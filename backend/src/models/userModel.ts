@@ -17,6 +17,7 @@ export interface IUser extends Document {
   twoFactorSecret?: string;
   isSeller: boolean;
   seller_type?: string;
+  adminRole?: "super" | "finance" | "support" | "content";
   balance: number;
   otp?: string;
   otpExpires?: Date;
@@ -36,6 +37,7 @@ const userSchema: Schema = new Schema(
     isAdmin: { type: Boolean, default: false },
     isSeller: { type: Boolean, default: false },
     seller_type: { type: String },
+    adminRole: { type: String, enum: ["super", "finance", "support", "content"] },
     balance: { type: Number, default: 0 },
     profileImage: { type: String, default: "" },
     bio: { type: String, default: "" },

@@ -62,6 +62,33 @@ import {
   adminUpdateReport,
   adminReportStats,
 } from "../controllers/reportController";
+import {
+  adminListCategories,
+  adminCreateCategory,
+  adminUpdateCategory,
+  adminDeleteCategory,
+} from "../controllers/categoryController";
+import {
+  adminListAuditLogs,
+  adminAuditStats,
+} from "../controllers/adminAuditController";
+import {
+  adminListInvites,
+  adminCreateInvite,
+  adminRevokeInvite,
+  adminResendInvite,
+} from "../controllers/adminInviteController";
+import {
+  adminListSettings,
+  adminUpdateSetting,
+} from "../controllers/systemSettingController";
+import {
+  adminListTickets,
+  adminGetTicket,
+  adminReplyTicket,
+  adminUpdateTicketStatus,
+  adminTicketStats,
+} from "../controllers/supportTicketController";
 
 const router: Router = Router();
 
@@ -110,6 +137,33 @@ router.get("/shops/:id", adminGetShop);
 router.get("/notifications/stats", adminNotificationStats);
 router.get("/notifications", adminListNotifications);
 router.post("/notifications/broadcast", adminBroadcastNotification);
+
+// Audit logs
+router.get("/audit/stats", adminAuditStats);
+router.get("/audit", adminListAuditLogs);
+
+// Admin invites
+router.get("/invites", adminListInvites);
+router.post("/invites", adminCreateInvite);
+router.patch("/invites/:id/revoke", adminRevokeInvite);
+router.patch("/invites/:id/resend", adminResendInvite);
+
+// System settings
+router.get("/settings", adminListSettings);
+router.patch("/settings/:key", adminUpdateSetting);
+
+// Support tickets
+router.get("/support/stats", adminTicketStats);
+router.get("/support", adminListTickets);
+router.get("/support/:id", adminGetTicket);
+router.post("/support/:id/reply", adminReplyTicket);
+router.patch("/support/:id", adminUpdateTicketStatus);
+
+// Categories
+router.get("/categories", adminListCategories);
+router.post("/categories", adminCreateCategory);
+router.patch("/categories/:id", adminUpdateCategory);
+router.delete("/categories/:id", adminDeleteCategory);
 
 // Reports
 router.get("/reports/stats", adminReportStats);

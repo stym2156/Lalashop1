@@ -373,10 +373,98 @@ const ProductDetailPage = () => {
       )}
 
       {tab === 'history' && (
-        <div className="rounded-lg py-12 text-center text-gray-400 text-[12px]">
-          History logging not yet implemented
-        </div>
+        <ProductHistoryTimeline product={product} reports={reports} />
       )}
+    </div>
+  );
+};
+
+interface HistoryTimelineProps {
+  product: AdminProductRow;
+  reports: AdminReportRow[];
+}
+
+interface TimelineEvent {
+  at: string;
+  title: string;
+  detail?: string;
+  tone: 'created' | 'updated' | 'flag' | 'report';
+}
+
+const ProductHistoryTimeline: React.FC<HistoryTimelineProps> = ({ product, reports }) => {
+  const events: TimelineEvent[] = [
+    {
+      at: product.createdAt,
+      title: 'Product created',
+      detail: `Listed by ${product.seller?.name || product.seller?.email || 'seller'}`,
+      tone: 'created',
+    },
+  ];
+
+  if (product.updatedAt && product.updatedAt !== product.createdAt) {
+    events.push({
+      at: product.updatedAt,
+      title: 'Product last updated',
+      detail: `Status: ${product.status}` + (product.tags?.length ? ` · Tags: ${product.tags.join(', ')}` : ''),
+      tone: 'updated',
+    });
+  }
+
+  for (const r of reports) {
+    events.push({
+      at: r.createdAt,
+      title: `Report filed (${r.reason})`,
+      detail: r.description?.slice(0, 120) || `Status: ${r.status}`,
+      tone: 'report',
+    });
+  }
+
+  if (Array.isArray(product.tags)) {
+    for (const tag of product.tags) {
+      if (['banned', 'featured', 'violation', 'reported'].includes(tag)) {
+        events.push({
+          at: product.updatedAt,
+          title: `Flag: ${tag}`,
+          detail: `Currently tagged as "${tag}"`,
+          tone: 'flag',
+        });
+      }
+    }
+  }
+
+  events.sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime());
+
+  if (events.length === 0) {
+    return (
+      <div className="rounded-lg py-12 text-center text-gray-400 text-[12px]">
+        No activity yet
+      </div>
+    );
+  }
+
+  const toneClass: Record<TimelineEvent['tone'], string> = {
+    created: 'bg-blue-500',
+    updated: 'bg-amber-500',
+    flag: 'bg-purple-500',
+    report: 'bg-red-500',
+  };
+
+  return (
+    <div className="px-2">
+      <div className="rounded-lg bg-amber-50 px-4 py-2 mb-4 text-[11px] text-amber-700">
+        Showing snapshot timeline based on createdAt, updatedAt, current tags, and report records.
+        Detailed change-by-change history will activate when AdminAuditLog is enabled.
+      </div>
+      <div className="border-l border-gray-200 ml-2 pl-2">
+        {events.map((e, i) => (
+          <div key={i} className="relative pl-6 pb-5 last:pb-0">
+            <div className={`absolute -left-[7px] top-1 w-2.5 h-2.5 rounded-full bg-white border-2 ${toneClass[e.tone]}`} />
+            <p className="text-[12px] font-semibold text-gray-900">{e.title}</p>
+            {e.detail && <p className="text-[11px] text-gray-600 mt-0.5">{e.detail}</p>}
+            <p className="text-[10px] text-gray-400 mt-0.5 tabular-nums">{formatDate(e.at)}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

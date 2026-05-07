@@ -179,7 +179,16 @@ const Sidebar = () => {
 
       {/* Footer */}
       <div className="p-4 border-t border-gray-100">
-        <button className="flex items-center justify-center w-full py-3 text-xs font-bold text-red-500 rounded-xl hover:bg-red-50 transition-all">
+        <button
+          onClick={() => {
+            if (typeof window !== 'undefined') {
+              window.localStorage.removeItem('token');
+              window.localStorage.removeItem('admin');
+            }
+            router.push('/login');
+          }}
+          className="flex items-center justify-center w-full py-3 text-xs font-bold text-red-500 rounded-xl hover:bg-red-50 transition-all"
+        >
           <LogOut className="mr-2 h-4 w-4" />
           Logout Session
         </button>

@@ -22,6 +22,9 @@ import creatorProductRoutes from "./routes/creatorProductRoutes";
 import affiliateRoutes from "./routes/affiliateRoutes";
 import analyticsRoutes from "./routes/analyticsRoutes";
 import reportRoutes from "./routes/reportRoutes";
+import categoryRoutes from "./routes/categoryRoutes";
+import supportRoutes from "./routes/supportRoutes";
+import inviteRoutes from "./routes/inviteRoutes";
 import { cookieParser } from "./middlewares/cookieParser";
 import { trackAndRedirect } from "./controllers/affiliateController";
 import { optionalProtect } from "./middlewares/authMiddleware";
@@ -67,6 +70,9 @@ app.use("/api/creator-products", creatorProductRoutes);
 app.use("/api/affiliate", affiliateRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/reports", reportRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/support", supportRoutes);
+app.use("/api", inviteRoutes);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   const statusCode = err.statusCode || 500;

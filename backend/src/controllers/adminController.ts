@@ -329,6 +329,21 @@ export const updateUser = async (req: Request, res: Response) => {
       user.withdrawPin = await bcrypt.hash(pin, salt);
     }
 
+    const { isAdmin: setIsAdmin, adminRole } = req.body as {
+      isAdmin?: boolean;
+      adminRole?: "super" | "finance" | "support" | "content" | null;
+    };
+    if (typeof setIsAdmin === "boolean") {
+      user.isAdmin = setIsAdmin;
+      if (!setIsAdmin) user.adminRole = undefined;
+    }
+    if (adminRole === null) {
+      user.adminRole = undefined;
+    } else if (adminRole && ["super", "finance", "support", "content"].includes(adminRole)) {
+      user.adminRole = adminRole;
+      user.isAdmin = true;
+    }
+
     await user.save();
 
     const safeUser = user.toObject() as unknown as Record<string, unknown>;

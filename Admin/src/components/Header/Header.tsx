@@ -1,41 +1,163 @@
-import React from 'react';
-import { Bell, Search, User, MessageSquare } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { Bell, Search, User as UserIcon, MessageSquare, ChevronDown, LogOut, UserCog } from 'lucide-react';
+import { adminMe } from '@/services/authApi';
+
+interface AdminMe {
+  _id?: string;
+  name?: string;
+  email?: string;
+  customId?: string;
+  adminRole?: string;
+}
+
+const roleLabel: Record<string, string> = {
+  super: 'Super Admin',
+  finance: 'Finance Admin',
+  support: 'Support Admin',
+  content: 'Content Admin',
+};
 
 const Header = () => {
+  const router = useRouter();
+  const [me, setMe] = useState<AdminMe | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const token = window.localStorage.getItem('token');
+    if (!token || token === 'null' || token === 'undefined') return;
+    let cancelled = false;
+    adminMe()
+      .then((res) => {
+        if (cancelled) return;
+        if (res?._id) {
+          setMe({
+            _id: res._id,
+            name: res.name,
+            email: res.email,
+            customId: res.customId,
+            adminRole: (res as any).adminRole,
+          });
+        }
+      })
+      .catch(() => {
+        // unauthenticated — leave me as null
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [menuOpen]);
+
+  const handleLogout = () => {
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem('token');
+      window.localStorage.removeItem('admin');
+    }
+    router.push('/login');
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = searchQuery.trim();
+    if (!q) return;
+    router.push(`/users/alluser?search=${encodeURIComponent(q)}`);
+  };
+
+  const displayName = me?.name || me?.email || 'Admin';
+  const role = me?.adminRole ? roleLabel[me.adminRole] : me ? 'Admin' : '—';
+  const initial = (displayName || 'A').slice(0, 1).toUpperCase();
+
   return (
     <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-8">
-      <div className="flex items-center bg-gray-50 px-4 py-2 rounded-xl w-96 border border-gray-100">
+      <form onSubmit={handleSearch} className="flex items-center bg-gray-50 px-4 py-2 rounded-xl w-96 border border-gray-100 focus-within:border-primary transition-colors">
         <Search className="h-4 w-4 text-gray-400 mr-2" />
         <input
           type="text"
-          placeholder="Search users, shops, orders..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search users..."
           className="bg-transparent border-none outline-none text-sm w-full text-black placeholder:text-gray-400"
         />
-      </div>
+      </form>
 
       <div className="flex items-center space-x-6">
-        <button className="p-2.5 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all text-gray-600 relative">
-          <MessageSquare className="h-5 w-5" />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-white"></span>
-        </button>
-
-        <button className="p-2.5 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all text-gray-600 relative">
+        <Link
+          href="/notifications"
+          className="p-2.5 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all text-gray-600 relative"
+          title="Notifications"
+        >
           <Bell className="h-5 w-5" />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-        </button>
+        </Link>
+
+        <Link
+          href="/reports"
+          className="p-2.5 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all text-gray-600 relative"
+          title="Reports"
+        >
+          <MessageSquare className="h-5 w-5" />
+        </Link>
 
         <div className="h-10 w-[1px] bg-gray-100"></div>
 
-        <div className="flex items-center space-x-3 cursor-pointer group">
-          <div className="text-right">
-            <p className="text-sm font-bold text-black group-hover:text-primary transition-colors">
-              ADMIN ALEX
-            </p>
-            <p className="text-[10px] text-gray-400 font-medium">Super Admin</p>
-          </div>
-          <div className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center group-hover:bg-primary-soft transition-all overflow-hidden border border-gray-100">
-            <User className="h-6 w-6 text-gray-400 group-hover:text-primary" />
-          </div>
+        <div className="relative" ref={menuRef}>
+          <button
+            onClick={() => setMenuOpen((s) => !s)}
+            className="flex items-center space-x-3 cursor-pointer group"
+          >
+            <div className="text-right">
+              <p className="text-sm font-bold text-black group-hover:text-primary transition-colors">
+                {displayName}
+              </p>
+              <p className="text-[10px] text-gray-400 font-medium">{role}</p>
+            </div>
+            <div className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center group-hover:bg-primary-soft transition-all overflow-hidden border border-gray-100">
+              {me ? (
+                <span className="text-sm font-bold text-gray-700 group-hover:text-primary">{initial}</span>
+              ) : (
+                <UserIcon className="h-6 w-6 text-gray-400 group-hover:text-primary" />
+              )}
+            </div>
+            <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${menuOpen ? 'rotate-180' : ''}`} />
+          </button>
+
+          {menuOpen && (
+            <div className="absolute right-0 top-full mt-2 bg-white border border-gray-200 rounded-xl shadow-xl py-2 min-w-[200px] z-50">
+              <div className="px-4 py-2 border-b border-gray-100">
+                <p className="text-[11px] text-gray-400">Signed in as</p>
+                <p className="text-[12px] font-bold text-gray-900 truncate">{me?.email || '—'}</p>
+              </div>
+
+              <Link
+                href="/profile"
+                onClick={() => setMenuOpen(false)}
+                className="w-full flex items-center gap-2.5 px-4 py-2 text-[12px] text-gray-700 hover:bg-gray-50"
+              >
+                <UserCog className="w-3.5 h-3.5 text-gray-400" /> My Profile
+              </Link>
+
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-2.5 px-4 py-2 text-[12px] text-red-600 hover:bg-red-50"
+              >
+                <LogOut className="w-3.5 h-3.5" /> Logout
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </header>

@@ -658,3 +658,250 @@ export const updateAdminReport = (
 export const fetchAdminReportStats = () =>
   apiClient<AdminReportStats>("/admin/reports/stats");
 
+// ─── Categories ───────────────────────────────────────────────────────
+
+export interface AdminCategoryRow {
+  _id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  icon?: string;
+  parent?: string | null;
+  displayOrder: number;
+  isActive: boolean;
+  productCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CategoryPayload {
+  name?: string;
+  description?: string;
+  icon?: string;
+  parent?: string | null;
+  displayOrder?: number;
+  isActive?: boolean;
+}
+
+export const fetchAdminCategories = () =>
+  apiClient<AdminCategoryRow[]>("/admin/categories");
+
+export const createAdminCategory = (payload: CategoryPayload) =>
+  apiClient<AdminCategoryRow>("/admin/categories", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+export const updateAdminCategory = (id: string, payload: CategoryPayload) =>
+  apiClient<AdminCategoryRow>(`/admin/categories/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+
+export const deleteAdminCategory = (id: string) =>
+  apiClient<{ message: string }>(`/admin/categories/${id}`, {
+    method: "DELETE",
+  });
+
+// ─── Audit Logs ──────────────────────────────────────────────────────
+
+export interface AdminAuditLogRow {
+  _id: string;
+  action: string;
+  targetType?: string;
+  targetId?: string;
+  before?: Record<string, unknown>;
+  after?: Record<string, unknown>;
+  ip?: string;
+  userAgent?: string;
+  metadata?: Record<string, unknown>;
+  admin?: { _id: string; name?: string; email?: string; customId?: string };
+  createdAt: string;
+}
+
+export interface AdminAuditStats {
+  total: number;
+  last7d: number;
+  byAction: { _id: string; count: number }[];
+  byAdmin: { _id: string; count: number; admin?: { name?: string; email?: string; customId?: string } }[];
+}
+
+export interface ListAuditParams {
+  page?: number;
+  limit?: number;
+  admin?: string;
+  action?: string;
+  targetType?: string;
+  targetId?: string;
+  startDate?: string;
+  endDate?: string;
+  search?: string;
+}
+
+export const fetchAdminAuditLogs = (params: ListAuditParams = {}) =>
+  apiClient<AdminAuditLogRow[]>(
+    `/admin/audit${buildQuery(params as Record<string, string | number | undefined>)}`,
+  );
+
+export const fetchAdminAuditStats = () =>
+  apiClient<AdminAuditStats>("/admin/audit/stats");
+
+// ─── Admin Invites ───────────────────────────────────────────────────
+
+export type InviteRole = "super" | "finance" | "support" | "content";
+export type InviteStatus = "pending" | "accepted" | "revoked" | "expired";
+
+export interface AdminInviteRow {
+  _id: string;
+  email: string;
+  name?: string;
+  role: InviteRole;
+  message?: string;
+  token: string;
+  status: InviteStatus;
+  expiresAt: string;
+  acceptedAt?: string;
+  invitedBy?: { _id: string; name?: string; email?: string; customId?: string };
+  acceptedBy?: { _id: string; name?: string; email?: string; customId?: string } | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateInvitePayload {
+  email: string;
+  name?: string;
+  role: InviteRole;
+  message?: string;
+  expiryDays?: number;
+}
+
+export const fetchAdminInvites = (status?: InviteStatus | "all") =>
+  apiClient<AdminInviteRow[]>(
+    `/admin/invites${status && status !== "all" ? `?status=${status}` : ""}`,
+  );
+
+export const createAdminInvite = (payload: CreateInvitePayload) =>
+  apiClient<AdminInviteRow>("/admin/invites", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+export const revokeAdminInvite = (id: string) =>
+  apiClient<AdminInviteRow>(`/admin/invites/${id}/revoke`, { method: "PATCH" });
+
+export const resendAdminInvite = (id: string) =>
+  apiClient<AdminInviteRow>(`/admin/invites/${id}/resend`, { method: "PATCH" });
+
+// ─── System Settings ─────────────────────────────────────────────────
+
+export type SettingType = "string" | "number" | "boolean" | "json";
+
+export interface AdminSettingRow {
+  _id: string;
+  key: string;
+  value: string;
+  type: SettingType;
+  group: string;
+  description?: string;
+  isPublic: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export const fetchAdminSettings = () =>
+  apiClient<AdminSettingRow[]>("/admin/settings");
+
+export const updateAdminSetting = (key: string, value: string) =>
+  apiClient<AdminSettingRow>(`/admin/settings/${encodeURIComponent(key)}`, {
+    method: "PATCH",
+    body: JSON.stringify({ value }),
+  });
+
+// ─── Support Tickets ─────────────────────────────────────────────────
+
+export type TicketStatus = "open" | "in_progress" | "resolved" | "closed";
+export type TicketCategory = "payments" | "orders" | "account" | "products" | "shop" | "other";
+export type TicketPriority = "low" | "normal" | "high" | "urgent";
+
+export interface TicketReply {
+  _id?: string;
+  author: { _id: string; name?: string; email?: string; customId?: string } | string;
+  authorRole: "user" | "admin";
+  message: string;
+  attachments?: string[];
+  createdAt: string;
+}
+
+export interface AdminTicketRow {
+  _id: string;
+  subject: string;
+  category: TicketCategory;
+  status: TicketStatus;
+  priority: TicketPriority;
+  description: string;
+  attachments?: string[];
+  replies: TicketReply[];
+  user?: { _id: string; name?: string; email?: string; customId?: string; profileImage?: string };
+  assignedTo?: { _id: string; name?: string; email?: string } | null;
+  resolvedAt?: string;
+  closedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AdminTicketStats {
+  total: number;
+  open: number;
+  inProgress: number;
+  resolved: number;
+  closed: number;
+}
+
+export interface ListTicketsParams {
+  page?: number;
+  limit?: number;
+  status?: TicketStatus | "all";
+  category?: TicketCategory | "all";
+  search?: string;
+  user?: string;
+}
+
+export const fetchAdminTickets = (params: ListTicketsParams = {}) =>
+  apiClient<AdminTicketRow[]>(
+    `/admin/support${buildQuery(params as Record<string, string | number | undefined>)}`,
+  );
+
+export const fetchAdminTicket = (id: string) =>
+  apiClient<AdminTicketRow>(`/admin/support/${id}`);
+
+export const replyAdminTicket = (id: string, message: string) =>
+  apiClient<AdminTicketRow>(`/admin/support/${id}/reply`, {
+    method: "POST",
+    body: JSON.stringify({ message }),
+  });
+
+export const updateAdminTicket = (
+  id: string,
+  payload: { status?: TicketStatus; priority?: TicketPriority; assignedTo?: string | null },
+) =>
+  apiClient<AdminTicketRow>(`/admin/support/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+
+export const fetchAdminTicketStats = () =>
+  apiClient<AdminTicketStats>("/admin/support/stats");
+
+// ─── Admin role assignment (extends fetchUsers/updateUser) ───────────
+
+export type AdminRole = "super" | "finance" | "support" | "content";
+
+export const updateUserAdminRole = (
+  userId: string,
+  payload: { isAdmin?: boolean; adminRole?: AdminRole | null },
+) =>
+  apiClient<AdminUserDetail>(`/admin/users/${userId}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+
