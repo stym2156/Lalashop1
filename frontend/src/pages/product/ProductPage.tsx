@@ -21,6 +21,7 @@ import { PriceTier, ProductData } from "./types";
 import { Product } from "@/types";
 import { apiClient } from "@/services/apiClient";
 import { useChat } from "@/components/chat/ChatContext";
+import { trackPageView } from "@/services/pageViewTracker";
 
 // ─── Toast Component ──────────────────────────────────────────────────────────
 function Toast({ message, visible }: { message: string; visible: boolean }) {
@@ -191,6 +192,21 @@ export default function ProductPage() {
 
   const isOwnProduct = !!(currentUserId && sellerId && currentUserId === sellerId);
   const viewShopHref = isOwnProduct ? "/me/me" : `/u/${sellerId || ""}`;
+
+  // Track this product view against the owning shop once we know its id.
+  // Fires when product or sellerId changes so navigating between products
+  // re-attributes correctly.
+  useEffect(() => {
+    if (!product || !sellerId) return;
+    const productId = String(product._id || product.id || "");
+    if (!productId) return;
+    trackPageView({
+      path: `/product/${productId}`,
+      pageType: "product",
+      productId,
+      shopId: sellerId,
+    });
+  }, [product, sellerId]);
 
   // Open the chat panel with the seller and auto-attach this product as context
   // so the seller's inbox shows which product the buyer is asking about.

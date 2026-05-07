@@ -31,6 +31,7 @@ import uploadRoutes from "./routes/uploadRoutes";
 import shopSettingRoutes from "./routes/shopSettingRoutes";
 import customerRoutes from "./routes/customerRoutes";
 import financeRoutes from "./routes/financeRoutes";
+import trackingRoutes from "./routes/trackingRoutes";
 import { cookieParser } from "./middlewares/cookieParser";
 import { trackAndRedirect } from "./controllers/affiliateController";
 import { optionalProtect } from "./middlewares/authMiddleware";
@@ -84,6 +85,7 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/shop-settings", shopSettingRoutes);
 app.use("/api/customers", customerRoutes);
 app.use("/api/finance", financeRoutes);
+app.use("/api/tracking", trackingRoutes);
 app.use("/api", inviteRoutes);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

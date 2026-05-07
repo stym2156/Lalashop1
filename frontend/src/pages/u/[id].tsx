@@ -18,6 +18,7 @@ import Avatar from "@/components/ui/Avatar";
 import ReportModal, { type ReportTargetType } from "@/components/ReportModal";
 import { useChat } from "@/components/chat/ChatContext";
 import UserListModal from "@/pages/Social/components/UserListModal";
+import { trackPageView } from "@/services/pageViewTracker";
 import { BackendPost } from "../Social/components/SocialPost";
 
 interface ProfileUser {
@@ -187,6 +188,17 @@ export default function UserProfilePage() {
     () => Boolean(currentUserId && profile && currentUserId === profile._id),
     [currentUserId, profile]
   );
+
+  // Track this shop-profile view against the owning seller. Fires once per
+  // profile load so seller analytics can count visitors landing on /u/[id].
+  useEffect(() => {
+    if (!profile?._id) return;
+    trackPageView({
+      path: `/u/${profile._id}`,
+      pageType: "shop",
+      shopId: profile._id,
+    });
+  }, [profile?._id]);
 
   const toggleFollow = async () => {
     if (!profile || !currentUserId) {

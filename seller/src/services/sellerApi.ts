@@ -814,3 +814,77 @@ export const fetchTransactions = async (limit = 200): Promise<SellerTransaction[
   const res = await apiClient<TransactionsResponse>(`/finance/transactions?limit=${limit}`);
   return res.data ?? [];
 };
+
+// ─── Analytics: Chat ─────────────────────────────────────────────────
+
+export interface ChatAnalytics {
+  rangeDays: number;
+  totalConversations: number;
+  totalMessages: number;
+  inboundMessages: number;
+  outboundMessages: number;
+  unreadInbound: number;
+  avgResponseSec: number;
+  p50ResponseSec: number;
+  p95ResponseSec: number;
+  responseSampleSize: number;
+  dailyVolume: Array<{ date: string; inbound: number; outbound: number }>;
+  buyersWhoChat: number;
+  buyersWhoOrdered: number;
+  chatConversionRate: number;
+}
+
+interface ChatAnalyticsResponse {
+  success: boolean;
+  data?: ChatAnalytics;
+}
+
+export const fetchChatAnalytics = async (days = 30): Promise<ChatAnalytics | null> => {
+  const res = await apiClient<ChatAnalyticsResponse>(`/analytics/chat?days=${days}`);
+  return res.data ?? null;
+};
+
+// ─── Tracking: Traffic + Conversion ──────────────────────────────────
+
+export interface TrafficAnalytics {
+  rangeDays: number;
+  totalViews: number;
+  uniqueSessions: number;
+  bySource: Record<string, number>;
+  byDevice: Record<string, number>;
+  topPages: Array<{ path: string; views: number; uniqueSessions: number }>;
+  topReferrers: Array<{ host: string; count: number }>;
+  daily: Array<{ date: string; views: number; sessions: number }>;
+}
+
+export interface ConversionFunnel {
+  rangeDays: number;
+  productViewSessions: number;
+  productViewers: number;
+  cartUsers: number;
+  orderUsers: number;
+  paidOrders: number;
+  paidRevenue: number;
+  viewToCartRate: number;
+  viewToOrderRate: number;
+  cartToOrderRate: number;
+}
+
+interface TrafficResponse {
+  success: boolean;
+  data?: TrafficAnalytics;
+}
+interface ConversionResponse {
+  success: boolean;
+  data?: ConversionFunnel;
+}
+
+export const fetchTrafficAnalytics = async (days = 30): Promise<TrafficAnalytics | null> => {
+  const res = await apiClient<TrafficResponse>(`/tracking/traffic?days=${days}`);
+  return res.data ?? null;
+};
+
+export const fetchConversionFunnel = async (days = 30): Promise<ConversionFunnel | null> => {
+  const res = await apiClient<ConversionResponse>(`/tracking/conversion?days=${days}`);
+  return res.data ?? null;
+};
