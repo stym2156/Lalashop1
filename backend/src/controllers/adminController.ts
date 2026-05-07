@@ -11,6 +11,8 @@ import KycSubmission from "../models/kycSubmissionModel";
 import Withdraw from "../models/withdrawModel";
 import Report from "../models/reportModel";
 import SupportTicket from "../models/supportTicketModel";
+import CreatorEarning from "../models/creatorEarningModel";
+import Refund from "../models/refundModel";
 import { IAuthRequest } from "../middlewares/authMiddleware";
 
 interface ListQuery {
@@ -370,6 +372,8 @@ export const getUserById = async (req: Request, res: Response) => {
     }
 
     // Pull bank + activity rollups in parallel for the admin detail panel.
+    // Compliance reviewers need to see provenance of money before approving
+    // withdrawals — we aggregate income/outgo by source here.
     const [
       bank,
       orderCount,
@@ -378,6 +382,20 @@ export const getUserById = async (req: Request, res: Response) => {
       lastOrder,
       latestKyc,
       pendingWithdrawals,
+      // Withdrawal aggregation by status (count + total amount per state)
+      withdrawStatusAgg,
+      lastWithdrawal,
+      // Income — web sales as seller (paid orders containing this seller's items)
+      sellerSalesAgg,
+      // Income — creator earnings (settled commission)
+      creatorEarningsAgg,
+      // Outgoing — refunds issued by this user (as seller)
+      refundsIssuedAgg,
+      // Buyer orders (this user as buyer) by paid/unpaid
+      buyerOrderAgg,
+      lastBuyerOrder,
+      // Seller orders received (this user as seller)
+      sellerOrderCountAgg,
     ] = await Promise.all([
       Bank.findOne({ user: userDoc._id }),
       Order.countDocuments({ user: userDoc._id }),
@@ -389,9 +407,123 @@ export const getUserById = async (req: Request, res: Response) => {
       KycSubmission.findOne({ user: userDoc._id })
         .sort({ createdAt: -1 })
         .select("status submittedAt reviewedAt rejectionReason shopInfo"),
-      // Pending withdrawals for sellers — useful at-a-glance for finance admins.
       Withdraw.countDocuments({ user: userDoc._id, status: "pending" }),
+      Withdraw.aggregate([
+        { $match: { user: userDoc._id } },
+        {
+          $group: {
+            _id: "$status",
+            count: { $sum: 1 },
+            totalAmount: { $sum: "$amount" },
+            totalNet: { $sum: "$netAmount" },
+            totalFee: { $sum: "$fee" },
+          },
+        },
+      ]),
+      Withdraw.findOne({ user: userDoc._id })
+        .sort({ createdAt: -1 })
+        .select("amount netAmount fee status createdAt processedAt bankAccount")
+        .populate("bankAccount", "bankName accountNumber"),
+      Order.aggregate([
+        { $match: { isPaid: true } },
+        { $unwind: "$orderItems" },
+        { $match: { "orderItems.seller": userDoc._id } },
+        {
+          $group: {
+            _id: null,
+            totalRevenue: {
+              $sum: { $multiply: ["$orderItems.price", "$orderItems.qty"] },
+            },
+            itemsSold: { $sum: "$orderItems.qty" },
+            orders: { $addToSet: "$_id" },
+          },
+        },
+      ]),
+      CreatorEarning.aggregate([
+        { $match: { creator: userDoc._id } },
+        {
+          $group: {
+            _id: "$status",
+            count: { $sum: 1 },
+            total: { $sum: "$amount" },
+          },
+        },
+      ]),
+      Refund.aggregate([
+        { $match: { shop: userDoc._id, status: { $in: ["approved", "completed"] } } },
+        {
+          $group: {
+            _id: null,
+            count: { $sum: 1 },
+            total: { $sum: "$amount" },
+          },
+        },
+      ]),
+      Order.aggregate([
+        { $match: { user: userDoc._id } },
+        {
+          $group: {
+            _id: { isPaid: "$isPaid" },
+            count: { $sum: 1 },
+            total: { $sum: "$totalPrice" },
+          },
+        },
+      ]),
+      Order.findOne({ user: userDoc._id, isPaid: true })
+        .sort({ createdAt: -1 })
+        .select("totalPrice createdAt status"),
+      Order.aggregate([
+        { $match: { isPaid: true } },
+        { $unwind: "$orderItems" },
+        { $match: { "orderItems.seller": userDoc._id } },
+        { $group: { _id: "$_id" } },
+        { $count: "n" },
+      ]),
     ]);
+
+    // Reduce withdrawal status aggregation into a friendly object
+    const withdrawals: Record<
+      string,
+      { count: number; totalAmount: number; totalNet: number; totalFee: number }
+    > = {};
+    let withdrawTotalCount = 0;
+    let withdrawTotalAmount = 0;
+    let withdrawTotalNet = 0;
+    for (const row of withdrawStatusAgg) {
+      withdrawals[row._id || "unknown"] = {
+        count: row.count,
+        totalAmount: row.totalAmount,
+        totalNet: row.totalNet,
+        totalFee: row.totalFee,
+      };
+      withdrawTotalCount += row.count;
+      withdrawTotalAmount += row.totalAmount;
+      withdrawTotalNet += row.totalNet;
+    }
+
+    const sellerSales = sellerSalesAgg[0] || { totalRevenue: 0, itemsSold: 0, orders: [] };
+    const creatorEarnings: Record<string, { count: number; total: number }> = {};
+    let creatorTotal = 0;
+    for (const row of creatorEarningsAgg) {
+      creatorEarnings[row._id || "unknown"] = { count: row.count, total: row.total };
+      if (row._id === "settled") creatorTotal += row.total;
+    }
+    const refundsIssued = refundsIssuedAgg[0] || { count: 0, total: 0 };
+
+    // Buyer orders: split paid vs unpaid
+    let buyerPaidCount = 0;
+    let buyerPaidTotal = 0;
+    let buyerUnpaidCount = 0;
+    for (const row of buyerOrderAgg) {
+      if (row._id?.isPaid) {
+        buyerPaidCount = row.count;
+        buyerPaidTotal = row.total;
+      } else {
+        buyerUnpaidCount = row.count;
+      }
+    }
+
+    const sellerOrderCount = sellerOrderCountAgg[0]?.n || 0;
 
     const safeUser = userDoc.toObject() as unknown as Record<string, unknown>;
     delete safeUser.password;
@@ -425,6 +557,69 @@ export const getUserById = async (req: Request, res: Response) => {
           lastOrderAt: lastOrder ? (lastOrder as unknown as { createdAt: Date }).createdAt : null,
           lastOrderTotal: lastOrder?.totalPrice ?? 0,
           lastOrderStatus: lastOrder?.status ?? null,
+        },
+        // Comprehensive money-trail breakdown for compliance review.
+        // - income: where the user's balance came from (web sales, creator
+        //   commission, POS revenue) so reviewers can verify provenance before
+        //   approving a withdrawal.
+        // - withdrawals: by status (pending/approved/completed/rejected/...)
+        // - orders: separate buyer-side (placed) and seller-side (received).
+        finance: {
+          withdrawals: {
+            byStatus: withdrawals,
+            totalCount: withdrawTotalCount,
+            totalAmount: withdrawTotalAmount,
+            totalNet: withdrawTotalNet,
+            last: lastWithdrawal
+              ? {
+                  amount: lastWithdrawal.amount,
+                  netAmount: lastWithdrawal.netAmount,
+                  fee: lastWithdrawal.fee,
+                  status: lastWithdrawal.status,
+                  createdAt: (lastWithdrawal as unknown as { createdAt: Date }).createdAt,
+                  processedAt: lastWithdrawal.processedAt,
+                  bank: lastWithdrawal.bankAccount as
+                    | { bankName?: string; accountNumber?: string }
+                    | null,
+                }
+              : null,
+          },
+          income: {
+            sellerWebSales: {
+              total: sellerSales.totalRevenue,
+              orders: sellerSales.orders?.length ?? 0,
+              itemsSold: sellerSales.itemsSold ?? 0,
+            },
+            creatorEarnings: {
+              byStatus: creatorEarnings,
+              settledTotal: creatorTotal,
+            },
+            posRevenue: userDoc.posRevenue || 0,
+            // currentBalance is what's actually in user.balance right now —
+            // the breakdown is historical and not guaranteed to sum to balance
+            // (admin can manually edit balance, refunds deduct, etc.).
+            currentBalance: userDoc.balance || 0,
+          },
+          outgoing: {
+            refundsIssued: {
+              count: refundsIssued.count,
+              total: refundsIssued.total,
+            },
+          },
+          buyerActivity: {
+            paidCount: buyerPaidCount,
+            paidTotal: buyerPaidTotal,
+            unpaidCount: buyerUnpaidCount,
+            lastPaidAt: lastBuyerOrder
+              ? (lastBuyerOrder as unknown as { createdAt: Date }).createdAt
+              : null,
+            lastPaidAmount: lastBuyerOrder?.totalPrice ?? 0,
+          },
+          sellerActivity: {
+            ordersReceived: sellerOrderCount,
+            grossRevenue: sellerSales.totalRevenue,
+            itemsSold: sellerSales.itemsSold ?? 0,
+          },
         },
         kyc: latestKyc
           ? {

@@ -128,6 +128,51 @@ export interface AdminUserKyc {
   shopInfo?: { shopName?: string; shopCategory?: string };
 }
 
+export interface AdminUserFinance {
+  withdrawals: {
+    byStatus: Record<
+      string,
+      { count: number; totalAmount: number; totalNet: number; totalFee: number }
+    >;
+    totalCount: number;
+    totalAmount: number;
+    totalNet: number;
+    last: {
+      amount: number;
+      netAmount: number;
+      fee: number;
+      status: string;
+      createdAt: string;
+      processedAt?: string;
+      bank?: { bankName?: string; accountNumber?: string } | null;
+    } | null;
+  };
+  income: {
+    sellerWebSales: { total: number; orders: number; itemsSold: number };
+    creatorEarnings: {
+      byStatus: Record<string, { count: number; total: number }>;
+      settledTotal: number;
+    };
+    posRevenue: number;
+    currentBalance: number;
+  };
+  outgoing: {
+    refundsIssued: { count: number; total: number };
+  };
+  buyerActivity: {
+    paidCount: number;
+    paidTotal: number;
+    unpaidCount: number;
+    lastPaidAt: string | null;
+    lastPaidAmount: number;
+  };
+  sellerActivity: {
+    ordersReceived: number;
+    grossRevenue: number;
+    itemsSold: number;
+  };
+}
+
 export interface AdminUserDetail extends AdminUser {
   hasPassword?: boolean;
   hasSellerPassword?: boolean;
@@ -135,6 +180,7 @@ export interface AdminUserDetail extends AdminUser {
   bank?: AdminBank | null;
   stats?: AdminUserStats;
   kyc?: AdminUserKyc | null;
+  finance?: AdminUserFinance;
   posRevenue?: number;
   isSuspended?: boolean;
   suspendedReason?: string;

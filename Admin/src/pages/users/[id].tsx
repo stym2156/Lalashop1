@@ -6,7 +6,10 @@ import {
   Shield, ShieldCheck, ShieldAlert, ShieldOff, User as UserIcon, Mail,
   Phone, Package, ShoppingBag, FileText, Wallet,
   ExternalLink, Ban, RefreshCw, BadgeCheck, AlertTriangle, Hash,
+  ArrowDownCircle, ArrowUpCircle, TrendingUp, Clock, Receipt,
+  Gift, Scan,
 } from "lucide-react";
+import type { AdminUserFinance } from "@/services/adminApi";
 import {
   fetchUserById,
   updateUser as apiUpdateUser,
@@ -331,87 +334,14 @@ const UserDetailsPage = () => {
       )}
 
       {/* Hero header */}
-      <div className="rounded-lg border border-gray-100 p-5 bg-white">
+      <div className="rounded-lg  p-5 bg-white">
         <div className="flex items-start gap-4 flex-wrap">
-          {user.profileImage ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={user.profileImage}
-              alt={user.name || user.email}
-              className="w-16 h-16 rounded-full object-cover flex-shrink-0"
-            />
-          ) : (
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#00aeff] to-[#0096db] text-white text-xl font-black flex items-center justify-center flex-shrink-0">
-              {initial(user.name || user.email)}
-            </div>
-          )}
-
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-[18px] font-black text-gray-900 truncate">
-                {user.name || user.email}
-              </h1>
-              {user.isAdmin && (
-                <span className="text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wide bg-amber-100 text-amber-700">
-                  {user.adminRole ? `${user.adminRole} admin` : "admin"}
-                </span>
-              )}
-              {user.isSeller && (
-                <span className="text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wide bg-emerald-100 text-emerald-700">
-                  seller
-                </span>
-              )}
-              {user.twoFactorEnabled && (
-                <span className="text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wide bg-blue-100 text-blue-700 inline-flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3" /> 2FA
-                </span>
-              )}
-              {kyc?.status === "approved" && (
-                <span className="text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wide bg-emerald-100 text-emerald-700 inline-flex items-center gap-1">
-                  <BadgeCheck className="w-3 h-3" /> KYC verified
-                </span>
-              )}
-              {kyc?.status === "pending" && (
-                <span className="text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wide bg-amber-100 text-amber-700">
-                  KYC pending
-                </span>
-              )}
-              {kyc?.status === "rejected" && (
-                <span className="text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wide bg-rose-100 text-rose-700">
-                  KYC rejected
-                </span>
-              )}
-              {user.isSuspended && (
-                <span className="text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wide bg-rose-100 text-rose-700 inline-flex items-center gap-1">
-                  <Ban className="w-3 h-3" /> suspended
-                </span>
-              )}
-            </div>
-            <div className="flex items-center gap-3 text-[11px] text-gray-500 mt-1 flex-wrap">
-              {user.username && <span>@{user.username}</span>}
-              {user.customId && <span className="font-mono">{user.customId}</span>}
-              {user.email && (
-                <span className="inline-flex items-center gap-1">
-                  <Mail className="w-3 h-3" /> {user.email}
-                </span>
-              )}
-              {user.phone && (
-                <span className="inline-flex items-center gap-1">
-                  <Phone className="w-3 h-3" /> {user.phone}
-                </span>
-              )}
-            </div>
-            {user.bio && (
-              <p className="text-[12px] text-gray-600 mt-2 leading-relaxed">{user.bio}</p>
-            )}
-          </div>
-
           <div className="flex items-center gap-2 flex-wrap flex-shrink-0">
             {user.isSeller && (
               <button
                 onClick={handleIssueCredentials}
                 disabled={issuing}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[11px] font-bold  text-emerald-700 disabled:opacity-50"
               >
                 {issuing ? <Loader2 className="w-3 h-3 animate-spin" /> : <KeyRound className="w-3 h-3" />}
                 {issuing ? "Issuing…" : "Issue seller password"}
@@ -423,7 +353,7 @@ const UserDetailsPage = () => {
                   setSuspendReason("");
                   setSuspendOpen(true);
                 }}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[11px] font-bold bg-rose-50 text-rose-700 hover:bg-rose-100"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[11px] font-bold  text-rose-700 "
               >
                 <Ban className="w-3 h-3" /> Suspend
               </button>
@@ -434,14 +364,14 @@ const UserDetailsPage = () => {
                   setSuspendReason("");
                   setSuspendOpen(true);
                 }}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[11px] font-bold  text-emerald-700 hover:bg-emerald-100"
               >
                 <RefreshCw className="w-3 h-3" /> Unsuspend
               </button>
             )}
             <button
               onClick={openEdit}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[11px] font-bold bg-gray-100 text-gray-700 hover:bg-gray-200"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[11px] font-bold  text-gray-700 "
             >
               <Pencil className="w-3 h-3" /> Edit
             </button>
@@ -489,61 +419,6 @@ const UserDetailsPage = () => {
           </a>
         </div>
       )}
-
-      {/* Quick stats grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
-        <Stat
-          icon={Wallet}
-          label="Web balance"
-          value={formatCurrency(user.balance ?? 0)}
-          tone="text-[#00aeff]"
-        />
-        {user.isSeller && (
-          <Stat
-            icon={Wallet}
-            label="POS revenue"
-            value={formatCurrency(user.posRevenue ?? 0)}
-            tone="text-emerald-700"
-            hint="Non-withdrawable"
-          />
-        )}
-        <Stat
-          icon={ShoppingBag}
-          label="Orders placed"
-          value={formatNumber(stats?.orderCount ?? 0)}
-          hint={
-            stats?.lastOrderAt
-              ? `Last: ${formatCurrency(stats.lastOrderTotal)}`
-              : undefined
-          }
-        />
-        {user.isSeller && (
-          <Stat
-            icon={Package}
-            label="Products listed"
-            value={formatNumber(stats?.productCount ?? 0)}
-          />
-        )}
-        <Stat
-          icon={FileText}
-          label="Posts"
-          value={formatNumber(stats?.postCount ?? 0)}
-        />
-        <Stat
-          icon={Shield}
-          label="Trust score"
-          value={`${trustScore}/100`}
-          tone={
-            trustScore >= 80
-              ? "text-emerald-700"
-              : trustScore >= 50
-              ? "text-amber-700"
-              : "text-rose-700"
-          }
-          hint={user.isSuspended ? "Suspended" : undefined}
-        />
-      </div>
-
       {/* 3-column grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Profile / Identity */}
@@ -707,6 +582,31 @@ const UserDetailsPage = () => {
         </Section>
       </div>
 
+      {/* Money source / income breakdown — compliance review */}
+      {user.finance && (
+        <Section
+          title="Money source — where the balance came from"
+          icon={Wallet}
+          hint="Use this to verify provenance before approving a withdrawal."
+        >
+          <IncomeBreakdown finance={user.finance} isSeller={user.isSeller} />
+        </Section>
+      )}
+
+      {/* Withdrawal history breakdown */}
+      {user.finance && (
+        <Section title="Withdrawal history" icon={ArrowDownCircle}>
+          <WithdrawalBreakdown finance={user.finance} userId={user._id} />
+        </Section>
+      )}
+
+      {/* Order activity — buyer + seller */}
+      {user.finance && (
+        <Section title="Order activity" icon={ShoppingBag}>
+          <OrderActivity finance={user.finance} isSeller={user.isSeller} userId={user._id} />
+        </Section>
+      )}
+
       {/* Shop / KYC info row (sellers only) */}
       {user.isSeller && (
         <Section title="Shop & KYC" icon={Store}>
@@ -766,60 +666,6 @@ const UserDetailsPage = () => {
           </div>
         </Section>
       )}
-
-      {/* Admin role management */}
-      <Section title="Admin role" icon={ShieldAlert}>
-        {user.isAdmin ? (
-          <div className="space-y-3">
-            <p className="text-[12px] text-gray-700">
-              Currently <strong>{ROLE_LABELS[user.adminRole || "super"]}</strong>.
-              {user.adminRole !== "super" && " Change role below or demote."}
-            </p>
-            <div className="flex flex-wrap items-center gap-2">
-              {(["super", "finance", "support", "content"] as const).map((r) => (
-                <button
-                  key={r}
-                  onClick={() => handleAdminRoleChange(r)}
-                  disabled={adminBusy || user.adminRole === r}
-                  className={`px-3 py-1.5 rounded-md text-[11px] font-bold ${
-                    user.adminRole === r
-                      ? "bg-amber-100 text-amber-700 cursor-default"
-                      : "border border-gray-200 text-gray-700 hover:bg-gray-50"
-                  } disabled:opacity-50`}
-                >
-                  {ROLE_LABELS[r]}
-                </button>
-              ))}
-              <button
-                onClick={() => handleAdminRoleChange(null)}
-                disabled={adminBusy}
-                className="ml-auto px-3 py-1.5 rounded-md text-[11px] font-bold bg-rose-50 text-rose-700 hover:bg-rose-100 disabled:opacity-50"
-              >
-                Demote (remove admin)
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            <p className="text-[12px] text-gray-500">
-              This user is not an admin. Promote them only if you trust them with the listed scope.
-            </p>
-            <div className="flex flex-wrap items-center gap-2">
-              {(["super", "finance", "support", "content"] as const).map((r) => (
-                <button
-                  key={r}
-                  onClick={() => handleAdminRoleChange(r)}
-                  disabled={adminBusy}
-                  className="px-3 py-1.5 rounded-md text-[11px] font-bold bg-amber-50 text-amber-700 hover:bg-amber-100 disabled:opacity-50"
-                >
-                  Promote to {ROLE_LABELS[r]}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-      </Section>
-
       {/* System metadata */}
       <Section title="System metadata" icon={Hash}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
@@ -985,16 +831,419 @@ const UserDetailsPage = () => {
 interface SectionProps {
   title: string;
   icon: typeof UserIcon;
+  hint?: string;
   children: React.ReactNode;
 }
 
-const Section: React.FC<SectionProps> = ({ title, icon: Icon, children }) => (
+const Section: React.FC<SectionProps> = ({ title, icon: Icon, hint, children }) => (
   <div className="rounded-lg border border-gray-100 bg-white">
     <div className="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
       <Icon className="w-3.5 h-3.5 text-gray-400" />
-      <h3 className="text-[13px] font-bold text-gray-900">{title}</h3>
+      <div className="flex-1 min-w-0">
+        <h3 className="text-[13px] font-bold text-gray-900">{title}</h3>
+        {hint && <p className="text-[10px] text-gray-500 mt-0.5">{hint}</p>}
+      </div>
     </div>
     <div className="p-4 space-y-2 text-[12px]">{children}</div>
+  </div>
+);
+
+// ─── Money source breakdown ──────────────────────────────────────────
+// Visualizes how much of the user's lifetime income came from each source.
+// Compliance reviewers use this to verify provenance before approving a
+// withdrawal — if a "buyer" account has 50k balance with no seller activity
+// and no creator earnings, that's a red flag worth investigating.
+
+interface IncomeBreakdownProps {
+  finance: AdminUserFinance;
+  isSeller: boolean;
+}
+
+const IncomeBreakdown: React.FC<IncomeBreakdownProps> = ({ finance, isSeller }) => {
+  const sellerWeb = finance.income.sellerWebSales.total;
+  const creator = finance.income.creatorEarnings.settledTotal;
+  const pos = finance.income.posRevenue;
+  const totalIncome = sellerWeb + creator + pos;
+  const balance = finance.income.currentBalance;
+  const withdrawn = finance.withdrawals.totalNet;
+  const refunded = finance.outgoing.refundsIssued.total;
+
+  const pct = (n: number): number =>
+    totalIncome > 0 ? Math.round((n / totalIncome) * 100) : 0;
+
+  const sources = [
+    {
+      label: "Web sales (as seller)",
+      value: sellerWeb,
+      pct: pct(sellerWeb),
+      color: "bg-emerald-500",
+      icon: Store,
+      hint: `${finance.income.sellerWebSales.orders} orders · ${finance.income.sellerWebSales.itemsSold} items sold`,
+    },
+    {
+      label: "Creator commission",
+      value: creator,
+      pct: pct(creator),
+      color: "bg-purple-500",
+      icon: Gift,
+      hint: `${
+        finance.income.creatorEarnings.byStatus.settled?.count || 0
+      } settled · ${
+        finance.income.creatorEarnings.byStatus.pending?.count || 0
+      } pending`,
+    },
+    {
+      label: "POS revenue (in-store)",
+      value: pos,
+      pct: pct(pos),
+      color: "bg-amber-500",
+      icon: Scan,
+      hint: "Non-withdrawable",
+    },
+  ];
+
+  // Reconciliation: balance ≈ totalIncome − totalWithdrawnNet − totalRefunded.
+  // It can drift from admin manual edits, so we just surface the numbers.
+  const reconciled = totalIncome - withdrawn - refunded;
+  const drift = balance - reconciled;
+  const driftSign = drift > 0 ? "+" : "";
+
+  return (
+    <div className="space-y-4">
+      {/* Top totals */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <Tile
+          label="Lifetime income"
+          value={`฿${formatNumber(totalIncome)}`}
+          tone="text-emerald-700"
+        />
+        <Tile
+          label="Withdrawn (net)"
+          value={`฿${formatNumber(withdrawn)}`}
+          tone="text-rose-700"
+        />
+        <Tile
+          label="Refunds issued"
+          value={`฿${formatNumber(refunded)}`}
+          tone="text-amber-700"
+          hint={`${finance.outgoing.refundsIssued.count} refunds`}
+        />
+        <Tile
+          label="Current balance"
+          value={`฿${formatNumber(balance)}`}
+          tone="text-[#00aeff]"
+          hint={
+            Math.abs(drift) > 1
+              ? `Drift ${driftSign}฿${formatNumber(drift)}`
+              : "Reconciles"
+          }
+        />
+      </div>
+
+      {/* Stacked progress bar */}
+      {totalIncome > 0 && (
+        <div>
+          <div className="h-3 rounded-full bg-gray-100 overflow-hidden flex">
+            {sources.map((s) =>
+              s.value > 0 ? (
+                <div
+                  key={s.label}
+                  className={s.color}
+                  style={{ width: `${s.pct}%` }}
+                  title={`${s.label}: ฿${formatNumber(s.value)} (${s.pct}%)`}
+                />
+              ) : null
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Source breakdown rows */}
+      <div className="space-y-2">
+        {sources.map((s) => {
+          const Icon = s.icon;
+          return (
+            <div key={s.label} className="flex items-center gap-3">
+              <span className={`w-6 h-6 rounded ${s.color}/20 inline-flex items-center justify-center`}>
+                <Icon className={`w-3 h-3 text-white ${s.color.replace("bg-", "fill-")}`} />
+              </span>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between">
+                  <p className="text-[12px] font-bold text-gray-900">{s.label}</p>
+                  <p className="text-[12px] font-black tabular-nums text-gray-900">
+                    ฿{formatNumber(s.value)}
+                    <span className="text-[10px] text-gray-400 font-normal ml-1.5">
+                      {s.pct}%
+                    </span>
+                  </p>
+                </div>
+                <p className="text-[10px] text-gray-500">{s.hint}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {!isSeller && sellerWeb === 0 && creator === 0 && balance > 0 && (
+        <div className="rounded-md bg-amber-50 border border-amber-100 px-3 py-2 text-[11px] text-amber-800 flex items-start gap-2">
+          <AlertTriangle className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
+          <p>
+            <strong>Heads up:</strong> this account has a balance but no seller or creator
+            income recorded. The balance came from admin edits or imported data — verify
+            before approving withdrawals.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ─── Withdrawal history breakdown ────────────────────────────────────
+
+const WITHDRAW_STATUSES = ["pending", "approved", "completed", "rejected", "failed", "cancelled"] as const;
+type WithdrawStatusKey = typeof WITHDRAW_STATUSES[number];
+
+const WITHDRAW_STATUS_TONE: Record<WithdrawStatusKey, string> = {
+  pending: "bg-amber-100 text-amber-700",
+  approved: "bg-blue-100 text-blue-700",
+  completed: "bg-emerald-100 text-emerald-700",
+  rejected: "bg-rose-100 text-rose-700",
+  failed: "bg-rose-100 text-rose-700",
+  cancelled: "bg-gray-100 text-gray-600",
+};
+
+interface WithdrawalBreakdownProps {
+  finance: AdminUserFinance;
+  userId: string;
+}
+
+const WithdrawalBreakdown: React.FC<WithdrawalBreakdownProps> = ({ finance, userId }) => {
+  const w = finance.withdrawals;
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <Tile
+          label="Total requests"
+          value={formatNumber(w.totalCount)}
+        />
+        <Tile
+          label="Total amount"
+          value={`฿${formatNumber(w.totalAmount)}`}
+          tone="text-rose-700"
+        />
+        <Tile
+          label="Net to bank"
+          value={`฿${formatNumber(w.totalNet)}`}
+          tone="text-emerald-700"
+        />
+        <Tile
+          label="Last withdrawal"
+          value={
+            w.last ? `฿${formatNumber(w.last.amount)}` : "—"
+          }
+          hint={
+            w.last
+              ? formatDateTime(w.last.createdAt) +
+                (w.last.status ? ` · ${w.last.status}` : "")
+              : "No history"
+          }
+        />
+      </div>
+
+      {/* Status breakdown */}
+      <div>
+        <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wide mb-2">
+          By status
+        </p>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+          {WITHDRAW_STATUSES.map((s) => {
+            const row = w.byStatus[s];
+            if (!row) return null;
+            return (
+              <div
+                key={s}
+                className="rounded-md border border-gray-100 px-3 py-2 flex items-center justify-between gap-2"
+              >
+                <span
+                  className={`text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wide ${WITHDRAW_STATUS_TONE[s]}`}
+                >
+                  {s}
+                </span>
+                <div className="text-right">
+                  <p className="text-[12px] font-black tabular-nums text-gray-900">
+                    ฿{formatNumber(row.totalAmount)}
+                  </p>
+                  <p className="text-[10px] text-gray-500">
+                    {row.count} request{row.count === 1 ? "" : "s"}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+          {Object.keys(w.byStatus).length === 0 && (
+            <div className="col-span-full text-[11px] text-gray-400 text-center py-4">
+              No withdrawal history
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Last withdrawal detail */}
+      {w.last && (
+        <div className="rounded-md bg-gray-50 px-3 py-2 text-[11px] space-y-0.5">
+          <p className="text-gray-500">
+            <strong className="text-gray-700">Last withdrawal:</strong>{" "}
+            ฿{formatNumber(w.last.amount)} (net ฿{formatNumber(w.last.netAmount)} · fee ฿
+            {formatNumber(w.last.fee)}) · status{" "}
+            <strong className="uppercase">{w.last.status}</strong>
+          </p>
+          <p className="text-gray-500">
+            {formatDateTime(w.last.createdAt)}
+            {w.last.processedAt && ` · processed ${formatDateTime(w.last.processedAt)}`}
+            {w.last.bank?.bankName &&
+              ` · ${w.last.bank.bankName} ····${(w.last.bank.accountNumber || "").slice(-4)}`}
+          </p>
+        </div>
+      )}
+
+      <Link
+        href={`/withdrawpage/Seller/SellerWithdrawals?userId=${userId}`}
+        className="text-[11px] text-[#00aeff] font-bold hover:underline inline-flex items-center gap-1"
+      >
+        View all withdrawals →
+      </Link>
+    </div>
+  );
+};
+
+// ─── Order activity (buyer + seller perspectives) ───────────────────
+
+interface OrderActivityProps {
+  finance: AdminUserFinance;
+  isSeller: boolean;
+  userId: string;
+}
+
+const OrderActivity: React.FC<OrderActivityProps> = ({ finance, isSeller, userId }) => {
+  const buyer = finance.buyerActivity;
+  const seller = finance.sellerActivity;
+  const totalBuyerOrders = buyer.paidCount + buyer.unpaidCount;
+  const avgOrderValue =
+    buyer.paidCount > 0 ? buyer.paidTotal / buyer.paidCount : 0;
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Buyer side */}
+        <div className="rounded-md border border-gray-100 p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <ShoppingBag className="w-3.5 h-3.5 text-blue-500" />
+            <h4 className="text-[12px] font-bold text-gray-900">As a buyer</h4>
+          </div>
+          <div className="space-y-2">
+            <Row label="Orders placed (lifetime)" value={formatNumber(totalBuyerOrders)} />
+            <Row
+              label="Paid orders"
+              value={formatNumber(buyer.paidCount)}
+              tone="text-emerald-700"
+            />
+            <Row
+              label="Unpaid / pending"
+              value={formatNumber(buyer.unpaidCount)}
+              tone={buyer.unpaidCount > 0 ? "text-amber-700" : "text-gray-400"}
+            />
+            <Row
+              label="Total spent"
+              value={`฿${formatNumber(buyer.paidTotal)}`}
+              tone="text-rose-700 font-bold"
+            />
+            <Row
+              label="Average order"
+              value={`฿${formatNumber(avgOrderValue)}`}
+            />
+            <Row
+              label="Last paid order"
+              value={
+                buyer.lastPaidAt
+                  ? `฿${formatNumber(buyer.lastPaidAmount)} · ${formatDate(buyer.lastPaidAt)}`
+                  : "—"
+              }
+            />
+          </div>
+        </div>
+
+        {/* Seller side */}
+        <div className="rounded-md border border-gray-100 p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Store className="w-3.5 h-3.5 text-emerald-500" />
+            <h4 className="text-[12px] font-bold text-gray-900">As a seller</h4>
+          </div>
+          {isSeller ? (
+            <div className="space-y-2">
+              <Row
+                label="Orders received"
+                value={formatNumber(seller.ordersReceived)}
+              />
+              <Row
+                label="Items sold"
+                value={formatNumber(seller.itemsSold)}
+              />
+              <Row
+                label="Gross revenue"
+                value={`฿${formatNumber(seller.grossRevenue)}`}
+                tone="text-emerald-700 font-bold"
+              />
+              <Row
+                label="Avg / order received"
+                value={
+                  seller.ordersReceived > 0
+                    ? `฿${formatNumber(seller.grossRevenue / seller.ordersReceived)}`
+                    : "—"
+                }
+              />
+            </div>
+          ) : (
+            <div className="text-[11px] text-gray-400 text-center py-6">
+              Not a seller
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        <Link
+          href={`/orders?user=${userId}`}
+          className="text-[11px] text-[#00aeff] font-bold hover:underline inline-flex items-center gap-1"
+        >
+          View buyer orders →
+        </Link>
+        {isSeller && (
+          <Link
+            href={`/orders?seller=${userId}`}
+            className="text-[11px] text-emerald-700 font-bold hover:underline inline-flex items-center gap-1"
+          >
+            View seller orders →
+          </Link>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Compact stat tile reused across the new finance/order sections.
+const Tile: React.FC<{ label: string; value: string; tone?: string; hint?: string }> = ({
+  label,
+  value,
+  tone,
+  hint,
+}) => (
+  <div className="rounded-md bg-gray-50 px-3 py-2">
+    <p className="text-[10px] font-semibold text-gray-500 tracking-wide">{label}</p>
+    <p className={`text-[16px] font-bold tabular-nums mt-0.5 ${tone || "text-gray-900"}`}>
+      {value}
+    </p>
+    {hint && <p className="text-[9px] text-gray-400 mt-0.5">{hint}</p>}
   </div>
 );
 
