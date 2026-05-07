@@ -32,7 +32,8 @@
       "Bash(rm -f frontend/src/pages/top-factories/toppage.tsx)",
       "Bash(git add *)",
       "Bash(git push *)",
-      "Bash(grep -E \"\\\\\\\\.items\\\\b|\\\\\"items\\\\\\\\.shop\\\\\"|orderItems\" f:/Lalashop2026/backend/src/controllers/orderController.ts)"
+      "Bash(grep -E \"\\\\\\\\.items\\\\b|\\\\\"items\\\\\\\\.shop\\\\\"|orderItems\" f:/Lalashop2026/backend/src/controllers/orderController.ts)",
+      "Bash(grep -n \"subItems\\\\|item\\\\\\\\.subItems\" f:/Lalashop2026/seller/src/components/Sidebar/Sidebar.tsx)"
     ]
   }
 }

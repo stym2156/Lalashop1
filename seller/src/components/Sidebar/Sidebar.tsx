@@ -75,15 +75,8 @@ const Sidebar = () => {
     },
     {
       name: 'Messages',
-      href: '/messages',
+      href: '/messages/inbox',
       icon: MessageSquare,
-      subItems: [
-        { name: 'Inbox', href: '/messages/inbox' },
-        { name: 'Channels', href: '/messages/channels' },
-        { name: 'CRM', href: '/messages/crm' },
-        { name: 'Quick Actions', href: '/messages/quick-actions' },
-        { name: 'Automation', href: '/messages/automation' },
-      ]
     },
     {
       name: 'Customers',
