@@ -1,10 +1,31 @@
 "use client";
 import React, { useMemo, useRef, useState, useEffect } from "react";
-import { CheckCircle2, Download, Home, ShoppingBag, MapPin, CreditCard, ChevronRight, Printer, FileText, ZoomIn } from "lucide-react";
+import { CheckCircle2, Download, MapPin, CreditCard, Printer, Clock } from "lucide-react";
 import { useRouter } from "next/router";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { apiClient } from "@/services/apiClient";
+
+interface Address {
+  recipientName?: string;
+  phoneNumber?: string;
+  village?: string;
+  district?: string;
+  province?: string;
+}
+
+interface CartProduct {
+  _id: string;
+  name: string;
+  image: string | string[];
+}
+
+interface CartItem {
+  product: CartProduct;
+  qty: number;
+  unitPrice: number;
+  total: number;
+}
 
 export default function ReceiptPage() {
   const router = useRouter();
@@ -12,12 +33,24 @@ export default function ReceiptPage() {
   const [mounted, setMounted] = useState(false);
   const [orderId, setOrderId] = useState("");
   const [currentDate, setCurrentDate] = useState("");
-  const [address, setAddress] = useState<any>(null);
-  const [cartItems, setCartItems] = useState<any[]>([]);
+  const [address, setAddress] = useState<Address | null>(null);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+  // Status from transfer.tsx redirect — `awaiting_verification` means a slip
+  // was uploaded and is waiting on admin review. Anything else (or absent)
+  // means the order is already considered paid.
+  const status = (query.status as string) || "paid";
+  const isAwaiting = status === "awaiting_verification";
 
   useEffect(() => {
     setMounted(true);
-    setOrderId("SN-" + Math.floor(100000 + Math.random() * 900000));
+    // Prefer the real order id passed from transfer.tsx; fall back to a
+    // synthetic display id so old direct visits still render.
+    if (query.orderId && typeof query.orderId === "string") {
+      setOrderId("#" + query.orderId.slice(-8).toUpperCase());
+    } else {
+      setOrderId("SN-" + Math.floor(100000 + Math.random() * 900000));
+    }
     setCurrentDate(new Date().toLocaleDateString('en-US', {
       year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
     }));
@@ -103,16 +136,40 @@ export default function ReceiptPage() {
 
   return (
     <div className="min-h-screen bg-gray-light text-dark font-sans antialiased pb-12">
-      {/* Success Header */}
+      {/* Header — colors swap based on whether the slip still needs admin review */}
       <div className="bg-white border-b border-gray-border py-12 text-center space-y-4">
         <div className="flex justify-center">
-          <div className="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center animate-in zoom-in duration-500">
-            <CheckCircle2 size={48} strokeWidth={2.5} />
+          <div
+            className={`w-20 h-20 rounded-full flex items-center justify-center animate-in zoom-in duration-500 ${
+              isAwaiting
+                ? "bg-amber-50 text-amber-500"
+                : "bg-emerald-50 text-emerald-500"
+            }`}
+          >
+            {isAwaiting ? (
+              <Clock size={44} strokeWidth={2.5} />
+            ) : (
+              <CheckCircle2 size={48} strokeWidth={2.5} />
+            )}
           </div>
         </div>
-        <div className="space-y-1">
-          <h1 className="text-[24px] font-bold text-dark">Payment Successful!</h1>
-          <p className="text-gray-400 text-[14px] font-medium">Thank you for your purchase. Your receipt is ready.</p>
+        <div className="space-y-1 max-w-xl mx-auto px-4">
+          {isAwaiting ? (
+            <>
+              <h1 className="text-[24px] font-bold text-dark">Slip submitted — awaiting verification</h1>
+              <p className="text-gray-500 text-[14px] font-medium">
+                Our team will review your transfer slip within a few hours. You&apos;ll get a
+                notification once the order is confirmed.
+              </p>
+            </>
+          ) : (
+            <>
+              <h1 className="text-[24px] font-bold text-dark">Payment Successful!</h1>
+              <p className="text-gray-400 text-[14px] font-medium">
+                Thank you for your purchase. Your receipt is ready.
+              </p>
+            </>
+          )}
         </div>
       </div>
 
@@ -159,7 +216,11 @@ export default function ReceiptPage() {
                 cartItems.map((item, idx) => (
                   <div key={idx} className="flex gap-4 items-center py-2 border-b border-gray-50 last:border-0 last:pb-0">
                     <div className="w-14 h-14 bg-gray-50 rounded-lg overflow-hidden border border-gray-100 flex-shrink-0">
-                      <img src={item.product.image} alt="product" className="w-full h-full object-cover" />
+                      <img
+                        src={Array.isArray(item.product.image) ? item.product.image[0] : item.product.image}
+                        alt="product"
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                     <div className="flex-1">
                       <h4 className="text-[14px] font-bold text-dark line-clamp-1">{item.product.name}</h4>
@@ -225,9 +286,15 @@ export default function ReceiptPage() {
                 </div>
                 <div className="text-[13px] text-gray-600 font-medium">
                   <p className="text-dark">{orderSummary.method.replace(/_/g, ' ')}</p>
-                  <p className="text-emerald-500 text-[11px] font-bold mt-1 flex items-center gap-1">
-                    <CheckCircle2 size={10} /> Verified Success
-                  </p>
+                  {isAwaiting ? (
+                    <p className="text-amber-600 text-[11px] font-bold mt-1 flex items-center gap-1">
+                      <Clock size={10} /> Awaiting verification
+                    </p>
+                  ) : (
+                    <p className="text-emerald-500 text-[11px] font-bold mt-1 flex items-center gap-1">
+                      <CheckCircle2 size={10} /> Verified
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

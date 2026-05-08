@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Users, Store, Layers,
   ShoppingBag, Settings, LogOut, Wallet, ChevronDown, ArrowLeftRight, Bell,
-  ShieldCheck, Package, FileWarning, UserCog, BadgeCheck, LifeBuoy,
+  ShieldCheck, Package, FileWarning, UserCog, BadgeCheck, LifeBuoy, Banknote,
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -63,6 +63,15 @@ const Sidebar = () => {
         { name: 'Seller Withdrawals', href: '/withdrawpage/Seller/SellerWithdrawals' },
         { name: 'Creator Withdrawals', href: '/withdrawpage/creator/CreatorWithdrawals' },
         { name: 'Payment', href: '/withdrawpage/payment/payment' },
+      ],
+    },
+    {
+      name: 'Payment',
+      href: '/payment',
+      icon: Banknote,
+      subItems: [
+        { name: 'Methods (banks/QR)', href: '/payment/methods' },
+        { name: 'Verify slips', href: '/payment/slips' },
       ],
     },
     { name: 'Categories', href: '/categories', icon: Layers },

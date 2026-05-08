@@ -1049,3 +1049,94 @@ export const updateUserAdminRole = (
     body: JSON.stringify(payload),
   });
 
+// ─── Payment methods + slips ─────────────────────────────────────────
+
+export type PaymentMethodKind = "bank" | "promptpay" | "static_qr";
+
+export interface AdminPaymentMethod {
+  _id: string;
+  kind: PaymentMethodKind;
+  label: string;
+  bankName?: string;
+  accountNumber?: string;
+  accountName?: string;
+  promptpayId?: string;
+  qrImageUrl?: string;
+  notes?: string;
+  isActive: boolean;
+  displayOrder: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PaymentMethodInput {
+  kind: PaymentMethodKind;
+  label: string;
+  bankName?: string;
+  accountNumber?: string;
+  accountName?: string;
+  promptpayId?: string;
+  qrImageUrl?: string;
+  notes?: string;
+  isActive?: boolean;
+  displayOrder?: number;
+}
+
+export const fetchAdminPaymentMethods = () =>
+  apiClient<AdminPaymentMethod[]>("/payment/admin/methods");
+
+export const createAdminPaymentMethod = (input: PaymentMethodInput) =>
+  apiClient<AdminPaymentMethod>("/payment/admin/methods", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+
+export const updateAdminPaymentMethod = (id: string, input: Partial<PaymentMethodInput>) =>
+  apiClient<AdminPaymentMethod>(`/payment/admin/methods/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(input),
+  });
+
+export const deleteAdminPaymentMethod = (id: string) =>
+  apiClient<{ _id: string }>(`/payment/admin/methods/${id}`, { method: "DELETE" });
+
+export type PaymentSlipStatus = "pending" | "verified" | "rejected";
+
+export interface AdminPaymentSlip {
+  _id: string;
+  user?: { _id: string; name?: string; email?: string; customId?: string; profileImage?: string };
+  order?: { _id: string; totalPrice: number; status: string; isPaid: boolean; createdAt: string };
+  paymentMethod?: { _id: string; label: string; kind: string; bankName?: string; accountNumber?: string };
+  slipImageUrl: string;
+  transferAmount: number;
+  transferRef?: string;
+  transferredAt?: string;
+  buyerNote?: string;
+  status: PaymentSlipStatus;
+  rejectionReason?: string;
+  reviewedBy?: { _id: string; name?: string; email?: string };
+  reviewedAt?: string;
+  createdAt: string;
+}
+
+export interface SlipStats {
+  pending: { count: number; total: number };
+  verified: { count: number; total: number };
+  rejected: { count: number; total: number };
+}
+
+export const fetchAdminSlips = (status: PaymentSlipStatus | "all" = "all") =>
+  apiClient<AdminPaymentSlip[]>(`/payment/admin/slips?status=${status}`);
+
+export const fetchAdminSlipStats = () =>
+  apiClient<SlipStats>("/payment/admin/slips/stats");
+
+export const reviewAdminSlip = (
+  id: string,
+  payload: { action: "verify" | "reject"; reason?: string }
+) =>
+  apiClient<AdminPaymentSlip>(`/payment/admin/slips/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+

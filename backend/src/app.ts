@@ -32,6 +32,7 @@ import shopSettingRoutes from "./routes/shopSettingRoutes";
 import customerRoutes from "./routes/customerRoutes";
 import financeRoutes from "./routes/financeRoutes";
 import trackingRoutes from "./routes/trackingRoutes";
+import paymentRoutes from "./routes/paymentRoutes";
 import { cookieParser } from "./middlewares/cookieParser";
 import { trackAndRedirect } from "./controllers/affiliateController";
 import { optionalProtect } from "./middlewares/authMiddleware";
@@ -86,6 +87,8 @@ app.use("/api/shop-settings", shopSettingRoutes);
 app.use("/api/customers", customerRoutes);
 app.use("/api/finance", financeRoutes);
 app.use("/api/tracking", trackingRoutes);
+// Payment routes mounted at /api so admin paths are /api/admin/methods etc.
+app.use("/api/payment", paymentRoutes);
 app.use("/api", inviteRoutes);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
