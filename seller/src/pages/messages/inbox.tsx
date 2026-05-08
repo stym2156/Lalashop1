@@ -136,9 +136,13 @@ const InboxPage: React.FC = () => {
     void load();
     const handle = setInterval(load, REFRESH_MS / 3);
 
-    // Mark read once (best-effort) when opening the thread.
+    // Mark read once (best-effort) when opening the thread. Notify the sidebar
+    // so its Messages badge updates without waiting for its next poll.
     markConversationRead(selectedId).then(() => {
       void loadConversations();
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new Event("messages:refresh"));
+      }
     }).catch(() => {});
 
     return () => {
@@ -227,6 +231,9 @@ const InboxPage: React.FC = () => {
     const unread = conversations.filter((c) => c.unreadCount > 0);
     await Promise.all(unread.map((c) => markConversationRead(c._id)));
     await loadConversations();
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new Event("messages:refresh"));
+    }
   };
 
   return (

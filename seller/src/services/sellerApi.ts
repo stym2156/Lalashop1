@@ -33,6 +33,69 @@ export const fetchMyProducts = async (): Promise<SellerProductRow[]> => {
   return res.data ?? [];
 };
 
+// Full product detail used by the edit page. Every editable field on the
+// product schema is reflected here so the form has a single source of truth.
+export interface SellerProductDetail extends SellerProductRow {
+  brand?: string;
+  vendor?: string;
+  sku?: string;
+  barcode?: string;
+  cost?: number;
+  trackInventory?: boolean;
+  allowOversell?: boolean;
+  reorderAt?: number;
+  moq?: number;
+  salesChannel?: "web" | "pos" | "both";
+  showInStorefront?: boolean;
+  weight?: number;
+  weightUnit?: string;
+  dimensions?: { length?: number; width?: number; height?: number; unit?: string };
+  originCountry?: string;
+  leadTime?: { min: number; max: number; unit: string };
+  returnPolicy?: { accepts: boolean; days: number; notes: string };
+  seoTitle?: string;
+  seoDescription?: string;
+  slug?: string;
+  channels?: Record<string, boolean>;
+  specifications?: Array<{ label: string; value: string }>;
+  advertImages?: string[];
+  attributes?: Record<string, string>;
+  variantOptions?: Array<{ name: string; values: string[] }>;
+  tiers?: Array<{ minQty: number; price: number; discountPercent?: number }>;
+  allowCreators?: boolean;
+  commissionType?: "percent" | "fixed";
+  commissionValue?: number;
+  minCreatorTier?: "all" | "bronze" | "silver" | "gold";
+  cookieDays?: number;
+}
+
+interface ProductDetailResponse {
+  success: boolean;
+  data?: SellerProductDetail;
+  message?: string;
+}
+
+export const fetchProductById = async (id: string): Promise<SellerProductDetail | null> => {
+  const res = await apiClient<ProductDetailResponse>(`/products/${id}`);
+  return res.data ?? null;
+};
+
+export const updateMyProduct = async (
+  id: string,
+  payload: Partial<SellerProductDetail> & { images?: string[]; advertImages?: string[] }
+): Promise<SellerProductDetail | null> => {
+  const res = await apiClient<ProductDetailResponse>(`/products/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+  return res.data ?? null;
+};
+
+export const deleteMyProduct = async (id: string): Promise<boolean> => {
+  await apiClient(`/products/${id}`, { method: "DELETE" });
+  return true;
+};
+
 // ─── Orders (seller-scoped) ────────────────────────────────────────────
 
 export interface SellerOrderItem {

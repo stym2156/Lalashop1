@@ -10,7 +10,7 @@ import {
   getCategoryConfig,
   type CategoryConfig,
 } from "@/pages/products/categoryFields";
-import { uploadToCloudinary } from "@/services/cloudinary";
+import { uploadImage } from "@/services/uploadImage";
 
 type ProductStatus = "Active" | "Draft" | "Archived";
 type CommissionType = "percent" | "fixed";
@@ -337,13 +337,13 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
     try {
       const imageUrls = await Promise.all(
         images.map(async (img) =>
-          img.uploadedUrl ? img.uploadedUrl : await uploadToCloudinary(img.file)
+          img.uploadedUrl ? img.uploadedUrl : await uploadImage(img.file, "products")
         )
       );
 
       const advertUrls = await Promise.all(
         advertImages.map(async (img) =>
-          img.uploadedUrl ? img.uploadedUrl : await uploadToCloudinary(img.file)
+          img.uploadedUrl ? img.uploadedUrl : await uploadImage(img.file, "banners")
         )
       );
 

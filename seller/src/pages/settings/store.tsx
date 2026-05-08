@@ -6,18 +6,7 @@ import {
   type ShopGeneral,
 } from "@/services/sellerApi";
 import { uploadImage } from "@/services/uploadImage";
-
-const CATEGORIES = [
-  "Fashion & Accessories",
-  "Electronics",
-  "Beauty & Personal Care",
-  "Food & Beverages",
-  "Home & Living",
-  "Sports & Outdoors",
-  "Toys & Hobbies",
-  "Health & Wellness",
-  "Other",
-];
+import { productCategories } from "../products/productCategories";
 
 const LANGUAGES = [
   { code: "en", label: "English" },
@@ -38,7 +27,7 @@ const initial: ShopGeneral = {
   description: "",
   logo: "",
   banner: "",
-  category: CATEGORIES[0],
+  category: productCategories[0].value,
   language: "en",
   currency: "THB",
 };
@@ -213,9 +202,14 @@ const StoreSettings: React.FC = () => {
               value={form.category}
               onChange={(e) => setForm({ ...form, category: e.target.value })}
             >
-              {CATEGORIES.map((c) => (
-                <option key={c} value={c}>{c}</option>
+              {productCategories.map((c) => (
+                <option key={c.value} value={c.value}>{c.label}</option>
               ))}
+              {/* Preserve legacy categories not in the canonical list */}
+              {form.category &&
+                !productCategories.some((c) => c.value === form.category) && (
+                  <option value={form.category}>{form.category}</option>
+                )}
             </select>
           </Field>
           <Field label="Language">

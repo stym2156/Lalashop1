@@ -7,10 +7,41 @@ import {
   Users, Megaphone, Share2, BarChart3, LifeBuoy,
   Settings, LogOut, ChevronDown, Bell, Search, User, ScanLine
 } from 'lucide-react';
+import { fetchUnreadSummary } from '@/services/messagesApi';
+
+const UNREAD_POLL_MS = 20000;
 
 const Sidebar = () => {
   const router = useRouter();
   const [openStates, setOpenStates] = useState<{ [key: string]: boolean }>({});
+  const [unreadMessages, setUnreadMessages] = useState(0);
+
+  // Poll unread DM count so the Messages icon badges in real-ish time.
+  // Other pages can fire `messages:refresh` to force an immediate update
+  // (e.g. inbox.tsx after marking a thread read).
+  useEffect(() => {
+    let active = true;
+    const load = async () => {
+      try {
+        const summary = await fetchUnreadSummary();
+        if (active) setUnreadMessages(summary.messages || 0);
+      } catch {
+        if (active) setUnreadMessages(0);
+      }
+    };
+    void load();
+    const handle = setInterval(load, UNREAD_POLL_MS);
+    const onFocus = () => { void load(); };
+    const onRefresh = () => { void load(); };
+    window.addEventListener('focus', onFocus);
+    window.addEventListener('messages:refresh', onRefresh);
+    return () => {
+      active = false;
+      clearInterval(handle);
+      window.removeEventListener('focus', onFocus);
+      window.removeEventListener('messages:refresh', onRefresh);
+    };
+  }, []);
 
   const navItems = [
     {
@@ -41,14 +72,6 @@ const Sidebar = () => {
       name: 'Orders',
       href: '/orders',
       icon: ShoppingBag,
-      subItems: [
-        { name: 'Pending', href: '/orders/pending' },
-        { name: 'Processing', href: '/orders/processing' },
-        { name: 'Shipping', href: '/orders/shipping' },
-        { name: 'Delivered', href: '/orders/delivered' },
-        { name: 'Cancelled', href: '/orders/cancelled' },
-        { name: 'Returned', href: '/orders/returned' },
-      ]
     },
     {
       name: 'POS',
@@ -189,7 +212,14 @@ const Sidebar = () => {
                     <motion.div layoutId="activeSide" className="absolute left-0 w-1 h-5 bg-primary rounded-r-full" />
                   )}
 
-                  <Icon className={`mr-3 h-5 w-5 ${isActive ? 'text-primary' : 'text-gray-400'}`} />
+                  <span className="relative inline-flex mr-3">
+                    <Icon className={`h-5 w-5 ${isActive ? 'text-primary' : 'text-gray-400'}`} />
+                    {item.name === 'Messages' && unreadMessages > 0 && (
+                      <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center tabular-nums leading-none ring-2 ring-white">
+                        {unreadMessages > 99 ? '99+' : unreadMessages}
+                      </span>
+                    )}
+                  </span>
                   <span className="flex-1 text-left">{item.name}</span>
 
                   {hasSub && (

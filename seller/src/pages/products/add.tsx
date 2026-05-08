@@ -6,9 +6,10 @@ import {
 } from "lucide-react";
 import { useCurrentSeller } from "@/services/useCurrentSeller";
 import { usePrinter } from "@/services/usePrinter";
-import { uploadManyToCloudinary } from "@/services/cloudinary";
+import { uploadImages } from "@/services/uploadImage";
 import Barcode, { downloadBarcodeSvg, printBarcode } from "@/components/Barcode/Barcode";
 import WebProductForm from "@/components/products/WebProductForm";
+import { productCategories } from "./productCategories";
 
 type Tab = "web" | "pos";
 
@@ -59,10 +60,6 @@ const Field: React.FC<FieldProps> = ({ label, hint, required, optional, children
   </div>
 );
 
-const POS_CATEGORIES = [
-  "Electronics", "Fashion", "Beauty & Health", "Home & Living",
-  "Food & Beverage", "Sports", "Books", "Toys", "Other",
-];
 
 interface ImageUploaderProps {
   images: UploadedImage[];
@@ -149,7 +146,7 @@ const AddProductPage: React.FC = () => {
   const [posPrice, setPosPrice] = useState("");
   const [posStock, setPosStock] = useState("0");
   const [posBarcodeManual, setPosBarcodeManual] = useState("");
-  const [posCategory, setPosCategory] = useState(POS_CATEGORIES[0]);
+  const [posCategory, setPosCategory] = useState(productCategories[0].value);
   const [posShowInStorefront, setPosShowInStorefront] = useState(false);
   const [posImages, setPosImages] = useState<UploadedImage[]>([]);
   const [createdPos, setCreatedPos] = useState<CreatedPosProduct | null>(null);
@@ -171,16 +168,18 @@ const AddProductPage: React.FC = () => {
 
     setPosSubmitting(true);
     try {
-      // Upload images to Cloudinary first — backend stores URLs only, never the
-      // raw files (avoids local disk dependency, gives us CDN delivery).
-      const imageUrls = await uploadManyToCloudinary(posImages.map((img) => img.file));
+      // Upload images to Cloudflare R2 via the backend presign endpoint;
+      // the API receives only the public URLs.
+      const imageUrls = await uploadImages(posImages.map((img) => img.file), "products");
 
       const payload: Record<string, unknown> = {
         name: posName.trim(),
         category: posCategory,
         price: Number(posPrice),
         countInStock: Number(posStock),
-        salesChannel: "pos",
+        // "Also show on website" → sells in both channels (visible to web
+        // shoppers AND scannable at the POS terminal). Otherwise pos-only.
+        salesChannel: posShowInStorefront ? "both" : "pos",
         showInStorefront: posShowInStorefront,
         status: "Active",
         images: imageUrls,
@@ -272,7 +271,7 @@ const AddProductPage: React.FC = () => {
       {tab === "web" && <WebProductForm />}
 
       {tab === "pos" && (
-        <div className="space-y-4 max-w-4xl">
+        <div className="space-y-4">
           <div className="rounded-lg bg-emerald-50 px-4 py-3 text-[12px] text-emerald-800">
             <strong className="font-bold">POS / In-store product:</strong> these are sold at your
             terminal by scanning a barcode. Revenue from POS sales goes to your shop directly and
@@ -286,19 +285,75 @@ const AddProductPage: React.FC = () => {
             </div>
           )}
 
-          {createdPos && (
-            <PosCreatedCard
-              created={createdPos}
-              printerAvailable={printer.available}
-              printerConnected={printer.connected}
-              printerConnecting={printer.connecting}
-              connectPrinter={printer.connect}
-              onDone={() => setCreatedPos(null)}
-              onGoToTerminal={() => router.push("/pos/terminal")}
-            />
-          )}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+            <form onSubmit={submitPosProduct} className="space-y-4 lg:col-span-2">
+            {/* Where to sell — tag selector at the top so the seller commits */}
+            {/* to inventory-only vs also-on-web before filling in the rest. */}
+            <div className="rounded-lg border border-gray-100 overflow-hidden">
+              <SectionHeader
+                title="Where to sell this product"
+                hint="Pick one — you can change it later from the product detail page"
+              />
+              <div className="p-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setPosShowInStorefront(false)}
+                    className={`text-left rounded-lg border-2 px-4 py-3 transition-all ${
+                      !posShowInStorefront
+                        ? "border-emerald-500 bg-emerald-50"
+                        : "border-gray-200 bg-white hover:border-gray-300"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      <EyeOff
+                        className={`w-4 h-4 ${
+                          !posShowInStorefront ? "text-emerald-600" : "text-gray-400"
+                        }`}
+                      />
+                      <span
+                        className={`text-[12px] font-bold ${
+                          !posShowInStorefront ? "text-emerald-900" : "text-gray-700"
+                        }`}
+                      >
+                        Store only (in-store inventory)
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-gray-500 leading-relaxed">
+                      Sold at the POS terminal only. Not visible on the web storefront.
+                    </p>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPosShowInStorefront(true)}
+                    className={`text-left rounded-lg border-2 px-4 py-3 transition-all ${
+                      posShowInStorefront
+                        ? "border-[#00aeff] bg-[#00aeff]/5"
+                        : "border-gray-200 bg-white hover:border-gray-300"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      <Eye
+                        className={`w-4 h-4 ${
+                          posShowInStorefront ? "text-[#00aeff]" : "text-gray-400"
+                        }`}
+                      />
+                      <span
+                        className={`text-[12px] font-bold ${
+                          posShowInStorefront ? "text-[#00aeff]" : "text-gray-700"
+                        }`}
+                      >
+                        Also show on the website
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-gray-500 leading-relaxed">
+                      Sold both at the POS terminal and on your public web storefront.
+                    </p>
+                  </button>
+                </div>
+              </div>
+            </div>
 
-          <form onSubmit={submitPosProduct} className="space-y-4">
             <div className="rounded-lg border border-gray-100 overflow-hidden">
               <SectionHeader
                 title="Product details"
@@ -340,8 +395,8 @@ const AddProductPage: React.FC = () => {
                       value={posCategory}
                       onChange={(e) => setPosCategory(e.target.value)}
                     >
-                      {POS_CATEGORIES.map((c) => (
-                        <option key={c} value={c}>{c}</option>
+                      {productCategories.map((c) => (
+                        <option key={c.value} value={c.value}>{c.label}</option>
                       ))}
                     </select>
                   </Field>
@@ -349,14 +404,17 @@ const AddProductPage: React.FC = () => {
                 <Field
                   label="Existing barcode"
                   optional
-                  hint="Leave empty — system will generate one for you"
+                  hint="Scan or paste — we'll keep it as-is. Leave blank to auto-generate."
                 >
-                  <input
-                    className={`${inputCls} font-mono`}
-                    value={posBarcodeManual}
-                    onChange={(e) => setPosBarcodeManual(e.target.value)}
-                    placeholder="e.g. 8851234567890"
-                  />
+                  <div className="relative">
+                    <Scan className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
+                    <input
+                      className={`${inputCls} font-mono pl-9`}
+                      value={posBarcodeManual}
+                      onChange={(e) => setPosBarcodeManual(e.target.value)}
+                      placeholder="e.g. 8851234567890"
+                    />
+                  </div>
                 </Field>
               </div>
             </div>
@@ -365,30 +423,6 @@ const AddProductPage: React.FC = () => {
               <SectionHeader title="Image" hint="At least one image (used as POS catalog cover)" />
               <div className="p-4">
                 <ImageUploader images={posImages} setImages={setPosImages} max={4} />
-              </div>
-            </div>
-
-            <div className="rounded-lg border border-gray-100 overflow-hidden">
-              <SectionHeader title="Visibility" />
-              <div className="p-4">
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="w-4 h-4 mt-0.5 accent-emerald-600"
-                    checked={posShowInStorefront}
-                    onChange={(e) => setPosShowInStorefront(e.target.checked)}
-                  />
-                  <div>
-                    <p className="text-[12px] font-bold text-gray-900 inline-flex items-center gap-1">
-                      {posShowInStorefront ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
-                      Also show on the public storefront
-                    </p>
-                    <p className="text-[11px] text-gray-500 mt-0.5">
-                      Default: stays in your in-store inventory only — customers on the web won&apos;t
-                      see it. Tick this if you also want online buyers to discover it.
-                    </p>
-                  </div>
-                </label>
               </div>
             </div>
 
@@ -411,6 +445,30 @@ const AddProductPage: React.FC = () => {
               </button>
             </div>
           </form>
+
+            <aside className="lg:col-span-1 lg:sticky lg:top-4">
+              {createdPos ? (
+                <PosCreatedCard
+                  created={createdPos}
+                  printerAvailable={printer.available}
+                  printerConnected={printer.connected}
+                  printerConnecting={printer.connecting}
+                  connectPrinter={printer.connect}
+                  onDone={() => setCreatedPos(null)}
+                  onGoToTerminal={() => router.push("/pos/terminal")}
+                />
+              ) : (
+                <div className="rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 p-5 text-center">
+                  <Scan className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+                  <p className="text-[12px] font-bold text-gray-700">Barcode preview</p>
+                  <p className="text-[11px] text-gray-500 mt-1 leading-relaxed">
+                    Save the product and the generated barcode appears here — ready to print on a sticker
+                    or download as SVG.
+                  </p>
+                </div>
+              )}
+            </aside>
+          </div>
         </div>
       )}
     </div>
@@ -437,7 +495,7 @@ const PosCreatedCard: React.FC<PosCreatedCardProps> = ({
   onGoToTerminal,
 }) => {
   return (
-    <div className="rounded-2xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-5 space-y-4">
+    <div className="rounded-2xl  from-emerald-50 to-white p-5 space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <CheckCircle2 className="w-5 h-5 text-emerald-600" />
@@ -451,23 +509,20 @@ const PosCreatedCard: React.FC<PosCreatedCardProps> = ({
         </button>
       </div>
 
-      <div className="flex flex-col items-center justify-center py-4 bg-white rounded-xl border border-emerald-100">
+      <div className="flex flex-col items-center justify-center py-4 bg-white rounded-xl  border-emerald-100">
         <p className="text-[12px] font-bold text-gray-900 mb-3">{created.name}</p>
         {created.barcode ? (
           <Barcode value={created.barcode} width={2} height={70} />
         ) : (
           <p className="text-[11px] text-gray-400 italic">no barcode</p>
         )}
-        <p className="text-[12px] font-bold text-emerald-700 mt-3">
-          ฿{Number(created.price).toLocaleString()}
-        </p>
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
         <button
           onClick={() => downloadBarcodeSvg(created.barcode, `${created.name.replace(/\s+/g, "_")}.svg`)}
           disabled={!created.barcode}
-          className="px-3 py-1.5 rounded-md text-[11px] font-bold text-emerald-700 bg-white border border-emerald-200 hover:bg-emerald-50 inline-flex items-center disabled:opacity-50"
+          className="px-3 py-1.5 rounded-md text-[11px] font-bold text-emerald-700 bg-white  border-emerald-200 hover:bg-emerald-50 inline-flex items-center disabled:opacity-50"
         >
           <Download className="w-3.5 h-3.5 mr-1.5" /> Download SVG
         </button>
@@ -480,7 +535,7 @@ const PosCreatedCard: React.FC<PosCreatedCardProps> = ({
           <button
             onClick={connectPrinter}
             disabled={printerConnecting}
-            className="px-3 py-1.5 rounded-md text-[11px] font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 inline-flex items-center disabled:opacity-50"
+            className="px-3 py-1.5 rounded-md text-[11px] font-bold text-amber-700   inline-flex items-center disabled:opacity-50"
           >
             {printerConnecting ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Plug className="w-3.5 h-3.5 mr-1.5" />}
             {printerConnecting ? "Connecting..." : "Connect sticker printer"}

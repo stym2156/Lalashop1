@@ -126,14 +126,19 @@ const ProductsList = () => {
             const cover = productImage(p);
             const lowStock = p.countInStock < 10;
             return (
-              <div
+              <Link
                 key={p._id}
-                className="border border-gray-100 rounded-lg overflow-hidden hover:shadow-sm transition-all bg-white"
+                href={`/products/${p._id}`}
+                className="border border-gray-100 rounded-lg overflow-hidden hover:shadow-md hover:border-[#00aeff]/40 transition-all bg-white block group"
               >
                 <div className="aspect-square bg-gray-50 relative overflow-hidden">
                   {cover ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={cover} alt={p.name} className="w-full h-full object-cover" />
+                    <img
+                      src={cover}
+                      alt={p.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
                       <Package className="w-8 h-8 text-gray-300" />
@@ -151,7 +156,7 @@ const ProductsList = () => {
                   )}
                 </div>
                 <div className="p-3 space-y-1">
-                  <h3 className="text-[12px] font-bold text-gray-900 line-clamp-2 min-h-[32px]">
+                  <h3 className="text-[12px] font-bold text-gray-900 line-clamp-2 min-h-[32px] group-hover:text-[#00aeff]">
                     {p.name}
                   </h3>
                   <div className="flex items-center justify-between text-[10px]">
@@ -170,7 +175,7 @@ const ProductsList = () => {
                     </span>
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
