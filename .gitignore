@@ -27,3 +27,12 @@ yarn-error.log*
 # OS files
 .DS_Store
 Thumbs.db
+
+# Build cache
+**/tsconfig.tsbuildinfo
+
+# Local Claude settings
+.claude/settings.local.json
+
+# Legacy multer uploads — we use Cloudflare R2 now
+backend/uploads/
