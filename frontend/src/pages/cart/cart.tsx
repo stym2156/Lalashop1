@@ -4,6 +4,7 @@ import { ShoppingCart, Trash2, Plus, Minus, ShieldCheck, Truck, ChevronLeft } fr
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 
 type CartItem = {
@@ -20,6 +21,7 @@ type CartItem = {
 };
 
 export default function CartPage() {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const [items, setItems] = useState<CartItem[]>([]);
   const [subtotal, setSubtotal] = useState(0);
@@ -38,7 +40,7 @@ export default function CartPage() {
       }
     } catch (error: any) {
       console.error("Load Cart Error:", error);
-      setError("Failed to load cart");
+      setError(t("cart.loadFailed"));
     } finally {
       setLoading(false);
     }
@@ -96,8 +98,8 @@ export default function CartPage() {
         ) : items.length === 0 ? (
           <div className="py-32 flex flex-col items-center opacity-30 px-10 text-center w-full">
             <ShoppingCart size={48} strokeWidth={1} />
-            <p className="mt-4 text-[13px] font-bold tracking-widest">your cart is empty</p>
-            <Link href="/" className="mt-6 text-[#0077b6] border-b border-[#0077b6] pb-1 text-sm font-bold">shop now</Link>
+            <p className="mt-4 text-[13px] font-bold tracking-widest">{t("cart.emptyHint")}</p>
+            <Link href="/" className="mt-6 text-[#0077b6] border-b border-[#0077b6] pb-1 text-sm font-bold">{t("actions.shopNow")}</Link>
           </div>
         ) : (
           <div className="w-full">
@@ -166,7 +168,7 @@ export default function CartPage() {
       {items.length > 0 && (
         <div className="fixed bottom-[70px] md:bottom-0 left-0 md:left-[64px] right-0 bg-white border-t border-[#EEEEEE] px-5 py-4 flex items-center justify-between z-[110] shadow-[0_-8px_30px_rgba(0,0,0,0.05)]">
           <div className="flex flex-col">
-            <span className="text-[10px] text-[#86878B] font-bold tracking-widest">total amount</span>
+            <span className="text-[10px] text-[#86878B] font-bold tracking-widest">{t("cart.totalAmount")}</span>
             <span className="text-[22px] font-black text-[#FE2C55] leading-none mt-1">฿{subtotal.toLocaleString()}</span>
           </div>
           <button
@@ -174,7 +176,7 @@ export default function CartPage() {
             disabled={loading}
             className="bg-[#0077b6] text-white px-10 py-3.5 rounded-2xl font-black text-[15px] active:scale-95 transition-all shadow-lg shadow-[#0077b6]/25 disabled:bg-gray-400"
           >
-            {loading ? "Updating..." : "Checkout"}
+            {loading ? t("status.updating") : t("actions.checkout")}
           </button>
         </div>
       )}

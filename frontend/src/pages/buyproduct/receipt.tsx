@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 
 interface OrderItem {
@@ -81,6 +82,7 @@ const formatPaymentMethod = (key: string): string =>
   } as Record<string, string>)[key] || key.replace(/_/g, " ");
 
 export default function ReceiptPage() {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const { query } = router;
   const [mounted, setMounted] = useState(false);
@@ -243,7 +245,7 @@ export default function ReceiptPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 text-center space-y-4">
         <AlertCircle size={48} className="text-rose-400" />
-        <h1 className="text-xl font-bold text-slate-900">Receipt unavailable</h1>
+        <h1 className="text-xl font-bold text-slate-900">{t("status.error")}</h1>
         <p className="text-sm text-slate-500 max-w-md">{error || "Order not found."}</p>
         <Link
           href="/me/me"
@@ -286,7 +288,7 @@ export default function ReceiptPage() {
           <div className="p-8 border-b border-dashed border-slate-200 flex justify-between items-start gap-4">
             <div className="space-y-1">
               <p className="text-primary font-black text-xl tracking-tighter ">LALASHOP</p>
-              <p className="text-[12px] text-slate-400 font-medium">Customer Receipt</p>
+              <p className="text-[12px] text-slate-400 font-medium">{t("pages.checkout.receiptTitle")}</p>
             </div>
             <div className="text-right space-y-1">
               <p className="text-[10px] text-slate-400 font-bold tracking-widest">
@@ -300,8 +302,8 @@ export default function ReceiptPage() {
             {/* ── Items ── */}
             <div className="space-y-3">
               <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 tracking-widest">
-                <span>Item Description</span>
-                <span>Amount</span>
+                <span>{t("product.description")}</span>
+                <span>{t("pages.checkout.amount")}</span>
               </div>
 
               {order.orderItems.map((item, idx) => (
@@ -337,18 +339,18 @@ export default function ReceiptPage() {
             {/* ── Price breakdown ── */}
             <div className="pt-6 border-t border-slate-50 space-y-3">
               <div className="flex justify-between text-slate-500 text-[14px] font-medium">
-                <span>Subtotal</span>
+                <span>{t("pages.checkout.subtotal")}</span>
                 <span className="text-slate-900 tabular-nums">฿{formatMoney(subtotal)}</span>
               </div>
               <div className="flex justify-between text-slate-500 text-[14px] font-medium">
-                <span>Shipping Fee</span>
+                <span>{t("pages.checkout.shippingFee")}</span>
                 <span className={shippingFee > 0 ? "tabular-nums text-slate-900" : "text-emerald-500 font-bold text-[12px]"}>
                   {shippingFee > 0 ? `฿${formatMoney(shippingFee)}` : "Free"}
                 </span>
               </div>
               <div className="pt-4 flex justify-between items-center">
                 <div>
-                  <p className="text-[14px] font-bold">Grand Total</p>
+                  <p className="text-[14px] font-bold">{t("pages.checkout.total")}</p>
                   <p className="text-[10px] text-slate-400 font-medium tracking-widest inline-flex items-center gap-1">
                     <Hash size={10} /> Order ID: {displayId}
                   </p>

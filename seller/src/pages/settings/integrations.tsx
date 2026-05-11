@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Loader2, CheckCircle2, AlertCircle, Music2, Hash, Camera,
   MessageCircle, ShoppingBag,
@@ -69,6 +70,7 @@ const INTEGRATIONS: IntegrationDef[] = [
 ];
 
 const IntegrationsPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [items, setItems] = useState<ShopIntegration[]>([]);
   const [accounts, setAccounts] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
@@ -129,9 +131,9 @@ const IntegrationsPage: React.FC = () => {
   return (
     <div className="space-y-4 text-sm max-w-3xl">
       <div>
-        <h1 className="text-[16px] font-bold text-gray-900">Integrations</h1>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.integrations.title')}</h1>
         <p className="text-[12px] text-gray-500 mt-0.5">
-          Connect external platforms to sync products, orders, and messages.
+          {t('pages.integrations.subtitle')}
         </p>
       </div>
 
@@ -163,11 +165,11 @@ const IntegrationsPage: React.FC = () => {
                   <h3 className="text-[13px] font-bold text-gray-900">{def.name}</h3>
                   {enabled ? (
                     <span className="text-[10px] px-1.5 py-0.5 rounded font-bold tracking-wide bg-emerald-100 text-emerald-700">
-                      Connected
+                      {t('pages.integrations.connected')}
                     </span>
                   ) : (
                     <span className="text-[10px] px-1.5 py-0.5 rounded font-bold tracking-wide bg-gray-100 text-gray-600">
-                      Disconnected
+                      {t('pages.integrations.disconnected')}
                     </span>
                   )}
                 </div>
@@ -200,9 +202,9 @@ const IntegrationsPage: React.FC = () => {
                 {savingKey === def.key ? (
                   <Loader2 className="w-3 h-3 animate-spin" />
                 ) : enabled ? (
-                  "Disconnect"
+                  t('actions.disconnect')
                 ) : (
-                  "Connect"
+                  t('actions.connect')
                 )}
               </button>
             </div>

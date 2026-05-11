@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { ChevronLeft, ChevronRight, ArrowRight, CheckCircle2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { countries } from "./constants";
 import Step1BusinessType from "./Step1BusinessType";
 import Step2ShopInfo from "./Step2ShopInfo";
@@ -15,6 +16,7 @@ interface OnboardingProps {
 }
 
 export default function ShopOnboarding({ onBack, onComplete }: OnboardingProps) {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [businessType, setBusinessType] = useState<string | null>(null);
@@ -249,7 +251,7 @@ export default function ShopOnboarding({ onBack, onComplete }: OnboardingProps) 
         <div className="w-24 h-24 bg-green-50 text-green-500 rounded-full flex items-center justify-center mb-8 shadow-sm">
           <CheckCircle2 size={56} strokeWidth={2.5} />
         </div>
-        <h2 className="text-[32px] font-bold text-dark mb-4">Application Submitted Successfully</h2>
+        <h2 className="text-[32px] font-bold text-dark mb-4">{t("pages.openshop.submitSuccess")}</h2>
         <p className="text-[16px] text-gray-500 max-w-md leading-relaxed mb-10 font-medium">
           Your store application is being reviewed by our staff. <br />
           We will notify you of the result via your registered email and phone number within 2-3 business days.
@@ -271,7 +273,7 @@ export default function ShopOnboarding({ onBack, onComplete }: OnboardingProps) 
           <button onClick={handleBack} className="active:opacity-50 -ml-1 hover:bg-gray-50 p-1 rounded-full transition-colors">
             <ChevronLeft size={24} strokeWidth={3} />
           </button>
-          <h1 className="text-[17px] font-bold tracking-tight text-dark">Seller Registration</h1>
+          <h1 className="text-[17px] font-bold tracking-tight text-dark">{t("pages.openshop.title")}</h1>
         </div>
       </nav>
 

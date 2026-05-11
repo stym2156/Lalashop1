@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import {
   ArrowLeft, Loader2, Save, Trash2, ImagePlus, X, AlertCircle,
@@ -52,6 +53,7 @@ const inputCls =
 
 const ProductDetailPage: React.FC = () => {
   const router = useRouter();
+  const { t } = useTranslation("common");
   const idParam = router.query.id;
   const id = typeof idParam === "string" ? idParam : null;
 
@@ -89,7 +91,7 @@ const ProductDetailPage: React.FC = () => {
     try {
       const p = await fetchProductById(id);
       if (!p) {
-        setError("Product not found");
+        setError(t("pages.productDetail.errProductNotFound"));
         return;
       }
       setProduct(p);
@@ -117,7 +119,7 @@ const ProductDetailPage: React.FC = () => {
       setImages(toImageSlots(imgs));
       setAdvertImages(toImageSlots(p.advertImages || []));
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load product");
+      setError(err instanceof Error ? err.message : t("pages.productDetail.errLoadFailed"));
     } finally {
       setLoading(false);
     }
@@ -161,7 +163,7 @@ const ProductDetailPage: React.FC = () => {
             prev.map((s) => (s.id === slot.id ? { id: s.id, url } : s))
           );
         } catch (err) {
-          setError(err instanceof Error ? err.message : "Upload failed");
+          setError(err instanceof Error ? err.message : t("pages.productDetail.errUploadFailed"));
           // Remove the failed placeholder
           setSlots((prev) => prev.filter((s) => s.id !== slot.id));
         }
@@ -179,15 +181,15 @@ const ProductDetailPage: React.FC = () => {
   const handleSave = async () => {
     if (!id) return;
     if (!name.trim()) {
-      setError("Name is required");
+      setError(t("pages.productDetail.errNameRequired"));
       return;
     }
     if (images.some((s) => s.uploading)) {
-      setError("Wait for image uploads to finish before saving");
+      setError(t("pages.productDetail.errWaitUploads"));
       return;
     }
     if (images.length === 0) {
-      setError("At least one product image is required");
+      setError(t("pages.productDetail.errImageRequired"));
       return;
     }
 
@@ -222,11 +224,11 @@ const ProductDetailPage: React.FC = () => {
       const updated = await updateMyProduct(id, payload);
       if (updated) {
         setProduct(updated);
-        setSuccess("Saved successfully");
+        setSuccess(t("pages.productDetail.savedSuccessfully"));
         setTimeout(() => setSuccess(null), 2500);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Save failed");
+      setError(err instanceof Error ? err.message : t("pages.productDetail.errSaveFailed"));
     } finally {
       setSaving(false);
     }
@@ -234,18 +236,14 @@ const ProductDetailPage: React.FC = () => {
 
   const handleDelete = async () => {
     if (!id || !product) return;
-    if (
-      !window.confirm(
-        `Delete "${product.name}"?\n\nThis is permanent. Existing orders will keep a snapshot of the product.`
-      )
-    )
+    if (!window.confirm(t("pages.productDetail.deleteConfirm", { name: product.name })))
       return;
     setDeleting(true);
     try {
       await deleteMyProduct(id);
       void router.replace("/products/list");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Delete failed");
+      setError(err instanceof Error ? err.message : t("pages.productDetail.errDeleteFailed"));
       setDeleting(false);
     }
   };
@@ -276,7 +274,7 @@ const ProductDetailPage: React.FC = () => {
     return (
       <div className="space-y-3">
         <Link href="/products/list" className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-black">
-          <ArrowLeft className="w-3.5 h-3.5" /> Back to products
+          <ArrowLeft className="w-3.5 h-3.5" /> {t("pages.productDetail.backToProducts")}
         </Link>
         <div className="rounded-md bg-red-50 px-3 py-2 text-[12px] text-red-700 inline-flex items-center gap-2">
           <AlertCircle className="w-3.5 h-3.5" /> {error}
@@ -295,7 +293,7 @@ const ProductDetailPage: React.FC = () => {
           href="/products/list"
           className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-black"
         >
-          <ArrowLeft className="w-3.5 h-3.5" /> Back to products
+          <ArrowLeft className="w-3.5 h-3.5" /> {t("pages.productDetail.backToProducts")}
         </Link>
 
         <div className="flex items-center gap-2">
@@ -304,7 +302,7 @@ const ProductDetailPage: React.FC = () => {
             disabled={deleting || saving}
             className="px-3 py-1.5 rounded-md text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 inline-flex items-center disabled:opacity-50"
           >
-            <Trash2 className="w-3 h-3 mr-1" /> {deleting ? "Deleting…" : "Delete"}
+            <Trash2 className="w-3 h-3 mr-1" /> {deleting ? t("pages.productDetail.deleting") : t("pages.productDetail.delete")}
           </button>
           <button
             onClick={handleSave}
@@ -316,7 +314,7 @@ const ProductDetailPage: React.FC = () => {
             ) : (
               <Save className="w-3.5 h-3.5 mr-1.5" />
             )}
-            {saving ? "Saving…" : "Save changes"}
+            {saving ? t("pages.productDetail.saving") : t("pages.productDetail.saveChanges")}
           </button>
         </div>
       </div>
@@ -348,7 +346,7 @@ const ProductDetailPage: React.FC = () => {
                   : "bg-gray-100 text-gray-600"
               }`}
             >
-              {product.showInStorefront !== false ? "In storefront" : "Hidden"}
+              {product.showInStorefront !== false ? t("pages.productDetail.inStorefront") : t("pages.productDetail.hidden")}
             </span>
           </div>
           <p className="text-[10px] text-gray-500 font-mono mt-0.5">ID: {product._id}</p>
@@ -357,7 +355,7 @@ const ProductDetailPage: React.FC = () => {
           <div className="hidden md:grid grid-cols-3 gap-3 text-right text-[10px] flex-shrink-0">
             <div>
               <p className="text-gray-400 inline-flex items-center gap-1 justify-end">
-                <Star className="w-3 h-3" /> Rating
+                <Star className="w-3 h-3" /> {t("pages.productDetail.rating")}
               </p>
               <p className="font-bold text-gray-900 tabular-nums">
                 {stats.rating > 0 ? stats.rating.toFixed(1) : "—"}{" "}
@@ -366,14 +364,14 @@ const ProductDetailPage: React.FC = () => {
             </div>
             <div>
               <p className="text-gray-400 inline-flex items-center gap-1 justify-end">
-                <ShoppingBag className="w-3 h-3" /> Sold
+                <ShoppingBag className="w-3 h-3" /> {t("pages.productDetail.sold")}
               </p>
               <p className="font-bold text-gray-900 tabular-nums">
                 {stats.soldCount.toLocaleString()}
               </p>
             </div>
             <div>
-              <p className="text-gray-400">Created</p>
+              <p className="text-gray-400">{t("pages.productDetail.created")}</p>
               <p className="font-bold text-gray-900">{stats.created}</p>
             </div>
           </div>
@@ -396,27 +394,27 @@ const ProductDetailPage: React.FC = () => {
         {/* Main column */}
         <div className="lg:col-span-2 space-y-4">
           {/* Basic info */}
-          <Section title="Basic info">
-            <Field label="Product name" required>
+          <Section title={t("pages.productDetail.basicInfo")}>
+            <Field label={t("product.name")} required>
               <input
                 className={inputCls}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Premium cotton t-shirt"
+                placeholder={t("pages.productDetail.productNamePlaceholder")}
               />
             </Field>
-            <Field label="Description">
+            <Field label={t("product.description")}>
               <textarea
                 className={`${inputCls} resize-y`}
                 rows={5}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Describe the product. Materials, fit, sizing, key selling points…"
+                placeholder={t("pages.productDetail.descriptionPlaceholder")}
               />
-              <p className="text-[10px] text-gray-400">{description.length} characters</p>
+              <p className="text-[10px] text-gray-400">{description.length} {t("common.characters")}</p>
             </Field>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <Field label="Category" required>
+              <Field label={t("product.category")} required>
                 <select
                   className={inputCls}
                   value={category}
@@ -434,19 +432,19 @@ const ProductDetailPage: React.FC = () => {
                     )}
                 </select>
               </Field>
-              <Field label="Tags (comma-separated)">
+              <Field label={t("pages.productDetail.tagsLabel")}>
                 <input
                   className={inputCls}
                   value={tagsCsv}
                   onChange={(e) => setTagsCsv(e.target.value)}
-                  placeholder="cotton, summer, oversized"
+                  placeholder={t("pages.productDetail.tagsPlaceholder")}
                 />
               </Field>
             </div>
           </Section>
 
           {/* Images */}
-          <Section title="Images" hint="Up to 8. The first image is the cover.">
+          <Section title={t("product.images")} hint={t("pages.productDetail.imagesHint")}>
             <ImageGrid
               slots={images}
               max={8}
@@ -465,8 +463,8 @@ const ProductDetailPage: React.FC = () => {
 
           {/* Advert banners */}
           <Section
-            title="Advert banners"
-            hint="Up to 4 wide images shown on the storefront promo strip."
+            title={t("pages.productDetail.advertBanners")}
+            hint={t("pages.productDetail.advertBannersHint")}
           >
             <ImageGrid
               slots={advertImages}
@@ -486,9 +484,9 @@ const ProductDetailPage: React.FC = () => {
           </Section>
 
           {/* Pricing & inventory */}
-          <Section title="Pricing & inventory">
+          <Section title={t("pages.productDetail.pricingInventory")}>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <Field label="Price (฿)" required>
+              <Field label={t("pages.addProduct.priceLabel")} required>
                 <input
                   type="number"
                   min="0"
@@ -498,7 +496,7 @@ const ProductDetailPage: React.FC = () => {
                   onChange={(e) => setPrice(e.target.value)}
                 />
               </Field>
-              <Field label="Compare-at price (฿)" hint="Strike-through">
+              <Field label={t("pages.productDetail.compareAt")} hint={t("pages.productDetail.compareAtHint")}>
                 <input
                   type="number"
                   min="0"
@@ -509,7 +507,7 @@ const ProductDetailPage: React.FC = () => {
                   placeholder="0.00"
                 />
               </Field>
-              <Field label="MOQ">
+              <Field label={t("pages.productDetail.moq")}>
                 <input
                   type="number"
                   min="1"
@@ -519,7 +517,7 @@ const ProductDetailPage: React.FC = () => {
                 />
               </Field>
             </div>
-            <Field label="Stock quantity">
+            <Field label={t("pages.productDetail.stockQuantity")}>
               <input
                 type="number"
                 min="0"
@@ -533,43 +531,43 @@ const ProductDetailPage: React.FC = () => {
 
         {/* Sidebar */}
         <div className="space-y-4">
-          <Section title="Status">
-            <Field label="Visibility">
+          <Section title={t("pages.productDetail.status")}>
+            <Field label={t("pages.productDetail.visibility")}>
               <select
                 className={inputCls}
                 value={status}
                 onChange={(e) => setStatus(e.target.value as ProductStatus)}
               >
-                <option value="Active">Active — visible on storefront</option>
-                <option value="Draft">Draft — saved but hidden</option>
-                <option value="Archived">Archived — removed</option>
+                <option value="Active">{t("pages.productDetail.statusActive")}</option>
+                <option value="Draft">{t("pages.productDetail.statusDraft")}</option>
+                <option value="Archived">{t("pages.productDetail.statusArchived")}</option>
               </select>
             </Field>
             <ToggleRow
               icon={showInStorefront ? Eye : EyeOff}
-              title="Show on storefront"
-              desc="Hide if you only want to sell at POS."
+              title={t("pages.productDetail.showOnStorefront")}
+              desc={t("pages.productDetail.showOnStorefrontDesc")}
               checked={showInStorefront}
               onChange={setShowInStorefront}
             />
             <ToggleRow
               icon={Tag}
-              title="Free shipping"
-              desc="Adds a green badge on the storefront."
+              title={t("pages.productDetail.freeShipping")}
+              desc={t("pages.productDetail.freeShippingDesc")}
               checked={freeShipping}
               onChange={setFreeShipping}
             />
           </Section>
 
           {/* Read-only meta */}
-          <Section title="Meta">
-            <Row label="Sales channel" value={product.salesChannel || "web"} />
+          <Section title={t("pages.productDetail.meta")}>
+            <Row label={t("pages.productDetail.salesChannel")} value={product.salesChannel || "web"} />
             {product.barcode && (
-              <Row label="Barcode" value={product.barcode} mono />
+              <Row label={t("pages.productDetail.barcode")} value={product.barcode} mono />
             )}
-            {product.sku && <Row label="SKU" value={product.sku} mono />}
-            <Row label="Price now" value={`฿${formatMoney(Number(price) || 0)}`} tone="text-[#00aeff] font-bold" />
-            <Row label="Stock" value={`${stock} units`} />
+            {product.sku && <Row label={t("pages.productDetail.skuLabel")} value={product.sku} mono />}
+            <Row label={t("pages.productDetail.priceNow")} value={`฿${formatMoney(Number(price) || 0)}`} tone="text-[#00aeff] font-bold" />
+            <Row label={t("product.stock")} value={t("pages.productDetail.stockUnits", { count: Number(stock) })} />
           </Section>
         </div>
       </div>
@@ -668,7 +666,11 @@ interface ImageGridProps {
   onRemove: (id: string) => void;
 }
 
-const ImageGrid: React.FC<ImageGridProps> = ({ slots, max, aspect = "aspect-square", onAdd, onRemove }) => (
+const ImageGrid: React.FC<ImageGridProps> = ({ slots, max, aspect = "aspect-square", onAdd, onRemove }) => {
+  const { t } = useTranslation("common");
+  const coverLabel = t("pages.productDetail.cover");
+  const addImageLabel = t("components.webProductForm.addImage");
+  return (
   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
     {slots.map((slot, i) => (
       <div
@@ -679,7 +681,7 @@ const ImageGrid: React.FC<ImageGridProps> = ({ slots, max, aspect = "aspect-squa
         <img src={slot.url} alt="" className="w-full h-full object-cover" />
         {i === 0 && (
           <span className="absolute top-1 left-1 text-[9px] font-bold px-1.5 py-0.5 rounded bg-black/70 text-white">
-            Cover
+            {coverLabel}
           </span>
         )}
         {slot.uploading && (
@@ -703,10 +705,11 @@ const ImageGrid: React.FC<ImageGridProps> = ({ slots, max, aspect = "aspect-squa
         className={`${aspect} rounded-md bg-gray-50 border border-dashed border-gray-200 hover:border-[#00aeff] hover:bg-blue-50/30 transition-colors flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-[#00aeff]`}
       >
         <ImagePlus className="w-5 h-5" />
-        <span className="text-[10px] font-bold tracking-wide">Add image</span>
+        <span className="text-[10px] font-bold tracking-wide">{addImageLabel}</span>
       </button>
     )}
   </div>
-);
+  );
+};
 
 export default ProductDetailPage;

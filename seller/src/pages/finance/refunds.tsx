@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Loader2, RotateCcw, CheckCircle2, XCircle, AlertCircle, X,
 } from "lucide-react";
@@ -32,16 +33,17 @@ const STATUS_BADGE: Record<RefundStatus, string> = {
   completed: "bg-emerald-100 text-emerald-700",
 };
 
-const REASON_LABEL: Record<string, string> = {
-  not_received: "Item not received",
-  damaged: "Damaged on arrival",
-  wrong_item: "Wrong item sent",
-  not_as_described: "Not as described",
-  changed_mind: "Changed mind",
-  other: "Other",
+const REASON_KEY: Record<string, string> = {
+  not_received: "pages.refunds.reasonNotReceived",
+  damaged: "pages.refunds.reasonDamaged",
+  wrong_item: "pages.refunds.reasonWrongItem",
+  not_as_described: "pages.refunds.reasonNotAsDescribed",
+  changed_mind: "pages.refunds.reasonChangedMind",
+  other: "pages.refunds.reasonOther",
 };
 
 const RefundsPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [items, setItems] = useState<SellerRefund[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -57,7 +59,7 @@ const RefundsPage: React.FC = () => {
       const list = await fetchRefunds();
       setItems(list);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Load failed");
+      setError(err instanceof Error ? err.message : t("pages.refunds.errLoadFailed"));
     } finally {
       setLoading(false);
     }
@@ -89,7 +91,7 @@ const RefundsPage: React.FC = () => {
       setNote("");
       await reload();
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Decision failed");
+      alert(err instanceof Error ? err.message : t("pages.refunds.errDecisionFailed"));
     } finally {
       setDecidingId(null);
     }
@@ -98,17 +100,17 @@ const RefundsPage: React.FC = () => {
   return (
     <div className="space-y-4 text-sm">
       <div>
-        <h1 className="text-[16px] font-bold text-gray-900">Refunds</h1>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.refunds.title')}</h1>
         <p className="text-[12px] text-gray-500 mt-0.5">
-          Customer refund requests. Approving deducts the amount from your withdrawable balance.
+          {t('pages.refunds.subtitle')}
         </p>
       </div>
 
       <div className="grid grid-cols-3 gap-3">
-        <Stat label="Total refunds" value={stats.total.toString()} />
-        <Stat label="Awaiting decision" value={stats.requested.toString()} tone="text-amber-700" />
+        <Stat label={t('pages.refunds.totalRefunds')} value={stats.total.toString()} />
+        <Stat label={t('pages.refunds.awaitingDecision')} value={stats.requested.toString()} tone="text-amber-700" />
         <Stat
-          label="Total refunded"
+          label={t('pages.refunds.totalRefunded')}
           value={`฿${formatMoney(stats.refundedAmount)}`}
           tone="text-rose-700"
         />
@@ -140,7 +142,7 @@ const RefundsPage: React.FC = () => {
         <div className="py-16 text-center">
           <RotateCcw className="w-8 h-8 mx-auto mb-3 text-gray-300" />
           <p className="text-[13px] font-bold text-gray-700">
-            {items.length === 0 ? "No refund requests" : "No matches"}
+            {items.length === 0 ? t('pages.refunds.noRefundRequests') : t('common.noMatches')}
           </p>
         </div>
       ) : (
@@ -151,7 +153,7 @@ const RefundsPage: React.FC = () => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-[13px] font-bold text-gray-900">
-                      {r.customer?.name || r.customer?.username || "Customer"}
+                      {r.customer?.name || r.customer?.username || t('orders.customer')}
                     </span>
                     <span
                       className={`text-[10px] px-1.5 py-0.5 rounded font-bold tracking-wide ${STATUS_BADGE[r.status]}`}
@@ -159,18 +161,18 @@ const RefundsPage: React.FC = () => {
                       {r.status}
                     </span>
                     <span className="text-[10px] text-gray-500 bg-gray-50 px-1.5 py-0.5 rounded">
-                      {REASON_LABEL[r.reason] || r.reason}
+                      {REASON_KEY[r.reason] ? t(REASON_KEY[r.reason]) : r.reason}
                     </span>
                   </div>
                   <p className="text-[12px] text-gray-600 mt-1">
-                    {r.description || <span className="italic text-gray-400">No description</span>}
+                    {r.description || <span className="italic text-gray-400">{t('common.noDescription')}</span>}
                   </p>
                   <p className="text-[10px] text-gray-500 mt-1">
-                    Order #{r.order?._id.slice(-8).toUpperCase()} · {formatDate(r.createdAt)}
+                    {t('pages.refunds.orderLine', { id: r.order?._id.slice(-8).toUpperCase(), date: formatDate(r.createdAt) })}
                   </p>
                   {r.resolutionNote && (
                     <p className="text-[11px] text-gray-700 mt-2 bg-gray-50 px-2 py-1 rounded">
-                      Resolution: {r.resolutionNote}
+                      {t('pages.refunds.resolutionLabel')} {r.resolutionNote}
                     </p>
                   )}
                   {r.evidenceImages?.length > 0 && (
@@ -201,7 +203,7 @@ const RefundsPage: React.FC = () => {
                         disabled={decidingId === r._id}
                         className="px-3 py-1.5 rounded-md text-[10px] font-bold bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50 inline-flex items-center"
                       >
-                        <CheckCircle2 className="w-3 h-3 mr-1" /> Approve
+                        <CheckCircle2 className="w-3 h-3 mr-1" /> {t('pages.refunds.approve')}
                       </button>
                       <button
                         onClick={() => {
@@ -211,7 +213,7 @@ const RefundsPage: React.FC = () => {
                         disabled={decidingId === r._id}
                         className="px-3 py-1.5 rounded-md text-[10px] font-bold border border-gray-200 text-gray-700 hover:bg-gray-50 disabled:opacity-50 inline-flex items-center"
                       >
-                        <XCircle className="w-3 h-3 mr-1" /> Reject
+                        <XCircle className="w-3 h-3 mr-1" /> {t('pages.refunds.reject')}
                       </button>
                     </div>
                   )}
@@ -224,7 +226,7 @@ const RefundsPage: React.FC = () => {
                       disabled={decidingId === r._id}
                       className="mt-2 px-3 py-1.5 rounded-md text-[10px] font-bold bg-[#00aeff] text-white hover:bg-[#0096db] disabled:opacity-50"
                     >
-                      Mark refunded
+                      {t('pages.refunds.markRefunded')}
                     </button>
                   )}
                 </div>
@@ -239,41 +241,39 @@ const RefundsPage: React.FC = () => {
           <div className="bg-white rounded-lg w-full max-w-md p-5 space-y-3">
             <div className="flex items-center justify-between">
               <h2 className="text-[14px] font-bold text-gray-900">
-                {noteFor.action === "approve" && "Approve refund"}
-                {noteFor.action === "reject" && "Reject refund"}
-                {noteFor.action === "complete" && "Mark as refunded"}
+                {noteFor.action === "approve" && t('pages.refunds.approveRefund')}
+                {noteFor.action === "reject" && t('pages.refunds.rejectRefund')}
+                {noteFor.action === "complete" && t('pages.refunds.markAsRefunded')}
               </h2>
               <button onClick={() => setNoteFor(null)} className="text-gray-400">
                 <X className="w-4 h-4" />
               </button>
             </div>
             <p className="text-[11px] text-gray-500">
-              {noteFor.action === "approve" &&
-                "The refund amount will be deducted from your withdrawable balance."}
-              {noteFor.action === "reject" &&
-                "The customer will be notified that this request was declined."}
-              {noteFor.action === "complete" && "Mark this refund as transferred to the customer."}
+              {noteFor.action === "approve" && t('pages.refunds.approveDesc')}
+              {noteFor.action === "reject" && t('pages.refunds.rejectDesc')}
+              {noteFor.action === "complete" && t('pages.refunds.completeDesc')}
             </p>
             <textarea
               className="w-full bg-gray-50 border border-gray-100 focus:bg-white focus:border-gray-200 outline-none rounded p-2 text-xs"
               rows={3}
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              placeholder="Optional note for the customer or internal record"
+              placeholder={t('pages.refunds.notePlaceholder')}
             />
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setNoteFor(null)}
                 className="px-3 py-1.5 rounded border text-xs font-bold text-gray-700 hover:bg-gray-50"
               >
-                Cancel
+                {t('actions.cancel')}
               </button>
               <button
                 onClick={submitDecision}
                 disabled={decidingId === noteFor.id}
                 className="px-4 py-1.5 rounded bg-[#00aeff] text-white text-xs font-bold hover:bg-[#0096db] disabled:opacity-50"
               >
-                {decidingId === noteFor.id ? "Saving…" : "Confirm"}
+                {decidingId === noteFor.id ? t('actions.saving') : t('actions.confirm')}
               </button>
             </div>
           </div>

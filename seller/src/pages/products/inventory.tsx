@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Search, AlertTriangle, Package } from 'lucide-react';
 import { fetchMyProducts, type SellerProductRow } from '@/services/sellerApi';
 
@@ -6,6 +7,7 @@ const formatMoney = (n: number): string =>
   Number(n || 0).toLocaleString('en-US', { maximumFractionDigits: 2 });
 
 const InventoryPage = () => {
+  const { t } = useTranslation('common');
   const [items, setItems] = useState<SellerProductRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -48,13 +50,13 @@ const InventoryPage = () => {
 
   return (
     <div className="space-y-4 text-sm">
-      <h1 className="text-[16px] font-bold text-gray-900">Inventory</h1>
+      <h1 className="text-[16px] font-bold text-gray-900">{t('pages.inventory.title')}</h1>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <KPI label="Total SKUs" value={stats.total.toLocaleString()} tone="text-black" />
-        <KPI label="Out of stock" value={stats.out.toLocaleString()} tone="text-red-700" />
-        <KPI label="Low stock" value={stats.low.toLocaleString()} tone="text-amber-700" />
-        <KPI label="Inventory value" value={`฿${formatMoney(stats.value)}`} tone="text-green-700" />
+        <KPI label={t('pages.inventory.totalSkus')} value={stats.total.toLocaleString()} tone="text-black" />
+        <KPI label={t('pages.inventory.outOfStock')} value={stats.out.toLocaleString()} tone="text-red-700" />
+        <KPI label={t('pages.inventory.lowStock')} value={stats.low.toLocaleString()} tone="text-amber-700" />
+        <KPI label={t('pages.inventory.inventoryValue')} value={`฿${formatMoney(stats.value)}`} tone="text-green-700" />
       </div>
 
       <div className="flex items-center gap-2 flex-wrap">
@@ -62,19 +64,19 @@ const InventoryPage = () => {
           onClick={() => setFilter('all')}
           className={`px-3 py-1 rounded text-[11px] font-bold ${filter === 'all' ? 'bg-black text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
         >
-          All ({stats.total})
+          {t('pages.inventory.filterAll')} ({stats.total})
         </button>
         <button
           onClick={() => setFilter('low')}
           className={`px-3 py-1 rounded text-[11px] font-bold ${filter === 'low' ? 'bg-amber-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
         >
-          Low ({stats.low})
+          {t('pages.inventory.filterLow')} ({stats.low})
         </button>
         <button
           onClick={() => setFilter('out')}
           className={`px-3 py-1 rounded text-[11px] font-bold ${filter === 'out' ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
         >
-          Out ({stats.out})
+          {t('pages.inventory.filterOut')} ({stats.out})
         </button>
 
         <div className="ml-auto relative">
@@ -83,7 +85,7 @@ const InventoryPage = () => {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             type="text"
-            placeholder="Search SKU, name..."
+            placeholder={t('pages.inventory.searchPlaceholder')}
             className="pl-7 pr-3 py-1 rounded text-[11px] w-64 bg-gray-50 border border-gray-100 focus:border-[#00aeff] outline-none"
           />
         </div>
@@ -98,23 +100,23 @@ const InventoryPage = () => {
           <table className="w-full text-[12px] tabular-nums">
             <thead className="text-[11px] text-gray-500 tracking-wide bg-gray-50/50">
               <tr>
-                <th className="px-4 py-2 text-left font-semibold">Product</th>
-                <th className="px-4 py-2 text-left font-semibold">Category</th>
-                <th className="px-4 py-2 text-right font-semibold">Price</th>
-                <th className="px-4 py-2 text-right font-semibold">Stock</th>
-                <th className="px-4 py-2 text-right font-semibold">Sold</th>
-                <th className="px-4 py-2 text-right font-semibold">Value</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.inventory.tableProduct')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.inventory.tableCategory')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('pages.inventory.tablePrice')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('pages.inventory.tableStock')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('pages.inventory.tableSold')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('pages.inventory.tableValue')}</th>
               </tr>
             </thead>
             <tbody>
               {loading && (
-                <tr><td colSpan={6} className="px-4 py-12 text-center text-gray-400 text-[12px]">Loading...</td></tr>
+                <tr><td colSpan={6} className="px-4 py-12 text-center text-gray-400 text-[12px]">{t('status.loading')}</td></tr>
               )}
               {!loading && filtered.length === 0 && (
                 <tr>
                   <td colSpan={6} className="px-4 py-12 text-center text-gray-400 text-[12px]">
                     <Package className="w-6 h-6 mx-auto mb-2 text-gray-300" />
-                    No products in this view
+                    {t('pages.inventory.noProducts')}
                   </td>
                 </tr>
               )}

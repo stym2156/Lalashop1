@@ -2,10 +2,11 @@
 import React from "react";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
+import { useTranslation } from "react-i18next";
 import { categories } from "@/menu/manu";
-import { 
-  Monitor, Home, Shirt, Wrench, Car, 
-  Sparkles, Building, Dumbbell, ChevronRight 
+import {
+  Monitor, Home, Shirt, Wrench, Car,
+  Sparkles, Building, Dumbbell, ChevronRight
 } from "lucide-react";
 
 const iconMap: Record<string, any> = {
@@ -13,16 +14,16 @@ const iconMap: Record<string, any> = {
 };
 
 export default function CategoryOverviewPage() {
+  const { t } = useTranslation("common");
   return (
     <div className="flex-1 flex flex-col min-h-screen bg-gray-50/50">
       <Header />
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-12">
         <div className="text-center mb-16">
-          <h1 className="text-4xl font-black text-slate-800 mb-4">Product Categories</h1>
+          <h1 className="text-4xl font-black text-slate-800 mb-4">{t("header.categories")}</h1>
           <p className="text-slate-500 max-w-2xl mx-auto">
-            Browse our extensive collection of products across various industries. 
-            Select a category to explore our curated selection.
+            {t("pages.category.title")}
           </p>
         </div>
 
@@ -42,7 +43,7 @@ export default function CategoryOverviewPage() {
                   {cat.name}
                 </h2>
                 <div className="mt-4 flex items-center gap-1 text-xs font-bold text-primary opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all">
-                  Explore Now <ChevronRight size={14} />
+                  {t("actions.viewMore")} <ChevronRight size={14} />
                 </div>
               </Link>
             );

@@ -14,10 +14,12 @@ import {
   Instagram,
   Twitter,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 import Header from "@/components/layout/Header";
 
 export default function PostDetailPage() {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const { id } = router.query;
 
@@ -173,8 +175,8 @@ export default function PostDetailPage() {
   if (!post) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-white">
-        <p className="text-gray-500 mb-4">Post Not Found</p>
-        <button onClick={() => router.back()} className="text-[#00aeff] font-bold">Go Back</button>
+        <p className="text-gray-500 mb-4">{t("pages.posts.deletedPost")}</p>
+        <button onClick={() => router.back()} className="text-[#00aeff] font-bold">{t("actions.back")}</button>
       </div>
     );
   }
@@ -264,7 +266,7 @@ export default function PostDetailPage() {
                   onChange={(e) => setEditedCaption(e.target.value)}
                   className="w-full bg-white border border-gray-200 rounded-xl p-3 text-sm outline-none focus:border-[#00aeff] transition-all"
                   rows={3}
-                  placeholder="Update your caption..."
+                  placeholder={t("pages.posts.captionPlaceholder")}
                 />
                 <div className="flex justify-end gap-2">
                   <button 
@@ -343,7 +345,7 @@ export default function PostDetailPage() {
               </div>
             )) : (
               <div className="h-full flex flex-col items-center justify-center text-gray-300 italic py-10">
-                <p className="text-xs">No comments yet</p>
+                <p className="text-xs">{t("status.empty")}</p>
               </div>
             )}
           </div>
@@ -354,7 +356,7 @@ export default function PostDetailPage() {
               <input
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Add comment..."
+                placeholder={t("pages.social.commentPlaceholder")}
                 className="flex-1 bg-transparent outline-none text-sm text-gray-800"
               />
               <button
@@ -376,7 +378,7 @@ export default function PostDetailPage() {
           <div className="bg-white rounded-[2rem] w-full max-w-sm overflow-hidden relative shadow-2xl">
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-black text-slate-800  tracking-tight">Share Post</h3>
+                <h3 className="text-lg font-black text-slate-800  tracking-tight">{t("pages.social.shareTo")}</h3>
                 <button onClick={() => setShowShareModal(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
                   <X size={20} />
                 </button>
@@ -410,7 +412,7 @@ export default function PostDetailPage() {
               </div>
 
               <div className="space-y-2">
-                <p className="text-[10px] font-black text-gray-400  tracking-widest px-1">Page Link</p>
+                <p className="text-[10px] font-black text-gray-400  tracking-widest px-1">{t("pages.social.shareLink")}</p>
                 <div className="flex items-center gap-2 bg-slate-50 border border-slate-100 rounded-2xl p-2 pl-4">
                   <p className="text-xs text-gray-500 truncate flex-1 font-medium">{typeof window !== 'undefined' ? window.location.href : ''}</p>
                   <button 

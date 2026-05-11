@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import {
   Users, Store, ShoppingBag, CreditCard, Bell, Layers,
   DollarSign, Package, MessageSquare, Flag, BadgeCheck, Wallet,
@@ -23,15 +24,15 @@ const formatDate = (s: string): string => {
   const pad = (x: number) => String(x).padStart(2, "0");
   return `${pad(d.getMonth() + 1)}/${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 };
-const formatRelativeTime = (iso: string): string => {
+const formatRelativeTime = (iso: string, t: (k: string, v?: Record<string, unknown>) => string): string => {
   const diffMs = Date.now() - new Date(iso).getTime();
   const minutes = Math.max(Math.floor(diffMs / 60000), 0);
-  if (minutes < 1) return "just now";
-  if (minutes < 60) return `${minutes}m ago`;
+  if (minutes < 1) return t("dashboard.justNow");
+  if (minutes < 60) return t("dashboard.minutesAgo", { count: minutes });
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
+  if (hours < 24) return t("dashboard.hoursAgo", { count: hours });
   const days = Math.floor(hours / 24);
-  return `${days}d ago`;
+  return t("dashboard.daysAgo", { count: days });
 };
 
 const statusBadge = (status: string, isPaid: boolean): string => {
@@ -47,7 +48,7 @@ const initial = (name?: string): string =>
   (name || "?").trim().charAt(0).toUpperCase() || "?";
 
 interface QueueDef {
-  label: string;
+  labelKey: string;
   href: string;
   icon: typeof BadgeCheck;
   tone: string;
@@ -56,23 +57,24 @@ interface QueueDef {
 }
 
 const QUEUES: QueueDef[] = [
-  { label: "Pending KYC", href: "/kyc", icon: BadgeCheck, tone: "text-amber-700", bg: "bg-amber-50", key: "pendingKyc" },
-  { label: "Pending withdrawals", href: "/withdrawpage/Seller/SellerWithdrawals", icon: Wallet, tone: "text-blue-700", bg: "bg-blue-50", key: "pendingWithdrawals" },
-  { label: "Open reports", href: "/reports", icon: Flag, tone: "text-rose-700", bg: "bg-rose-50", key: "openReports" },
-  { label: "Open tickets", href: "/support", icon: MessageSquare, tone: "text-purple-700", bg: "bg-purple-50", key: "openTickets" },
-  { label: "Pending orders", href: "/orders", icon: ShoppingBag, tone: "text-orange-700", bg: "bg-orange-50", key: "pendingOrders" },
+  { labelKey: "dashboard.pendingKyc", href: "/kyc", icon: BadgeCheck, tone: "text-amber-700", bg: "bg-amber-50", key: "pendingKyc" },
+  { labelKey: "dashboard.pendingWithdrawals", href: "/withdrawpage/Seller/SellerWithdrawals", icon: Wallet, tone: "text-blue-700", bg: "bg-blue-50", key: "pendingWithdrawals" },
+  { labelKey: "dashboard.openReports", href: "/reports", icon: Flag, tone: "text-rose-700", bg: "bg-rose-50", key: "openReports" },
+  { labelKey: "dashboard.openTickets", href: "/support", icon: MessageSquare, tone: "text-purple-700", bg: "bg-purple-50", key: "openTickets" },
+  { labelKey: "dashboard.pendingOrders", href: "/orders", icon: ShoppingBag, tone: "text-orange-700", bg: "bg-orange-50", key: "pendingOrders" },
 ];
 
 const QUICK_LINKS = [
-  { title: "All Users", icon: Users, href: "/users/alluser" },
-  { title: "Sellers", icon: Store, href: "/users/alluser?role=seller" },
-  { title: "Shop Center", icon: ShoppingBag, href: "/shops/shopcenter" },
-  { title: "Categories", icon: Layers, href: "/categories" },
-  { title: "Notifications", icon: Bell, href: "/notifications" },
-  { title: "Audit log", href: "/admins/audit", icon: Activity },
+  { titleKey: "nav.allUsers", icon: Users, href: "/users/alluser" },
+  { titleKey: "dashboard.sellers", icon: Store, href: "/users/alluser?role=seller" },
+  { titleKey: "dashboard.shopCenterLink", icon: ShoppingBag, href: "/shops/shopcenter" },
+  { titleKey: "nav.categories", icon: Layers, href: "/categories" },
+  { titleKey: "nav.notifications", icon: Bell, href: "/notifications" },
+  { titleKey: "nav.auditLog", href: "/admins/audit", icon: Activity },
 ];
 
 const Dashboard: React.FC = () => {
+  const { t } = useTranslation("common");
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [activity, setActivity] = useState<RecentActivity[]>([]);
   const [loading, setLoading] = useState(true);
@@ -92,7 +94,7 @@ const Dashboard: React.FC = () => {
         setStats(statsRes.data ?? null);
         setActivity(activityRes.data ?? []);
       } catch (err) {
-        if (!cancelled) setError(err instanceof Error ? err.message : "Failed to load dashboard");
+        if (!cancelled) setError(err instanceof Error ? err.message : t("dashboard.failedToLoad"));
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -121,15 +123,15 @@ const Dashboard: React.FC = () => {
     <div className="space-y-4 text-sm">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
-          <h1 className="text-[18px] font-black text-gray-900">Dashboard</h1>
+          <h1 className="text-[18px] font-black text-gray-900">{t("dashboard.title")}</h1>
           <p className="text-[12px] text-gray-500 mt-0.5">
-            Live snapshot of platform health, revenue, and items needing your attention.
+            {t("dashboard.subtitle")}
           </p>
         </div>
         {totalQueueCount > 0 && (
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-50 border border-rose-100 text-[12px] font-bold text-rose-700">
             <AlertTriangle className="w-3.5 h-3.5" />
-            {totalQueueCount} item{totalQueueCount === 1 ? "" : "s"} need attention
+            {t("dashboard.needAttention", { count: totalQueueCount })}
           </div>
         )}
       </div>
@@ -147,7 +149,7 @@ const Dashboard: React.FC = () => {
           {/* Operational queues */}
           <div>
             <h2 className="text-[11px] font-bold text-gray-500 tracking-widest mb-2">
-              Action queue
+              {t("dashboard.actionQueue")}
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
               {QUEUES.map((q) => {
@@ -164,7 +166,7 @@ const Dashboard: React.FC = () => {
                         <Icon className="w-3.5 h-3.5" />
                       </span>
                       <span className="text-[10px] font-semibold text-gray-500 tracking-wide truncate">
-                        {q.label}
+                        {t(q.labelKey)}
                       </span>
                     </div>
                     <div className="flex items-center justify-between mt-2">
@@ -182,32 +184,32 @@ const Dashboard: React.FC = () => {
           {/* Primary KPI strip */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <KPI
-              label="Total revenue"
-              value={totals ? formatCurrency(totals.revenue) : "—"}
-              hint="Lifetime, all paid orders"
+              label={t("dashboard.totalRevenue")}
+              value={totals ? formatCurrency(totals.revenue, t) : "—"}
+              hint={t("dashboard.lifetimeAllPaidOrders")}
               icon={DollarSign}
               tone="text-emerald-700"
               change={period?.revenueChangePct}
             />
             <KPI
-              label="Total users"
+              label={t("dashboard.totalUsers")}
               value={totals ? formatNumber(totals.users) : "—"}
-              hint={period ? `${formatNumber(period.newUsers30)} new last 30d` : ""}
+              hint={period ? t("dashboard.newLast30", { count: period.newUsers30 }) : ""}
               icon={Users}
               tone="text-[#00aeff]"
               change={period?.newUsersChangePct}
             />
             <KPI
-              label="Active shops"
+              label={t("dashboard.activeShops")}
               value={totals ? formatNumber(totals.activeShops) : "—"}
-              hint="Sellers with approved KYC"
+              hint={t("dashboard.sellersApprovedKyc")}
               icon={Store}
               tone="text-purple-700"
             />
             <KPI
-              label="Total products"
+              label={t("dashboard.totalProducts")}
               value={totals ? formatNumber(totals.products) : "—"}
-              hint="Across all shops"
+              hint={t("dashboard.acrossAllShops")}
               icon={Package}
               tone="text-amber-700"
             />
@@ -218,13 +220,13 @@ const Dashboard: React.FC = () => {
             <div className="lg:col-span-2 rounded-lg border border-gray-100 p-4 bg-white">
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <h3 className="text-[13px] font-bold text-gray-900">Revenue · last 30 days</h3>
+                  <h3 className="text-[13px] font-bold text-gray-900">{t("dashboard.revenue30Days")}</h3>
                   <p className="text-[10px] text-gray-500">
-                    {period ? formatCurrency(period.revenue30) : "—"} this period
+                    {t("dashboard.thisPeriod", { value: period ? formatCurrency(period.revenue30, t) : "—" })}
                     {period && (
                       <span className={`ml-2 inline-flex items-center text-[10px] font-bold ${period.revenueChangePct >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
                         {period.revenueChangePct >= 0 ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
-                        {Math.abs(period.revenueChangePct)}% vs prev 30d
+                        {Math.abs(period.revenueChangePct)}{t("dashboard.vsPrev30d")}
                       </span>
                     )}
                   </p>
@@ -238,7 +240,7 @@ const Dashboard: React.FC = () => {
                     <div
                       key={i}
                       className="flex-1 flex flex-col items-center justify-end h-full group"
-                      title={`${d.date}: ${formatCurrency(d.revenue)} · ${d.orders} orders`}
+                      title={`${d.date}: ${formatCurrency(d.revenue, t)} · ${d.orders} orders`}
                     >
                       <div
                         className="w-full bg-[#00aeff] hover:bg-[#0096db] rounded-t-sm transition-colors"
@@ -257,13 +259,13 @@ const Dashboard: React.FC = () => {
             {/* Top shops */}
             <div className="rounded-lg border border-gray-100 bg-white">
               <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
-                <h3 className="text-[13px] font-bold text-gray-900">Top shops · lifetime</h3>
+                <h3 className="text-[13px] font-bold text-gray-900">{t("dashboard.topShopsLifetime")}</h3>
                 <Link href="/shops/shopcenter" className="text-[10px] font-bold text-[#00aeff] hover:underline">
-                  All →
+                  {t("dashboard.all")} →
                 </Link>
               </div>
               {!stats?.topShops?.length ? (
-                <p className="py-8 text-center text-[11px] text-gray-400">No shop revenue yet</p>
+                <p className="py-8 text-center text-[11px] text-gray-400">{t("dashboard.noShopRevenue")}</p>
               ) : (
                 <div className="divide-y divide-gray-50">
                   {stats.topShops.map((s, i) => (
@@ -284,11 +286,11 @@ const Dashboard: React.FC = () => {
                       <div className="flex-1 min-w-0">
                         <p className="text-[12px] font-bold text-gray-900 truncate">{s.name || "—"}</p>
                         <p className="text-[10px] text-gray-500">
-                          {formatNumber(s.orderCount)} order{s.orderCount === 1 ? "" : "s"}
+                          {t("dashboard.orderCount", { count: s.orderCount })}
                         </p>
                       </div>
                       <p className="text-[12px] font-black text-emerald-700 tabular-nums">
-                        {formatCurrency(s.revenue)}
+                        {formatCurrency(s.revenue, t)}
                       </p>
                     </Link>
                   ))}
@@ -301,13 +303,13 @@ const Dashboard: React.FC = () => {
             {/* Recent orders */}
             <div className="lg:col-span-2 rounded-lg border border-gray-100 bg-white">
               <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
-                <h3 className="text-[13px] font-bold text-gray-900">Recent orders</h3>
+                <h3 className="text-[13px] font-bold text-gray-900">{t("dashboard.recentOrders")}</h3>
                 <Link href="/orders" className="text-[10px] font-bold text-[#00aeff] hover:underline">
-                  All orders →
+                  {t("dashboard.allOrders")} →
                 </Link>
               </div>
               {!stats?.recentOrders?.length ? (
-                <p className="py-8 text-center text-[11px] text-gray-400">No orders yet</p>
+                <p className="py-8 text-center text-[11px] text-gray-400">{t("dashboard.noOrders")}</p>
               ) : (
                 <div className="divide-y divide-gray-50">
                   {stats.recentOrders.map((o) => (
@@ -326,10 +328,10 @@ const Dashboard: React.FC = () => {
                         <p className="text-[10px] text-gray-500">{formatDate(o.createdAt)}</p>
                       </div>
                       <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold tracking-wide ${statusBadge(o.status, o.isPaid)}`}>
-                        {o.status || (o.isPaid ? "paid" : "pending")}
+                        {t(`status.${o.status || (o.isPaid ? "paid" : "pending")}`, o.status || (o.isPaid ? "paid" : "pending"))}
                       </span>
                       <p className="text-[12px] font-black text-gray-900 tabular-nums w-24 text-right">
-                        {formatCurrency(o.totalPrice)}
+                        {formatCurrency(o.totalPrice, t)}
                       </p>
                     </Link>
                   ))}
@@ -340,19 +342,19 @@ const Dashboard: React.FC = () => {
             {/* Activity feed */}
             <div className="rounded-lg border border-gray-100 bg-white">
               <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
-                <h3 className="text-[13px] font-bold text-gray-900">Activity</h3>
+                <h3 className="text-[13px] font-bold text-gray-900">{t("dashboard.activity")}</h3>
                 <Link href="/history/history" className="text-[10px] font-bold text-[#00aeff] hover:underline">
-                  History →
+                  {t("dashboard.history")} →
                 </Link>
               </div>
               {!activity.length ? (
-                <p className="py-8 text-center text-[11px] text-gray-400">No recent activity</p>
+                <p className="py-8 text-center text-[11px] text-gray-400">{t("dashboard.noActivity")}</p>
               ) : (
                 <div className="divide-y divide-gray-50 max-h-[420px] overflow-y-auto">
                   {activity.map((a) => (
                     <div key={a.id} className="px-4 py-2.5">
                       <p className="text-[11px] text-gray-700 leading-snug">{a.text}</p>
-                      <p className="text-[10px] text-gray-400 mt-0.5">{formatRelativeTime(a.at)}</p>
+                      <p className="text-[10px] text-gray-400 mt-0.5">{formatRelativeTime(a.at, t)}</p>
                     </div>
                   ))}
                 </div>
@@ -363,17 +365,17 @@ const Dashboard: React.FC = () => {
           {/* Quick links */}
           <div>
             <h2 className="text-[11px] font-bold text-gray-500 tracking-widest mb-2">
-              Quick access
+              {t("dashboard.quickAccess")}
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
               {QUICK_LINKS.map((l) => (
                 <Link
-                  key={l.title}
+                  key={l.titleKey}
                   href={l.href}
                   className="rounded-lg border border-gray-100 px-3 py-2.5 flex items-center gap-2 hover:bg-gray-50 transition-colors"
                 >
                   <l.icon className="w-4 h-4 text-gray-500 flex-shrink-0" />
-                  <span className="text-[12px] font-bold text-gray-700 truncate">{l.title}</span>
+                  <span className="text-[12px] font-bold text-gray-700 truncate">{t(l.titleKey)}</span>
                 </Link>
               ))}
             </div>
@@ -382,20 +384,20 @@ const Dashboard: React.FC = () => {
           {/* Footer counters */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2">
             <SmallStat
-              label="Active today"
+              label={t("dashboard.activeToday")}
               value={formatNumber(stats?.secondary.activeUsersToday ?? 0)}
-              hint="Updated last 24h"
+              hint={t("dashboard.updated24h")}
             />
             <SmallStat
-              label="Pending orders"
+              label={t("dashboard.pendingOrders")}
               value={formatNumber(stats?.secondary.pendingOrders ?? 0)}
             />
             <SmallStat
-              label="Completed orders"
+              label={t("dashboard.completedOrders")}
               value={formatNumber(stats?.secondary.completedOrders ?? 0)}
             />
             <SmallStat
-              label="Total posts"
+              label={t("dashboard.totalPosts")}
               value={formatNumber(totals?.posts ?? 0)}
             />
           </div>

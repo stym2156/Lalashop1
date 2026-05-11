@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Loader2, TrendingUp, ShoppingBag, DollarSign, Calendar } from "lucide-react";
 import { fetchMyOrders, type SellerOrderRow } from "@/services/sellerApi";
 
@@ -14,6 +15,7 @@ const formatMoney = (n: number): string =>
   Number(n || 0).toLocaleString("en-US", { maximumFractionDigits: 0 });
 
 const SalesAnalyticsPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [orders, setOrders] = useState<SellerOrderRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [range, setRange] = useState<RangeKey>("30d");
@@ -75,8 +77,8 @@ const SalesAnalyticsPage: React.FC = () => {
     <div className="space-y-4 text-sm">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
-          <h1 className="text-[16px] font-bold text-gray-900">Sales analytics</h1>
-          <p className="text-[12px] text-gray-500 mt-0.5">Revenue and order trend over time.</p>
+          <h1 className="text-[16px] font-bold text-gray-900">{t('pages.salesAnalytics.title')}</h1>
+          <p className="text-[12px] text-gray-500 mt-0.5">{t('pages.salesAnalytics.subtitle')}</p>
         </div>
         <div className="flex items-center gap-1.5 bg-gray-100 rounded p-0.5">
           {RANGES.map((r) => (
@@ -94,15 +96,15 @@ const SalesAnalyticsPage: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        <KPI icon={DollarSign} label="Revenue" value={loading ? "—" : `฿${formatMoney(totals.revenue)}`} tone="text-emerald-700" />
-        <KPI icon={ShoppingBag} label="Orders" value={loading ? "—" : totals.count.toLocaleString()} tone="text-blue-700" />
-        <KPI icon={TrendingUp} label="Avg order value" value={loading ? "—" : `฿${formatMoney(totals.aov)}`} tone="text-purple-700" />
+        <KPI icon={DollarSign} label={t('pages.salesAnalytics.revenue')} value={loading ? "—" : `฿${formatMoney(totals.revenue)}`} tone="text-emerald-700" />
+        <KPI icon={ShoppingBag} label={t('pages.salesAnalytics.orders')} value={loading ? "—" : totals.count.toLocaleString()} tone="text-blue-700" />
+        <KPI icon={TrendingUp} label={t('pages.salesAnalytics.avgOrderValue')} value={loading ? "—" : `฿${formatMoney(totals.aov)}`} tone="text-purple-700" />
       </div>
 
       <div className="rounded-lg border border-gray-100 p-4 space-y-3">
         <div className="flex items-center gap-2">
           <Calendar className="w-3.5 h-3.5 text-gray-400" />
-          <h3 className="text-[12px] font-bold text-gray-700">Revenue trend</h3>
+          <h3 className="text-[12px] font-bold text-gray-700">{t('pages.salesAnalytics.revenueTrend')}</h3>
         </div>
         <BarChart data={chartData} />
       </div>

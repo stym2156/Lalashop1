@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 import {
   Download,
   Plus,
@@ -29,23 +30,23 @@ type ColumnId =
 
 interface ColumnDef {
   id: ColumnId;
-  label: string;
+  labelKey: string;
   align: 'left' | 'right';
   defaultVisible: boolean;
 }
 
 const COLUMNS: ColumnDef[] = [
-  { id: 'shopId', label: 'Shop ID', align: 'left', defaultVisible: true },
-  { id: 'shop', label: 'Shop', align: 'left', defaultVisible: true },
-  { id: 'owner', label: 'Owner', align: 'left', defaultVisible: true },
-  { id: 'email', label: 'Email', align: 'left', defaultVisible: true },
-  { id: 'phone', label: 'Phone', align: 'left', defaultVisible: true },
-  { id: 'balance', label: 'Balance', align: 'right', defaultVisible: true },
-  { id: 'type', label: 'Type', align: 'left', defaultVisible: false },
-  { id: 'twofa', label: '2FA', align: 'left', defaultVisible: false },
-  { id: 'joined', label: 'Joined', align: 'left', defaultVisible: true },
-  { id: 'status', label: 'Status', align: 'left', defaultVisible: true },
-  { id: 'bank', label: 'Bank', align: 'left', defaultVisible: false },
+  { id: 'shopId', labelKey: 'table.shopId', align: 'left', defaultVisible: true },
+  { id: 'shop', labelKey: 'table.shop', align: 'left', defaultVisible: true },
+  { id: 'owner', labelKey: 'table.owner', align: 'left', defaultVisible: true },
+  { id: 'email', labelKey: 'table.email', align: 'left', defaultVisible: true },
+  { id: 'phone', labelKey: 'table.phone', align: 'left', defaultVisible: true },
+  { id: 'balance', labelKey: 'table.balance', align: 'right', defaultVisible: true },
+  { id: 'type', labelKey: 'table.type', align: 'left', defaultVisible: false },
+  { id: 'twofa', labelKey: 'table.twofa', align: 'left', defaultVisible: false },
+  { id: 'joined', labelKey: 'table.joined', align: 'left', defaultVisible: true },
+  { id: 'status', labelKey: 'table.status', align: 'left', defaultVisible: true },
+  { id: 'bank', labelKey: 'table.bank', align: 'left', defaultVisible: false },
 ];
 
 const COLUMN_PREF_KEY = 'admin.shopcenter.columns.v1';
@@ -74,11 +75,11 @@ const useDebounce = (value: string, delay: number): string => {
 const isVerifiedSeller = (u: AdminUser): boolean =>
   Boolean(u.seller_type && u.seller_type.trim() !== '');
 
-const computeShopStatus = (u: AdminUser): { label: string; cls: string } => {
+const computeShopStatus = (u: AdminUser): { labelKey: string; cls: string } => {
   if (isVerifiedSeller(u)) {
-    return { label: 'verified', cls: ' text-emerald-700' };
+    return { labelKey: 'status.verified', cls: ' text-emerald-700' };
   }
-  return { label: 'pending', cls: 'text-orange-700' };
+  return { labelKey: 'status.pending', cls: 'text-orange-700' };
 };
 
 const loadColumnPrefs = (): Record<ColumnId, boolean> => {
@@ -101,6 +102,7 @@ const loadColumnPrefs = (): Record<ColumnId, boolean> => {
 };
 
 const ShopCenter = () => {
+  const { t } = useTranslation('common');
   const [filter, setFilter] = useState<ShopFilter>('all');
   const [q, setQ] = useState('');
   const [open, setOpen] = useState(false);
@@ -166,7 +168,7 @@ const ShopCenter = () => {
       setPages(res.meta?.pages ?? 1);
       setBalanceTotal(res.meta?.balanceTotal ?? 0);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load shops');
+      setError(err instanceof Error ? err.message : t('pages.shops.loadingShops'));
       setShops([]);
       setTotal(0);
       setPages(1);
@@ -305,7 +307,7 @@ const ShopCenter = () => {
                   : 'bg-gray-100 text-gray-600'
                 }`}
             >
-              {u.twoFactorEnabled ? 'On' : 'Off'}
+              {u.twoFactorEnabled ? t('status.on') : t('status.off')}
             </span>
           </td>
         );
@@ -320,7 +322,7 @@ const ShopCenter = () => {
         return (
           <td key={col.id} className="px-4 py-2">
             <span className={`text-[11px] font-medium px-2 py-0.5 rounded capitalize ${s.cls}`}>
-              {s.label}
+              {t(s.labelKey)}
             </span>
           </td>
         );
@@ -347,19 +349,19 @@ const ShopCenter = () => {
     <div className="space-y-4 text-sm">
       <div className="flex items-center gap-2">
         <button className="px-3 py-1.5 rounded-md text-xs font-medium text-gray-700 inline-flex items-center hover:bg-gray-100">
-          <Download className="w-3.5 h-3.5 mr-1.5" /> Export
+          <Download className="w-3.5 h-3.5 mr-1.5" /> {t('actions.export')}
         </button>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <KPI
-          label="All Shops"
+          label={t('pages.shops.kpi.allShops')}
           value={loading && allShopsCount === 0 ? '—' : formatNumber(allShopsCount)}
         />
-        <KPI label="Verified" value={formatNumber(verifiedCount)} tone="text-emerald-700" />
-        <KPI label="Pending" value={formatNumber(pendingCount)} tone="text-orange-700" />
+        <KPI label={t('pages.shops.kpi.verified')} value={formatNumber(verifiedCount)} tone="text-emerald-700" />
+        <KPI label={t('pages.shops.kpi.pending')} value={formatNumber(pendingCount)} tone="text-orange-700" />
         <KPI
-          label="Total Balance"
+          label={t('pages.shops.kpi.totalBalance')}
           value={formatNumber(balanceTotal)}
           tone="text-blue-700"
         />
@@ -371,24 +373,24 @@ const ShopCenter = () => {
             onClick={() => setOpen(!open)}
             className="inline-flex items-center gap-1.5 px-3 py-1 rounded text-[11px] font-semibold capitalize bg-gray-100 hover:bg-gray-200 text-gray-700 min-w-[100px] justify-between"
           >
-            <span>{filter}</span>
+            <span>{t(`pages.shops.${filter}`)}</span>
             <ChevronDown className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`} />
           </button>
           {open && (
             <div className="absolute top-full left-0 mt-1 bg-white border border-gray-100 rounded-md shadow-md py-1 z-10 min-w-[120px]">
-              {filterTabs.map((t) => (
+              {filterTabs.map((tab) => (
                 <button
-                  key={t}
+                  key={tab}
                   onClick={() => {
-                    setFilter(t);
+                    setFilter(tab);
                     setOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-1.5 text-[11px] font-semibold capitalize transition-colors ${filter === t
+                  className={`w-full text-left px-3 py-1.5 text-[11px] font-semibold capitalize transition-colors ${filter === tab
                       ? 'bg-gray-50 text-black'
                       : 'text-gray-600 hover:bg-gray-50 hover:text-black'
                     }`}
                 >
-                  {t}
+                  {t(`pages.shops.${tab}`)}
                 </button>
               ))}
             </div>
@@ -396,7 +398,7 @@ const ShopCenter = () => {
         </div>
 
         <span className="text-[11px] text-gray-500">
-          {loading ? 'Loading…' : `${formatNumber(total)} shops`}
+          {loading ? t('status.loadingShort') : t('pages.shops.shopsCount', { count: total })}
         </span>
 
         <div className="ml-auto flex items-center gap-2">
@@ -406,7 +408,7 @@ const ShopCenter = () => {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               type="text"
-              placeholder="Search shop name, owner, email..."
+              placeholder={t('pages.shops.searchPlaceholder')}
               className="pl-7 pr-3 py-1 rounded text-[11px] w-64 bg-gray-50 border border-gray-100 focus:border-primary outline-none"
             />
           </div>
@@ -415,10 +417,10 @@ const ShopCenter = () => {
             <button
               onClick={() => setColumnsOpen((o) => !o)}
               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-[11px] font-semibold bg-gray-100 hover:bg-gray-200 text-gray-700"
-              title="Columns"
+              title={t('table.columnsTitle')}
             >
               <SlidersHorizontal className="w-3.5 h-3.5" />
-              <span>Columns</span>
+              <span>{t('table.columns')}</span>
               <ChevronDown
                 className={`w-3 h-3 transition-transform ${columnsOpen ? 'rotate-180' : ''}`}
               />
@@ -427,13 +429,13 @@ const ShopCenter = () => {
               <div className="absolute top-full right-0 mt-1 bg-white border border-gray-100 rounded-md shadow-lg py-1 z-20 min-w-[200px]">
                 <div className="px-3 py-2 flex items-center justify-between border-b border-gray-100">
                   <span className="text-[11px] font-semibold text-gray-700">
-                    Show columns
+                    {t('table.showColumns')}
                   </span>
                   <button
                     onClick={resetColumns}
                     className="text-[10px] font-medium text-blue-600 hover:underline"
                   >
-                    Reset
+                    {t('actions.reset')}
                   </button>
                 </div>
                 <div className="max-h-72 overflow-y-auto py-1">
@@ -453,7 +455,7 @@ const ShopCenter = () => {
                         >
                           {checked && <Check className="w-2.5 h-2.5" strokeWidth={3} />}
                         </span>
-                        <span className="font-medium">{c.label}</span>
+                        <span className="font-medium">{t(c.labelKey)}</span>
                       </button>
                     );
                   })}
@@ -481,7 +483,7 @@ const ShopCenter = () => {
                     className={`px-4 py-2 font-semibold ${c.align === 'right' ? 'text-right' : 'text-left'
                       }`}
                   >
-                    {c.label}
+                    {t(c.labelKey)}
                   </th>
                 ))}
               </tr>
@@ -493,7 +495,7 @@ const ShopCenter = () => {
                     colSpan={colCount}
                     className="px-4 py-8 text-center text-gray-400 text-[11px]"
                   >
-                    Loading shops…
+                    {t('pages.shops.loadingShops')}
                   </td>
                 </tr>
               ) : filteredShops.length === 0 ? (
@@ -502,7 +504,7 @@ const ShopCenter = () => {
                     colSpan={colCount}
                     className="px-4 py-8 text-center text-gray-400 text-[11px]"
                   >
-                    No shops match the current filter.
+                    {t('pages.shops.noMatch')}
                   </td>
                 </tr>
               ) : (
@@ -521,7 +523,7 @@ const ShopCenter = () => {
                       className="px-4 py-3 font-semibold text-gray-500"
                       colSpan={balanceColIndex}
                     >
-                      Total Balance ({formatNumber(total)} shops)
+                      {t('pages.shops.totalBalance', { count: total })}
                     </td>
                   )}
                   <td className="px-4 py-3 text-right font-bold text-blue-600 text-[13px]">
@@ -540,8 +542,8 @@ const ShopCenter = () => {
       <div className="flex flex-wrap items-center justify-between gap-3 px-3 pt-2 text-[11px] text-gray-600">
         <div>
           {total === 0
-            ? 'No results'
-            : `Showing ${formatNumber(startIndex)}–${formatNumber(endIndex)} of ${formatNumber(total)}`}
+            ? t('table.noResultsShort')
+            : t('table.showingResults', { from: formatNumber(startIndex), to: formatNumber(endIndex), total: formatNumber(total) })}
         </div>
 
         <div className="ml-auto flex items-center gap-3">
@@ -551,17 +553,17 @@ const ShopCenter = () => {
               disabled={!canPrev}
               className="inline-flex items-center gap-1 px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              <ChevronLeft className="w-3 h-3" /> Prev
+              <ChevronLeft className="w-3 h-3" /> {t('actions.prev')}
             </button>
             <span className="text-gray-500">
-              Page {formatNumber(page)} / {formatNumber(Math.max(pages, 1))}
+              {t('table.pageOf', { page: formatNumber(page), total: formatNumber(Math.max(pages, 1)) })}
             </span>
             <button
               onClick={() => canNext && setPage((p) => p + 1)}
               disabled={!canNext}
               className="inline-flex items-center gap-1 px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              Next <ChevronRight className="w-3 h-3" />
+              {t('actions.next')} <ChevronRight className="w-3 h-3" />
             </button>
           </div>
 
@@ -570,7 +572,7 @@ const ShopCenter = () => {
               onClick={() => setPageSizeOpen((o) => !o)}
               className="inline-flex items-center gap-1.5 px-3 py-1 rounded font-semibold bg-gray-100 hover:bg-gray-200 text-gray-700 min-w-[110px] justify-between"
             >
-              <span>{pageSize} / page</span>
+              <span>{t('table.perPage', { count: pageSize })}</span>
               <ChevronDown
                 className={`w-3 h-3 transition-transform ${pageSizeOpen ? 'rotate-180' : ''}`}
               />
@@ -589,7 +591,7 @@ const ShopCenter = () => {
                         : 'text-gray-600 hover:bg-gray-50 hover:text-black'
                       }`}
                   >
-                    {size} / page
+                    {t('table.perPage', { count: size })}
                   </button>
                 ))}
               </div>

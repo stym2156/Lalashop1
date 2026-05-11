@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Loader2, DollarSign, Globe, Scan } from "lucide-react";
 import { fetchMyOrders, type SellerOrderRow } from "@/services/sellerApi";
 import { useCurrentSeller } from "@/services/useCurrentSeller";
@@ -7,6 +8,7 @@ const formatMoney = (n: number): string =>
   Number(n || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 const RevenueDashboardPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const { seller } = useCurrentSeller();
   const [orders, setOrders] = useState<SellerOrderRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,40 +44,40 @@ const RevenueDashboardPage: React.FC = () => {
   return (
     <div className="space-y-4 text-sm">
       <div>
-        <h1 className="text-[16px] font-bold text-gray-900">Revenue split</h1>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.revenueDashboard.title')}</h1>
         <p className="text-[12px] text-gray-500 mt-0.5">
-          Web sales accumulate in your withdrawable balance. POS sales go to in-store revenue.
+          {t('pages.revenueDashboard.subtitle')}
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div className="rounded-2xl bg-gradient-to-br from-[#00aeff] to-[#0096db] text-white p-5">
           <div className="flex items-center gap-2 text-white/80 text-[11px] font-bold tracking-wide">
-            <Globe className="w-3.5 h-3.5" /> Web revenue · withdrawable
+            <Globe className="w-3.5 h-3.5" /> {t('pages.revenueDashboard.webRevenue')}
           </div>
           <p className="text-[28px] font-black tabular-nums mt-2">
             {loading ? "—" : `฿${formatMoney(split.web.revenue)}`}
           </p>
           <p className="text-[11px] text-white/80 mt-1">
-            {split.web.count} order{split.web.count === 1 ? "" : "s"}
+            {t('pages.revenueDashboard.orders', { count: split.web.count })}
           </p>
         </div>
 
         <div className="rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-700 text-white p-5">
           <div className="flex items-center gap-2 text-white/80 text-[11px] font-bold tracking-wide">
-            <Scan className="w-3.5 h-3.5" /> POS revenue · in-store
+            <Scan className="w-3.5 h-3.5" /> {t('pages.revenueDashboard.posRevenue')}
           </div>
           <p className="text-[28px] font-black tabular-nums mt-2">
             {loading ? "—" : `฿${formatMoney(split.pos.revenue)}`}
           </p>
           <p className="text-[11px] text-white/80 mt-1">
-            {split.pos.count} sale{split.pos.count === 1 ? "" : "s"}
+            {t('pages.revenueDashboard.sales', { count: split.pos.count })}
           </p>
         </div>
       </div>
 
       <div className="rounded-lg border border-gray-100 p-4 space-y-3">
-        <h3 className="text-[12px] font-bold text-gray-700 tracking-wide">Distribution</h3>
+        <h3 className="text-[12px] font-bold text-gray-700 tracking-wide">{t('pages.revenueDashboard.distribution')}</h3>
         <div className="flex h-3 rounded overflow-hidden">
           <div className="bg-[#00aeff]" style={{ width: `${webShare}%` }} />
           <div className="bg-emerald-600" style={{ width: `${posShare}%` }} />
@@ -83,27 +85,27 @@ const RevenueDashboardPage: React.FC = () => {
         <div className="grid grid-cols-2 gap-3 text-[11px]">
           <div className="flex items-center gap-2">
             <span className="w-3 h-3 bg-[#00aeff] rounded-sm" />
-            <span className="text-gray-700">Web {webShare.toFixed(1)}%</span>
+            <span className="text-gray-700">{t('pages.revenueDashboard.web')} {webShare.toFixed(1)}%</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-3 h-3 bg-emerald-600 rounded-sm" />
-            <span className="text-gray-700">POS {posShare.toFixed(1)}%</span>
+            <span className="text-gray-700">{t('pages.revenueDashboard.pos')} {posShare.toFixed(1)}%</span>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
         <Stat
-          label="Withdrawable balance"
+          label={t('pages.revenueDashboard.withdrawableBalance')}
           value={loading ? "—" : `฿${formatMoney(seller?.balance ?? 0)}`}
           tone="text-[#00aeff]"
-          desc="From web sales — withdraw anytime."
+          desc={t('pages.revenueDashboard.withdrawableDesc')}
         />
         <Stat
-          label="POS revenue (lifetime)"
+          label={t('pages.revenueDashboard.posLifetime')}
           value={loading ? "—" : `฿${formatMoney(((seller as { posRevenue?: number })?.posRevenue) ?? split.pos.revenue)}`}
           tone="text-emerald-600"
-          desc="In-store earnings — kept in shop, not withdrawable."
+          desc={t('pages.revenueDashboard.posLifetimeDesc')}
         />
       </div>
 

@@ -1,26 +1,28 @@
 import React from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { Megaphone } from "lucide-react";
 
-const CampaignsPage: React.FC = () => (
+const CampaignsPage: React.FC = () => {
+  const { t } = useTranslation("common");
+  return (
   <div className="space-y-4 text-sm">
     <div>
-      <h1 className="text-[16px] font-bold text-gray-900">Affiliate campaigns</h1>
+      <h1 className="text-[16px] font-bold text-gray-900">{t('pages.affCampaigns.title')}</h1>
       <p className="text-[12px] text-gray-500 mt-0.5">
-        Coordinated affiliate pushes (e.g. seasonal launches, exclusive coupons for creators).
+        {t('pages.affCampaigns.subtitle')}
       </p>
     </div>
 
     <div className="rounded-lg bg-gray-50 px-6 py-12 text-center">
       <Megaphone className="w-7 h-7 text-gray-300 mx-auto mb-3" />
-      <h2 className="text-[13px] font-semibold text-gray-700">Campaigns module coming soon</h2>
+      <h2 className="text-[13px] font-semibold text-gray-700">{t('pages.affCampaigns.comingSoon')}</h2>
       <p className="text-[11px] text-gray-500 mt-1 max-w-md mx-auto">
-        The MarketingCampaign model has not been implemented yet. For now, manage individual
-        product commissions from <Link href="/affiliate/commission" className="text-[#00aeff] hover:underline font-bold">Commission</Link> and view
-        creator performance in <Link href="/affiliate/creators" className="text-[#00aeff] hover:underline font-bold">Creators</Link>.
+        {t('pages.affCampaigns.comingSoonDesc')} <Link href="/affiliate/commission" className="text-[#00aeff] hover:underline font-bold">{t('pages.affCampaigns.commissionLink')}</Link> {t('pages.affCampaigns.andViewPerformance')} <Link href="/affiliate/creators" className="text-[#00aeff] hover:underline font-bold">{t('pages.affCampaigns.creatorsLink')}</Link>.
       </p>
     </div>
   </div>
-);
+  );
+};
 
 export default CampaignsPage;

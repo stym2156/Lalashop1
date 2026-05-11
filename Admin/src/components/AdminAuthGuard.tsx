@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 import { ShieldAlert, Loader2 } from "lucide-react";
 import { apiClient } from "@/services/apiClient";
 
@@ -21,6 +22,7 @@ interface AdminProfile {
 // dashboard never flashes for unauthorized users.
 const AdminAuthGuard: React.FC<AdminAuthGuardProps> = ({ children }) => {
   const router = useRouter();
+  const { t } = useTranslation("common");
   const [state, setState] = useState<"checking" | "ok" | "denied">("checking");
 
   useEffect(() => {
@@ -72,7 +74,7 @@ const AdminAuthGuard: React.FC<AdminAuthGuardProps> = ({ children }) => {
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="flex flex-col items-center gap-3 text-gray-500">
           <Loader2 className="w-6 h-6 animate-spin" />
-          <p className="text-xs font-medium tracking-wide">Verifying admin access…</p>
+          <p className="text-xs font-medium tracking-wide">{t("components.authGuard.checking")}</p>
         </div>
       </div>
     );
@@ -83,7 +85,7 @@ const AdminAuthGuard: React.FC<AdminAuthGuardProps> = ({ children }) => {
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="flex flex-col items-center gap-3 text-gray-500">
           <ShieldAlert className="w-7 h-7 text-rose-500" />
-          <p className="text-sm font-bold text-gray-700">Redirecting to login…</p>
+          <p className="text-sm font-bold text-gray-700">{t("components.authGuard.checking")}</p>
         </div>
       </div>
     );

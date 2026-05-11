@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Loader2, Plus, Megaphone, Trash2, Send, Mail, Smartphone, Users,
   CheckCircle2, Clock, AlertCircle, X,
@@ -56,6 +57,7 @@ const initialForm: BroadcastInput = {
 };
 
 const BroadcastPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [items, setItems] = useState<SellerBroadcast[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -136,9 +138,9 @@ const BroadcastPage: React.FC = () => {
     <div className="space-y-4 text-sm">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-[16px] font-bold text-gray-900">Broadcasts</h1>
+          <h1 className="text-[16px] font-bold text-gray-900">{t('pages.broadcast.title')}</h1>
           <p className="text-[12px] text-gray-500 mt-0.5">
-            Mass-message your customers or followers via in-app or email.
+            {t('pages.broadcast.subtitle')}
           </p>
         </div>
         <button
@@ -148,7 +150,7 @@ const BroadcastPage: React.FC = () => {
           }}
           className="bg-[#00aeff] text-white px-3 py-1.5 rounded-md text-xs font-bold inline-flex items-center hover:bg-[#0096db]"
         >
-          <Plus className="w-3.5 h-3.5 mr-1" /> New broadcast
+          <Plus className="w-3.5 h-3.5 mr-1" /> {t('pages.broadcast.newBroadcast')}
         </button>
       </div>
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 import { Plus, Search, MoreHorizontal, ShieldCheck } from 'lucide-react';
 import { fetchUsers, type AdminUser } from '@/services/adminApi';
 
@@ -12,6 +13,7 @@ const formatDate = (s?: string): string => {
 };
 
 const AdminsList = () => {
+  const { t } = useTranslation('common');
   const [q, setQ] = useState('');
   const [items, setItems] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
@@ -44,31 +46,31 @@ const AdminsList = () => {
           href="/admins/audit"
           className="px-3 py-1.5 rounded-md text-xs font-medium text-gray-700 inline-flex items-center hover:bg-gray-100"
         >
-          Audit Log
+          {t('nav.auditLog')}
         </Link>
         <Link
           href="/admins/roles"
           className="px-3 py-1.5 rounded-md text-xs font-medium text-gray-700 inline-flex items-center hover:bg-gray-100"
         >
-          <ShieldCheck className="w-3.5 h-3.5 mr-1.5" /> Roles
+          <ShieldCheck className="w-3.5 h-3.5 mr-1.5" /> {t('nav.rolesAndPermissions')}
         </Link>
         <Link
           href="/admins/invite"
           className="bg-black text-white px-3 py-1.5 rounded-md text-xs font-semibold inline-flex items-center hover:bg-gray-900"
         >
-          <Plus className="w-3.5 h-3.5 mr-1.5" /> Invite Admin
+          <Plus className="w-3.5 h-3.5 mr-1.5" /> {t('pages.admins.invite.title')}
         </Link>
       </div>
 
       <div className="rounded-lg px-3 py-2 flex flex-wrap items-center gap-2">
-        <h2 className="text-[13px] font-semibold text-gray-900">Active admin users</h2>
+        <h2 className="text-[13px] font-semibold text-gray-900">{t('pages.admins.title')}</h2>
         <div className="ml-auto relative">
           <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
             type="text"
-            placeholder="Search name, email..."
+            placeholder={t('pages.users.searchPlaceholder')}
             className="pl-7 pr-3 py-1 rounded text-[11px] w-64 bg-gray-50 border border-gray-100 focus:border-primary outline-none"
           />
         </div>
@@ -79,18 +81,18 @@ const AdminsList = () => {
           <table className="w-full text-[12px] tabular-nums">
             <thead className="text-[11px] text-gray-500 tracking-wide">
               <tr>
-                <th className="px-4 py-2 text-left font-semibold">Admin ID</th>
-                <th className="px-4 py-2 text-left font-semibold">Name</th>
-                <th className="px-4 py-2 text-left font-semibold">Email</th>
-                <th className="px-4 py-2 text-left font-semibold">Phone</th>
-                <th className="px-4 py-2 text-left font-semibold">2FA</th>
-                <th className="px-4 py-2 text-left font-semibold">Joined</th>
-                <th className="px-4 py-2 text-right font-semibold">Actions</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.id')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.name')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.email')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.phone')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.twofa')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.joined')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('table.actions')}</th>
               </tr>
             </thead>
             <tbody>
               {loading && (
-                <tr><td colSpan={7} className="px-4 py-12 text-center text-gray-400 text-[12px]">Loading...</td></tr>
+                <tr><td colSpan={7} className="px-4 py-12 text-center text-gray-400 text-[12px]">{t('status.loading')}</td></tr>
               )}
               {!loading && error && (
                 <tr><td colSpan={7} className="px-4 py-12 text-center text-red-500 text-[12px]">{error}</td></tr>
@@ -107,9 +109,9 @@ const AdminsList = () => {
                   <td className="px-4 py-2 text-gray-700">{a.phone || '—'}</td>
                   <td className="px-4 py-2">
                     {a.twoFactorEnabled ? (
-                      <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-green-50 text-green-700">On</span>
+                      <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-green-50 text-green-700">{t('status.on')}</span>
                     ) : (
-                      <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-red-50 text-red-700">Off</span>
+                      <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-red-50 text-red-700">{t('status.off')}</span>
                     )}
                   </td>
                   <td className="px-4 py-2 text-gray-500 text-[11px]">{formatDate(a.createdAt)}</td>
@@ -121,7 +123,7 @@ const AdminsList = () => {
                 </tr>
               ))}
               {!loading && !error && items.length === 0 && (
-                <tr><td colSpan={7} className="px-4 py-12 text-center text-gray-400 text-[12px]">No admin users found</td></tr>
+                <tr><td colSpan={7} className="px-4 py-12 text-center text-gray-400 text-[12px]">{t('pages.admins.noAdmins')}</td></tr>
               )}
             </tbody>
           </table>

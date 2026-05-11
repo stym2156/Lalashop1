@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Search, ChevronDown, Loader2, Check } from 'lucide-react';
 import {
   fetchMyOrders,
@@ -21,54 +22,52 @@ type OrderFilterKey =
 
 interface FilterDef {
   key: OrderFilterKey;
-  label: string;
-  description: string;
+  labelKey: string;
+  descKey: string;
   match: (o: SellerOrderRow) => boolean;
 }
 
 const FILTERS: FilterDef[] = [
   {
     key: 'all',
-    label: 'All',
-    description: 'Every order from your shop, regardless of status.',
+    labelKey: 'pages.ordersList.filterAll',
+    descKey: 'pages.ordersList.filterAllDesc',
     match: () => true,
   },
   {
     key: 'pending',
-    label: 'Pending shipment',
-    description:
-      'Approved orders ready to be packed and shipped. Payment has been verified.',
+    labelKey: 'pages.ordersList.filterPending',
+    descKey: 'pages.ordersList.filterPendingDesc',
     match: (o) => o.isPaid && o.status === 'processing',
   },
   {
     key: 'processing',
-    label: 'Processing',
-    description: 'Orders that are paid and ready to be packed and shipped.',
+    labelKey: 'pages.ordersList.filterProcessing',
+    descKey: 'pages.ordersList.filterProcessingDesc',
     match: (o) => o.isPaid && o.status === 'processing',
   },
   {
     key: 'shipping',
-    label: 'Shipping',
-    description: 'Orders currently in transit to the customer.',
+    labelKey: 'pages.ordersList.filterShipping',
+    descKey: 'pages.ordersList.filterShippingDesc',
     match: (o) => o.status === 'shipped',
   },
   {
     key: 'delivered',
-    label: 'Delivered',
-    description: 'Successfully delivered orders.',
+    labelKey: 'pages.ordersList.filterDelivered',
+    descKey: 'pages.ordersList.filterDeliveredDesc',
     match: (o) => o.status === 'delivered',
   },
   {
     key: 'cancelled',
-    label: 'Cancelled',
-    description: 'Orders that were cancelled before delivery.',
+    labelKey: 'pages.ordersList.filterCancelled',
+    descKey: 'pages.ordersList.filterCancelledDesc',
     match: (o) => o.status === 'canceled' && !o.isPaid,
   },
   {
     key: 'returned',
-    label: 'Returned / Refunded',
-    description:
-      'Paid orders that were cancelled (proxy for refund until a dedicated Dispute model is added).',
+    labelKey: 'pages.ordersList.filterReturned',
+    descKey: 'pages.ordersList.filterReturnedDesc',
     match: (o) => o.status === 'canceled' && o.isPaid,
   },
 ];
@@ -98,11 +97,11 @@ const allowedTransitions = (o: SellerOrderRow): SellerOrderStatus[] => {
   }
 };
 
-const transitionLabel: Record<SellerOrderStatus, string> = {
-  processing: 'Processing',
-  shipped: 'Mark Shipped',
-  delivered: 'Mark Delivered',
-  canceled: 'Cancel order',
+const transitionLabelKey: Record<SellerOrderStatus, string> = {
+  processing: 'pages.ordersList.transitionProcessing',
+  shipped: 'pages.ordersList.transitionShipped',
+  delivered: 'pages.ordersList.transitionDelivered',
+  canceled: 'pages.ordersList.transitionCancel',
 };
 
 const formatMoney = (n: number): string =>
@@ -117,6 +116,7 @@ const formatDate = (s?: string): string => {
 };
 
 const OrdersPage: React.FC = () => {
+  const { t } = useTranslation('common');
   const [allOrders, setAllOrders] = useState<SellerOrderRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -192,8 +192,8 @@ const OrdersPage: React.FC = () => {
   return (
     <div className="space-y-4 text-sm">
       <div>
-        <h1 className="text-[16px] font-bold text-gray-900">Orders</h1>
-        <p className="text-[12px] text-gray-500 mt-0.5">{active.description}</p>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.ordersList.title')}</h1>
+        <p className="text-[12px] text-gray-500 mt-0.5">{t(active.descKey)}</p>
       </div>
 
       <div className="rounded-lg px-3 py-2 flex flex-wrap items-center gap-2">
@@ -203,7 +203,7 @@ const OrdersPage: React.FC = () => {
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-[11px] font-bold bg-white border border-gray-200 hover:border-gray-300 text-gray-800 min-w-[180px] justify-between transition-colors"
           >
             <span className="inline-flex items-center gap-2">
-              {active.label}
+              {t(active.labelKey)}
               <span className="text-[10px] font-bold text-gray-400 tabular-nums">
                 ({counts[active.key]})
               </span>
@@ -227,7 +227,7 @@ const OrdersPage: React.FC = () => {
                       : 'text-gray-700 hover:bg-gray-50 hover:text-black'
                   }`}
                 >
-                  <span>{f.label}</span>
+                  <span>{t(f.labelKey)}</span>
                   <span className="text-[10px] font-bold text-gray-400 tabular-nums">
                     {counts[f.key]}
                   </span>
@@ -239,8 +239,8 @@ const OrdersPage: React.FC = () => {
 
         <span className="text-[11px] text-gray-500 ml-2">
           {loading
-            ? 'Loading...'
-            : `${filtered.length} order${filtered.length === 1 ? '' : 's'}`}
+            ? t('status.loading')
+            : t('pages.ordersList.orderCount', { count: filtered.length })}
         </span>
 
         <div className="ml-auto relative">
@@ -249,7 +249,7 @@ const OrdersPage: React.FC = () => {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             type="text"
-            placeholder="Search order ID, customer..."
+            placeholder={t('pages.ordersList.searchPlaceholder')}
             className="pl-7 pr-3 py-1 rounded text-[11px] w-64 bg-gray-50 border border-gray-100 focus:border-[#00aeff] outline-none"
           />
         </div>
@@ -260,20 +260,20 @@ const OrdersPage: React.FC = () => {
           <table className="w-full text-[12px] tabular-nums">
             <thead className="text-[11px] text-gray-500 tracking-wide bg-gray-50/50">
               <tr>
-                <th className="px-4 py-2 text-left font-semibold">Order</th>
-                <th className="px-4 py-2 text-left font-semibold">Customer</th>
-                <th className="px-4 py-2 text-right font-semibold">Items</th>
-                <th className="px-4 py-2 text-right font-semibold">Amount</th>
-                <th className="px-4 py-2 text-left font-semibold">Payment</th>
-                <th className="px-4 py-2 text-left font-semibold">Created</th>
-                <th className="px-4 py-2 text-left font-semibold">Status</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.ordersList.tableOrder')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.ordersList.tableCustomer')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('pages.ordersList.tableItems')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('pages.ordersList.tableAmount')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.ordersList.tablePayment')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.ordersList.tableCreated')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.ordersList.tableStatus')}</th>
               </tr>
             </thead>
             <tbody>
               {loading && (
                 <tr>
                   <td colSpan={7} className="px-4 py-12 text-center text-gray-400 text-[12px]">
-                    Loading...
+                    {t('status.loading')}
                   </td>
                 </tr>
               )}
@@ -287,8 +287,8 @@ const OrdersPage: React.FC = () => {
               {!loading && !error && filtered.map((o) => {
                 const customer =
                   typeof o.user === 'object' && o.user
-                    ? o.user.name || o.user.email || 'Guest'
-                    : o.shippingAddress?.fullName || 'Guest';
+                    ? o.user.name || o.user.email || t('common.guest')
+                    : o.shippingAddress?.fullName || t('common.guest');
                 const itemCount = o.orderItems?.length || 0;
                 return (
                   <tr key={o._id} className="border-t border-gray-50">
@@ -325,7 +325,7 @@ const OrdersPage: React.FC = () => {
               {!loading && !error && filtered.length === 0 && (
                 <tr>
                   <td colSpan={7} className="px-4 py-12 text-center text-gray-400 text-[12px]">
-                    No orders match this view
+                    {t('pages.ordersList.noMatch')}
                   </td>
                 </tr>
               )}
@@ -346,6 +346,7 @@ interface StatusCellProps {
 }
 
 const StatusCell: React.FC<StatusCellProps> = ({ order, onChanged }) => {
+  const { t } = useTranslation('common');
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState<SellerOrderStatus | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -366,16 +367,14 @@ const StatusCell: React.FC<StatusCellProps> = ({ order, onChanged }) => {
 
   const apply = async (next: SellerOrderStatus) => {
     if (next === 'canceled') {
-      const ok = window.confirm(
-        'Cancel this order? The buyer will be notified. This may need a manual refund if already paid.',
-      );
+      const ok = window.confirm(t('pages.ordersList.cancelConfirm'));
       if (!ok) return;
     }
     setBusy(next);
     setError(null);
     try {
       const updated = await updateMyOrderStatus(order._id, next);
-      if (!updated) throw new Error('No response');
+      if (!updated) throw new Error(t('pages.ordersList.noResponse'));
       onChanged({
         _id: updated._id,
         status: updated.status,
@@ -383,7 +382,7 @@ const StatusCell: React.FC<StatusCellProps> = ({ order, onChanged }) => {
       });
       setOpen(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update status');
+      setError(err instanceof Error ? err.message : t('pages.ordersList.failedUpdate'));
     } finally {
       setBusy(null);
     }
@@ -409,7 +408,7 @@ const StatusCell: React.FC<StatusCellProps> = ({ order, onChanged }) => {
         type="button"
         onClick={() => setOpen(!open)}
         className="inline-flex items-center gap-1 hover:opacity-80 transition-opacity"
-        title="Change status"
+        title={t('pages.ordersList.changeStatus')}
       >
         {badge}
         <ChevronDown
@@ -418,20 +417,20 @@ const StatusCell: React.FC<StatusCellProps> = ({ order, onChanged }) => {
       </button>
       {open && (
         <div className="absolute top-full left-0 mt-1 bg-white border border-gray-100 rounded-md shadow-lg py-1 z-20 min-w-[160px]">
-          {transitions.map((t) => {
-            const isThisBusy = busy === t;
+          {transitions.map((trans) => {
+            const isThisBusy = busy === trans;
             const tone =
-              t === 'canceled'
+              trans === 'canceled'
                 ? 'text-rose-700 hover:bg-rose-50'
                 : 'text-gray-700 hover:bg-gray-50';
             return (
               <button
-                key={t}
-                onClick={() => apply(t)}
+                key={trans}
+                onClick={() => apply(trans)}
                 disabled={busy !== null}
                 className={`w-full text-left px-3 py-2 text-[11px] font-bold transition-colors flex items-center justify-between disabled:opacity-50 ${tone}`}
               >
-                <span>{transitionLabel[t]}</span>
+                <span>{t(transitionLabelKey[trans])}</span>
                 {isThisBusy ? (
                   <Loader2 className="w-3 h-3 animate-spin" />
                 ) : (

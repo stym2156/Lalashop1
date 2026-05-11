@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import FollowButton from "@/pages/Social/components/FollowButton";
 import UserListModal from "@/pages/Social/components/UserListModal";
 import SocialPost from "@/pages/Social/components/SocialPost";
@@ -25,6 +26,7 @@ import { apiClient } from "@/services/apiClient";
 import { useCurrentUser } from "@/services/useCurrentUser";
 
 export default function UserProfilePage() {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const { username } = router.query; // This is actually the user ID in our current routing
   const [targetUser, setTargetUser] = useState<any>(null);
@@ -135,9 +137,9 @@ export default function UserProfilePage() {
 
   if (!targetUser) return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white p-4">
-        <h2 className="text-xl font-bold text-slate-800 mb-2">User not found</h2>
-        <p className="text-slate-500 mb-6 text-center">The user you are looking for doesn't exist or has been removed.</p>
-        <button onClick={() => router.back()} className="bg-primary text-white px-8 py-2 rounded-full font-bold">Go Back</button>
+        <h2 className="text-xl font-bold text-slate-800 mb-2">{t("status.empty")}</h2>
+        <p className="text-slate-500 mb-6 text-center">{t("status.empty")}</p>
+        <button onClick={() => router.back()} className="bg-primary text-white px-8 py-2 rounded-full font-bold">{t("actions.back")}</button>
     </div>
   );
 
@@ -318,7 +320,7 @@ export default function UserProfilePage() {
                 <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
                   <UserIcon size={32} className="text-gray-300" />
                 </div>
-                <p className="text-slate-400 font-medium">No posts yet.</p>
+                <p className="text-slate-400 font-medium">{t("pages.social.noPosts")}</p>
               </div>
             )}
           </div>
@@ -333,7 +335,7 @@ export default function UserProfilePage() {
                 <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Store size={32} className="text-gray-300" />
                 </div>
-                <p className="text-slate-400 font-medium">No products listed yet.</p>
+                <p className="text-slate-400 font-medium">{t("pages.shop.noProducts")}</p>
               </div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">

@@ -9,6 +9,7 @@ import {
   RefreshCw, MessageCircle, ShoppingCart, CreditCard,
   Store, Flag, Minus, Plus, CheckCircle2, AlertCircle, XCircle,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import Header from "@/components/layout/Header";
 import BuyPopup from "../buyproduct/buy";
@@ -76,6 +77,7 @@ function ProductPageSkeleton() {
   );
 }
 export default function ProductPage() {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const { id } = router.query;
   const { openWithProduct } = useChat();
@@ -334,9 +336,9 @@ export default function ProductPage() {
         <Header />
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <p className="text-xl font-black text-slate-900 mb-3">Product Not Found</p>
+            <p className="text-xl font-black text-slate-900 mb-3">{t("status.empty")}</p>
             <Link href="/" className="text-sky-500 font-bold hover:underline">
-              ← Back to Home
+              ← {t("nav.home")}
             </Link>
           </div>
         </main>
@@ -393,7 +395,7 @@ export default function ProductPage() {
           >
             <ChevronLeft size={14} />
           </Link>
-          <Link href="/" className="hover:text-sky-500 transition-colors">Home</Link>
+          <Link href="/" className="hover:text-sky-500 transition-colors">{t("nav.home")}</Link>
           <ChevronRight size={10} />
           <span className="text-gray-600">{product.category}</span>
           <ChevronRight size={10} />
@@ -776,7 +778,7 @@ export default function ProductPage() {
         {/* ── Related Products ── */}
         <div className="animate-[fadeSlideUp_0.7s_0.25s_ease_both]">
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-xl font-black text-slate-900">Recommended Products</h2>
+            <h2 className="text-xl font-black text-slate-900">{t("product.popularProducts")}</h2>
 
           </div>
 

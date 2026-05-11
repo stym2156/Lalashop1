@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import {
   Loader2, Tag, Zap, Megaphone, ArrowRight, Calendar, TrendingUp,
 } from "lucide-react";
@@ -48,6 +49,7 @@ const statusBadge = (status: string): string => {
 };
 
 const CampaignsPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [coupons, setCoupons] = useState<SellerCoupon[]>([]);
   const [promotions, setPromotions] = useState<SellerPromotion[]>([]);
   const [broadcasts, setBroadcasts] = useState<SellerBroadcast[]>([]);
@@ -139,9 +141,9 @@ const CampaignsPage: React.FC = () => {
   return (
     <div className="space-y-4 text-sm">
       <div>
-        <h1 className="text-[16px] font-bold text-gray-900">Campaigns</h1>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.campaignsList.title')}</h1>
         <p className="text-[12px] text-gray-500 mt-0.5">
-          Unified view of every coupon, promotion, and broadcast you&apos;ve set up.
+          {t('pages.campaignsList.subtitle')}
         </p>
       </div>
 

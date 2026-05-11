@@ -4,9 +4,11 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, ArrowLeft, Loader2, AlertCircle, CheckCircle2, Lock, Eye, EyeOff, ShieldCheck } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 
 export default function ForgotPasswordPage() {
+  const { t } = useTranslation("common");
   const router = useRouter();
   
   // UI States
@@ -37,7 +39,7 @@ export default function ForgotPasswordPage() {
       });
       setEmailSent(true);
     } catch (err: any) {
-      setError(err.message || "Failed to send reset code.");
+      setError(err.message || t("auth.failedToSendCode"));
     } finally {
       setLoading(false);
     }
@@ -54,7 +56,7 @@ export default function ForgotPasswordPage() {
       });
       setOtpVerified(true);
     } catch (err: any) {
-      setError(err.message || "Invalid or expired code.");
+      setError(err.message || t("auth.invalidCode"));
     } finally {
       setLoading(false);
     }
@@ -63,7 +65,7 @@ export default function ForgotPasswordPage() {
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      setError("Passwords do not match");
+      setError(t("auth.passwordsDoNotMatch"));
       return;
     }
     setLoading(true);
@@ -75,7 +77,7 @@ export default function ForgotPasswordPage() {
       });
       setIsSuccess(true);
     } catch (err: any) {
-      setError(err.message || "Failed to reset password.");
+      setError(err.message || t("auth.failedToReset"));
     } finally {
       setLoading(false);
     }
@@ -84,7 +86,7 @@ export default function ForgotPasswordPage() {
   return (
     <div className="min-h-screen bg-[#F0F2F5] flex items-center justify-center p-4 font-sans">
       <Head>
-        <title>Reset Password • LALA</title>
+        <title>{t("auth.resetPasswordTitle")} • LALA</title>
       </Head>
 
       <div className="bg-white w-full max-w-md rounded-[2rem] shadow-2xl shadow-slate-200/50 border border-white overflow-hidden relative">
@@ -108,8 +110,8 @@ export default function ForgotPasswordPage() {
                   <div className="w-16 h-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <ShieldCheck size={32} />
                   </div>
-                  <h1 className="text-2xl font-black text-slate-800 tracking-tight">Forgot Password</h1>
-                  <p className="text-slate-500 text-xs mt-1">Follow the steps to reset your password</p>
+                  <h1 className="text-2xl font-black text-slate-800 tracking-tight">{t("auth.forgotPasswordTitle")}</h1>
+                  <p className="text-slate-500 text-xs mt-1">{t("auth.forgotPasswordSubtitle")}</p>
                 </div>
 
                 {error && (
@@ -126,7 +128,7 @@ export default function ForgotPasswordPage() {
                 {/* STEP 1: Email Input */}
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <label className="text-[11px] font-bold text-slate-400 tracking-widest ml-1 ">Email</label>
+                    <label className="text-[11px] font-bold text-slate-400 tracking-widest ml-1 ">{t("auth.email")}</label>
                     <div className="relative">
                       <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
                         <Mail size={18} />
@@ -149,7 +151,7 @@ export default function ForgotPasswordPage() {
                       disabled={loading || !email.includes("@")}
                       className="w-full bg-primary hover:bg-primary-hover disabled:opacity-50 text-white font-bold py-4 rounded-2xl shadow-lg shadow-primary/25 transition-all flex items-center justify-center gap-2 text-sm"
                     >
-                      {loading ? <Loader2 className="animate-spin" size={20} /> : "Send Verification Code"}
+                      {loading ? <Loader2 className="animate-spin" size={20} /> : t("auth.sendVerificationCode")}
                     </button>
                   )}
                 </div>
@@ -163,7 +165,7 @@ export default function ForgotPasswordPage() {
                       className="space-y-4 pt-4 border-t border-slate-100"
                     >
                       <div className="space-y-2">
-                        <label className="text-[11px] font-bold text-slate-400 tracking-widest ml-1">Enter 6-Digit Code</label>
+                        <label className="text-[11px] font-bold text-slate-400 tracking-widest ml-1">{t("auth.enterCode")}</label>
                         <input 
                           type="text" 
                           disabled={otpVerified}
@@ -181,7 +183,7 @@ export default function ForgotPasswordPage() {
                           disabled={loading || otp.length !== 6}
                           className="w-full bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-bold py-4 rounded-2xl transition-all flex items-center justify-center gap-2 text-sm"
                         >
-                          {loading ? <Loader2 className="animate-spin" size={20} /> : "Verify Code"}
+                          {loading ? <Loader2 className="animate-spin" size={20} /> : t("auth.verifyCode")}
                         </button>
                       )}
                     </motion.div>
@@ -196,7 +198,7 @@ export default function ForgotPasswordPage() {
                       animate={{ height: "auto", opacity: 1 }}
                       className="space-y-4 pt-4 border-t border-slate-100"
                     >
-                      <label className="text-[11px] font-bold text-slate-400 tracking-widest ml-1">New Password</label>
+                      <label className="text-[11px] font-bold text-slate-400 tracking-widest ml-1">{t("auth.newPassword")}</label>
                       
                       <div className="space-y-3">
                         <div className="relative">
@@ -208,7 +210,7 @@ export default function ForgotPasswordPage() {
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
                             className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 pl-12 pr-12 outline-none text-sm"
-                            placeholder="New Password"
+                            placeholder={t("auth.newPassword")}
                           />
                           <button 
                             type="button"
@@ -228,7 +230,7 @@ export default function ForgotPasswordPage() {
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-4 pl-12 pr-4 outline-none text-sm"
-                            placeholder="Confirm New Password"
+                            placeholder={t("auth.confirmNewPassword")}
                           />
                         </div>
                       </div>
@@ -238,7 +240,7 @@ export default function ForgotPasswordPage() {
                         disabled={loading || newPassword.length < 6}
                         className="w-full bg-primary hover:bg-primary-hover text-white font-bold py-4 rounded-2xl shadow-lg shadow-primary/25 transition-all flex items-center justify-center gap-2 text-sm mt-2"
                       >
-                        {loading ? <Loader2 className="animate-spin" size={20} /> : "Reset Password Now"}
+                        {loading ? <Loader2 className="animate-spin" size={20} /> : t("auth.resetPassword")}
                       </button>
                     </motion.div>
                   )}
@@ -254,15 +256,15 @@ export default function ForgotPasswordPage() {
                 <div className="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner">
                   <CheckCircle2 size={48} />
                 </div>
-                <h2 className="text-3xl font-black text-slate-800 mb-3">Password Changed!</h2>
+                <h2 className="text-3xl font-black text-slate-800 mb-3">{t("auth.passwordChanged")}</h2>
                 <p className="text-slate-500 text-sm mb-10 px-2 leading-relaxed">
-                  Your password has been updated. You can now use your new password to log in.
+                  {t("auth.passwordChangedDesc")}
                 </p>
-                <Link 
-                  href="/login" 
+                <Link
+                  href="/login"
                   className="w-full inline-block bg-slate-900 text-white font-bold py-4 rounded-2xl hover:bg-slate-800 transition-all active:scale-[0.98]"
                 >
-                  Return to Login
+                  {t("auth.returnToLogin")}
                 </Link>
               </motion.div>
             )}

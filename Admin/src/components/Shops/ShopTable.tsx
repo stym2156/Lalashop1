@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 import { Search, MoreHorizontal, ChevronDown } from 'lucide-react';
 import { fetchAdminShops, type AdminShopRow, type ListShopsParams } from '@/services/adminApi';
 
@@ -9,6 +10,12 @@ const statusBadge: Record<ShopStatus, string> = {
   active: 'bg-green-50 text-green-700',
   pending: 'bg-orange-50 text-orange-700',
   closed: 'bg-gray-100 text-gray-600',
+};
+
+const statusLabelKey: Record<ShopStatus, string> = {
+  active: 'status.active',
+  pending: 'status.pending',
+  closed: 'status.closed',
 };
 
 const formatMoney = (n: number): string =>
@@ -28,6 +35,7 @@ interface ShopTableProps {
 }
 
 const ShopTable = ({ initialFilter = 'all', hideFilters = false }: ShopTableProps) => {
+  const { t } = useTranslation('common');
   const [filter, setFilter] = useState<'all' | ShopStatus>(initialFilter);
   const [q, setQ] = useState('');
   const [open, setOpen] = useState(false);
@@ -88,22 +96,22 @@ const ShopTable = ({ initialFilter = 'all', hideFilters = false }: ShopTableProp
               onClick={() => setOpen(!open)}
               className="inline-flex items-center gap-1.5 px-3 py-1 rounded text-[11px] font-semibold capitalize bg-gray-100 hover:bg-gray-200 text-gray-700 min-w-[100px] justify-between"
             >
-              <span>{filter}</span>
+              <span>{filter === 'all' ? t('common.all') : t(statusLabelKey[filter as ShopStatus])}</span>
               <ChevronDown className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`} />
             </button>
             {open && (
               <div className="absolute top-full left-0 mt-1 bg-white border border-gray-100 rounded-md shadow-md py-1 z-10 min-w-[120px]">
-                {tabs.map((t) => (
+                {tabs.map((tab) => (
                   <button
-                    key={t}
-                    onClick={() => { setFilter(t); setOpen(false); }}
+                    key={tab}
+                    onClick={() => { setFilter(tab); setOpen(false); }}
                     className={`w-full text-left px-3 py-1.5 text-[11px] font-semibold capitalize transition-colors ${
-                      filter === t
+                      filter === tab
                         ? 'bg-gray-50 text-black'
                         : 'text-gray-600 hover:bg-gray-50 hover:text-black'
                     }`}
                   >
-                    {t}
+                    {tab === 'all' ? t('common.all') : t(statusLabelKey[tab as ShopStatus])}
                   </button>
                 ))}
               </div>
@@ -117,7 +125,7 @@ const ShopTable = ({ initialFilter = 'all', hideFilters = false }: ShopTableProp
             value={q}
             onChange={(e) => setQ(e.target.value)}
             type="text"
-            placeholder="Search shop name, owner, ID..."
+            placeholder={t('pages.shops.searchTablePlaceholder')}
             className="pl-7 pr-3 py-1 rounded text-[11px] w-64 bg-gray-50 border border-gray-100 focus:border-primary outline-none"
           />
         </div>
@@ -128,22 +136,22 @@ const ShopTable = ({ initialFilter = 'all', hideFilters = false }: ShopTableProp
           <table className="w-full text-[12px] tabular-nums">
             <thead className="text-[11px] text-gray-500 tracking-wide">
               <tr>
-                <th className="px-4 py-2 text-left font-semibold">Shop ID</th>
-                <th className="px-4 py-2 text-left font-semibold">Shop</th>
-                <th className="px-4 py-2 text-left font-semibold">Owner</th>
-                <th className="px-4 py-2 text-left font-semibold">Category</th>
-                <th className="px-4 py-2 text-right font-semibold">Products</th>
-                <th className="px-4 py-2 text-right font-semibold">Sales (₭)</th>
-                <th className="px-4 py-2 text-left font-semibold">Created</th>
-                <th className="px-4 py-2 text-left font-semibold">Status</th>
-                <th className="px-4 py-2 text-right font-semibold">Actions</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.shopId')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.shop')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.owner')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.category')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('table.products')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('table.salesKip')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.createdAt')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.status')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('table.actions')}</th>
               </tr>
             </thead>
             <tbody>
               {loading && (
                 <tr>
                   <td colSpan={9} className="px-4 py-12 text-center text-gray-400 text-[12px]">
-                    Loading shops...
+                    {t('pages.shops.loadingShops')}
                   </td>
                 </tr>
               )}
@@ -176,7 +184,7 @@ const ShopTable = ({ initialFilter = 'all', hideFilters = false }: ShopTableProp
                     <td className="px-4 py-2 text-gray-500 text-[11px]">{formatDate(s.createdAt)}</td>
                     <td className="px-4 py-2">
                       <span className={`text-[11px] font-medium px-2 py-0.5 rounded capitalize ${statusBadge[status]}`}>
-                        {status}
+                        {t(statusLabelKey[status])}
                       </span>
                     </td>
                     <td className="px-4 py-2 text-right">
@@ -190,7 +198,7 @@ const ShopTable = ({ initialFilter = 'all', hideFilters = false }: ShopTableProp
               {!loading && !error && shops.length === 0 && (
                 <tr>
                   <td colSpan={9} className="px-4 py-12 text-center text-gray-400 text-[12px]">
-                    No shops match your filter
+                    {t('pages.shops.noMatch')}
                   </td>
                 </tr>
               )}
@@ -199,7 +207,7 @@ const ShopTable = ({ initialFilter = 'all', hideFilters = false }: ShopTableProp
         </div>
 
         <div className="flex items-center justify-between px-4 py-2.5 text-[11px] text-gray-500">
-          <span>Showing {shops.length} of {total} shops</span>
+          <span>{t('table.showingLabeled', { shown: shops.length, total, label: t('nav.shops').toLowerCase() })}</span>
         </div>
       </div>
     </>

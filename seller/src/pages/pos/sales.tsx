@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Loader2, Receipt, ScanBarcode, TrendingUp } from "lucide-react";
 import { fetchMyOrders, type SellerOrderRow } from "@/services/sellerApi";
 
@@ -14,6 +15,7 @@ const formatDate = (s?: string): string => {
 };
 
 const PosSalesPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [orders, setOrders] = useState<SellerOrderRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -69,9 +71,9 @@ const PosSalesPage: React.FC = () => {
     <div className="space-y-4 text-sm">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
-          <h1 className="text-[16px] font-bold text-gray-900">POS sales history</h1>
+          <h1 className="text-[16px] font-bold text-gray-900">{t('pages.posSales.title')}</h1>
           <p className="text-[12px] text-gray-500 mt-0.5">
-            All in-store transactions rung up at the terminal. Revenue routes to your shop balance.
+            {t('pages.posSales.subtitle')}
           </p>
         </div>
         <div className="flex items-center gap-1.5 bg-gray-100 rounded p-0.5">
@@ -83,17 +85,17 @@ const PosSalesPage: React.FC = () => {
                 range === r ? "bg-white text-black shadow-sm" : "text-gray-500 hover:text-black"
               }`}
             >
-              {r === "today" ? "Today" : r === "7d" ? "7D" : r === "30d" ? "30D" : "All"}
+              {r === "today" ? t('ranges.today') : r === "7d" ? t('ranges.7d') : r === "30d" ? t('ranges.30d') : t('ranges.all')}
             </button>
           ))}
         </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <KPI label="Sales count" value={stats.count.toLocaleString()} tone="text-blue-700" />
-        <KPI label="Items sold" value={stats.items.toLocaleString()} tone="text-purple-700" />
-        <KPI label="Revenue" value={`฿${formatMoney(stats.revenue)}`} tone="text-emerald-700" />
-        <KPI label="Avg ticket" value={`฿${formatMoney(stats.avg)}`} tone="text-black" />
+        <KPI label={t('pages.posSales.salesCount')} value={stats.count.toLocaleString()} tone="text-blue-700" />
+        <KPI label={t('pages.posSales.itemsSold')} value={stats.items.toLocaleString()} tone="text-purple-700" />
+        <KPI label={t('pages.posSales.revenue')} value={`฿${formatMoney(stats.revenue)}`} tone="text-emerald-700" />
+        <KPI label={t('pages.posSales.avgTicket')} value={`฿${formatMoney(stats.avg)}`} tone="text-black" />
       </div>
 
       {error && (

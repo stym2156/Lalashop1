@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import {
   ScanBarcode, Search, Plus, Minus, Trash2, ShoppingCart, Receipt,
   Loader2, AlertCircle, Package, CheckCircle2, X,
@@ -43,6 +44,7 @@ const productImage = (p: PosProduct): string => {
 };
 
 const PosTerminal: React.FC = () => {
+  const { t } = useTranslation("common");
   const { seller, loading: sellerLoading } = useCurrentSeller();
   const [products, setProducts] = useState<PosProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -63,7 +65,7 @@ const PosTerminal: React.FC = () => {
       );
       setProducts(res.data ?? []);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load products");
+      setError(err instanceof Error ? err.message : t("pages.posTerminal.errFailedLoad"));
     } finally {
       setLoading(false);
     }
@@ -145,7 +147,7 @@ const PosTerminal: React.FC = () => {
       addToCart(product);
       setScanInput("");
     } else {
-      setError(`No product found for barcode "${code}"`);
+      setError(t("pages.posTerminal.errBarcode", { code }));
       setTimeout(() => setError(null), 2500);
       setScanInput("");
     }
@@ -176,11 +178,11 @@ const PosTerminal: React.FC = () => {
           body: JSON.stringify({
             orderItems,
             shippingAddress: {
-              fullName: seller.name || "POS Customer",
-              phone: "in-store",
-              address: "In-store POS sale",
+              fullName: seller.name || t("pages.posTerminal.posCustomer"),
+              phone: t("pages.posTerminal.posInStorePhone"),
+              address: t("pages.posTerminal.posInStoreSale"),
             },
-            paymentMethod: "POS Cash",
+            paymentMethod: t("pages.posTerminal.posCash"),
             totalPrice: subtotal,
             channel: "pos",
             posTerminal: "terminal-1",
@@ -196,7 +198,7 @@ const PosTerminal: React.FC = () => {
         await loadProducts();
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Checkout failed");
+      setError(err instanceof Error ? err.message : t("pages.posTerminal.errCheckout"));
     } finally {
       setSubmitting(false);
     }
@@ -214,22 +216,22 @@ const PosTerminal: React.FC = () => {
     <div className="space-y-4 text-sm h-full flex flex-col">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
-          <h1 className="text-[18px] font-bold text-gray-900">POS Terminal</h1>
+          <h1 className="text-[18px] font-bold text-gray-900">{t('pages.posTerminal.title')}</h1>
           <p className="text-[11px] text-gray-500">
-            Scan a barcode or click a product. {products.length} POS items in catalog.
+            {t('pages.posTerminal.subtitle', { count: products.length })}
           </p>
         </div>
         <Link
           href="/products/add"
           className="bg-emerald-600 text-white px-3 py-1.5 rounded-md text-xs font-bold inline-flex items-center hover:bg-emerald-700"
         >
-          <Plus className="w-3.5 h-3.5 mr-1.5" /> Add POS product
+          <Plus className="w-3.5 h-3.5 mr-1.5" /> {t('pages.posTerminal.addPosProduct')}
         </Link>
       </div>
 
       <form onSubmit={onScanSubmit} className="rounded-lg border-2 border-emerald-200 bg-emerald-50 px-4 py-3">
         <label className="text-[10px] font-black text-emerald-800 tracking-widest block mb-1">
-          Scanner input — barcode or manual entry
+          {t('pages.posTerminal.scannerLabel')}
         </label>
         <div className="flex items-center gap-3">
           <ScanBarcode className="w-5 h-5 text-emerald-600 flex-shrink-0" />
@@ -237,7 +239,7 @@ const PosTerminal: React.FC = () => {
             ref={scanRef}
             value={scanInput}
             onChange={(e) => setScanInput(e.target.value)}
-            placeholder="Scan or type barcode + Enter..."
+            placeholder={t('pages.posTerminal.scanPlaceholder')}
             className="flex-1 bg-white border border-emerald-200 rounded-md px-3 py-2 text-sm font-mono outline-none focus:border-emerald-500"
             autoFocus
           />
@@ -245,7 +247,7 @@ const PosTerminal: React.FC = () => {
             type="submit"
             className="bg-emerald-600 text-white px-4 py-2 rounded-md text-xs font-bold hover:bg-emerald-700"
           >
-            Add
+            {t('actions.add')}
           </button>
         </div>
       </form>
@@ -261,8 +263,7 @@ const PosTerminal: React.FC = () => {
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-green-700" />
             <p className="text-[12px] text-green-800">
-              <strong>Sale completed</strong> — Order #{lastReceipt.id.slice(-6).toUpperCase()},
-              {" "}{lastReceipt.items} items, ฿{formatMoney(lastReceipt.total)}
+              <strong>{t('pages.posTerminal.saleCompleted')}</strong> — {t('pages.posTerminal.saleSummary', { id: lastReceipt.id.slice(-6).toUpperCase(), items: lastReceipt.items, total: formatMoney(lastReceipt.total) })}
             </p>
           </div>
           <button
@@ -282,7 +283,7 @@ const PosTerminal: React.FC = () => {
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by name, barcode, category..."
+              placeholder={t('pages.posTerminal.searchPlaceholder')}
               className="flex-1 outline-none text-sm placeholder:text-gray-400"
             />
           </div>
@@ -291,8 +292,8 @@ const PosTerminal: React.FC = () => {
               <div className="py-12 text-center text-gray-400 text-[12px]">
                 <Package className="w-6 h-6 mx-auto mb-2 text-gray-300" />
                 {products.length === 0
-                  ? "No POS products yet — add one from /products/add"
-                  : "No products match your search"}
+                  ? t('pages.posTerminal.noPosProducts')
+                  : t('pages.posTerminal.noProductsMatch')}
               </div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
@@ -319,7 +320,7 @@ const PosTerminal: React.FC = () => {
                         )}
                         {outOfStock && (
                           <span className="absolute inset-0 bg-black/40 text-white text-[11px] font-bold flex items-center justify-center">
-                            OUT OF STOCK
+                            {t('pages.posTerminal.outOfStock')}
                           </span>
                         )}
                       </div>
@@ -331,7 +332,7 @@ const PosTerminal: React.FC = () => {
                           <p className="text-[12px] font-black text-emerald-700">
                             ฿{formatMoney(p.price)}
                           </p>
-                          <p className="text-[9px] text-gray-400">stk {p.countInStock}</p>
+                          <p className="text-[9px] text-gray-400">{t('pages.posTerminal.stockShort', { count: p.countInStock })}</p>
                         </div>
                         {p.barcode && (
                           <p className="text-[9px] font-mono text-gray-400 truncate">{p.barcode}</p>
@@ -350,7 +351,7 @@ const PosTerminal: React.FC = () => {
           <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <ShoppingCart className="w-4 h-4 text-emerald-600" />
-              <h3 className="text-[13px] font-bold text-gray-900">Cart</h3>
+              <h3 className="text-[13px] font-bold text-gray-900">{t('pages.posTerminal.cart')}</h3>
               {cart.length > 0 && (
                 <span className="text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-bold">
                   {totalQty}
@@ -362,7 +363,7 @@ const PosTerminal: React.FC = () => {
                 onClick={clearCart}
                 className="text-[11px] text-red-600 hover:underline font-bold"
               >
-                Clear
+                {t('actions.clear')}
               </button>
             )}
           </div>
@@ -370,7 +371,7 @@ const PosTerminal: React.FC = () => {
           <div className="flex-1 overflow-y-auto">
             {cart.length === 0 ? (
               <div className="py-12 text-center text-gray-400 text-[12px]">
-                Cart is empty — scan a barcode to start
+                {t('pages.posTerminal.cartEmpty')}
               </div>
             ) : (
               <div className="divide-y divide-gray-50">
@@ -419,11 +420,11 @@ const PosTerminal: React.FC = () => {
 
           <div className="border-t border-gray-100 p-4 space-y-2 bg-gray-50/50">
             <div className="flex items-center justify-between text-[12px]">
-              <span className="text-gray-600">Subtotal</span>
+              <span className="text-gray-600">{t('pages.posTerminal.subtotal')}</span>
               <span className="font-bold text-gray-900">฿{formatMoney(subtotal)}</span>
             </div>
             <div className="flex items-center justify-between text-[14px] pt-2 border-t border-gray-200">
-              <span className="font-bold text-gray-900">Total</span>
+              <span className="font-bold text-gray-900">{t('pages.posTerminal.total')}</span>
               <span className="font-black text-emerald-700 text-[18px]">
                 ฿{formatMoney(subtotal)}
               </span>
@@ -434,11 +435,10 @@ const PosTerminal: React.FC = () => {
               className="w-full mt-2 bg-emerald-600 text-white py-3 rounded-lg font-black tracking-wider text-[12px] inline-flex items-center justify-center gap-2 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Receipt className="w-4 h-4" />}
-              {submitting ? "PROCESSING..." : `CHECKOUT ${cart.length > 0 ? `(${totalQty})` : ""}`}
+              {submitting ? t('pages.posTerminal.processing') : `${t('pages.posTerminal.checkout')} ${cart.length > 0 ? `(${totalQty})` : ""}`}
             </button>
             <p className="text-[10px] text-center text-gray-400 leading-tight">
-              POS sale — paid in person at the terminal. Revenue routes to your shop balance
-              (non-withdrawable).
+              {t('pages.posTerminal.posSaleNote')}
             </p>
           </div>
         </div>

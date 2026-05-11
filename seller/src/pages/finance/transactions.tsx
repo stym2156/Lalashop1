@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Loader2, ArrowDownCircle, ArrowUpCircle, RotateCcw, Receipt,
   Search,
@@ -34,6 +35,7 @@ const TYPE_META: Record<
 };
 
 const TransactionsPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [items, setItems] = useState<SellerTransaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -75,16 +77,16 @@ const TransactionsPage: React.FC = () => {
   return (
     <div className="space-y-4 text-sm">
       <div>
-        <h1 className="text-[16px] font-bold text-gray-900">Transactions</h1>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.transactions.title')}</h1>
         <p className="text-[12px] text-gray-500 mt-0.5">
-          Unified ledger — every income, withdrawal, fee, and refund touching your balance.
+          {t('pages.transactions.subtitle')}
         </p>
       </div>
 
       <div className="grid grid-cols-3 gap-3">
-        <Stat label="Total inflow" value={`฿${formatMoney(totals.inflow)}`} tone="text-emerald-700" />
-        <Stat label="Total outflow" value={`฿${formatMoney(totals.outflow)}`} tone="text-rose-700" />
-        <Stat label="Net" value={`฿${formatMoney(totals.net)}`} tone="text-[#00aeff]" />
+        <Stat label={t('pages.transactions.totalInflow')} value={`฿${formatMoney(totals.inflow)}`} tone="text-emerald-700" />
+        <Stat label={t('pages.transactions.totalOutflow')} value={`฿${formatMoney(totals.outflow)}`} tone="text-rose-700" />
+        <Stat label={t('pages.transactions.net')} value={`฿${formatMoney(totals.net)}`} tone="text-[#00aeff]" />
       </div>
 
       <div className="flex items-center justify-between flex-wrap gap-2">
@@ -106,7 +108,7 @@ const TransactionsPage: React.FC = () => {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search description…"
+            placeholder={t('pages.transactions.searchPlaceholder')}
             className="bg-gray-50 border border-gray-100 focus:bg-white focus:border-gray-200 outline-none rounded-md pl-8 pr-3 py-1.5 text-xs w-64"
           />
         </div>
@@ -124,7 +126,7 @@ const TransactionsPage: React.FC = () => {
         <div className="py-16 text-center">
           <Receipt className="w-8 h-8 mx-auto mb-3 text-gray-300" />
           <p className="text-[13px] font-bold text-gray-700">
-            {items.length === 0 ? "No transactions yet" : "No matches"}
+            {items.length === 0 ? t('pages.transactions.noTransactions') : t('common.noMatches')}
           </p>
         </div>
       ) : (

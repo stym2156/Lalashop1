@@ -1,4 +1,5 @@
 import "@/pages/globals.css";
+import "@/i18n/config";
 import type { AppProps } from "next/app";
 import { useEffect } from "react";
 import MainSidebar from "@/components/layout/MainSidebar";

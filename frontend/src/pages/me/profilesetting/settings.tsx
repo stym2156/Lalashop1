@@ -5,12 +5,14 @@ import {
   Store, Shield, Bell,
   Truck, Save, ChevronRight, CheckCircle, ArrowLeft, FileBadge,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { GeneralSection } from "./GeneralSection";
 import { AddressSection } from "./AddressSection";
 import { SecuritySection } from "./SecuritySection";
 import { ShopDetailSection } from "./ShopDetailSection";
 export default function SellerSettings() {
+  const { t } = useTranslation("common");
   const [activeSection, setActiveSection] = useState("general");
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -22,10 +24,10 @@ export default function SellerSettings() {
   // the bank account captured during KYC, so the standalone Bank section
   // would only confuse sellers (no second source of truth).
   const menuItems = [
-    { id: "general", label: "Basic Store Info", icon: Store },
-    { id: "shop_detail", label: "Shop details (KYC)", icon: FileBadge },
-    { id: "address", label: "Address & Shipping", icon: Truck },
-    { id: "security", label: "Account Security", icon: Shield },
+    { id: "general", label: t("pages.settings.general"), icon: Store },
+    { id: "shop_detail", label: t("pages.settings.shopDetail"), icon: FileBadge },
+    { id: "address", label: t("pages.settings.address"), icon: Truck },
+    { id: "security", label: t("pages.settings.security"), icon: Shield },
   ];
 
   const handleSave = () => {
@@ -50,7 +52,7 @@ export default function SellerSettings() {
             <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
             <h1 className="text-lg font-bold flex items-center gap-2">
               <div className="w-2 h-6 bg-[#00aeff] rounded-full" />
-              Store Settings
+              {t("pages.settings.title")}
             </h1>
           </Link>
           
@@ -84,7 +86,7 @@ export default function SellerSettings() {
             </h2>
             {success && (
               <span className="text-emerald-600 text-xs font-bold flex items-center gap-1 animate-in fade-in">
-                <CheckCircle size={14} /> Saved Successfully
+                <CheckCircle size={14} /> {t("status.success")}
               </span>
             )}
           </div>

@@ -8,10 +8,12 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { SelectAddressModal } from "./SelectAddressModal";
 import { apiClient } from "@/services/apiClient";
 
 export default function PaymentPage() {
+  const { t } = useTranslation("common");
   const [address, setAddress] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
@@ -107,7 +109,7 @@ export default function PaymentPage() {
         <button onClick={() => router.back()} className="p-2 -ml-2 rounded-full hover:bg-gray-100 transition-colors">
           <ChevronLeft size={22} className="text-gray-700" />
         </button>
-        <h1 className="ml-2 text-base font-bold text-gray-900">Checkout</h1>
+        <h1 className="ml-2 text-base font-bold text-gray-900">{t("pages.checkout.title")}</h1>
       </nav>
 
       <main className="max-w-5xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
@@ -117,7 +119,7 @@ export default function PaymentPage() {
             {/* Order Summary (หน้าตาเดิม แค่เพิ่ม Logic แยกแหล่งข้อมูล) */}
             <section className="bg-white rounded-1xl border border-gray-200 shadow-sm overflow-hidden">
               <div className="px-5 py-4 border-b border-gray-100 bg-gray-50/60">
-                <h2 className="text-sm font-bold text-gray-700 tracking-wider">Order Summary</h2>
+                <h2 className="text-sm font-bold text-gray-700 tracking-wider">{t("pages.checkout.summary")}</h2>
               </div>
               <div className="p-5">
                 <div className="space-y-4 mb-5">
@@ -171,7 +173,7 @@ export default function PaymentPage() {
 
                 {/* ส่วนยอดรวมคงเดิม */}
                 <div className="pt-3 border-t border-gray-100 flex justify-between items-center">
-                  <span className="font-bold text-gray-900 text-sm">Total Payment</span>
+                  <span className="font-bold text-gray-900 text-sm">{t("pages.checkout.total")}</span>
                   <div className="text-right">
                     <p className="text-2xl font-bold text-blue-600 tracking-tight">
                       ฿{finalSubtotal.toLocaleString(undefined, { minimumFractionDigits: 2 })}
@@ -183,7 +185,7 @@ export default function PaymentPage() {
                 <div className="flex justify-between items-center mb-4">
                   <h2 className="text-sm font-bold text-gray-900 flex items-center gap-2">
                     <MapPin size={16} className="text-blue-500 shrink-0" />
-                    Delivery Address
+                    {t("pages.checkout.deliveryAddress")}
                   </h2>
                   <button
                     onClick={() => setIsSelectModalOpen(true)}
@@ -195,7 +197,7 @@ export default function PaymentPage() {
 
                 <div className="text-sm text-gray-600 leading-relaxed">
                   {loading ? (
-                    <p className="text-gray-400 animate-pulse text-sm">Loading address...</p>
+                    <p className="text-gray-400 animate-pulse text-sm">{t("status.loading")}</p>
                   ) : address ? (
                     <div>
                       <p className="font-bold text-gray-900">
@@ -215,7 +217,7 @@ export default function PaymentPage() {
                     </div>
                   ) : (
                     <p className="text-red-400 text-xs ">
-                      No delivery address found. Please add your address before checkout.
+                      {t("pages.checkout.noAddress")}
                     </p>
                   )}
                 </div>
@@ -228,7 +230,7 @@ export default function PaymentPage() {
             {/* Payment Method Selector */}
             <section>
               <div className="flex items-center justify-between mb-3 pl-3 border-l-[3px] border-blue-500">
-                <h2 className="text-sm font-bold text-gray-900">Select Payment Method</h2>
+                <h2 className="text-sm font-bold text-gray-900">{t("pages.checkout.selectPayment")}</h2>
               </div>
               <div className="space-y-2.5">
                 {paymentMethods.map((pm) => (
@@ -305,7 +307,7 @@ export default function PaymentPage() {
                   router.push(`/buyproduct/transfer?${params.toString()}&method=${method}`);
                 }}
               >
-                {!address ? "Please select address" : !method ? "Select Payment Method" : "Proceed to Checkout"}
+                {!address ? t("pages.checkout.selectAddress") : !method ? t("pages.checkout.selectPayment") : t("actions.checkout")}
               </button>
             </div>
           </div>

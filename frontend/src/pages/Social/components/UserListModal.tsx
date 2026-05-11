@@ -6,6 +6,7 @@ import {
   ChevronLeft
 } from "lucide-react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import FollowButton from "./FollowButton";
 import { apiClient } from "@/services/apiClient";
 import { useCurrentUser } from "@/services/useCurrentUser";
@@ -27,6 +28,7 @@ interface UserListModalProps {
 }
 
 export default function UserListModal({ title, isOpen, onClose, type, userId }: UserListModalProps) {
+  const { t } = useTranslation("common");
   const [searchQuery, setSearchQuery] = useState("");
   const [userList, setUserList] = useState<UserListItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -92,7 +94,7 @@ export default function UserListModal({ title, isOpen, onClose, type, userId }: 
             <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="text"
-              placeholder="Search..."
+              placeholder={`${t("actions.search")}...`}
               className="w-full bg-gray-50 border border-gray-100 rounded-xl py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-slate-800"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -166,7 +168,7 @@ export default function UserListModal({ title, isOpen, onClose, type, userId }: 
           ) : (
             <div className="flex flex-col items-center justify-center py-10 text-gray-400">
               <Search size={40} className="mb-3 opacity-20" />
-              <p className="text-sm">No results found</p>
+              <p className="text-sm">{t("status.noResults")}</p>
             </div>
           )}
         </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 import { Search, FileText, Check, X, Eye } from 'lucide-react';
 import {
   fetchKycSubmissions,
@@ -14,10 +15,10 @@ const statusBadge: Record<KycStatus, string> = {
   rejected: 'bg-red-50 text-red-700',
 };
 
-const statusLabel: Record<KycStatus, string> = {
-  pending: 'Pending Review',
-  approved: 'Approved',
-  rejected: 'Rejected',
+const statusLabelKey: Record<KycStatus, string> = {
+  pending: 'status.pending',
+  approved: 'status.approved',
+  rejected: 'status.rejected',
 };
 
 const formatDate = (s?: string): string => {
@@ -29,6 +30,7 @@ const formatDate = (s?: string): string => {
 };
 
 const ApplicationsPage = () => {
+  const { t } = useTranslation('common');
   const [filter, setFilter] = useState<'all' | KycStatus>('all');
   const [q, setQ] = useState('');
   const [items, setItems] = useState<AdminKycSubmission[]>([]);
@@ -46,7 +48,7 @@ const ApplicationsPage = () => {
       });
       setItems(res.data ?? []);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load applications');
+      setError(err instanceof Error ? err.message : t('pages.shops.applications.title'));
     } finally {
       setLoading(false);
     }
@@ -63,7 +65,7 @@ const ApplicationsPage = () => {
       await reviewKycSubmission(id, { decision, note: '' });
       await load();
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Action failed');
+      alert(err instanceof Error ? err.message : t('withdraw.actionFailed'));
     } finally {
       setBusyId(null);
     }
@@ -75,15 +77,15 @@ const ApplicationsPage = () => {
     <div className="space-y-4 text-sm">
       <div className="rounded-lg px-3 py-2 flex flex-wrap items-center gap-2">
         <div className="flex items-center gap-1">
-          {tabs.map((t) => (
+          {tabs.map((tab) => (
             <button
-              key={t}
-              onClick={() => setFilter(t)}
+              key={tab}
+              onClick={() => setFilter(tab)}
               className={`px-3 py-1 rounded text-[11px] font-semibold transition-colors ${
-                filter === t ? 'bg-black text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                filter === tab ? 'bg-black text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
               }`}
             >
-              {t === 'all' ? 'All' : statusLabel[t]}
+              {tab === 'all' ? t('common.all') : t(statusLabelKey[tab])}
             </button>
           ))}
         </div>
@@ -94,7 +96,7 @@ const ApplicationsPage = () => {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             type="text"
-            placeholder="Search applicant or shop..."
+            placeholder={t('kyc.searchPlaceholder')}
             className="pl-7 pr-3 py-1 rounded text-[11px] w-64 bg-gray-50 border border-gray-100 focus:border-primary outline-none"
           />
         </div>
@@ -105,21 +107,21 @@ const ApplicationsPage = () => {
           <table className="w-full text-[12px] tabular-nums">
             <thead className="text-[11px] text-gray-500 tracking-wide">
               <tr>
-                <th className="px-4 py-2 text-left font-semibold">App ID</th>
-                <th className="px-4 py-2 text-left font-semibold">Applicant</th>
-                <th className="px-4 py-2 text-left font-semibold">Shop Name</th>
-                <th className="px-4 py-2 text-left font-semibold">Business Type</th>
-                <th className="px-4 py-2 text-left font-semibold">Category</th>
-                <th className="px-4 py-2 text-left font-semibold">Submitted</th>
-                <th className="px-4 py-2 text-left font-semibold">Status</th>
-                <th className="px-4 py-2 text-right font-semibold">Actions</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.kycId')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.applicant')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.shop')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.businessType')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.category')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.submittedAt')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.status')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('table.actions')}</th>
               </tr>
             </thead>
             <tbody>
               {loading && (
                 <tr>
                   <td colSpan={8} className="px-4 py-12 text-center text-gray-400 text-[12px]">
-                    Loading applications...
+                    {t('kyc.loadingSubmissions')}
                   </td>
                 </tr>
               )}
@@ -144,15 +146,15 @@ const ApplicationsPage = () => {
                   <td className="px-4 py-2 text-gray-500 text-[11px]">{formatDate(a.submittedAt)}</td>
                   <td className="px-4 py-2">
                     <span className={`text-[11px] font-medium px-2 py-0.5 rounded ${statusBadge[a.status]}`}>
-                      {statusLabel[a.status]}
+                      {t(statusLabelKey[a.status])}
                     </span>
                   </td>
                   <td className="px-4 py-2 text-right">
                     <div className="flex items-center justify-end gap-0.5">
-                      <Link href={`/kyc/${a._id}`} title="View" className="text-gray-500 hover:text-black hover:bg-gray-100 rounded p-1">
+                      <Link href={`/kyc/${a._id}`} title={t('actions.view')} className="text-gray-500 hover:text-black hover:bg-gray-100 rounded p-1">
                         <Eye className="w-3.5 h-3.5" />
                       </Link>
-                      <button title="Documents" className="text-gray-500 hover:text-black hover:bg-gray-100 rounded p-1">
+                      <button title={t('kyc.documents')} className="text-gray-500 hover:text-black hover:bg-gray-100 rounded p-1">
                         <FileText className="w-3.5 h-3.5" />
                       </button>
                       {a.status === 'pending' && (
@@ -160,7 +162,7 @@ const ApplicationsPage = () => {
                           <button
                             disabled={busyId === a._id}
                             onClick={() => onReview(a._id, 'approved')}
-                            title="Approve"
+                            title={t('actions.approve')}
                             className="text-gray-500 hover:text-green-700 hover:bg-gray-100 rounded p-1 disabled:opacity-50"
                           >
                             <Check className="w-3.5 h-3.5" />
@@ -168,7 +170,7 @@ const ApplicationsPage = () => {
                           <button
                             disabled={busyId === a._id}
                             onClick={() => onReview(a._id, 'rejected')}
-                            title="Reject"
+                            title={t('actions.reject')}
                             className="text-gray-500 hover:text-red-600 hover:bg-gray-100 rounded p-1 disabled:opacity-50"
                           >
                             <X className="w-3.5 h-3.5" />
@@ -182,7 +184,7 @@ const ApplicationsPage = () => {
               {!loading && !error && items.length === 0 && (
                 <tr>
                   <td colSpan={8} className="px-4 py-12 text-center text-gray-400 text-[12px]">
-                    No applications match your filter
+                    {t('pages.shops.applications.noApplications')}
                   </td>
                 </tr>
               )}

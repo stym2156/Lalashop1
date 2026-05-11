@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Loader2, Banknote, Calendar, ChevronDown, ChevronRight } from "lucide-react";
 import { fetchSettlements, type SellerSettlement } from "@/services/sellerApi";
 
@@ -14,6 +15,7 @@ const formatPeriod = (period: string, startDate: string): string => {
 };
 
 const SettlementsPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [items, setItems] = useState<SellerSettlement[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,17 +51,17 @@ const SettlementsPage: React.FC = () => {
   return (
     <div className="space-y-4 text-sm">
       <div>
-        <h1 className="text-[16px] font-bold text-gray-900">Settlements</h1>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.settlements.title')}</h1>
         <p className="text-[12px] text-gray-500 mt-0.5">
-          Withdrawals grouped by period — see how much landed in your bank account each {period}.
+          {t('pages.settlements.subtitle', { period: period === 'week' ? t('pages.settlements.periodWeek') : t('pages.settlements.periodMonth') })}
         </p>
       </div>
 
       <div className="grid grid-cols-4 gap-3">
-        <Stat label={`Periods`} value={items.length.toString()} />
-        <Stat label="Gross paid out" value={`฿${formatMoney(totals.gross)}`} />
-        <Stat label="Fees" value={`฿${formatMoney(totals.fees)}`} tone="text-rose-700" />
-        <Stat label="Net to bank" value={`฿${formatMoney(totals.net)}`} tone="text-emerald-700" />
+        <Stat label={t('pages.settlements.periods')} value={items.length.toString()} />
+        <Stat label={t('pages.settlements.grossPaidOut')} value={`฿${formatMoney(totals.gross)}`} />
+        <Stat label={t('pages.settlements.fees')} value={`฿${formatMoney(totals.fees)}`} tone="text-rose-700" />
+        <Stat label={t('pages.settlements.netToBank')} value={`฿${formatMoney(totals.net)}`} tone="text-emerald-700" />
       </div>
 
       <div className="flex items-center gap-1.5 bg-gray-100 rounded p-0.5 w-fit">
@@ -71,7 +73,7 @@ const SettlementsPage: React.FC = () => {
               period === k ? "bg-white text-black shadow-sm" : "text-gray-500 hover:text-black"
             }`}
           >
-            By {k}
+            {k === 'week' ? t('pages.settlements.byWeek') : t('pages.settlements.byMonth')}
           </button>
         ))}
       </div>
@@ -87,9 +89,9 @@ const SettlementsPage: React.FC = () => {
       ) : items.length === 0 ? (
         <div className="py-16 text-center">
           <Banknote className="w-8 h-8 mx-auto mb-3 text-gray-300" />
-          <p className="text-[13px] font-bold text-gray-700">No settlements yet</p>
+          <p className="text-[13px] font-bold text-gray-700">{t('pages.settlements.noSettlements')}</p>
           <p className="text-[11px] text-gray-500 mt-1">
-            Once you complete a withdrawal, it will appear grouped here.
+            {t('pages.settlements.noSettlementsDesc')}
           </p>
         </div>
       ) : (

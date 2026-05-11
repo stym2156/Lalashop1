@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Loader2, CheckCircle2, AlertCircle, Plus, Trash2, Truck, MapPin,
 } from "lucide-react";
@@ -29,6 +30,7 @@ const newZone = (): ShippingZone => ({
 });
 
 const ShippingSettings: React.FC = () => {
+  const { t } = useTranslation("common");
   const [form, setForm] = useState<ShopShipping>(initial);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -95,9 +97,9 @@ const ShippingSettings: React.FC = () => {
     <div className="space-y-4 text-sm max-w-3xl">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-[16px] font-bold text-gray-900">Shipping settings</h1>
+          <h1 className="text-[16px] font-bold text-gray-900">{t('pages.shippingSettings.title')}</h1>
           <p className="text-[12px] text-gray-500 mt-0.5">
-            Default rates, free-shipping rules, and per-region zones.
+            {t('pages.shippingSettings.subtitle')}
           </p>
         </div>
         <button
@@ -106,7 +108,7 @@ const ShippingSettings: React.FC = () => {
           className="bg-[#00aeff] text-white px-4 py-2 rounded-md text-xs font-bold inline-flex items-center hover:bg-[#0096db] disabled:opacity-50"
         >
           {saving ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" />}
-          {saving ? "Saving…" : "Save changes"}
+          {saving ? t('actions.saving') : t('actions.saveChanges')}
         </button>
       </div>
 

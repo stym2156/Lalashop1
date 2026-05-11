@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 import {
   ArrowLeft, Globe, Scan, ImagePlus, X, CheckCircle2, AlertCircle, Loader2,
   Printer, Download, Plug, Eye, EyeOff,
@@ -46,19 +47,22 @@ interface FieldProps {
   children: React.ReactNode;
 }
 
-const Field: React.FC<FieldProps> = ({ label, hint, required, optional, children }) => (
-  <div className="space-y-1">
-    <div className="flex items-center justify-between">
-      <label className="text-[11px] font-semibold text-gray-700">
-        {label}
-        {required && <span className="ml-1 text-red-500">*</span>}
-        {optional && <span className="ml-1 text-gray-400 font-normal">(optional)</span>}
-      </label>
-      {hint && <span className="text-[10px] text-gray-400">{hint}</span>}
+const Field: React.FC<FieldProps> = ({ label, hint, required, optional, children }) => {
+  const { t } = useTranslation("common");
+  return (
+    <div className="space-y-1">
+      <div className="flex items-center justify-between">
+        <label className="text-[11px] font-semibold text-gray-700">
+          {label}
+          {required && <span className="ml-1 text-red-500">*</span>}
+          {optional && <span className="ml-1 text-gray-400 font-normal">{t("common.optional")}</span>}
+        </label>
+        {hint && <span className="text-[10px] text-gray-400">{hint}</span>}
+      </div>
+      {children}
     </div>
-    {children}
-  </div>
-);
+  );
+};
 
 
 interface ImageUploaderProps {
@@ -68,6 +72,7 @@ interface ImageUploaderProps {
 }
 
 const ImageUploader: React.FC<ImageUploaderProps> = ({ images, setImages, max = 8 }) => {
+  const { t } = useTranslation("common");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFiles = (files: FileList | null): void => {
@@ -113,7 +118,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ images, setImages, max = 
             className="aspect-square rounded-lg border-2 border-dashed border-gray-200 flex flex-col items-center justify-center gap-1 text-gray-400 hover:border-emerald-500 hover:text-emerald-600 transition-colors"
           >
             <ImagePlus className="w-5 h-5" />
-            <span className="text-[10px] font-bold tracking-wide">Add image</span>
+            <span className="text-[10px] font-bold tracking-wide">{t("pages.addProduct.imageSection") === "Image" ? "Add image" : t("components.webProductForm.addImage")}</span>
           </button>
         )}
       </div>
@@ -126,7 +131,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ images, setImages, max = 
         onChange={(e) => handleFiles(e.target.files)}
       />
       <p className="text-[10px] text-gray-400">
-        Upload up to {max} images. The first image is used as the cover.
+        {t("pages.addProduct.uploadHint", { max })}
       </p>
     </div>
   );
@@ -134,6 +139,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ images, setImages, max = 
 
 const AddProductPage: React.FC = () => {
   const router = useRouter();
+  const { t } = useTranslation("common");
   const { seller, loading: sellerLoading } = useCurrentSeller();
   const printer = usePrinter();
 
@@ -162,9 +168,9 @@ const AddProductPage: React.FC = () => {
     e.preventDefault();
     setPosError(null);
     setCreatedPos(null);
-    if (!posName.trim()) return setPosError("Product name is required");
-    if (!posPrice || Number(posPrice) <= 0) return setPosError("Price must be greater than 0");
-    if (posImages.length === 0) return setPosError("At least one product image is required");
+    if (!posName.trim()) return setPosError(t("pages.addProduct.errProductName"));
+    if (!posPrice || Number(posPrice) <= 0) return setPosError(t("pages.addProduct.errPrice"));
+    if (posImages.length === 0) return setPosError(t("pages.addProduct.errImage"));
 
     setPosSubmitting(true);
     try {
@@ -197,7 +203,7 @@ const AddProductPage: React.FC = () => {
         body: JSON.stringify(payload),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to create product");
+      if (!res.ok) throw new Error(data.message || t("pages.addProduct.errFailedCreate"));
 
       const created = data.data;
       setCreatedPos({
@@ -213,7 +219,7 @@ const AddProductPage: React.FC = () => {
       posImages.forEach((img) => URL.revokeObjectURL(img.preview));
       setPosImages([]);
     } catch (err) {
-      setPosError(err instanceof Error ? err.message : "Failed to create product");
+      setPosError(err instanceof Error ? err.message : t("pages.addProduct.errFailedCreate"));
     } finally {
       setPosSubmitting(false);
     }
@@ -233,14 +239,14 @@ const AddProductPage: React.FC = () => {
         onClick={() => router.back()}
         className="inline-flex items-center gap-2 text-[12px] text-gray-500 hover:text-black font-medium transition-colors"
       >
-        <ArrowLeft className="w-3.5 h-3.5" /> Back
+        <ArrowLeft className="w-3.5 h-3.5" /> {t("actions.back")}
       </button>
 
       <div className="flex items-center justify-between">
-        <h1 className="text-[18px] font-bold text-gray-900">Add product</h1>
+        <h1 className="text-[18px] font-bold text-gray-900">{t("pages.addProduct.title")}</h1>
         {seller?.name && (
           <span className="text-[11px] text-gray-500">
-            Adding to <strong>{seller.name}</strong>
+            {t("pages.addProduct.addingTo", { name: seller.name })}
           </span>
         )}
       </div>
@@ -254,7 +260,7 @@ const AddProductPage: React.FC = () => {
               : "text-gray-500 hover:text-black border-b-2 border-transparent"
           }`}
         >
-          <Globe className="w-3.5 h-3.5" /> Web product
+          <Globe className="w-3.5 h-3.5" /> {t("pages.addProduct.tabWeb")}
         </button>
         <button
           onClick={() => setTab("pos")}
@@ -264,7 +270,7 @@ const AddProductPage: React.FC = () => {
               : "text-gray-500 hover:text-black border-b-2 border-transparent"
           }`}
         >
-          <Scan className="w-3.5 h-3.5" /> POS / In-store product
+          <Scan className="w-3.5 h-3.5" /> {t("pages.addProduct.tabPos")}
         </button>
       </div>
 
@@ -273,9 +279,7 @@ const AddProductPage: React.FC = () => {
       {tab === "pos" && (
         <div className="space-y-4">
           <div className="rounded-lg bg-emerald-50 px-4 py-3 text-[12px] text-emerald-800">
-            <strong className="font-bold">POS / In-store product:</strong> these are sold at your
-            terminal by scanning a barcode. Revenue from POS sales goes to your shop directly and
-            is <strong>not withdrawable</strong> (kept separate from your web balance).
+            <strong className="font-bold">{t("pages.addProduct.posIntro")}</strong> {t("pages.addProduct.posIntroBody")} <strong>{t("pages.addProduct.notWithdrawable")}</strong> {t("pages.addProduct.notWithdrawableSuffix")}
           </div>
 
           {posError && (
@@ -291,8 +295,8 @@ const AddProductPage: React.FC = () => {
             {/* to inventory-only vs also-on-web before filling in the rest. */}
             <div className="rounded-lg border border-gray-100 overflow-hidden">
               <SectionHeader
-                title="Where to sell this product"
-                hint="Pick one — you can change it later from the product detail page"
+                title={t("pages.addProduct.whereToSell")}
+                hint={t("pages.addProduct.whereToSellHint")}
               />
               <div className="p-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -316,11 +320,11 @@ const AddProductPage: React.FC = () => {
                           !posShowInStorefront ? "text-emerald-900" : "text-gray-700"
                         }`}
                       >
-                        Store only (in-store inventory)
+                        {t("pages.addProduct.storeOnly")}
                       </span>
                     </div>
                     <p className="text-[11px] text-gray-500 leading-relaxed">
-                      Sold at the POS terminal only. Not visible on the web storefront.
+                      {t("pages.addProduct.storeOnlyDesc")}
                     </p>
                   </button>
                   <button
@@ -343,11 +347,11 @@ const AddProductPage: React.FC = () => {
                           posShowInStorefront ? "text-[#00aeff]" : "text-gray-700"
                         }`}
                       >
-                        Also show on the website
+                        {t("pages.addProduct.alsoOnWeb")}
                       </span>
                     </div>
                     <p className="text-[11px] text-gray-500 leading-relaxed">
-                      Sold both at the POS terminal and on your public web storefront.
+                      {t("pages.addProduct.alsoOnWebDesc")}
                     </p>
                   </button>
                 </div>
@@ -356,20 +360,20 @@ const AddProductPage: React.FC = () => {
 
             <div className="rounded-lg border border-gray-100 overflow-hidden">
               <SectionHeader
-                title="Product details"
-                hint="Minimum info needed to ring up a sale at the terminal"
+                title={t("pages.addProduct.productDetails")}
+                hint={t("pages.addProduct.productDetailsHint")}
               />
               <div className="p-4 space-y-4">
-                <Field label="Product name" required>
+                <Field label={t("product.name")} required>
                   <input
                     className={inputCls}
                     value={posName}
                     onChange={(e) => setPosName(e.target.value)}
-                    placeholder="e.g. Espresso shot"
+                    placeholder={t("pages.addProduct.productNamePlaceholder")}
                   />
                 </Field>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <Field label="Price (฿)" required>
+                  <Field label={t("pages.addProduct.priceLabel")} required>
                     <input
                       type="number"
                       min="0"
@@ -380,7 +384,7 @@ const AddProductPage: React.FC = () => {
                       placeholder="0.00"
                     />
                   </Field>
-                  <Field label="Stock quantity">
+                  <Field label={t("pages.addProduct.stockQuantity")}>
                     <input
                       type="number"
                       min="0"
@@ -389,7 +393,7 @@ const AddProductPage: React.FC = () => {
                       onChange={(e) => setPosStock(e.target.value)}
                     />
                   </Field>
-                  <Field label="Category">
+                  <Field label={t("pages.addProduct.category")}>
                     <select
                       className={inputCls}
                       value={posCategory}
@@ -402,9 +406,9 @@ const AddProductPage: React.FC = () => {
                   </Field>
                 </div>
                 <Field
-                  label="Existing barcode"
+                  label={t("pages.addProduct.existingBarcode")}
                   optional
-                  hint="Scan or paste — we'll keep it as-is. Leave blank to auto-generate."
+                  hint={t("pages.addProduct.existingBarcodeHint")}
                 >
                   <div className="relative">
                     <Scan className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
@@ -412,7 +416,7 @@ const AddProductPage: React.FC = () => {
                       className={`${inputCls} font-mono pl-9`}
                       value={posBarcodeManual}
                       onChange={(e) => setPosBarcodeManual(e.target.value)}
-                      placeholder="e.g. 8851234567890"
+                      placeholder={t("pages.addProduct.barcodePlaceholder")}
                     />
                   </div>
                 </Field>
@@ -420,7 +424,7 @@ const AddProductPage: React.FC = () => {
             </div>
 
             <div className="rounded-lg border border-gray-100 overflow-hidden">
-              <SectionHeader title="Image" hint="At least one image (used as POS catalog cover)" />
+              <SectionHeader title={t("pages.addProduct.imageSection")} hint={t("pages.addProduct.imageSectionHint")} />
               <div className="p-4">
                 <ImageUploader images={posImages} setImages={setPosImages} max={4} />
               </div>
@@ -433,7 +437,7 @@ const AddProductPage: React.FC = () => {
                 disabled={posSubmitting}
                 className="px-4 py-2 rounded-md text-[12px] font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-50"
               >
-                Cancel
+                {t("actions.cancel")}
               </button>
               <button
                 type="submit"
@@ -441,7 +445,7 @@ const AddProductPage: React.FC = () => {
                 className="bg-emerald-600 text-white px-5 py-2 rounded-md text-[12px] font-bold inline-flex items-center hover:bg-emerald-700 disabled:opacity-50"
               >
                 {posSubmitting ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Scan className="w-3.5 h-3.5 mr-1.5" />}
-                {posSubmitting ? "Saving..." : "Save & generate barcode"}
+                {posSubmitting ? t("pages.addProduct.saving") : t("pages.addProduct.saveAndGenerate")}
               </button>
             </div>
           </form>
@@ -460,10 +464,9 @@ const AddProductPage: React.FC = () => {
               ) : (
                 <div className="rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 p-5 text-center">
                   <Scan className="w-8 h-8 text-gray-300 mx-auto mb-2" />
-                  <p className="text-[12px] font-bold text-gray-700">Barcode preview</p>
+                  <p className="text-[12px] font-bold text-gray-700">{t("pages.addProduct.barcodePreview")}</p>
                   <p className="text-[11px] text-gray-500 mt-1 leading-relaxed">
-                    Save the product and the generated barcode appears here — ready to print on a sticker
-                    or download as SVG.
+                    {t("pages.addProduct.barcodePreviewHint")}
                   </p>
                 </div>
               )}
@@ -494,18 +497,19 @@ const PosCreatedCard: React.FC<PosCreatedCardProps> = ({
   onDone,
   onGoToTerminal,
 }) => {
+  const { t } = useTranslation("common");
   return (
     <div className="rounded-2xl  from-emerald-50 to-white p-5 space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-          <h3 className="text-[14px] font-black text-emerald-900">Product created</h3>
+          <h3 className="text-[14px] font-black text-emerald-900">{t("pages.addProduct.productCreated")}</h3>
         </div>
         <button
           onClick={onDone}
           className="text-[11px] font-bold text-emerald-700 hover:text-emerald-900"
         >
-          Add another
+          {t("actions.addAnother")}
         </button>
       </div>
 
@@ -514,7 +518,7 @@ const PosCreatedCard: React.FC<PosCreatedCardProps> = ({
         {created.barcode ? (
           <Barcode value={created.barcode} width={2} height={70} />
         ) : (
-          <p className="text-[11px] text-gray-400 italic">no barcode</p>
+          <p className="text-[11px] text-gray-400 italic">{t("pages.addProduct.noBarcode")}</p>
         )}
       </div>
 
@@ -524,12 +528,12 @@ const PosCreatedCard: React.FC<PosCreatedCardProps> = ({
           disabled={!created.barcode}
           className="px-3 py-1.5 rounded-md text-[11px] font-bold text-emerald-700 bg-white  border-emerald-200 hover:bg-emerald-50 inline-flex items-center disabled:opacity-50"
         >
-          <Download className="w-3.5 h-3.5 mr-1.5" /> Download SVG
+          <Download className="w-3.5 h-3.5 mr-1.5" /> {t("pages.addProduct.downloadSvg")}
         </button>
 
         {!printerAvailable ? (
           <span className="px-3 py-1.5 text-[11px] text-gray-500 bg-gray-100 rounded-md inline-flex items-center">
-            <Plug className="w-3.5 h-3.5 mr-1.5" /> Web USB not supported (use Chrome/Edge)
+            <Plug className="w-3.5 h-3.5 mr-1.5" /> {t("pages.addProduct.webUsbNotSupported")}
           </span>
         ) : !printerConnected ? (
           <button
@@ -538,7 +542,7 @@ const PosCreatedCard: React.FC<PosCreatedCardProps> = ({
             className="px-3 py-1.5 rounded-md text-[11px] font-bold text-amber-700   inline-flex items-center disabled:opacity-50"
           >
             {printerConnecting ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Plug className="w-3.5 h-3.5 mr-1.5" />}
-            {printerConnecting ? "Connecting..." : "Connect sticker printer"}
+            {printerConnecting ? t("pages.addProduct.connectingPrinter") : t("pages.addProduct.connectPrinter")}
           </button>
         ) : (
           <button
@@ -546,7 +550,7 @@ const PosCreatedCard: React.FC<PosCreatedCardProps> = ({
             disabled={!created.barcode}
             className="px-3 py-1.5 rounded-md text-[11px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 inline-flex items-center disabled:opacity-50"
           >
-            <Printer className="w-3.5 h-3.5 mr-1.5" /> Print sticker
+            <Printer className="w-3.5 h-3.5 mr-1.5" /> {t("pages.addProduct.printSticker")}
           </button>
         )}
 
@@ -554,14 +558,12 @@ const PosCreatedCard: React.FC<PosCreatedCardProps> = ({
           onClick={onGoToTerminal}
           className="ml-auto px-3 py-1.5 rounded-md text-[11px] font-bold text-gray-700 hover:bg-gray-100 inline-flex items-center"
         >
-          Go to POS Terminal →
+          {t("pages.addProduct.goToTerminal")} →
         </button>
       </div>
 
       <p className="text-[11px] text-emerald-800 leading-relaxed">
-        The Print button activates only when a USB sticker printer is paired with this browser.
-        Click <em>Connect sticker printer</em> once per session — the OS print dialog will offer
-        the device when you press Print.
+        {t("pages.addProduct.printerInfo")}
       </p>
     </div>
   );

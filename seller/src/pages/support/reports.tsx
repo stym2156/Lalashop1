@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { AlertCircle, Loader2, Flag } from "lucide-react";
 import { apiClient } from "@/services/apiClient";
 import { useCurrentSeller } from "@/services/useCurrentSeller";
@@ -38,6 +39,7 @@ const formatDate = (s?: string): string => {
 };
 
 const SellerReportsPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const { seller } = useCurrentSeller();
   const [reports, setReports] = useState<ReportRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -69,9 +71,9 @@ const SellerReportsPage: React.FC = () => {
   return (
     <div className="space-y-4 text-sm">
       <div>
-        <h1 className="text-[16px] font-bold text-gray-900">Reports about my shop</h1>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.supportReports.title')}</h1>
         <p className="text-[12px] text-gray-500 mt-0.5">
-          Reports filed by buyers against your shop or products. Admin reviews and decides.
+          {t('pages.supportReports.subtitle')}
         </p>
       </div>
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { Loader2, Users, Search, ArrowRight } from "lucide-react";
 import { fetchCustomers, type SellerCustomer, type CustomerSegment } from "@/services/sellerApi";
 
@@ -26,6 +27,7 @@ const initial = (name?: string): string =>
   (name || "?").trim().charAt(0).toUpperCase() || "?";
 
 const CustomerListPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [items, setItems] = useState<SellerCustomer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -68,9 +70,9 @@ const CustomerListPage: React.FC = () => {
   return (
     <div className="space-y-4 text-sm">
       <div>
-        <h1 className="text-[16px] font-bold text-gray-900">Customers</h1>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.customersList.title')}</h1>
         <p className="text-[12px] text-gray-500 mt-0.5">
-          Everyone who has ordered from your shop, with spend and engagement summary.
+          {t('pages.customersList.subtitle')}
         </p>
       </div>
 
@@ -84,7 +86,11 @@ const CustomerListPage: React.FC = () => {
                 filter === k ? "bg-white text-black shadow-sm" : "text-gray-500 hover:text-black"
               }`}
             >
-              {k === "all" ? "All" : k}
+              {k === "all" ? t('pages.customersList.filterAll') :
+               k === "vip" ? t('pages.customersList.filterVip') :
+               k === "regular" ? t('pages.customersList.filterRegular') :
+               k === "new" ? t('pages.customersList.filterNew') :
+               t('pages.customersList.filterInactive')}
             </button>
           ))}
         </div>
@@ -93,7 +99,7 @@ const CustomerListPage: React.FC = () => {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search name or email…"
+            placeholder={t('pages.customersList.searchPlaceholder')}
             className="bg-gray-50 border border-gray-100 focus:bg-white focus:border-gray-200 outline-none rounded-md pl-8 pr-3 py-1.5 text-xs w-64"
           />
         </div>
@@ -111,11 +117,11 @@ const CustomerListPage: React.FC = () => {
         <div className="py-16 text-center">
           <Users className="w-8 h-8 mx-auto mb-3 text-gray-300" />
           <p className="text-[13px] font-bold text-gray-700">
-            {items.length === 0 ? "No customers yet" : "No matches"}
+            {items.length === 0 ? t('pages.customersList.noCustomers') : t('common.noMatches')}
           </p>
           {items.length === 0 && (
             <p className="text-[11px] text-gray-500 mt-1">
-              Customers appear here after their first order.
+              {t('pages.customersList.noCustomersHint')}
             </p>
           )}
         </div>
@@ -124,11 +130,11 @@ const CustomerListPage: React.FC = () => {
           <table className="w-full text-xs">
             <thead className="bg-gray-50 text-[10px] font-bold text-gray-500 tracking-wider">
               <tr>
-                <th className="px-4 py-2 text-left">Customer</th>
-                <th className="px-4 py-2 text-left">Segment</th>
-                <th className="px-4 py-2 text-right">Orders</th>
-                <th className="px-4 py-2 text-right">Total spent</th>
-                <th className="px-4 py-2 text-left">Last order</th>
+                <th className="px-4 py-2 text-left">{t('pages.customersList.tableCustomer')}</th>
+                <th className="px-4 py-2 text-left">{t('pages.customersList.tableSegment')}</th>
+                <th className="px-4 py-2 text-right">{t('pages.customersList.tableOrders')}</th>
+                <th className="px-4 py-2 text-right">{t('pages.customersList.tableTotalSpent')}</th>
+                <th className="px-4 py-2 text-left">{t('pages.customersList.tableLastOrder')}</th>
                 <th className="px-4 py-2"></th>
               </tr>
             </thead>
@@ -151,7 +157,7 @@ const CustomerListPage: React.FC = () => {
                       )}
                       <div className="min-w-0">
                         <p className="font-bold text-gray-900 truncate">
-                          {c.name || c.username || "Customer"}
+                          {c.name || c.username || t('orders.customer')}
                         </p>
                         <p className="text-[10px] text-gray-500 truncate">{c.email || "—"}</p>
                       </div>
@@ -182,7 +188,7 @@ const CustomerListPage: React.FC = () => {
                       href={`/customers/activity?id=${c._id}`}
                       className="text-[11px] font-bold text-[#00aeff] hover:underline inline-flex items-center"
                     >
-                      View <ArrowRight className="w-3 h-3 ml-0.5" />
+                      {t('pages.customersList.view')} <ArrowRight className="w-3 h-3 ml-0.5" />
                     </Link>
                   </td>
                 </tr>

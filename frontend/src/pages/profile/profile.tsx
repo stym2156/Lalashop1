@@ -18,12 +18,14 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 import UserListModal from "@/pages/Social/components/UserListModal";
 import SocialPost from "@/pages/Social/components/SocialPost";
 import MainSidebar from "@/components/layout/MainSidebar";
 import { apiClient } from "@/services/apiClient";
 
 export default function ProfilePage() {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [activeTab, setActiveTab] = useState("posts");
@@ -130,14 +132,14 @@ export default function ProfilePage() {
                       <button
                         onClick={() => setPreviewOpen(true)}
                         className="w-full h-1/2 flex items-center justify-center hover:bg-white/20 transition-colors border-b border-white/10"
-                        title="View Photo"
+                        title={t("header.viewProfile")}
                       >
                         <Eye size={16} className="text-white" />
                       </button>
                       <button
                         onClick={() => fileInputRef.current?.click()}
                         className="w-full h-1/2 flex items-center justify-center hover:bg-white/20 transition-colors"
-                        title="Edit Photo"
+                        title={t("header.editPhoto")}
                       >
                         <Camera size={16} className="text-white" />
                       </button>
@@ -160,7 +162,7 @@ export default function ProfilePage() {
                 </div>
 
                 <div className="min-w-0">
-                  <h2 className="text-lg sm:text-xl font-black text-slate-800 truncate">{user?.name || "Lala User"}</h2>
+                  <h2 className="text-lg sm:text-xl font-black text-slate-800 truncate">{user?.name || t("pages.profile.lalaUser")}</h2>
                   <p
                     onClick={() => navigator.clipboard.writeText(`@${user?.username || ""}`)}
                     className="text-xs text-[#00aeff] font-black mb-1 cursor-pointer active:opacity-60"

@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Search, Loader2, Layers, Package } from "lucide-react";
 import { fetchMyProducts, type SellerProductRow } from "@/services/sellerApi";
 
 const SellerCategoriesPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [products, setProducts] = useState<SellerProductRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,23 +43,22 @@ const SellerCategoriesPage: React.FC = () => {
   return (
     <div className="space-y-4 text-sm">
       <div>
-        <h1 className="text-[16px] font-bold text-gray-900">My categories</h1>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.categoriesPage.title')}</h1>
         <p className="text-[12px] text-gray-500 mt-0.5">
-          Categories used across your catalog. The platform-wide list is managed by admin.
+          {t('pages.categoriesPage.subtitle')}
         </p>
       </div>
 
       <div className="flex items-center gap-2">
         <span className="text-[11px] text-gray-500">
-          {products.length} product{products.length === 1 ? "" : "s"} in {groups.length}{" "}
-          categor{groups.length === 1 ? "y" : "ies"}
+          {t('pages.categoriesPage.summary', { products: products.length, groups: groups.length, count: products.length })}
         </span>
         <div className="ml-auto relative">
           <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Search category..."
+            placeholder={t('pages.categoriesPage.searchPlaceholder')}
             className="pl-7 pr-3 py-1 rounded text-[11px] w-64 bg-gray-50 border border-gray-100 focus:border-[#00aeff] outline-none"
           />
         </div>
@@ -74,7 +75,7 @@ const SellerCategoriesPage: React.FC = () => {
       ) : groups.length === 0 ? (
         <div className="py-12 text-center text-gray-400 text-[12px]">
           <Layers className="w-6 h-6 mx-auto mb-2 text-gray-300" />
-          No categories yet
+          {t('pages.categoriesPage.noCategories')}
         </div>
       ) : (
         <div className="space-y-3">
@@ -86,7 +87,7 @@ const SellerCategoriesPage: React.FC = () => {
                   <h3 className="text-[13px] font-bold text-gray-900">{cat}</h3>
                 </div>
                 <span className="text-[11px] font-bold text-gray-500">
-                  {list.length} product{list.length === 1 ? "" : "s"}
+                  {t('pages.categoriesPage.productCount', { count: list.length })}
                 </span>
               </div>
               <div className="divide-y divide-gray-50">
@@ -101,7 +102,7 @@ const SellerCategoriesPage: React.FC = () => {
                 ))}
                 {list.length > 8 && (
                   <div className="px-4 py-2 text-[11px] text-gray-400 italic">
-                    + {list.length - 8} more
+                    {t('pages.categoriesPage.moreItems', { count: list.length - 8 })}
                   </div>
                 )}
               </div>

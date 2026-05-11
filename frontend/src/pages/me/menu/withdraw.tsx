@@ -8,6 +8,7 @@ import {
   Shield,
   Scan,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 
 interface WithdrawProps {
@@ -55,6 +56,7 @@ interface KycShopInfo {
 const PENDING_STATUSES = new Set(["pending", "approved"]);
 
 export default function ShopWithdraw({ onBack }: WithdrawProps) {
+  const { t } = useTranslation("common");
   // Withdraw is shop-bound — sellers can only payout to the bank account
   // tied to their KYC. Adding ad-hoc accounts here was removed; that lives
   // in profile settings → Bank Account / Finance instead.
@@ -367,7 +369,7 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
           {posRevenue === 0 && <div className="mb-8" />}
 
           <div className="mb-6">
-            <label className="text-[10px] font-bold text-[#86878B] tracking-widest block mb-2">Withdraw Amount</label>
+            <label className="text-[10px] font-bold text-[#86878B] tracking-widest block mb-2">{t("pages.withdraw.amount")}</label>
             <div className="relative">
               <span className="absolute left-0 top-1/2 -translate-y-1/2 text-2xl font-bold">฿</span>
               <input
@@ -412,7 +414,7 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-lg font-black text-slate-800">Verify Withdrawal</h3>
+                  <h3 className="text-lg font-black text-slate-800">{t("actions.verify")}</h3>
                   <p className="text-xs text-slate-400 font-medium">
                     Please enter your 6-digit PIN to confirm withdrawal of ฿
                     {parseFloat(withdrawAmount || "0").toLocaleString()}

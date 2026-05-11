@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 import { ShieldCheck, Eye, EyeOff, Lock, User } from 'lucide-react';
 import { adminLogin } from '@/services/authApi';
 
 const LoginPage = () => {
   const router = useRouter();
+  const { t } = useTranslation('common');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -16,17 +18,17 @@ const LoginPage = () => {
     e.preventDefault();
     setError('');
     if (!email || !password) {
-      setError('Email and password are required');
+      setError(t('auth.emailPasswordRequired'));
       return;
     }
     setLoading(true);
     try {
       const res = await adminLogin(email, password);
       if (!res.token) {
-        throw new Error('Login response missing token');
+        throw new Error(t('auth.missingToken'));
       }
       if (!res.isAdmin) {
-        throw new Error('This account is not an admin');
+        throw new Error(t('auth.notAdmin'));
       }
       window.localStorage.setItem('token', res.token);
       window.localStorage.setItem('admin', JSON.stringify({
@@ -40,7 +42,7 @@ const LoginPage = () => {
       }
       router.push('/');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed');
+      setError(err instanceof Error ? err.message : t('auth.loginFailed'));
     } finally {
       setLoading(false);
     }
@@ -57,15 +59,14 @@ const LoginPage = () => {
         </div>
         <div className="relative z-10">
           <h1 className="text-5xl font-bold leading-tight tracking-tight">
-            Secure access<br />for operators only.
+            {t('auth.secureHeadline')}
           </h1>
           <p className="text-gray-400 text-sm mt-6 max-w-sm leading-relaxed">
-            This console controls platform-wide users, shops, products, finance,
-            and content moderation. All actions are logged.
+            {t('auth.secureSubtext')}
           </p>
         </div>
         <div className="text-[11px] text-gray-500 font-medium tracking-wide">
-          v1.0.0 · Internal Use Only
+          v1.0.0 · {t('auth.internalUseOnly')}
         </div>
         <div className="absolute -right-32 -bottom-32 w-96 h-96 rounded-full bg-primary opacity-10 blur-3xl" />
       </div>
@@ -79,8 +80,8 @@ const LoginPage = () => {
             </span>
           </div>
 
-          <h2 className="text-2xl font-bold text-black">Sign In</h2>
-          <p className="text-gray-500 text-sm mt-1">Enter your admin credentials to continue</p>
+          <h2 className="text-2xl font-bold text-black">{t('auth.signIn')}</h2>
+          <p className="text-gray-500 text-sm mt-1">{t('auth.loginSubtitle')}</p>
 
           {error && (
             <div className="mt-6 px-4 py-3 rounded-md bg-red-50 text-red-700 text-[12px] font-medium">
@@ -90,7 +91,7 @@ const LoginPage = () => {
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">
             <label className="block">
-              <span className="text-[11px] font-semibold text-gray-500 tracking-wide">EMAIL</span>
+              <span className="text-[11px] font-semibold text-gray-500 tracking-wide">{t('auth.emailLabel')}</span>
               <div className="flex items-center bg-gray-50 border border-gray-100 rounded-xl mt-1.5 px-4 focus-within:border-primary transition-colors">
                 <User className="w-4 h-4 text-gray-400 mr-3" />
                 <input
@@ -105,7 +106,7 @@ const LoginPage = () => {
             </label>
 
             <label className="block">
-              <span className="text-[11px] font-semibold text-gray-500 tracking-wide">PASSWORD</span>
+              <span className="text-[11px] font-semibold text-gray-500 tracking-wide">{t('auth.passwordLabel')}</span>
               <div className="flex items-center bg-gray-50 border border-gray-100 rounded-xl mt-1.5 px-4 focus-within:border-primary transition-colors">
                 <Lock className="w-4 h-4 text-gray-400 mr-3" />
                 <input
@@ -134,10 +135,10 @@ const LoginPage = () => {
                   onChange={(e) => setRemember(e.target.checked)}
                   className="rounded accent-primary"
                 />
-                Remember device
+                {t('auth.rememberDevice')}
               </label>
               <a href="/forgot-password" className="text-gray-600 hover:text-primary font-medium transition-colors">
-                Forgot password?
+                {t('auth.forgotPassword')}
               </a>
             </div>
 
@@ -146,12 +147,12 @@ const LoginPage = () => {
               disabled={loading}
               className="w-full mt-2 py-3 bg-black text-white text-sm font-semibold rounded-xl hover:bg-gray-900 transition-colors disabled:opacity-50"
             >
-              {loading ? 'Signing in...' : 'Sign In →'}
+              {loading ? t('auth.signingIn') : `${t('auth.signIn')} →`}
             </button>
           </form>
 
           <p className="text-[11px] text-gray-400 mt-8 leading-relaxed">
-            This is a restricted area. Unauthorized access is logged and prosecuted.
+            {t('auth.restrictedFooter')}
           </p>
         </div>
       </div>

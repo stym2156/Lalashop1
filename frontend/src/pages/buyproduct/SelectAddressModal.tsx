@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { X, MapPin, CheckCircle2, Plus, Truck, Phone, User } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { AddressModal } from "../me/profilesetting/AddressModal";
 import { apiClient } from "@/services/apiClient";
 import { useEffect, useState } from "react";
@@ -23,6 +24,7 @@ interface SelectAddressModalProps {
 }
 
 export function SelectAddressModal({ isOpen, onClose, onSelect, selectedId }: SelectAddressModalProps) {
+  const { t } = useTranslation("common");
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -69,7 +71,7 @@ export function SelectAddressModal({ isOpen, onClose, onSelect, selectedId }: Se
                   <div className="p-2 text-blue-500">
                     <MapPin size={18} />
                   </div>
-                  Select Delivery Address
+                  {t("pages.selectAddress.title")}
                 </h3>
                 <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full text-gray-400">
                   <X size={20} />
@@ -99,7 +101,7 @@ export function SelectAddressModal({ isOpen, onClose, onSelect, selectedId }: Se
                         <div className="flex items-center gap-2">
                           <p className="text-sm font-bold text-gray-900">{addr.recipientName}</p>
                           {addr.isDefault && (
-                            <span className="text-[10px] bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded font-bold">Default</span>
+                            <span className="text-[10px] bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded font-bold">{t("pages.settings.default")}</span>
                           )}
                         </div>
                         {selectedId === addr._id && (
@@ -123,8 +125,8 @@ export function SelectAddressModal({ isOpen, onClose, onSelect, selectedId }: Se
                     <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3 text-gray-300">
                       <MapPin size={30} />
                     </div>
-                    <p className="text-sm text-gray-500 font-medium">No saved addresses</p>
-                    <p className="text-xs text-gray-400 mt-1">Add an address to continue checkout</p>
+                    <p className="text-sm text-gray-500 font-medium">{t("pages.selectAddress.noAddresses")}</p>
+                    <p className="text-xs text-gray-400 mt-1">{t("pages.selectAddress.addNew")}</p>
                   </div>
                 )}
               </div>
@@ -136,7 +138,7 @@ export function SelectAddressModal({ isOpen, onClose, onSelect, selectedId }: Se
                   className="w-full py-3.5 bg-white  text-gray-500 text-sm font-bold hover:bg-gray-100 hover:border-blue-200 hover:text-blue-500 transition-all flex items-center justify-center gap-2"
                 >
                   <Plus size={18} />
-                  Add Address
+                  {t("pages.selectAddress.addNew")}
                 </button>
               </div>
             </motion.div>

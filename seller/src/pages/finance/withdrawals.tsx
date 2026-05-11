@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Wallet, Search, ChevronDown } from 'lucide-react';
 import {
   fetchMyWithdrawals,
@@ -26,6 +27,7 @@ const formatDate = (s?: string): string => {
 };
 
 const WithdrawalsPage = () => {
+  const { t } = useTranslation('common');
   const [items, setItems] = useState<SellerWithdrawalRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -71,7 +73,7 @@ const WithdrawalsPage = () => {
   return (
     <div className="space-y-4 text-sm">
       <div className="flex items-center justify-between">
-        <h1 className="text-[16px] font-bold text-gray-900">Withdrawals</h1>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.withdrawals.title')}</h1>
       </div>
 
       <div className="rounded-lg px-3 py-2 flex flex-wrap items-center gap-2">
@@ -80,12 +82,12 @@ const WithdrawalsPage = () => {
           onChange={(e) => setFilter(e.target.value as 'all' | WithdrawStatus)}
           className="bg-gray-100 rounded text-[11px] font-semibold text-gray-700 px-3 py-1 outline-none cursor-pointer"
         >
-          <option value="all">All ({counts.all})</option>
-          <option value="pending">Pending ({counts.pending})</option>
-          <option value="approved">Approved ({counts.approved})</option>
-          <option value="completed">Completed ({counts.completed})</option>
-          <option value="rejected">Rejected ({counts.rejected})</option>
-          <option value="failed">Failed ({counts.failed})</option>
+          <option value="all">{t('pages.withdrawals.filterAll')} ({counts.all})</option>
+          <option value="pending">{t('pages.withdrawals.filterPending')} ({counts.pending})</option>
+          <option value="approved">{t('pages.withdrawals.filterApproved')} ({counts.approved})</option>
+          <option value="completed">{t('pages.withdrawals.filterCompleted')} ({counts.completed})</option>
+          <option value="rejected">{t('pages.withdrawals.filterRejected')} ({counts.rejected})</option>
+          <option value="failed">{t('pages.withdrawals.filterFailed')} ({counts.failed})</option>
         </select>
 
         <div className="ml-auto relative">
@@ -94,7 +96,7 @@ const WithdrawalsPage = () => {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             type="text"
-            placeholder="Search ref or account..."
+            placeholder={t('pages.withdrawals.searchPlaceholder')}
             className="pl-7 pr-3 py-1 rounded text-[11px] w-64 bg-gray-50 border border-gray-100 focus:border-[#00aeff] outline-none"
           />
         </div>
@@ -109,26 +111,26 @@ const WithdrawalsPage = () => {
           <table className="w-full text-[12px] tabular-nums">
             <thead className="text-[11px] text-gray-500 tracking-wide bg-gray-50/50">
               <tr>
-                <th className="px-4 py-2 text-left font-semibold">Reference</th>
-                <th className="px-4 py-2 text-right font-semibold">Amount</th>
-                <th className="px-4 py-2 text-right font-semibold">Fee</th>
-                <th className="px-4 py-2 text-right font-semibold">Net</th>
-                <th className="px-4 py-2 text-left font-semibold">Bank</th>
-                <th className="px-4 py-2 text-left font-semibold">Status</th>
-                <th className="px-4 py-2 text-left font-semibold">Requested</th>
-                <th className="px-4 py-2 text-left font-semibold">Processed</th>
-                <th className="px-4 py-2 text-left font-semibold">Note</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.withdrawals.tableReference')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('pages.withdrawals.tableAmount')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('pages.withdrawals.tableFee')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('pages.withdrawals.tableNet')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.withdrawals.tableBank')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.withdrawals.tableStatus')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.withdrawals.tableRequested')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.withdrawals.tableProcessed')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.withdrawals.tableNote')}</th>
               </tr>
             </thead>
             <tbody>
               {loading && (
-                <tr><td colSpan={9} className="px-4 py-12 text-center text-gray-400 text-[12px]">Loading...</td></tr>
+                <tr><td colSpan={9} className="px-4 py-12 text-center text-gray-400 text-[12px]">{t('status.loading')}</td></tr>
               )}
               {!loading && filtered.length === 0 && (
                 <tr>
                   <td colSpan={9} className="px-4 py-12 text-center text-gray-400 text-[12px]">
                     <Wallet className="w-6 h-6 mx-auto mb-2 text-gray-300" />
-                    No withdrawals
+                    {t('pages.withdrawals.noItems')}
                   </td>
                 </tr>
               )}

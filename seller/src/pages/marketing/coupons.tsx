@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Loader2, Plus, Tag, Trash2, Edit3, Copy, Check } from "lucide-react";
 import {
   fetchMyCoupons,
@@ -36,6 +37,7 @@ const initialForm: CouponInput = {
 };
 
 const CouponsPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [items, setItems] = useState<SellerCoupon[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -128,23 +130,23 @@ const CouponsPage: React.FC = () => {
     <div className="space-y-4 text-sm">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-[16px] font-bold text-gray-900">Coupons</h1>
+          <h1 className="text-[16px] font-bold text-gray-900">{t('pages.coupons.title')}</h1>
           <p className="text-[12px] text-gray-500 mt-0.5">
-            Discount codes that buyers can apply at checkout.
+            {t('pages.coupons.subtitle')}
           </p>
         </div>
         <button
           onClick={openCreate}
           className="bg-[#00aeff] text-white px-3 py-1.5 rounded-md text-xs font-bold inline-flex items-center hover:bg-[#0096db]"
         >
-          <Plus className="w-3.5 h-3.5 mr-1" /> New coupon
+          <Plus className="w-3.5 h-3.5 mr-1" /> {t('pages.coupons.newCoupon')}
         </button>
       </div>
 
       <div className="grid grid-cols-3 gap-3">
-        <Stat label="Total coupons" value={stats.total.toString()} />
-        <Stat label="Active" value={stats.active.toString()} tone="text-emerald-700" />
-        <Stat label="Total redemptions" value={stats.used.toString()} tone="text-[#00aeff]" />
+        <Stat label={t('pages.coupons.totalCoupons')} value={stats.total.toString()} />
+        <Stat label={t('pages.coupons.active')} value={stats.active.toString()} tone="text-emerald-700" />
+        <Stat label={t('pages.coupons.totalRedemptions')} value={stats.used.toString()} tone="text-[#00aeff]" />
       </div>
 
       {error && (
@@ -158,8 +160,8 @@ const CouponsPage: React.FC = () => {
       ) : items.length === 0 ? (
         <div className="py-16 text-center">
           <Tag className="w-8 h-8 mx-auto mb-3 text-gray-300" />
-          <p className="text-[13px] font-bold text-gray-700">No coupons yet</p>
-          <p className="text-[11px] text-gray-500 mt-1">Create your first discount code.</p>
+          <p className="text-[13px] font-bold text-gray-700">{t('pages.coupons.noCoupons')}</p>
+          <p className="text-[11px] text-gray-500 mt-1">{t('pages.coupons.noCouponsHint')}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

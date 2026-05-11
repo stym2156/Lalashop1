@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 import {
   Search,
   Calendar,
@@ -29,23 +30,23 @@ type ColumnId =
 
 interface ColumnDef {
   id: ColumnId;
-  label: string;
+  labelKey: string;
   align: 'left' | 'right';
   defaultVisible: boolean;
 }
 
 const COLUMNS: ColumnDef[] = [
-  { id: 'id', label: 'ID', align: 'left', defaultVisible: true },
-  { id: 'name', label: 'Name', align: 'left', defaultVisible: true },
-  { id: 'email', label: 'Email', align: 'left', defaultVisible: true },
-  { id: 'balance', label: 'Balance', align: 'right', defaultVisible: true },
-  { id: 'phone', label: 'Phone', align: 'left', defaultVisible: true },
-  { id: 'twofa', label: '2FA', align: 'left', defaultVisible: true },
-  { id: 'joined', label: 'Joined', align: 'left', defaultVisible: true },
-  { id: 'status', label: 'Status', align: 'left', defaultVisible: true },
-  { id: 'bank', label: 'Bank', align: 'left', defaultVisible: false },
-  { id: 'username', label: 'Username', align: 'left', defaultVisible: false },
-  { id: 'ip', label: 'IP', align: 'left', defaultVisible: false },
+  { id: 'id', labelKey: 'table.id', align: 'left', defaultVisible: true },
+  { id: 'name', labelKey: 'table.name', align: 'left', defaultVisible: true },
+  { id: 'email', labelKey: 'table.email', align: 'left', defaultVisible: true },
+  { id: 'balance', labelKey: 'table.balance', align: 'right', defaultVisible: true },
+  { id: 'phone', labelKey: 'table.phone', align: 'left', defaultVisible: true },
+  { id: 'twofa', labelKey: 'table.twofa', align: 'left', defaultVisible: true },
+  { id: 'joined', labelKey: 'table.joined', align: 'left', defaultVisible: true },
+  { id: 'status', labelKey: 'table.status', align: 'left', defaultVisible: true },
+  { id: 'bank', labelKey: 'table.bank', align: 'left', defaultVisible: false },
+  { id: 'username', labelKey: 'table.username', align: 'left', defaultVisible: false },
+  { id: 'ip', labelKey: 'table.ip', align: 'left', defaultVisible: false },
 ];
 
 const COLUMN_PREF_KEY = 'admin.alluser.columns.v2';
@@ -71,16 +72,16 @@ const useDebounce = (value: string, delay: number): string => {
   return debounced;
 };
 
-const computeStatus = (u: AdminUser): { label: string; cls: string } => {
+const computeStatus = (u: AdminUser): { labelKey: string; cls: string } => {
   const updated = new Date(u.updatedAt);
   const ageDays = (Date.now() - updated.getTime()) / (1000 * 60 * 60 * 24);
   if (Number.isFinite(ageDays) && ageDays > 90) {
-    return { label: 'inactive', cls: ' text-gray-600' };
+    return { labelKey: 'status.inactive', cls: ' text-gray-600' };
   }
   if (u.twoFactorEnabled) {
-    return { label: 'verified', cls: ' text-emerald-700' };
+    return { labelKey: 'status.verified', cls: ' text-emerald-700' };
   }
-  return { label: 'active', cls: ' text-green-700' };
+  return { labelKey: 'status.active', cls: ' text-green-700' };
 };
 
 const loadColumnPrefs = (): Record<ColumnId, boolean> => {
@@ -103,6 +104,7 @@ const loadColumnPrefs = (): Record<ColumnId, boolean> => {
 };
 
 const AllUsers = () => {
+  const { t } = useTranslation('common');
   const [filter, setFilter] = useState<RoleFilter>('all');
   const [q, setQ] = useState('');
   const [open, setOpen] = useState(false);
@@ -164,7 +166,7 @@ const AllUsers = () => {
       setPages(res.meta?.pages ?? 1);
       setBalanceTotal(res.meta?.balanceTotal ?? 0);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load users');
+      setError(err instanceof Error ? err.message : t('pages.users.loadingUsers'));
       setUsers([]);
       setTotal(0);
       setPages(1);
@@ -229,11 +231,11 @@ const AllUsers = () => {
       case 'phone':
         return u.phone || '';
       case 'twofa':
-        return u.twoFactorEnabled ? 'On' : 'Off';
+        return u.twoFactorEnabled ? t('status.on') : t('status.off');
       case 'joined':
         return formatDate(u.createdAt);
       case 'status':
-        return computeStatus(u).label;
+        return t(computeStatus(u).labelKey);
       case 'bank':
         return u.bank ? `${u.bank.bankName} ${u.bank.accountNumber}` : '';
       case 'username':
@@ -254,7 +256,7 @@ const AllUsers = () => {
 
   const handleExport = () => {
     if (users.length === 0) return;
-    const header = visibleColumns.map((c) => escapeCsv(c.label)).join(',');
+    const header = visibleColumns.map((c) => escapeCsv(t(c.labelKey))).join(',');
     const rows = users.map((u) =>
       visibleColumns.map((c) => escapeCsv(cellValue(u, c.id))).join(','),
     );
@@ -317,7 +319,7 @@ const AllUsers = () => {
                   : ' text-gray-600'
               }`}
             >
-              {u.twoFactorEnabled ? 'On' : 'Off'}
+              {u.twoFactorEnabled ? t('status.on') : t('status.off')}
             </span>
           </td>
         );
@@ -332,7 +334,7 @@ const AllUsers = () => {
         return (
           <td key={col.id} className="px-4 py-2">
             <span className={`text-[11px] font-medium px-2 py-0.5 rounded capitalize ${s.cls}`}>
-              {s.label}
+              {t(s.labelKey)}
             </span>
           </td>
         );
@@ -377,25 +379,25 @@ const AllUsers = () => {
             onClick={() => setOpen(!open)}
             className="inline-flex items-center gap-1.5 px-3 py-1 rounded text-[11px] font-semibold capitalize bg-gray-100 hover:bg-gray-200 text-gray-700 min-w-[100px] justify-between"
           >
-            <span>{filter}</span>
+            <span>{t(`pages.users.filters.${filter}`)}</span>
             <ChevronDown className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`} />
           </button>
           {open && (
             <div className="absolute top-full left-0 mt-1 bg-white border border-gray-100 rounded-md shadow-md py-1 z-10 min-w-[120px]">
-              {roleTabs.map((t) => (
+              {roleTabs.map((tab) => (
                 <button
-                  key={t}
+                  key={tab}
                   onClick={() => {
-                    setFilter(t);
+                    setFilter(tab);
                     setOpen(false);
                   }}
                   className={`w-full text-left px-3 py-1.5 text-[11px] font-semibold capitalize transition-colors ${
-                    filter === t
+                    filter === tab
                       ? 'bg-gray-50 text-black'
                       : 'text-gray-600 hover:bg-gray-50 hover:text-black'
                   }`}
                 >
-                  {t}
+                  {t(`pages.users.filters.${tab}`)}
                 </button>
               ))}
             </div>
@@ -403,11 +405,11 @@ const AllUsers = () => {
         </div>
 
         <button className="inline-flex items-center text-[11px] font-medium text-gray-700 px-2 py-1 rounded">
-          <Calendar className="w-3.5 h-3.5 mr-1.5 text-gray-400" /> Date Range
+          <Calendar className="w-3.5 h-3.5 mr-1.5 text-gray-400" /> {t('table.dateRange')}
         </button>
 
         <span className="text-[11px] text-gray-500">
-          {loading ? 'Loading…' : `${formatNumber(total)} users`}
+          {loading ? t('status.loadingShort') : t('pages.users.usersCount', { count: total })}
         </span>
 
         <div className="ml-auto flex items-center gap-2">
@@ -417,7 +419,7 @@ const AllUsers = () => {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               type="text"
-              placeholder="Search ID, name, email, phone..."
+              placeholder={t('pages.users.searchPlaceholder')}
               className="pl-7 pr-3 py-1 rounded text-[11px] w-64 bg-gray-50 border border-gray-100 focus:border-primary outline-none"
             />
           </div>
@@ -426,20 +428,20 @@ const AllUsers = () => {
             onClick={handleExport}
             disabled={users.length === 0}
             className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-[11px] font-semibold bg-gray-100 hover:bg-gray-200 text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed"
-            title="Export current view as CSV"
+            title={t('pages.users.exportTitle')}
           >
             <Download className="w-3.5 h-3.5" />
-            <span>Export</span>
+            <span>{t('actions.export')}</span>
           </button>
 
           <div className="relative" ref={columnsRef}>
             <button
               onClick={() => setColumnsOpen((o) => !o)}
               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-[11px] font-semibold bg-gray-100 hover:bg-gray-200 text-gray-700"
-              title="Columns"
+              title={t('table.columnsTitle')}
             >
               <SlidersHorizontal className="w-3.5 h-3.5" />
-              <span>Columns</span>
+              <span>{t('table.columns')}</span>
               <ChevronDown
                 className={`w-3 h-3 transition-transform ${columnsOpen ? 'rotate-180' : ''}`}
               />
@@ -448,13 +450,13 @@ const AllUsers = () => {
               <div className="absolute top-full right-0 mt-1 bg-white border border-gray-100 rounded-md shadow-lg py-1 z-20 min-w-[200px]">
                 <div className="px-3 py-2 flex items-center justify-between border-b border-gray-100">
                   <span className="text-[11px] font-semibold text-gray-700">
-                    Show columns
+                    {t('table.showColumns')}
                   </span>
                   <button
                     onClick={resetColumns}
                     className="text-[10px] font-medium text-blue-600 hover:underline"
                   >
-                    Reset
+                    {t('actions.reset')}
                   </button>
                 </div>
                 <div className="max-h-72 overflow-y-auto py-1">
@@ -475,7 +477,7 @@ const AllUsers = () => {
                         >
                           {checked && <Check className="w-2.5 h-2.5" strokeWidth={3} />}
                         </span>
-                        <span className="font-medium">{c.label}</span>
+                        <span className="font-medium">{t(c.labelKey)}</span>
                       </button>
                     );
                   })}
@@ -504,7 +506,7 @@ const AllUsers = () => {
                       c.align === 'right' ? 'text-right' : 'text-left'
                     }`}
                   >
-                    {c.label}
+                    {t(c.labelKey)}
                   </th>
                 ))}
               </tr>
@@ -516,7 +518,7 @@ const AllUsers = () => {
                     colSpan={colCount}
                     className="px-4 py-8 text-center text-gray-400 text-[11px]"
                   >
-                    Loading users…
+                    {t('pages.users.loadingUsers')}
                   </td>
                 </tr>
               ) : users.length === 0 ? (
@@ -525,7 +527,7 @@ const AllUsers = () => {
                     colSpan={colCount}
                     className="px-4 py-8 text-center text-gray-400 text-[11px]"
                   >
-                    No users match the current filter.
+                    {t('pages.users.noMatch')}
                   </td>
                 </tr>
               ) : (
@@ -544,7 +546,7 @@ const AllUsers = () => {
                       className="px-4 py-3 font-semibold text-gray-500"
                       colSpan={balanceColIndex}
                     >
-                      Total Balance ({formatNumber(total)} users)
+                      {t('pages.users.totalBalance', { count: total })}
                     </td>
                   )}
                   <td className="px-4 py-3 text-right font-bold text-blue-600 text-[13px]">
@@ -563,8 +565,8 @@ const AllUsers = () => {
       <div className="flex flex-wrap items-center justify-between gap-3 px-3 pt-2 text-[11px] text-gray-600">
         <div>
           {total === 0
-            ? 'No results'
-            : `Showing ${formatNumber(startIndex)}–${formatNumber(endIndex)} of ${formatNumber(total)}`}
+            ? t('table.noResultsShort')
+            : t('table.showingResults', { from: formatNumber(startIndex), to: formatNumber(endIndex), total: formatNumber(total) })}
         </div>
 
         <div className="ml-auto flex items-center gap-3">
@@ -574,17 +576,17 @@ const AllUsers = () => {
               disabled={!canPrev}
               className="inline-flex items-center gap-1 px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              <ChevronLeft className="w-3 h-3" /> Prev
+              <ChevronLeft className="w-3 h-3" /> {t('actions.prev')}
             </button>
             <span className="text-gray-500">
-              Page {formatNumber(page)} / {formatNumber(Math.max(pages, 1))}
+              {t('table.pageOf', { page: formatNumber(page), total: formatNumber(Math.max(pages, 1)) })}
             </span>
             <button
               onClick={() => canNext && setPage((p) => p + 1)}
               disabled={!canNext}
               className="inline-flex items-center gap-1 px-2 py-1 rounded bg-gray-100 hover:bg-gray-200 text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              Next <ChevronRight className="w-3 h-3" />
+              {t('actions.next')} <ChevronRight className="w-3 h-3" />
             </button>
           </div>
 
@@ -593,7 +595,7 @@ const AllUsers = () => {
               onClick={() => setPageSizeOpen((o) => !o)}
               className="inline-flex items-center gap-1.5 px-3 py-1 rounded font-semibold bg-gray-100 hover:bg-gray-200 text-gray-700 min-w-[110px] justify-between"
             >
-              <span>{pageSize} / page</span>
+              <span>{t('table.perPage', { count: pageSize })}</span>
               <ChevronDown
                 className={`w-3 h-3 transition-transform ${pageSizeOpen ? 'rotate-180' : ''}`}
               />
@@ -613,7 +615,7 @@ const AllUsers = () => {
                         : 'text-gray-600 hover:bg-gray-50 hover:text-black'
                     }`}
                   >
-                    {size} / page
+                    {t('table.perPage', { count: size })}
                   </button>
                 ))}
               </div>

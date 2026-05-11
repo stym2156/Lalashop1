@@ -3,9 +3,11 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Loader2, AlertCircle, Eye, EyeOff } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 
 export default function LoginPage() {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
@@ -39,7 +41,7 @@ export default function LoginPage() {
       localStorage.setItem("userInfo", JSON.stringify(userInfo));
       router.push("/");
     } catch (err: any) {
-      setError(err.message || "Invalid email or password");
+      setError(err.message || t("auth.invalidCredentials"));
     } finally {
       setLoading(false);
     }
@@ -53,7 +55,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-[#F0F2F5] flex flex-col items-center justify-center p-4 font-sans selection:bg-primary/20">
       <Head>
-        <title>Login • LALA</title>
+        <title>{t("auth.loginTitle")} • LALA</title>
       </Head>
 
       <div className="w-full max-w-[400px] space-y-4">
@@ -78,23 +80,23 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="w-full space-y-4">
             <div className="space-y-1.5">
-              <label className="text-[13px] font-semibold text-slate-600 ml-1">Email phone</label>
+              <label className="text-[13px] font-semibold text-slate-600 ml-1">{t("auth.emailOrPhone")}</label>
               <input
                 type="email"
                 name="email"
                 required
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="email@example.com or 02x-xxx-xxxx"
+                placeholder={t("auth.emailWithPhonePlaceholder")}
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-slate-400"
               />
             </div>
 
             <div className="space-y-1.5 relative">
               <div className="flex justify-between items-center px-1">
-                <label className="text-[13px] font-semibold text-slate-600">Password</label>
+                <label className="text-[13px] font-semibold text-slate-600">{t("auth.password")}</label>
                 <Link href="/login/forgot-password" className="text-xs font-bold text-primary hover:text-primary-hover">
-                  Forgot password?
+                  {t("auth.forgotPassword")}
                 </Link>
               </div>
               <div className="relative">
@@ -122,12 +124,12 @@ export default function LoginPage() {
               disabled={loading || !formData.email || formData.password.length < 6}
               className="w-full bg-primary hover:bg-primary-hover disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl text-sm transition-all shadow-lg shadow-primary/25 active:scale-[0.98] flex items-center justify-center gap-2 mt-2"
             >
-              {loading ? <Loader2 className="animate-spin" size={18} /> : "log in"}
+              {loading ? <Loader2 className="animate-spin" size={18} /> : t("auth.loginCta")}
             </button>
 
             <div className="flex items-center gap-4 my-6">
               <div className="flex-1 h-[1px] bg-slate-100"></div>
-              <span className="text-[12px] font-bold text-slate-400  tracking-widest">Or continue with</span>
+              <span className="text-[12px] font-bold text-slate-400  tracking-widest">{t("auth.orContinueWith")}</span>
               <div className="flex-1 h-[1px] bg-slate-100"></div>
             </div>
 
@@ -147,8 +149,8 @@ export default function LoginPage() {
           </form>
           <div className="bg-white/60 border border-white rounded-2xl p-5 text-center backdrop-blur-md shadow-sm">
             <p className="text-sm text-slate-600">
-              Don't have an account?{" "}
-              <Link href="/login/signup" className="text-primary font-bold hover:underline ml-1">Create account</Link>
+              {t("auth.noAccount")}{" "}
+              <Link href="/login/signup" className="text-primary font-bold hover:underline ml-1">{t("auth.createAccount")}</Link>
             </p>
           </div>
         </div>

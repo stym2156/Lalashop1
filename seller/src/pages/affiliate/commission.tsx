@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Loader2, DollarSign, Package } from "lucide-react";
 import { fetchAffiliateSummary, type AffiliateSummary } from "@/services/sellerApi";
 
@@ -13,6 +14,7 @@ const productImage = (p: AffiliateSummary["products"][0]): string => {
 };
 
 const CommissionPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [data, setData] = useState<AffiliateSummary | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -45,10 +47,9 @@ const CommissionPage: React.FC = () => {
   return (
     <div className="space-y-4 text-sm">
       <div>
-        <h1 className="text-[16px] font-bold text-gray-900">Commission</h1>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.commission.title')}</h1>
         <p className="text-[12px] text-gray-500 mt-0.5">
-          Total commission paid to creators promoting your products. Each product can use a percent
-          or fixed-amount commission.
+          {t('pages.commission.subtitle')}
         </p>
       </div>
 

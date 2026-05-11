@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { Loader2, Monitor, ArrowRight } from "lucide-react";
 import { fetchMyOrders, type SellerOrderRow } from "@/services/sellerApi";
 
@@ -22,6 +23,7 @@ interface RegisterRow {
 }
 
 const RegistersPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [orders, setOrders] = useState<SellerOrderRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -64,17 +66,16 @@ const RegistersPage: React.FC = () => {
     <div className="space-y-4 text-sm">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-[16px] font-bold text-gray-900">POS registers</h1>
+          <h1 className="text-[16px] font-bold text-gray-900">{t('pages.registers.title')}</h1>
           <p className="text-[12px] text-gray-500 mt-0.5">
-            One card per POS terminal that has rung up sales. Use the terminal page to ring up new
-            ones — the register ID is recorded automatically per order.
+            {t('pages.registers.subtitle')}
           </p>
         </div>
         <Link
           href="/pos/terminal"
           className="bg-emerald-600 text-white px-3 py-1.5 rounded-md text-xs font-bold inline-flex items-center hover:bg-emerald-700"
         >
-          Open terminal <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+          {t('pages.registers.openTerminal')} <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
         </Link>
       </div>
 

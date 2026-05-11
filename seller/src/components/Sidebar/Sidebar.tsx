@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import {
   LayoutDashboard, ShoppingBag, Package, Wallet, MessageSquare,
   Users, Megaphone, Share2, BarChart3, LifeBuoy,
-  Settings, LogOut, ChevronDown, Bell, Search, User, ScanLine
+  Settings, LogOut, ChevronDown, ScanLine
 } from 'lucide-react';
 import { fetchUnreadSummary } from '@/services/messagesApi';
 
@@ -13,6 +14,7 @@ const UNREAD_POLL_MS = 20000;
 
 const Sidebar = () => {
   const router = useRouter();
+  const { t } = useTranslation('common');
   const [openStates, setOpenStates] = useState<{ [key: string]: boolean }>({});
   const [unreadMessages, setUnreadMessages] = useState(0);
 
@@ -45,125 +47,137 @@ const Sidebar = () => {
 
   const navItems = [
     {
-      name: 'Dashboard',
+      key: 'dashboard',
+      name: t('sidebar.dashboard'),
       href: '/dashboard',
       icon: LayoutDashboard,
       subItems: [
-        { name: 'Overview', href: '/' },
-        { name: 'Revenue Summary', href: '/dashboard/revenue' },
-        { name: 'Orders Summary', href: '/dashboard/orders' },
-        { name: 'Conversion Metrics', href: '/dashboard/conversion' },
-        { name: 'Traffic Analytics', href: '/dashboard/traffic' },
+        { key: 'overview', name: t('sidebar.overview'), href: '/' },
+        { key: 'revenueSummary', name: t('sidebar.revenueSummary'), href: '/dashboard/revenue' },
+        { key: 'ordersSummary', name: t('sidebar.ordersSummary'), href: '/dashboard/orders' },
+        { key: 'conversionMetrics', name: t('sidebar.conversionMetrics'), href: '/dashboard/conversion' },
+        { key: 'trafficAnalytics', name: t('sidebar.trafficAnalytics'), href: '/dashboard/traffic' },
       ]
     },
     {
-      name: 'Products',
+      key: 'products',
+      name: t('sidebar.products'),
       href: '/products',
       icon: Package,
       subItems: [
-        { name: 'Product List', href: '/products/list' },
-        { name: 'Categories', href: '/products/categories' },
-        { name: 'Inventory', href: '/products/inventory' },
-        { name: 'Product Review', href: '/products/reviews' },
-        { name: 'Product Violations', href: '/products/violations' },
+        { key: 'productList', name: t('sidebar.productList'), href: '/products/list' },
+        { key: 'categories', name: t('sidebar.categories'), href: '/products/categories' },
+        { key: 'inventory', name: t('sidebar.inventory'), href: '/products/inventory' },
+        { key: 'productReview', name: t('sidebar.productReview'), href: '/products/reviews' },
+        { key: 'productViolations', name: t('sidebar.productViolations'), href: '/products/violations' },
       ]
     },
     {
-      name: 'Orders',
+      key: 'orders',
+      name: t('sidebar.orders'),
       href: '/orders',
       icon: ShoppingBag,
     },
     {
-      name: 'POS',
+      key: 'pos',
+      name: t('sidebar.pos'),
       href: '/pos',
       icon: ScanLine,
       subItems: [
-        { name: 'Sales Terminal', href: '/pos/terminal' },
-        { name: 'POS Sales', href: '/pos/sales' },
-        { name: 'Cashier Shifts', href: '/pos/shifts' },
-        { name: 'Registers', href: '/pos/registers' },
+        { key: 'salesTerminal', name: t('sidebar.salesTerminal'), href: '/pos/terminal' },
+        { key: 'posSales', name: t('sidebar.posSales'), href: '/pos/sales' },
+        { key: 'cashierShifts', name: t('sidebar.cashierShifts'), href: '/pos/shifts' },
+        { key: 'registers', name: t('sidebar.registers'), href: '/pos/registers' },
       ]
     },
     {
-      name: 'Finance',
+      key: 'finance',
+      name: t('sidebar.finance'),
       href: '/finance',
       icon: Wallet,
       subItems: [
-        { name: 'Balance', href: '/finance/balance' },
-        { name: 'Withdrawals', href: '/finance/withdrawals' },
-        { name: 'Settlements', href: '/finance/settlements' },
-        { name: 'Refunds', href: '/finance/refunds' },
-        { name: 'Transactions', href: '/finance/transactions' },
+        { key: 'balance', name: t('sidebar.balance'), href: '/finance/balance' },
+        { key: 'withdrawals', name: t('sidebar.withdrawals'), href: '/finance/withdrawals' },
+        { key: 'settlements', name: t('sidebar.settlements'), href: '/finance/settlements' },
+        { key: 'refunds', name: t('sidebar.refunds'), href: '/finance/refunds' },
+        { key: 'transactions', name: t('sidebar.transactions'), href: '/finance/transactions' },
       ]
     },
     {
-      name: 'Messages',
+      key: 'messages',
+      name: t('sidebar.messages'),
       href: '/messages/inbox',
       icon: MessageSquare,
     },
     {
-      name: 'Customers',
+      key: 'customers',
+      name: t('sidebar.customers'),
       href: '/customers',
       icon: Users,
       subItems: [
-        { name: 'Customer List', href: '/customers/list' },
-        { name: 'Segments', href: '/customers/segments' },
-        { name: 'Labels', href: '/customers/labels' },
-        { name: 'Customer Activity', href: '/customers/activity' },
+        { key: 'customerList', name: t('sidebar.customerList'), href: '/customers/list' },
+        { key: 'segments', name: t('sidebar.segments'), href: '/customers/segments' },
+        { key: 'labels', name: t('sidebar.labels'), href: '/customers/labels' },
+        { key: 'customerActivity', name: t('sidebar.customerActivity'), href: '/customers/activity' },
       ]
     },
     {
-      name: 'Marketing',
+      key: 'marketing',
+      name: t('sidebar.marketing'),
       href: '/marketing',
       icon: Megaphone,
       subItems: [
-        { name: 'Coupons', href: '/marketing/coupons' },
-        { name: 'Campaigns', href: '/marketing/campaigns' },
-        { name: 'Broadcast Messages', href: '/marketing/broadcast' },
-        { name: 'Promotions', href: '/marketing/promotions' },
+        { key: 'coupons', name: t('sidebar.coupons'), href: '/marketing/coupons' },
+        { key: 'campaigns', name: t('sidebar.campaigns'), href: '/marketing/campaigns' },
+        { key: 'broadcastMessages', name: t('sidebar.broadcastMessages'), href: '/marketing/broadcast' },
+        { key: 'promotions', name: t('sidebar.promotions'), href: '/marketing/promotions' },
       ]
     },
     {
-      name: 'Affiliate',
+      key: 'affiliate',
+      name: t('sidebar.affiliate'),
       href: '/affiliate',
       icon: Share2,
       subItems: [
-        { name: 'Creator List', href: '/affiliate/creators' },
-        { name: 'Campaigns', href: '/affiliate/campaigns' },
-        { name: 'Commission', href: '/affiliate/commission' },
-        { name: 'Performance', href: '/affiliate/performance' },
+        { key: 'creatorList', name: t('sidebar.creatorList'), href: '/affiliate/creators' },
+        { key: 'campaigns', name: t('sidebar.campaigns'), href: '/affiliate/campaigns' },
+        { key: 'commission', name: t('sidebar.commission'), href: '/affiliate/commission' },
+        { key: 'performance', name: t('sidebar.performance'), href: '/affiliate/performance' },
       ]
     },
     {
-      name: 'Analytics',
+      key: 'analytics',
+      name: t('sidebar.analytics'),
       href: '/analytics',
       icon: BarChart3,
       subItems: [
-        { name: 'Sales Analytics', href: '/analytics/sales' },
-        { name: 'Product Analytics', href: '/analytics/products' },
-        { name: 'Customer Analytics', href: '/analytics/customers' },
-        { name: 'Chat Analytics', href: '/analytics/chat' },
+        { key: 'salesAnalytics', name: t('sidebar.salesAnalytics'), href: '/analytics/sales' },
+        { key: 'productAnalytics', name: t('sidebar.productAnalytics'), href: '/analytics/products' },
+        { key: 'customerAnalytics', name: t('sidebar.customerAnalytics'), href: '/analytics/customers' },
+        { key: 'chatAnalytics', name: t('sidebar.chatAnalytics'), href: '/analytics/chat' },
       ]
     },
     {
-      name: 'Support',
+      key: 'support',
+      name: t('sidebar.support'),
       href: '/support',
       icon: LifeBuoy,
       subItems: [
-        { name: 'Tickets', href: '/support/tickets' },
-        { name: 'Appeals', href: '/support/appeals' },
-        { name: 'Reports', href: '/support/reports' },
+        { key: 'tickets', name: t('sidebar.tickets'), href: '/support/tickets' },
+        { key: 'appeals', name: t('sidebar.appeals'), href: '/support/appeals' },
+        { key: 'reports', name: t('sidebar.reports'), href: '/support/reports' },
       ]
     },
     {
-      name: 'Settings',
+      key: 'settings',
+      name: t('sidebar.settings'),
       href: '/settings',
       icon: Settings,
       subItems: [
-        { name: 'Store Settings', href: '/settings/store' },
-        { name: 'Shipping Settings', href: '/settings/shipping' },
-        { name: 'Payment Settings', href: '/settings/payment' },
-        { name: 'Integrations', href: '/settings/integrations' },
+        { key: 'storeSettings', name: t('sidebar.storeSettings'), href: '/settings/store' },
+        { key: 'shippingSettings', name: t('sidebar.shippingSettings'), href: '/settings/shipping' },
+        { key: 'paymentSettings', name: t('sidebar.paymentSettings'), href: '/settings/payment' },
+        { key: 'integrations', name: t('sidebar.integrations'), href: '/settings/integrations' },
       ]
     },
   ];
@@ -172,13 +186,14 @@ const Sidebar = () => {
     const currentPath = router.pathname;
     navItems.forEach(item => {
       if (item.subItems?.some(sub => currentPath === sub.href) || currentPath === item.href) {
-        setOpenStates(prev => ({ ...prev, [item.name]: true }));
+        setOpenStates(prev => ({ ...prev, [item.key]: true }));
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.pathname]);
 
-  const toggleMenu = (name: string) => {
-    setOpenStates(prev => ({ ...prev, [name]: !prev[name] }));
+  const toggleMenu = (key: string) => {
+    setOpenStates(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
   return (
@@ -186,7 +201,7 @@ const Sidebar = () => {
       {/* Brand */}
       <div className="flex items-center px-8 h-20 border-b border-gray-100">
         <Link href="/" className="flex items-center space-x-2">
-          
+
           <span className="text-xl font-bold tracking-tight">lalashop <span className="text-primary">seller</span></span>
         </Link>
       </div>
@@ -196,17 +211,17 @@ const Sidebar = () => {
         <nav className="space-y-1">
           {navItems.map((item) => {
             const hasSub = item.subItems && item.subItems.length > 0;
-            const isOpen = openStates[item.name];
+            const isOpen = openStates[item.key];
             const isActive = router.pathname === item.href || item.subItems?.some(sub => router.pathname === sub.href);
             const Icon = item.icon;
 
             return (
-              <div key={item.name}>
+              <div key={item.key}>
                 <div
                   className={`flex items-center w-full px-4 py-3 text-sm font-semibold cursor-pointer relative transition-all rounded-lg mb-1 ${
                     isActive ? 'bg-primary-soft text-primary' : 'text-gray-500 hover:bg-gray-50 hover:text-black'
                   }`}
-                  onClick={() => hasSub ? toggleMenu(item.name) : router.push(item.href)}
+                  onClick={() => hasSub ? toggleMenu(item.key) : router.push(item.href)}
                 >
                   {isActive && (
                     <motion.div layoutId="activeSide" className="absolute left-0 w-1 h-5 bg-primary rounded-r-full" />
@@ -214,7 +229,7 @@ const Sidebar = () => {
 
                   <span className="relative inline-flex mr-3">
                     <Icon className={`h-5 w-5 ${isActive ? 'text-primary' : 'text-gray-400'}`} />
-                    {item.name === 'Messages' && unreadMessages > 0 && (
+                    {item.key === 'messages' && unreadMessages > 0 && (
                       <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center tabular-nums leading-none ring-2 ring-white">
                         {unreadMessages > 99 ? '99+' : unreadMessages}
                       </span>
@@ -237,7 +252,7 @@ const Sidebar = () => {
                     >
                       {item.subItems?.map((sub) => (
                         <Link
-                          key={sub.name}
+                          key={sub.key}
                           href={sub.href}
                           className={`block py-2 px-4 text-xs font-medium transition-colors rounded-md mb-1 ${
                             router.pathname === sub.href ? 'text-primary bg-primary-soft/50 font-bold' : 'text-gray-500 hover:text-black hover:bg-gray-50'
@@ -259,7 +274,7 @@ const Sidebar = () => {
       <div className="p-4 border-t border-gray-100">
         <button className="flex items-center justify-center w-full py-3 text-xs font-bold text-red-500 rounded-xl hover:bg-red-50 transition-all">
           <LogOut className="mr-2 h-4 w-4" />
-          Logout Session
+          {t('sidebar.logoutSession')}
         </button>
       </div>
     </div>

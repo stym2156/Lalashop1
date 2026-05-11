@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import { 
-  ImageIcon, X, Upload, Loader2, CheckCircle2, Globe, Users, 
+import {
+  ImageIcon, X, Upload, Loader2, CheckCircle2, Globe, Users,
   UserMinus, UserCheck, ChevronRight, MessageSquare, Video,
   Send
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { compressImage, formatSize } from "../utils/media";
 import { apiClient } from "@/services/apiClient";
 import { useCurrentUser } from "@/services/useCurrentUser";
@@ -17,6 +18,7 @@ interface MediaUploadProps {
 }
 
 export default function MediaUpload({ onUpload, onCancel }: MediaUploadProps) {
+  const { t } = useTranslation("common");
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [fileType, setFileType] = useState<"image" | "video">("image");
@@ -138,7 +140,7 @@ export default function MediaUpload({ onUpload, onCancel }: MediaUploadProps) {
     <div className="fixed inset-0 z-[100] bg-dark/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white rounded-[2rem] w-full max-w-lg overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300 flex flex-col max-h-[90vh]">
         <div className="p-5 border-b border-gray-border flex items-center justify-between">
-          <h2 className="font-black text-lg text-dark tracking-widest">Create New Post</h2>
+          <h2 className="font-black text-lg text-dark tracking-widest">{t("pages.posts.createTitle")}</h2>
           <button onClick={onCancel} className="p-2 hover:bg-gray-light rounded-full transition-colors text-dark">
             <X size={24} />
           </button>
@@ -154,8 +156,8 @@ export default function MediaUpload({ onUpload, onCancel }: MediaUploadProps) {
                 <Upload size={32} className="text-gray-400 group-hover:text-[#00aeff]" />
               </div>
               <div className="text-center">
-                <p className="font-black text-dark tracking-widest text-sm">Select Media</p>
-                <p className="text-[10px] text-gray-400 mt-1 font-bold tracking-tighter">Images or Videos up to 100MB</p>
+                <p className="font-black text-dark tracking-widest text-sm">{t("pages.posts.selectFromGallery")}</p>
+                <p className="text-[10px] text-gray-400 mt-1 font-bold tracking-tighter">{t("pages.posts.uploadMedia")}</p>
               </div>
             </div>
           ) : (
@@ -178,12 +180,12 @@ export default function MediaUpload({ onUpload, onCancel }: MediaUploadProps) {
               <div className="space-y-2">
                  <div className="flex items-center gap-2 text-slate-400 px-1">
                     <MessageSquare size={14} />
-                    <span className="text-[10px] font-black tracking-widest">Caption</span>
+                    <span className="text-[10px] font-black tracking-widest">{t("actions.comment")}</span>
                  </div>
-                 <textarea 
+                 <textarea
                     value={caption}
                     onChange={(e) => setCaption(e.target.value)}
-                    placeholder="What's on your mind?"
+                    placeholder={t("pages.posts.captionPlaceholder")}
                     className="w-full bg-slate-50 rounded-2xl p-4 text-sm font-medium outline-none border-2 border-transparent focus:border-[#00aeff] transition-all min-h-[100px] resize-none"
                  />
               </div>
@@ -223,12 +225,12 @@ export default function MediaUpload({ onUpload, onCancel }: MediaUploadProps) {
             {uploading ? (
               <>
                 <Loader2 size={18} className="animate-spin" />
-                Processing...
+                {t("pages.checkout.processing")}
               </>
             ) : (
               <>
                 <Send size={18} className="-rotate-12" />
-                Share Post
+                {t("pages.social.shareTo")}
               </>
             )}
           </button>

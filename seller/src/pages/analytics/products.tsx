@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Loader2, Package, TrendingUp, AlertTriangle } from "lucide-react";
 import {
   fetchMyProducts, fetchMyOrders, type SellerProductRow, type SellerOrderRow,
@@ -21,6 +22,7 @@ interface ProductPerf {
 }
 
 const ProductsAnalyticsPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [products, setProducts] = useState<SellerProductRow[]>([]);
   const [orders, setOrders] = useState<SellerOrderRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,21 +70,21 @@ const ProductsAnalyticsPage: React.FC = () => {
   return (
     <div className="space-y-4 text-sm">
       <div>
-        <h1 className="text-[16px] font-bold text-gray-900">Product analytics</h1>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.productsAnalytics.title')}</h1>
         <p className="text-[12px] text-gray-500 mt-0.5">
-          Top sellers, slow movers, and inventory alerts derived from your paid orders.
+          {t('pages.productsAnalytics.subtitle')}
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        <KPI icon={Package} label="Products" value={products.length} tone="text-blue-700" />
+        <KPI icon={Package} label={t('pages.productsAnalytics.products')} value={products.length} tone="text-blue-700" />
         <KPI
           icon={TrendingUp}
-          label="Total units sold"
+          label={t('pages.productsAnalytics.totalUnitsSold')}
           value={performance.reduce((s, p) => s + p.unitsSold, 0)}
           tone="text-emerald-700"
         />
-        <KPI icon={AlertTriangle} label="Low stock alerts" value={lowStock.length} tone="text-amber-700" />
+        <KPI icon={AlertTriangle} label={t('pages.productsAnalytics.lowStockAlerts')} value={lowStock.length} tone="text-amber-700" />
       </div>
 
       {loading ? (

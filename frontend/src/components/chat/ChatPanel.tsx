@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { X, Send, Loader2, ArrowLeft, MessageCircle, Search, Image as ImageIcon, Check, CheckCheck } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import Avatar from "@/components/ui/Avatar";
 import { useChat } from "./ChatContext";
 import { useCurrentUser } from "@/services/useCurrentUser";
@@ -67,6 +68,7 @@ const isSameDay = (a?: string, b?: string): boolean => {
 };
 
 const ChatPanel: React.FC = () => {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const {
     isOpen,
@@ -295,14 +297,16 @@ const ConversationList: React.FC<ConversationListProps> = ({
   onSelect,
   onClose,
   onPeerClick,
-}) => (
+}) => {
+  const { t } = useTranslation("common");
+  return (
   <>
     <header className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
-      <h2 className="text-base font-bold text-slate-900">Messages</h2>
+      <h2 className="text-base font-bold text-slate-900">{t("components.chat.title")}</h2>
       <button
         onClick={onClose}
         className="p-1.5 rounded-full hover:bg-slate-100 text-slate-500"
-        aria-label="Close messages"
+        aria-label={t("actions.close")}
       >
         <X size={18} />
       </button>
@@ -314,7 +318,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search messages"
+          placeholder={t("components.chat.search")}
           className="w-full bg-slate-50 border border-transparent focus:bg-white focus:border-slate-200 outline-none rounded-full pl-9 pr-3 py-1.5 text-sm transition-colors"
         />
       </div>
@@ -324,16 +328,16 @@ const ConversationList: React.FC<ConversationListProps> = ({
       {conversations.length === 0 ? (
         <div className="text-center py-16 px-4 text-slate-400">
           <MessageCircle size={36} className="mx-auto mb-3 text-slate-200" />
-          <p className="text-sm font-bold text-slate-600">No conversations yet</p>
+          <p className="text-sm font-bold text-slate-600">{t("components.chat.noConversations")}</p>
           <p className="text-xs mt-1">
-            Open a profile and tap <strong>Message</strong> to start chatting.
+            {t("components.chat.startChat")}
           </p>
         </div>
       ) : (
         conversations.map((c) => {
           const peer = c.peer;
-          const name = peer?.name || peer?.username || "User";
-          const subtitle = c.lastMessageText || "Tap to start chatting";
+          const name = peer?.name || peer?.username || t("components.chat.viewProfile");
+          const subtitle = c.lastMessageText || t("components.chat.startChat");
           return (
             <div
               key={c._id}
@@ -393,7 +397,8 @@ const ConversationList: React.FC<ConversationListProps> = ({
       )}
     </div>
   </>
-);
+  );
+};
 
 interface ConversationViewProps {
   peerName: string;
@@ -436,6 +441,7 @@ const ConversationView: React.FC<ConversationViewProps> = ({
   inputRef,
   messagesEndRef,
 }) => {
+  const { t } = useTranslation("common");
   // Always compare ids as strings — Mongoose returns ObjectId-shaped values
   // from populate() that look like strings after JSON but trip strict ===.
   const meIdStr = meId ? String(meId) : "";
@@ -509,7 +515,7 @@ const ConversationView: React.FC<ConversationViewProps> = ({
         </div>
       ) : messages.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-xs text-slate-400">Send the first message to {peerName}.</p>
+          <p className="text-xs text-slate-400">{t("components.chat.noMessages")}</p>
         </div>
       ) : (
         messages.map((m, i) => {
@@ -574,8 +580,8 @@ const ConversationView: React.FC<ConversationViewProps> = ({
         onClick={onPickImage}
         disabled={uploading}
         className="p-2 rounded-full text-slate-500 hover:text-primary hover:bg-slate-100 transition-colors disabled:opacity-50"
-        aria-label="Send photo"
-        title="Send photo"
+        aria-label={t("actions.upload")}
+        title={t("actions.upload")}
       >
         {uploading ? <Loader2 size={18} className="animate-spin" /> : <ImageIcon size={18} />}
       </button>
@@ -584,14 +590,14 @@ const ConversationView: React.FC<ConversationViewProps> = ({
         type="text"
         value={draft}
         onChange={(e) => setDraft(e.target.value)}
-        placeholder={`Message ${peerName}…`}
+        placeholder={t("components.chat.typePlaceholder")}
         className="flex-1 bg-slate-50 rounded-full px-4 py-2 text-sm border border-transparent focus:bg-white focus:border-slate-200 outline-none transition-colors"
       />
       <button
         type="submit"
         disabled={!draft.trim() || sending}
         className="p-2 rounded-full bg-primary text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-primary-hover transition-colors"
-        aria-label="Send"
+        aria-label={t("components.chat.send")}
       >
         {sending ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
       </button>

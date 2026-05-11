@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Loader2, TrendingUp, Eye, ShoppingCart, CreditCard, ChevronRight,
 } from "lucide-react";
@@ -15,6 +16,7 @@ const formatMoney = (n: number): string =>
   Number(n || 0).toLocaleString("en-US", { maximumFractionDigits: 0 });
 
 const ConversionPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [data, setData] = useState<ConversionFunnel | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -53,9 +55,9 @@ const ConversionPage: React.FC = () => {
     <div className="space-y-4 text-sm">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
-          <h1 className="text-[16px] font-bold text-gray-900">Conversion</h1>
+          <h1 className="text-[16px] font-bold text-gray-900">{t('pages.conversion.title')}</h1>
           <p className="text-[12px] text-gray-500 mt-0.5">
-            Funnel from product views → cart → checkout. Tracked from logged-in shoppers.
+            {t('pages.conversion.subtitle')}
           </p>
         </div>
         <div className="flex items-center gap-1.5 bg-gray-100 rounded p-0.5">
@@ -84,17 +86,17 @@ const ConversionPage: React.FC = () => {
       ) : !data ? (
         <div className="py-16 text-center text-gray-400">
           <TrendingUp className="w-7 h-7 mx-auto mb-3 text-gray-300" />
-          <p className="text-[12px]">No conversion data yet</p>
+          <p className="text-[12px]">{t('pages.conversion.noData')}</p>
         </div>
       ) : (
         <>
           {/* KPI bar */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <KPI label="View → Cart" value={`${data.viewToCartRate}%`} tone="text-blue-700" />
-            <KPI label="View → Order" value={`${data.viewToOrderRate}%`} tone="text-emerald-700" />
-            <KPI label="Cart → Order" value={`${data.cartToOrderRate}%`} tone="text-purple-700" />
+            <KPI label={t('pages.conversion.viewToCart')} value={`${data.viewToCartRate}%`} tone="text-blue-700" />
+            <KPI label={t('pages.conversion.viewToOrder')} value={`${data.viewToOrderRate}%`} tone="text-emerald-700" />
+            <KPI label={t('pages.conversion.cartToOrder')} value={`${data.cartToOrderRate}%`} tone="text-purple-700" />
             <KPI
-              label="Paid revenue"
+              label={t('pages.conversion.paidRevenue')}
               value={`฿${formatMoney(data.paidRevenue)}`}
               tone="text-[#00aeff]"
             />
@@ -102,47 +104,43 @@ const ConversionPage: React.FC = () => {
 
           {/* Funnel */}
           <div className="rounded-lg border border-gray-100 p-5 bg-white space-y-3">
-            <h3 className="text-[13px] font-bold text-gray-900">Funnel</h3>
+            <h3 className="text-[13px] font-bold text-gray-900">{t('pages.conversion.funnel')}</h3>
 
             <FunnelStage
               icon={Eye}
-              label="Product viewers"
+              label={t('pages.conversion.productViewers')}
               value={data.productViewers}
               widthPct={(data.productViewers / max) * 100}
               tone="bg-blue-100 text-blue-700"
               barTone="bg-blue-400"
-              hint={`${data.productViewSessions.toLocaleString()} sessions${
-                data.productViewers !== data.productViewSessions
-                  ? " (some logged-out)"
-                  : ""
-              }`}
+              hint={data.productViewers !== data.productViewSessions
+                ? t('pages.conversion.sessionsLoggedOutHint', { count: data.productViewSessions })
+                : t('pages.conversion.sessionsHint', { count: data.productViewSessions })}
             />
             <FunnelStage
               icon={ShoppingCart}
-              label="Added to cart"
+              label={t('pages.conversion.addedToCart')}
               value={data.cartUsers}
               widthPct={(data.cartUsers / max) * 100}
               tone="bg-amber-100 text-amber-700"
               barTone="bg-amber-400"
-              hint={`${data.viewToCartRate}% of viewers`}
+              hint={t('pages.conversion.viewersHint', { rate: data.viewToCartRate })}
               arrow
             />
             <FunnelStage
               icon={CreditCard}
-              label="Placed an order"
+              label={t('pages.conversion.placedOrder')}
               value={data.orderUsers}
               widthPct={(data.orderUsers / max) * 100}
               tone="bg-emerald-100 text-emerald-700"
               barTone="bg-emerald-500"
-              hint={`${data.cartToOrderRate}% of cart users · ${data.paidOrders} paid orders`}
+              hint={t('pages.conversion.cartUsersHint', { rate: data.cartToOrderRate, paid: data.paidOrders })}
               arrow
             />
           </div>
 
           <div className="rounded-lg bg-gray-50 px-4 py-3 text-[11px] text-gray-500 leading-relaxed">
-            <strong className="text-gray-700">Note:</strong> view→cart and view→order rates are
-            computed from logged-in shoppers only (where we can match a session to an account).
-            Anonymous viewers are counted in <em>sessions</em> but not in this funnel.
+            <strong className="text-gray-700">{t('pages.conversion.note')}</strong> {t('pages.conversion.noteText')}
           </div>
         </>
       )}

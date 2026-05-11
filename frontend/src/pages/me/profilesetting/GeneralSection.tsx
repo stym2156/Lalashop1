@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import { User as UserIcon, CheckCircle, Camera, Loader2, Edit2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 import { uploadImage } from "@/services/uploadImage";
 
 export const GeneralSection: React.FC = () => {
+  const { t } = useTranslation("common");
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -210,7 +212,7 @@ export const GeneralSection: React.FC = () => {
         <div className="space-y-1 md:col-span-2">
           <div className="flex justify-between items-center">
             <label className="text-xs font-bold text-gray-500">
-              Store Description (Bio)
+              {t("pages.settings.bio")}
             </label>
 
             <span
@@ -226,7 +228,7 @@ export const GeneralSection: React.FC = () => {
             maxLength={200}
             className={`w-full border ${length > maxLength ? "border-red-500" : "border-gray-300"
               } rounded-md px-3 py-2 text-sm focus:ring-1 focus:ring-[#00aeff] outline-none transition-colors`}
-            placeholder="Tell customers about your store..."
+            placeholder={t("pages.settings.bioPlaceholder")}
             value={userData.bio}
             onChange={(e) =>
               setUserData({ ...userData, bio: e.target.value })

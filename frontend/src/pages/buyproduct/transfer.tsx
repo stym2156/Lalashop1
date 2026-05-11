@@ -5,6 +5,7 @@ import {
   QrCode, Loader2, AlertCircle, FileText, ArrowRight,
 } from "lucide-react";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 import { uploadImage } from "@/services/uploadImage";
 
@@ -42,6 +43,7 @@ const formatMoney = (n: number): string =>
   Number(n || 0).toLocaleString("en-US", { maximumFractionDigits: 2 });
 
 export default function TransferPage() {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const { query } = router;
   const [mounted, setMounted] = useState(false);
@@ -325,7 +327,7 @@ export default function TransferPage() {
         <button onClick={() => router.back()} className="p-2 -ml-2 rounded-full hover:bg-gray-100">
           <ChevronLeft size={20} />
         </button>
-        <h1 className="ml-2 text-base font-bold">Pay & upload slip</h1>
+        <h1 className="ml-2 text-base font-bold">{t("pages.checkout.uploadSlip")}</h1>
       </nav>
 
       <main className="max-w-3xl mx-auto px-4 py-5 space-y-4">
@@ -414,7 +416,7 @@ export default function TransferPage() {
             {/* Slip upload form */}
             <div className="rounded-xl bg-white border border-gray-100 p-5 space-y-3">
               <div>
-                <h3 className="text-[13px] font-bold text-gray-900">After you transfer</h3>
+                <h3 className="text-[13px] font-bold text-gray-900">{t("pages.checkout.uploadSlip")}</h3>
                 <p className="text-[11px] text-gray-500 mt-0.5">
                   Upload the bank/wallet transfer slip and the admin will verify within a few hours.
                 </p>
@@ -444,7 +446,7 @@ export default function TransferPage() {
                   className="w-full py-8 border-2 border-dashed border-gray-200 rounded-md hover:border-[#00aeff] hover:bg-blue-50/30 transition-colors flex flex-col items-center justify-center gap-2 text-gray-500"
                 >
                   <Upload className="w-6 h-6" />
-                  <span className="text-[12px] font-bold">Tap to upload transfer slip</span>
+                  <span className="text-[12px] font-bold">{t("pages.checkout.tapToUpload")}</span>
                   <span className="text-[10px]">PNG / JPG / WEBP</span>
                 </button>
               )}

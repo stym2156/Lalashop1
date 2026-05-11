@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Loader2, Users, Eye, Smartphone, Monitor, Tablet, Globe,
 } from "lucide-react";
@@ -27,6 +28,7 @@ const DEVICE_ICONS: Record<string, typeof Smartphone> = {
 };
 
 const TrafficPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [data, setData] = useState<TrafficAnalytics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -66,9 +68,9 @@ const TrafficPage: React.FC = () => {
     <div className="space-y-4 text-sm">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
-          <h1 className="text-[16px] font-bold text-gray-900">Traffic</h1>
+          <h1 className="text-[16px] font-bold text-gray-900">{t('pages.traffic.title')}</h1>
           <p className="text-[12px] text-gray-500 mt-0.5">
-            Where your visitors come from, what they browse, and which devices they use.
+            {t('pages.traffic.subtitle')}
           </p>
         </div>
         <div className="flex items-center gap-1.5 bg-gray-100 rounded p-0.5">
@@ -103,11 +105,11 @@ const TrafficPage: React.FC = () => {
         <>
           {/* KPI bar */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            <KPI icon={Eye} label="Total views" value={data.totalViews.toLocaleString()} tone="text-[#00aeff]" />
-            <KPI icon={Users} label="Unique sessions" value={data.uniqueSessions.toLocaleString()} tone="text-emerald-700" />
+            <KPI icon={Eye} label={t('pages.traffic.totalViews')} value={data.totalViews.toLocaleString()} tone="text-[#00aeff]" />
+            <KPI icon={Users} label={t('pages.traffic.uniqueSessions')} value={data.uniqueSessions.toLocaleString()} tone="text-emerald-700" />
             <KPI
               icon={Eye}
-              label="Views / session"
+              label={t('pages.traffic.viewsPerSession')}
               value={
                 data.uniqueSessions > 0
                   ? (data.totalViews / data.uniqueSessions).toFixed(1)

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Loader2, MessageCircle, Clock, Inbox, TrendingUp, ArrowDownCircle, ArrowUpCircle,
 } from "lucide-react";
@@ -22,6 +23,7 @@ const formatDuration = (seconds: number): string => {
 };
 
 const ChatAnalyticsPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [data, setData] = useState<ChatAnalytics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -59,9 +61,9 @@ const ChatAnalyticsPage: React.FC = () => {
     <div className="space-y-4 text-sm">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
-          <h1 className="text-[16px] font-bold text-gray-900">Chat analytics</h1>
+          <h1 className="text-[16px] font-bold text-gray-900">{t('pages.chatAnalytics.title')}</h1>
           <p className="text-[12px] text-gray-500 mt-0.5">
-            Response time, message volume, and chat-to-order conversion.
+            {t('pages.chatAnalytics.subtitle')}
           </p>
         </div>
         <div className="flex items-center gap-1.5 bg-gray-100 rounded p-0.5">

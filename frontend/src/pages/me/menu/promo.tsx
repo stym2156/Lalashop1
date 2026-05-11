@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { Ticket, Info, Clock, ChevronLeft, Gift } from 'lucide-react';
+import { useTranslation } from "react-i18next";
 import { useLoading } from '../../../../LoadingContext';
 
 interface CouponsPageProps {
@@ -8,6 +9,7 @@ interface CouponsPageProps {
 }
 
 const CouponsPage = ({ onBack }: CouponsPageProps) => {
+  const { t } = useTranslation("common");
   const { showLoading, hideLoading } = useLoading(); 
   const [coupons, setCoupons] = useState<any[]>([]);
 
@@ -54,15 +56,15 @@ const CouponsPage = ({ onBack }: CouponsPageProps) => {
         <button onClick={onBack} className="p-1 -ml-1 active:opacity-50 transition-opacity">
           <ChevronLeft size={24} className="text-slate-800" />
         </button>
-        <h1 className="ml-2 text-[17px] font-black text-slate-800  tracking-tight">Promo</h1>
+        <h1 className="ml-2 text-[17px] font-black text-slate-800  tracking-tight">{t("pages.promo.title")}</h1>
       </nav>
 
       <main className="p-4 space-y-4">
-        
+
 
         {/* Footer Hint */}
         <div className="py-8 text-center">
-          <p className="text-[11px] text-slate-400 font-bold  tracking-widest">No promotions yet &gt;</p>
+          <p className="text-[11px] text-slate-400 font-bold  tracking-widest">{t("pages.promo.noPromo")}</p>
         </div>
       </main>
     </div>

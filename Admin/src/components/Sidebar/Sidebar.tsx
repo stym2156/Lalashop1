@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import {
   LayoutDashboard, Users, Store, Layers,
   ShoppingBag, Settings, LogOut, Wallet, ChevronDown, ArrowLeftRight, Bell,
@@ -10,100 +11,111 @@ import {
 
 const Sidebar = () => {
   const router = useRouter();
+  const { t } = useTranslation('common');
   const [openStates, setOpenStates] = useState<{ [key: string]: boolean }>({});
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const navItems = [
-    { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-    
+    { key: 'dashboard', name: t('nav.dashboard'), href: '/', icon: LayoutDashboard },
+
     {
-      name: 'Users',
+      key: 'users',
+      name: t('nav.users'),
       href: '/users',
       icon: Users,
       subItems: [
-        { name: 'All Users', href: '/users/alluser' },
+        { key: 'allUsers', name: t('nav.allUsers'), href: '/users/alluser' },
       ],
     },
-    
+
     {
-      name: 'Shop Center',
+      key: 'shops',
+      name: t('nav.shops'),
       href: '/shops/shopcenter',
       icon: Store,
       subItems: [
-        { name: 'All Shops', href: '/shops/shopcenter' },
+        { key: 'allShops', name: t('nav.allShops'), href: '/shops/shopcenter' },
       ],
     },
     {
-      name: 'Products',
+      key: 'products',
+      name: t('nav.products'),
       href: '/products',
       icon: Package,
       subItems: [
-        { name: 'All Products', href: '/products' },
-        { name: 'Pending Review', href: '/products/pending' },
-        { name: 'Violations', href: '/products/violations' },
-        { name: 'Banned', href: '/products/banned' },
-        { name: 'Featured', href: '/products/featured' },
+        { key: 'allProducts', name: t('nav.allProducts'), href: '/products' },
+        { key: 'pendingReview', name: t('nav.pendingReview'), href: '/products/pending' },
+        { key: 'violations', name: t('nav.violations'), href: '/products/violations' },
+        { key: 'banned', name: t('nav.banned'), href: '/products/banned' },
+        { key: 'featured', name: t('nav.featured'), href: '/products/featured' },
       ],
     },
     {
-      name: 'Orders',
+      key: 'orders',
+      name: t('nav.orders'),
       href: '/orders',
       icon: ShoppingBag,
       subItems: [
-        { name: 'All Orders', href: '/orders' },
-        { name: 'Disputes', href: '/orders/disputes' },
-        { name: 'Refunds', href: '/orders/refunds' },
-        { name: 'Cancelled', href: '/orders/cancelled' },
+        { key: 'allOrders', name: t('nav.allOrders'), href: '/orders' },
+        { key: 'disputes', name: t('nav.disputes'), href: '/orders/disputes' },
+        { key: 'refunds', name: t('nav.refunds'), href: '/orders/refunds' },
+        { key: 'cancelled', name: t('nav.cancelled'), href: '/orders/cancelled' },
       ],
     },
     {
-      name: 'Transactions',
+      key: 'transactions',
+      name: t('nav.transactions'),
       href: '/withdrawpage',
       icon: Wallet,
       subItems: [
-        { name: 'Seller Withdrawals', href: '/withdrawpage/Seller/SellerWithdrawals' },
-        { name: 'Creator Withdrawals', href: '/withdrawpage/creator/CreatorWithdrawals' },
-        { name: 'Payment', href: '/withdrawpage/payment/payment' },
+        { key: 'sellerWithdrawals', name: t('nav.sellerWithdrawals'), href: '/withdrawpage/Seller/SellerWithdrawals' },
+        { key: 'creatorWithdrawals', name: t('nav.creatorWithdrawals'), href: '/withdrawpage/creator/CreatorWithdrawals' },
+        { key: 'payment', name: t('nav.payment'), href: '/withdrawpage/payment/payment' },
       ],
     },
     {
-      // Slip verification moved into the Orders table — admins approve/reject
-      // inline next to the order. Methods (bank accounts / QR) live here.
-      name: 'Payment',
+      key: 'paymentMethods',
+      name: t('nav.payment'),
       href: '/payment/methods',
       icon: Banknote,
     },
-    { name: 'Categories', href: '/categories', icon: Layers },
-    { name: 'History', href: '/history/history', icon: ArrowLeftRight },
-    { name: 'Notifications', href: '/notifications', icon: Bell },
-    { name: 'KYC Verification', href: '/kyc', icon: BadgeCheck },
+    { key: 'categories', name: t('nav.categories'), href: '/categories', icon: Layers },
+    { key: 'history', name: t('nav.history'), href: '/history/history', icon: ArrowLeftRight },
+    { key: 'notifications', name: t('nav.notifications'), href: '/notifications', icon: Bell },
+    { key: 'kyc', name: t('nav.kyc'), href: '/kyc', icon: BadgeCheck },
     {
-      name: 'Admins',
+      key: 'admins',
+      name: t('nav.admins'),
       href: '/admins',
       icon: ShieldCheck,
       subItems: [
-        { name: 'Admin Accounts', href: '/admins' },
-        { name: 'Roles & Permissions', href: '/admins/roles' },
-        { name: 'Audit Log', href: '/admins/audit' },
+        { key: 'adminAccounts', name: t('nav.adminAccounts'), href: '/admins' },
+        { key: 'rolesAndPermissions', name: t('nav.rolesAndPermissions'), href: '/admins/roles' },
+        { key: 'auditLog', name: t('nav.auditLog'), href: '/admins/audit' },
       ],
     },
-    { name: 'Reports', href: '/reports', icon: FileWarning },
-    { name: 'Support', href: '/support', icon: LifeBuoy },
-    { name: 'Profile', href: '/profile', icon: UserCog },
-    { name: 'System Settings', href: '/settings', icon: Settings },
+    { key: 'reports', name: t('nav.reports'), href: '/reports', icon: FileWarning },
+    { key: 'support', name: t('nav.support'), href: '/support', icon: LifeBuoy },
+    { key: 'profile', name: t('nav.profile'), href: '/profile', icon: UserCog },
+    { key: 'systemSettings', name: t('nav.systemSettings'), href: '/settings', icon: Settings },
   ];
 
   useEffect(() => {
     const currentPath = router.pathname;
     navItems.forEach((item) => {
       if (item.subItems?.some((sub) => currentPath === sub.href) || currentPath === item.href) {
-        setOpenStates((prev) => ({ ...prev, [item.name]: true }));
+        setOpenStates((prev) => ({ ...prev, [item.key]: true }));
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.pathname]);
 
-  const toggleMenu = (name: string) => {
-    setOpenStates((prev) => ({ ...prev, [name]: !prev[name] }));
+  const toggleMenu = (key: string) => {
+    setOpenStates((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
   return (
@@ -122,21 +134,21 @@ const Sidebar = () => {
         <nav className="space-y-1">
           {navItems.map((item) => {
             const hasSub = item.subItems && item.subItems.length > 0;
-            const isOpen = openStates[item.name];
+            const isOpen = openStates[item.key];
             const isActive =
               router.pathname === item.href ||
               item.subItems?.some((sub) => router.pathname === sub.href);
             const Icon = item.icon;
 
             return (
-              <div key={item.name}>
+              <div key={item.key}>
                 <div
                   className={`flex items-center w-full px-4 py-3 text-sm font-semibold cursor-pointer relative transition-all rounded-lg mb-1 ${
                     isActive
                       ? 'bg-primary-soft text-primary'
                       : 'text-gray-500 hover:bg-gray-50 hover:text-black'
                   }`}
-                  onClick={() => (hasSub ? toggleMenu(item.name) : router.push(item.href))}
+                  onClick={() => (hasSub ? toggleMenu(item.key) : router.push(item.href))}
                 >
                   {isActive && (
                     <motion.div
@@ -146,7 +158,7 @@ const Sidebar = () => {
                   )}
 
                   <Icon className={`mr-3 h-5 w-5 ${isActive ? 'text-primary' : 'text-gray-400'}`} />
-                  <span className="flex-1 text-left">{item.name}</span>
+                  <span className="flex-1 text-left">{mounted ? item.name : ''}</span>
 
                   {hasSub && (
                     <ChevronDown
@@ -165,7 +177,7 @@ const Sidebar = () => {
                     >
                       {item.subItems?.map((sub) => (
                         <Link
-                          key={sub.name}
+                          key={sub.key}
                           href={sub.href}
                           className={`block py-2 px-4 text-xs font-medium transition-colors rounded-md mb-1 ${
                             router.pathname === sub.href
@@ -173,7 +185,7 @@ const Sidebar = () => {
                               : 'text-gray-500 hover:text-black hover:bg-gray-50'
                           }`}
                         >
-                          {sub.name}
+                          {mounted ? sub.name : ''}
                         </Link>
                       ))}
                     </motion.div>
@@ -198,7 +210,7 @@ const Sidebar = () => {
           className="flex items-center justify-center w-full py-3 text-xs font-bold text-red-500 rounded-xl hover:bg-red-50 transition-all"
         >
           <LogOut className="mr-2 h-4 w-4" />
-          Logout Session
+          {mounted ? t('nav.logoutSession') : ''}
         </button>
       </div>
     </div>

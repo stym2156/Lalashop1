@@ -13,6 +13,7 @@ import {
   Flag,
   MoreHorizontal,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 import Avatar from "@/components/ui/Avatar";
 import ReportModal, { type ReportTargetType } from "@/components/ReportModal";
@@ -46,6 +47,7 @@ interface ShopProduct {
 }
 
 export default function UserProfilePage() {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const { id } = router.query;
 
@@ -237,7 +239,7 @@ export default function UserProfilePage() {
   if (!profile) {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-4">
-        <p className="text-sm text-slate-500">User not found</p>
+        <p className="text-sm text-slate-500">{t("status.empty")}</p>
         <button onClick={() => router.back()} className="text-sm font-bold text-primary">
           Go back
         </button>
@@ -410,7 +412,7 @@ export default function UserProfilePage() {
       <main className="max-w-3xl mx-auto pt-4">
         {tab === "grid" ? (
           posts.length === 0 ? (
-            <div className="py-20 text-center text-sm text-slate-400">No posts yet</div>
+            <div className="py-20 text-center text-sm text-slate-400">{t("pages.social.noPosts")}</div>
           ) : (
             <div className="grid grid-cols-3 gap-1 px-1">
               {posts.map((p) => (
@@ -446,7 +448,7 @@ export default function UserProfilePage() {
             <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-3">
               <ShoppingBag size={28} className="text-slate-300" strokeWidth={1.5} />
             </div>
-            <p className="text-sm text-slate-400 font-medium">No products listed yet</p>
+            <p className="text-sm text-slate-400 font-medium">{t("pages.shop.noProducts")}</p>
           </div>
         ) : (
           // Match the Posts grid (3 cols, square tiles, hairline gap) so the

@@ -2,7 +2,9 @@ import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { Search, Camera, ClipboardList, ShoppingCart, Bell, Globe, Check, LogOut, Store, DollarSign, Menu, X } from "lucide-react";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
+import { SUPPORTED_LANGUAGES } from "@/i18n/config";
 
 interface UserInfo {
   name: string;
@@ -19,24 +21,14 @@ interface AutocompleteItem {
 }
 
 export default function Header() {
+  const { t, i18n } = useTranslation("common");
+  const [mounted, setMounted] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLangOpen, setIsLangOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [selectedLang, setSelectedLang] = useState("th");
-  const [user, setUser] = useState<UserInfo | null>(null);
-  const [cartCount, setCartCount] = useState(0);
-  const [notificationCount, setNotificationCount] = useState(0);
-  // Autocomplete state — debounced fetch fires after the user stops typing
-  // for 250ms. Dropdown shows when focused + has results; click-outside
-  // closes it without committing the typed text.
-  const [acItems, setAcItems] = useState<AutocompleteItem[]>([]);
-  const [acOpen, setAcOpen] = useState(false);
-  const [acLoading, setAcLoading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const acRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
 
   useEffect(() => {
+    setMounted(true);
     const userInfo = localStorage.getItem("userInfo");
     if (userInfo) {
       setUser(JSON.parse(userInfo));
@@ -149,20 +141,13 @@ export default function Header() {
   };
 
   const navItems = [
-    { icon: Bell, label: "Notifications", href: "/Notificatio/Notifications" },
-    { icon: ClipboardList, label: "Orders", href: "/orders/orders" },
-    { icon: ShoppingCart, label: "Cart", href: "/cart/cart" },
-    { icon: Store, label: "Shop", href: "/me/me" },
-
+    { icon: Bell, key: "notifications", label: t("nav.notifications"), href: "/Notificatio/Notifications" },
+    { icon: ClipboardList, key: "orders", label: t("nav.orders"), href: "/orders/orders" },
+    { icon: ShoppingCart, key: "cart", label: t("nav.cart"), href: "/cart/cart" },
+    { icon: Store, key: "shop", label: t("nav.shop"), href: "/me/me" },
   ];
 
-  const languages = [
-    { id: "th", name: "ไทย", flag: "🇹🇭" },
-    { id: "en", name: "English", flag: "🇺🇸" },
-    { id: "zh", name: "Chinese", flag: "🇨🇳" },
-    { id: "lao", name: "Lao", flag: "🇱🇦" },
-    { id: "vi", name: "Vietnamese", flag: "🇻🇳" },
-  ];
+  const languages = SUPPORTED_LANGUAGES;
 
   return (
     <header className="w-full bg-white/90 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50 shadow-sm">
@@ -193,7 +178,7 @@ export default function Header() {
               <Search size={18} className="text-gray-400" />
               <input
                 type="text"
-                placeholder="Find unique goods..."
+                placeholder={mounted ? t("header.searchPlaceholder") : ""}
                 className="flex-1 bg-transparent outline-none text-sm text-slate-700 px-3 placeholder:text-gray-400"
                 value={searchQuery}
                 onChange={(e) => {
@@ -207,7 +192,7 @@ export default function Header() {
               </button>
               <div className="w-[1.5px] h-4 bg-gray-300 mx-2 opacity-50" />
               <button type="submit" className="text-primary font-bold text-sm px-2 hover:scale-110 transition-transform">
-                Search
+                {mounted ? t("actions.search") : ""}
               </button>
             </div>
           </form>
@@ -219,12 +204,12 @@ export default function Header() {
             <div className="absolute left-4 right-4 top-full mt-2 bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden z-50">
               {acLoading && (
                 <div className="px-4 py-6 text-center text-[12px] text-gray-400">
-                  Loading…
+                  {mounted ? t("status.loading") : ""}
                 </div>
               )}
               {!acLoading && acItems.length === 0 && (
                 <div className="px-4 py-6 text-center text-[12px] text-gray-400">
-                  No matches — press Enter to search anyway
+                  {mounted ? t("header.searchPlaceholder") : ""}
                 </div>
               )}
               {!acLoading &&
@@ -256,7 +241,7 @@ export default function Header() {
                         )}
                       </div>
                       <p className="text-[12px] font-black text-sky-600 tabular-nums flex-shrink-0">
-                        ฿{Number(item.price || 0).toLocaleString()}
+                        {mounted ? t("common.currencySymbol", "฿") : "฿"}{Number(item.price || 0).toLocaleString()}
                       </p>
                     </Link>
                   );
@@ -267,7 +252,7 @@ export default function Header() {
                   onClick={() => setAcOpen(false)}
                   className="flex items-center justify-center gap-1 px-3 py-2.5 border-t border-slate-100 bg-slate-50 text-[12px] font-bold text-sky-600 hover:bg-slate-100"
                 >
-                  See all results for &ldquo;{searchQuery}&rdquo;
+                  {mounted ? t("actions.viewAll") : ""} — &ldquo;{searchQuery}&rdquo;
                 </Link>
               )}
             </div>
@@ -291,17 +276,17 @@ export default function Header() {
           <div className="hidden sm:flex items-center gap-5 md:gap-7">
             {navItems.map((item) => {
               const badgeCount =
-                item.label === "Cart" ? cartCount :
-                item.label === "Notifications" ? notificationCount : 0;
+                item.key === "cart" ? cartCount :
+                item.key === "notifications" ? notificationCount : 0;
               return (
-                <Link key={item.label} href={item.href} className="flex flex-col items-center gap-1 group transition-all active:scale-90 relative">
+                <Link key={item.key} href={item.href} className="flex flex-col items-center gap-1 group transition-all active:scale-90 relative">
                   <item.icon size={19} strokeWidth={2} className="text-slate-500 group-hover:text-primary transition-colors" />
                   {badgeCount > 0 && (
                     <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-black min-w-4 h-4 px-1 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
                       {badgeCount > 99 ? '99+' : badgeCount}
                     </span>
                   )}
-                  <span className="text-[10px] font-bold text-slate-400 group-hover:text-primary tracking-tight">{item.label}</span>
+                  <span className="text-[10px] font-bold text-slate-400 group-hover:text-primary tracking-tight">{mounted ? item.label : ""}</span>
                 </Link>
               );
             })}
@@ -319,12 +304,12 @@ export default function Header() {
                   <div className="fixed inset-0 z-[-1]" onClick={() => setIsLangOpen(false)} />
                   <div className="absolute right-0 mt-3 w-48 bg-white border border-gray-100 rounded-2xl shadow-2xl py-2 z-[60] animate-in fade-in zoom-in duration-200">
                     {languages.map((lang) => (
-                      <button key={lang.id} onClick={() => { setSelectedLang(lang.id); setIsLangOpen(false); }} className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-gray-50 transition-colors">
+                      <button key={lang.code} onClick={() => switchLang(lang.code)} className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-gray-50 transition-colors">
                         <div className="flex items-center gap-3 text-xs font-bold">
                           <span>{lang.flag}</span>
-                          <span className={selectedLang === lang.id ? 'text-primary' : 'text-slate-600'}>{lang.name}</span>
+                          <span className={selectedLang === lang.code ? 'text-primary' : 'text-slate-600'}>{lang.name}</span>
                         </div>
-                        {selectedLang === lang.id && <Check size={14} className="text-primary" strokeWidth={3} />}
+                        {selectedLang === lang.code && <Check size={14} className="text-primary" strokeWidth={3} />}
                       </button>
                     ))}
                   </div>
@@ -343,7 +328,7 @@ export default function Header() {
               </div>
             ) : (
               <Link href="/login" className="bg-primary text-white px-4 sm:px-5 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-xs font-black shadow-lg shadow-primary/20 hover:bg-primary-hover transition-all">
-                Login
+                {mounted ? t("nav.login") : ""}
               </Link>
             )}
           </div>
@@ -358,17 +343,17 @@ export default function Header() {
             <div className="p-4 flex flex-col gap-1">
               {navItems.map((item) => {
                 const badgeCount =
-                  item.label === "Cart" ? cartCount :
-                  item.label === "Notifications" ? notificationCount : 0;
+                  item.key === "cart" ? cartCount :
+                  item.key === "notifications" ? notificationCount : 0;
                 return (
                   <Link
-                    key={item.label}
+                    key={item.key}
                     href={item.href}
                     onClick={() => setIsMenuOpen(false)}
                     className="flex items-center gap-4 p-4 hover:bg-gray-50 rounded-xl transition-colors"
                   >
                     <item.icon size={20} className="text-slate-500" />
-                    <span className="text-sm font-bold text-slate-700">{item.label}</span>
+                    <span className="text-sm font-bold text-slate-700">{mounted ? item.label : ""}</span>
                     {badgeCount > 0 && (
                       <span className="ml-auto bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
                         {badgeCount > 99 ? "99+" : badgeCount}
@@ -381,12 +366,12 @@ export default function Header() {
               <div className="p-2 grid grid-cols-5 gap-2">
                 {languages.map((lang) => (
                   <button
-                    key={lang.id}
-                    onClick={() => { setSelectedLang(lang.id); setIsLangOpen(false); }}
-                    className={`flex flex-col items-center p-2 rounded-lg gap-1 ${selectedLang === lang.id ? 'bg-primary/10 border-primary' : 'bg-gray-50 border-transparent'} border`}
+                    key={lang.code}
+                    onClick={() => switchLang(lang.code)}
+                    className={`flex flex-col items-center p-2 rounded-lg gap-1 ${selectedLang === lang.code ? 'bg-primary/10 border-primary' : 'bg-gray-50 border-transparent'} border`}
                   >
                     <span className="text-lg">{lang.flag}</span>
-                    <span className="text-[8px] font-black">{lang.id}</span>
+                    <span className="text-[8px] font-black">{lang.code}</span>
                   </button>
                 ))}
               </div>
@@ -402,12 +387,12 @@ export default function Header() {
             <Search size={16} className="text-gray-400" />
             <input
               type="text"
-              placeholder="Search products..."
+              placeholder={mounted ? t("header.searchPlaceholder") : ""}
               className="flex-1 bg-transparent outline-none text-xs text-slate-700 px-2"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button type="submit" className="text-primary font-bold text-xs px-2">Go</button>
+            <button type="submit" className="text-primary font-bold text-xs px-2">{mounted ? t("actions.search") : ""}</button>
           </div>
         </form>
       </div>

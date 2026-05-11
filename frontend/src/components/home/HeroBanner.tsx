@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Zap, Star, Trophy,  } from "lucide-react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { Product } from "@/types";
 import { apiClient } from "@/services/apiClient";
 
 export default function HeroBanner() {
+  const { t } = useTranslation("common");
   const [current, setCurrent] = useState(0);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   const slides = [
-    { image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070&auto=format&fit=crop", title: "Global Direct Supply", sub: "Save up to 60% on all orders" },
-    { image: "https://images.unsplash.com/photo-1553413077-190dd305871c?q=80&w=2070&auto=format&fit=crop", title: "Smart Factory Source", sub: "Verified manufacturers from 20+ regions" },
-    { image: "https://tkacademy.com.my/wp-content/uploads/2021/09/Website-banner-1920-x-600-px-2.jpg", title: "Quality Sourcing", sub: "Inspect global goods locally" },
+    { image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070&auto=format&fit=crop", title: t("product.globalDirectSupply"), sub: t("product.globalDirectSupplyDesc") },
+    { image: "https://images.unsplash.com/photo-1553413077-190dd305871c?q=80&w=2070&auto=format&fit=crop", title: t("product.smartFactorySource"), sub: t("product.smartFactorySourceDesc") },
+    { image: "https://tkacademy.com.my/wp-content/uploads/2021/09/Website-banner-1920-x-600-px-2.jpg", title: t("product.qualitySourcing"), sub: t("product.qualitySourcingDesc") },
   ];
 
   useEffect(() => {
@@ -46,7 +48,7 @@ export default function HeroBanner() {
   if (loading && products.length === 0) {
     return (
       <div className="w-full h-[300px] md:h-[600px] flex items-center justify-center bg-gray-50 rounded-2xl animate-pulse">
-        <div className="text-gray-400 font-bold">Loading Goods...</div>
+        <div className="text-gray-400 font-bold">{t("product.loadingGoods")}</div>
       </div>
     );
   }
@@ -72,7 +74,7 @@ export default function HeroBanner() {
                     href="/products"
                     className="inline-block bg-white text-slate-900 px-6 py-3 rounded-xl font-extrabold text-sm shadow-xl hover:bg-gray-100 transition-all active:scale-95 leading-none"
                   >
-                    GO TO MARKET
+                    {t("product.goToMarket")}
                   </Link>
                 </div>
               </div>
@@ -94,10 +96,10 @@ export default function HeroBanner() {
           <div className="flex items-center justify-between mb-3 sm:mb-4">
             <h3 className="font-bold text-slate-800 flex items-center gap-2 text-xs sm:text-sm">
               <Trophy size={18} className="text-cyan-400 sm:w-[20px]" />
-              <span className="truncate">Popular Products</span>
+              <span className="truncate">{t("product.popularProducts")}</span>
             </h3>
             <Link href="/products" className="hidden sm:flex text-[10px] text-gray-400 font-bold items-center gap-1 hover:text-primary transition-colors">
-              More <ChevronRight size={12} />
+              {t("common.more")} <ChevronRight size={12} />
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-auto">
@@ -109,7 +111,7 @@ export default function HeroBanner() {
                 <div className="overflow-hidden text-left">
                   <p className="text-[10px] sm:text-[14px] font-bold text-slate-800 line-clamp-1">{product.name}</p>
                   <p className="text-[10px] sm:text-[14px] text-red-500 font-bold whitespace-nowrap">
-                    ฿{(product.prices && product.prices.length > 0 ? product.prices[0].price : (product.price || 0)).toLocaleString()}
+                    {t("common.currencySymbol", "฿")}{(product.prices && product.prices.length > 0 ? product.prices[0].price : (product.price || 0)).toLocaleString()}
                   </p>
                 </div>
               </Link>
@@ -122,10 +124,10 @@ export default function HeroBanner() {
           <div className="flex items-center justify-between mb-3 sm:mb-4">
             <h3 className="font-bold text-slate-800 flex items-center gap-2 text-xs sm:text-sm">
               <Zap size={18} className="text-primary fill-primary sm:w-[20px]" />
-              <span className="truncate">Hot Sellers</span>
+              <span className="truncate">{t("product.hotSellers")}</span>
             </h3>
             <Link href="/products" className="hidden sm:flex text-[10px] text-gray-400 font-bold items-center gap-1 hover:text-primary transition-colors">
-              More <ChevronRight size={12} />
+              {t("common.more")} <ChevronRight size={12} />
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-auto">
@@ -137,7 +139,7 @@ export default function HeroBanner() {
                 <div className="overflow-hidden text-left">
                   <p className="text-[10px] sm:text-[14px] font-bold text-slate-800 line-clamp-1">{product.name}</p>
                   <p className="text-[10px] sm:text-[14px] text-red-500 font-bold whitespace-nowrap">
-                    ฿{(product.prices && product.prices.length > 0 ? product.prices[0].price : (product.price || 0)).toLocaleString()}
+                    {t("common.currencySymbol", "฿")}{(product.prices && product.prices.length > 0 ? product.prices[0].price : (product.price || 0)).toLocaleString()}
                   </p>
                 </div>
               </Link>
@@ -150,10 +152,10 @@ export default function HeroBanner() {
           <div className="flex items-center justify-between mb-3 sm:mb-0.2">
             <h3 className="font-bold text-slate-800 flex items-center gap-2 text-xs sm:text-sm">
               <Star size={18} className="text-orange-400 fill-orange-400 sm:w-[20px]" />
-              <span className="truncate">New Arrivals</span>
+              <span className="truncate">{t("header.newArrivals")}</span>
             </h3>
             <Link href="/products" className="hidden sm:flex text-[10px] text-gray-400 font-bold items-center gap-1 hover:text-primary transition-colors">
-              More <ChevronRight size={12} />
+              {t("common.more")} <ChevronRight size={12} />
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-auto">
@@ -165,7 +167,7 @@ export default function HeroBanner() {
                 <div className="overflow-hidden text-left">
                   <p className="text-[10px] sm:text-[14px] font-bold text-slate-800 line-clamp-1">{product.name}</p>
                   <p className="text-[10px] sm:text-[14px] text-red-500 font-bold whitespace-nowrap">
-                    ฿{(product.prices && product.prices.length > 0 ? product.prices[0].price : (product.price || 0)).toLocaleString()}
+                    {t("common.currencySymbol", "฿")}{(product.prices && product.prices.length > 0 ? product.prices[0].price : (product.price || 0)).toLocaleString()}
                   </p>
                 </div>
               </Link>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 import { Search, Plus, Package, Star, AlertTriangle } from 'lucide-react';
 import { fetchMyProducts, type SellerProductRow } from '@/services/sellerApi';
 
@@ -20,6 +21,7 @@ const productImage = (p: SellerProductRow): string => {
 };
 
 const ProductsList = () => {
+  const { t } = useTranslation('common');
   const [items, setItems] = useState<SellerProductRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -58,21 +60,21 @@ const ProductsList = () => {
   };
 
   const tabs: Array<{ id: typeof statusFilter; label: string }> = [
-    { id: 'all', label: `All (${counts.all})` },
-    { id: 'Active', label: `Active (${counts.Active})` },
-    { id: 'Draft', label: `Draft (${counts.Draft})` },
-    { id: 'Archived', label: `Archived (${counts.Archived})` },
+    { id: 'all', label: `${t('pages.productsList.tabAll')} (${counts.all})` },
+    { id: 'Active', label: `${t('pages.productsList.tabActive')} (${counts.Active})` },
+    { id: 'Draft', label: `${t('pages.productsList.tabDraft')} (${counts.Draft})` },
+    { id: 'Archived', label: `${t('pages.productsList.tabArchived')} (${counts.Archived})` },
   ];
 
   return (
     <div className="space-y-4 text-sm">
       <div className="flex items-center justify-between">
-        <h1 className="text-[16px] font-bold text-gray-900">My products</h1>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.productsList.title')}</h1>
         <Link
           href="/products/add"
           className="bg-[#00aeff] text-white px-3 py-1.5 rounded-md text-xs font-semibold inline-flex items-center hover:bg-[#0096db]"
         >
-          <Plus className="w-3.5 h-3.5 mr-1.5" /> Add product
+          <Plus className="w-3.5 h-3.5 mr-1.5" /> {t('pages.productsList.addProduct')}
         </Link>
       </div>
 
@@ -97,7 +99,7 @@ const ProductsList = () => {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             type="text"
-            placeholder="Search product..."
+            placeholder={t('pages.productsList.searchPlaceholder')}
             className="pl-7 pr-3 py-1 rounded text-[11px] w-64 bg-gray-50 border border-gray-100 focus:border-[#00aeff] outline-none"
           />
         </div>
@@ -108,16 +110,16 @@ const ProductsList = () => {
       )}
 
       {loading ? (
-        <div className="py-12 text-center text-gray-400 text-[12px]">Loading products...</div>
+        <div className="py-12 text-center text-gray-400 text-[12px]">{t('status.loadingProducts')}</div>
       ) : filtered.length === 0 ? (
         <div className="py-20 flex flex-col items-center justify-center text-gray-300">
           <Package size={48} strokeWidth={1} />
-          <p className="mt-4 text-[11px] font-bold tracking-widest">No products in this view</p>
+          <p className="mt-4 text-[11px] font-bold tracking-widest">{t('pages.productsList.noProductsView')}</p>
           <Link
             href="/products/add"
             className="mt-4 bg-[#00aeff] text-white px-4 py-2 rounded-md text-[12px] font-semibold inline-flex items-center hover:bg-[#0096db]"
           >
-            <Plus className="w-3.5 h-3.5 mr-1.5" /> Create your first product
+            <Plus className="w-3.5 h-3.5 mr-1.5" /> {t('pages.productsList.createFirst')}
           </Link>
         </div>
       ) : (
@@ -151,7 +153,7 @@ const ProductsList = () => {
                   )}
                   {p.freeShipping && (
                     <span className="absolute bottom-2 left-2 text-[9px] font-bold px-1.5 py-0.5 rounded bg-green-600 text-white">
-                      Free ship
+                      {t('pages.productsList.freeShip')}
                     </span>
                   )}
                 </div>
@@ -165,13 +167,13 @@ const ProductsList = () => {
                       <span className="font-semibold text-gray-700">{(p.rating ?? 0).toFixed(1)}</span>
                       <span className="text-gray-400">({p.numReviews ?? 0})</span>
                     </div>
-                    <span className="text-gray-500">{(p.soldCount ?? 0).toLocaleString()} sold</span>
+                    <span className="text-gray-500">{t('pages.productsList.soldCount', { count: (p.soldCount ?? 0) })}</span>
                   </div>
                   <div className="flex items-center justify-between pt-1">
                     <span className="text-[14px] font-bold text-[#00aeff]">฿{formatMoney(p.price)}</span>
                     <span className={`text-[10px] font-medium inline-flex items-center gap-0.5 ${lowStock ? 'text-red-600' : 'text-gray-500'}`}>
                       {lowStock && <AlertTriangle className="w-3 h-3" />}
-                      stock {p.countInStock}
+                      {t('pages.productsList.stockCount', { count: p.countInStock })}
                     </span>
                   </div>
                 </div>

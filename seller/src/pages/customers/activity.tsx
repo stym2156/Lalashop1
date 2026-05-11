@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import {
   Loader2, ArrowLeft, Package, Mail, Calendar, Tag, MessageCircle,
 } from "lucide-react";
@@ -41,6 +42,7 @@ const initial = (name?: string): string =>
   (name || "?").trim().charAt(0).toUpperCase() || "?";
 
 const ActivityPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const queryId = typeof router.query.id === "string" ? router.query.id : null;
 
@@ -106,9 +108,9 @@ const ActivityPage: React.FC = () => {
           <ArrowLeft className="w-4 h-4" />
         </Link>
         <div>
-          <h1 className="text-[16px] font-bold text-gray-900">Customer activity</h1>
+          <h1 className="text-[16px] font-bold text-gray-900">{t('pages.customerActivity.title')}</h1>
           <p className="text-[12px] text-gray-500 mt-0.5">
-            Profile, lifetime value, and order history with this customer.
+            {t('pages.customerActivity.subtitle')}
           </p>
         </div>
       </div>

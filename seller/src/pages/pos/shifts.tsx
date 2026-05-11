@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Loader2, Calendar, Clock } from "lucide-react";
 import { fetchMyOrders, type SellerOrderRow } from "@/services/sellerApi";
 
@@ -15,6 +16,7 @@ interface DayShift {
 }
 
 const PosShiftsPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [orders, setOrders] = useState<SellerOrderRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -85,9 +87,9 @@ const PosShiftsPage: React.FC = () => {
   return (
     <div className="space-y-4 text-sm">
       <div>
-        <h1 className="text-[16px] font-bold text-gray-900">POS shifts</h1>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.posShifts.title')}</h1>
         <p className="text-[12px] text-gray-500 mt-0.5">
-          Daily shift summary derived from your POS sales — one row per business day.
+          {t('pages.posShifts.subtitle')}
         </p>
       </div>
 

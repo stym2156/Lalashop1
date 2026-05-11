@@ -6,6 +6,7 @@ import {
   Search as SearchIcon, X, SlidersHorizontal, ChevronDown, Loader2,
   TrendingUp, Clock, ArrowRight, Package, Star, AlertCircle,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import Header from "@/components/layout/Header";
 import MainSidebar from "@/components/layout/MainSidebar";
 import { apiClient } from "@/services/apiClient";
@@ -55,13 +56,7 @@ interface TrendingTerm {
 
 type SortKey = "relevance" | "newest" | "priceAsc" | "priceDesc" | "popular";
 
-const SORT_OPTIONS: { key: SortKey; label: string }[] = [
-  { key: "relevance", label: "Most relevant" },
-  { key: "popular", label: "Most popular" },
-  { key: "newest", label: "Newest first" },
-  { key: "priceAsc", label: "Price: low to high" },
-  { key: "priceDesc", label: "Price: high to low" },
-];
+const SORT_KEYS: SortKey[] = ["relevance", "popular", "newest", "priceAsc", "priceDesc"];
 
 const HISTORY_KEY = "lalashop:recentSearches";
 const HISTORY_MAX = 10;
@@ -94,8 +89,14 @@ const highlight = (text: string, q: string): React.ReactNode => {
 };
 
 export default function ProductListingPage() {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const initialQ = typeof router.query.q === "string" ? router.query.q : "";
+
+  const SORT_OPTIONS: { key: SortKey; label: string }[] = SORT_KEYS.map((key) => ({
+    key,
+    label: t(`pages.search.sort.${key}`),
+  }));
 
   const [q, setQ] = useState(initialQ);
   const [debouncedQ, setDebouncedQ] = useState(initialQ);
@@ -192,11 +193,11 @@ export default function ProductListingPage() {
           setData(res.data);
           if (debouncedQ) pushHistory(debouncedQ);
         } else {
-          setError("Failed to load results");
+          setError(t("status.error"));
         }
       })
       .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : "Search failed");
+        if (!cancelled) setError(err instanceof Error ? err.message : t("status.error"));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -279,14 +280,14 @@ export default function ProductListingPage() {
                 type="text"
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                placeholder="Search products, brands, categories…"
+                placeholder={t("pages.search.inputPlaceholder")}
                 className="w-full pl-12 pr-12 py-3 text-[15px] bg-slate-50 rounded-xl border border-transparent focus:bg-white focus:border-sky-300 outline-none transition-colors"
               />
               {q && (
                 <button
                   onClick={() => setQ("")}
                   className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-slate-100 text-slate-400"
-                  aria-label="Clear search"
+                  aria-label={t("pages.search.clearSearch")}
                 >
                   <X size={16} />
                 </button>
@@ -299,7 +300,7 @@ export default function ProductListingPage() {
           {showDiscovery && (
             <div className="space-y-3 mb-4">
               {history.length > 0 && (
-                <Section title="Recent searches" icon={Clock}>
+                <Section title={t("pages.search.recentSearches")} icon={Clock}>
                   <div className="flex flex-wrap gap-2">
                     {history.map((term) => (
                       <button
@@ -325,7 +326,7 @@ export default function ProductListingPage() {
                 </Section>
               )}
               {trending.length > 0 && (
-                <Section title="Trending searches" icon={TrendingUp}>
+                <Section title={t("pages.search.trendingSearches")} icon={TrendingUp}>
                   <div className="flex flex-wrap gap-2">
                     {trending.map((t, i) => (
                       <button
@@ -350,13 +351,13 @@ export default function ProductListingPage() {
             >
               <div className="bg-white rounded-2xl border border-slate-100 p-4 sticky top-4 space-y-5 max-h-[calc(100vh-2rem)] overflow-y-auto">
                 <div className="flex items-center justify-between">
-                  <p className="text-[12px] font-black tracking-wide text-slate-900">FILTERS</p>
+                  <p className="text-[12px] font-black tracking-wide text-slate-900">{t("pages.search.filtersUpper")}</p>
                   {activeFilterCount > 0 && (
                     <button
                       onClick={clearAllFilters}
                       className="text-[11px] font-bold text-rose-600 hover:underline"
                     >
-                      Clear all
+                      {t("pages.search.clearAll")}
                     </button>
                   )}
                 </div>
@@ -364,7 +365,7 @@ export default function ProductListingPage() {
                 {facets?.categories && facets.categories.length > 0 && (
                   <div>
                     <p className="text-[10px] font-black text-slate-400 mb-2 tracking-wide">
-                      CATEGORY
+                      {t("pages.search.category")}
                     </p>
                     <div className="space-y-1">
                       {facets.categories.map((c) => (
@@ -380,7 +381,7 @@ export default function ProductListingPage() {
                               : "text-slate-700 hover:bg-slate-50"
                           }`}
                         >
-                          <span className="truncate">{c._id || "Uncategorized"}</span>
+                          <span className="truncate">{c._id || t("product.uncategorized")}</span>
                           <span className="text-[10px] text-slate-400 tabular-nums">
                             {c.count}
                           </span>
@@ -392,7 +393,7 @@ export default function ProductListingPage() {
 
                 <div>
                   <p className="text-[10px] font-black text-slate-400 mb-2 tracking-wide">
-                    PRICE RANGE (฿)
+                    {t("pages.search.priceRange")}
                   </p>
                   <div className="grid grid-cols-2 gap-2">
                     <input
@@ -403,7 +404,7 @@ export default function ProductListingPage() {
                         setMinPrice(e.target.value);
                         setPage(1);
                       }}
-                      placeholder="Min"
+                      placeholder={t("pages.search.min")}
                       className="w-full px-2 py-1.5 rounded-md text-[12px] bg-slate-50 border border-transparent focus:border-sky-300 outline-none"
                     />
                     <input
@@ -414,14 +415,13 @@ export default function ProductListingPage() {
                         setMaxPrice(e.target.value);
                         setPage(1);
                       }}
-                      placeholder="Max"
+                      placeholder={t("pages.search.max")}
                       className="w-full px-2 py-1.5 rounded-md text-[12px] bg-slate-50 border border-transparent focus:border-sky-300 outline-none"
                     />
                   </div>
                   {facets?.priceBounds && facets.priceBounds.maxPrice > 0 && (
                     <p className="mt-1 text-[10px] text-slate-400">
-                      In results: ฿{formatPrice(facets.priceBounds.minPrice)} – ฿
-                      {formatPrice(facets.priceBounds.maxPrice)}
+                      {t("pages.search.inResults", { min: formatPrice(facets.priceBounds.minPrice), max: formatPrice(facets.priceBounds.maxPrice) })}
                     </p>
                   )}
                 </div>
@@ -436,7 +436,7 @@ export default function ProductListingPage() {
                   className="md:hidden inline-flex items-center gap-1 px-3 py-1.5 rounded-md bg-slate-100 hover:bg-slate-200 text-[12px] font-bold text-slate-700"
                 >
                   <SlidersHorizontal size={14} />
-                  Filters
+                  {t("pages.search.filters")}
                   {activeFilterCount > 0 && (
                     <span className="ml-1 inline-flex items-center justify-center w-4 h-4 rounded-full bg-sky-500 text-white text-[9px] font-bold">
                       {activeFilterCount}
@@ -446,15 +446,14 @@ export default function ProductListingPage() {
 
                 <p className="text-[12px] text-slate-500">
                   {loading ? (
-                    "Searching…"
+                    t("pages.search.searching")
                   ) : (
                     <>
                       <strong className="text-slate-900 tabular-nums">{total.toLocaleString()}</strong>{" "}
-                      {debouncedQ ? "result" : "product"}
-                      {total === 1 ? "" : "s"}
+                      {debouncedQ ? t("pages.search.result", { count: total }) : t("pages.search.product", { count: total })}
                       {debouncedQ && (
                         <>
-                          {" "}for <strong className="text-slate-900">&ldquo;{debouncedQ}&rdquo;</strong>
+                          {" "}{t("pages.search.for")} <strong className="text-slate-900">&ldquo;{debouncedQ}&rdquo;</strong>
                         </>
                       )}
                     </>
@@ -496,6 +495,7 @@ export default function ProductListingPage() {
                 <NoResults
                   query={debouncedQ}
                   suggestions={suggestions}
+                  t={t}
                   onClear={() => {
                     setQ("");
                     clearAllFilters();
@@ -504,7 +504,7 @@ export default function ProductListingPage() {
               ) : items.length === 0 ? (
                 <div className="rounded-2xl bg-white border border-slate-100 px-6 py-16 text-center">
                   <Package className="w-8 h-8 mx-auto text-slate-300 mb-3" />
-                  <p className="text-sm font-bold text-slate-700">No products available</p>
+                  <p className="text-sm font-bold text-slate-700">{t("product.noProductsAvailable")}</p>
                 </div>
               ) : (
                 <>
@@ -554,6 +554,7 @@ interface ProductCardProps {
   q: string;
 }
 const ProductCard: React.FC<ProductCardProps> = ({ product, q }) => {
+  const { t } = useTranslation("common");
   const cover = productCover(product);
   const stock = Number(product.countInStock || 0);
   const outOfStock = stock <= 0;
@@ -580,13 +581,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, q }) => {
         {outOfStock && (
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
             <span className="px-2 py-1 rounded bg-white text-[10px] font-black tracking-wide text-slate-900">
-              OUT OF STOCK
+              {t("product.outOfStock")}
             </span>
           </div>
         )}
         {product.freeShipping && !outOfStock && (
           <span className="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-emerald-500 text-white text-[9px] font-bold">
-            Free ship
+            {t("product.freeShipping")}
           </span>
         )}
       </div>
@@ -606,7 +607,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, q }) => {
           )}
         </div>
         {product.soldCount && product.soldCount > 0 ? (
-          <p className="text-[10px] text-slate-400">{product.soldCount.toLocaleString()} sold</p>
+          <p className="text-[10px] text-slate-400">{t("product.soldCount", { count: product.soldCount })}</p>
         ) : null}
       </div>
     </Link>
@@ -617,28 +618,29 @@ interface NoResultsProps {
   query: string;
   suggestions: SearchProduct[];
   onClear: () => void;
+  t: (key: string, opts?: Record<string, unknown>) => string;
 }
-const NoResults: React.FC<NoResultsProps> = ({ query, suggestions, onClear }) => (
+const NoResults: React.FC<NoResultsProps> = ({ query, suggestions, onClear, t }) => (
   <div className="space-y-4">
     <div className="rounded-2xl bg-white border border-slate-100 px-6 py-12 text-center">
       <SearchIcon className="w-8 h-8 mx-auto text-slate-300 mb-3" />
       <p className="text-sm font-bold text-slate-900">
-        {query ? <>No results for &ldquo;{query}&rdquo;</> : "No products match your filters"}
+        {query ? t("pages.search.noResultsTitle", { query }) : t("pages.search.noResultsFilters")}
       </p>
       <p className="text-xs text-slate-500 mt-1">
-        Try a shorter term, different spelling, or remove filters.
+        {t("pages.search.noResultsHint")}
       </p>
       <button
         onClick={onClear}
         className="mt-4 inline-flex items-center gap-1 px-4 py-1.5 rounded-full bg-slate-900 text-white text-[11px] font-bold hover:bg-slate-800"
       >
-        Clear search & filters
+        {t("pages.search.clearSearchAndFilters")}
         <ArrowRight size={12} />
       </button>
     </div>
     {suggestions.length > 0 && (
       <div>
-        <p className="text-[12px] font-bold text-slate-700 mb-2">You might also like</p>
+        <p className="text-[12px] font-bold text-slate-700 mb-2">{t("pages.search.youMightLike")}</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {suggestions.map((p) => (
             <ProductCard key={p._id} product={p} q="" />

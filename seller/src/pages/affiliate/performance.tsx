@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Loader2, MousePointer, ShoppingCart, TrendingUp, Award } from "lucide-react";
 import { fetchAffiliateSummary, type AffiliateSummary } from "@/services/sellerApi";
 
@@ -6,6 +7,7 @@ const formatMoney = (n: number): string =>
   Number(n || 0).toLocaleString("en-US", { maximumFractionDigits: 2 });
 
 const PerformancePage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [data, setData] = useState<AffiliateSummary | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -43,17 +45,17 @@ const PerformancePage: React.FC = () => {
   return (
     <div className="space-y-4 text-sm">
       <div>
-        <h1 className="text-[16px] font-bold text-gray-900">Affiliate performance</h1>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.performance.title')}</h1>
         <p className="text-[12px] text-gray-500 mt-0.5">
-          Conversion and revenue contribution from your affiliate program.
+          {t('pages.performance.subtitle')}
         </p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <KPI icon={MousePointer} label="Total clicks" value={data.totals.totalClicks.toLocaleString()} tone="text-amber-700" />
-        <KPI icon={ShoppingCart} label="Affiliate orders" value={data.creators.reduce((s, c) => s + c.ordersCount, 0).toLocaleString()} tone="text-blue-700" />
-        <KPI icon={TrendingUp} label="Conversion" value={`${conversion}%`} tone="text-purple-700" />
-        <KPI icon={Award} label="Affiliate revenue" value={`฿${formatMoney(data.totals.totalAffiliateRevenue)}`} tone="text-emerald-700" />
+        <KPI icon={MousePointer} label={t('pages.performance.totalClicks')} value={data.totals.totalClicks.toLocaleString()} tone="text-amber-700" />
+        <KPI icon={ShoppingCart} label={t('pages.performance.affiliateOrders')} value={data.creators.reduce((s, c) => s + c.ordersCount, 0).toLocaleString()} tone="text-blue-700" />
+        <KPI icon={TrendingUp} label={t('pages.performance.conversion')} value={`${conversion}%`} tone="text-purple-700" />
+        <KPI icon={Award} label={t('pages.performance.affiliateRevenue')} value={`฿${formatMoney(data.totals.totalAffiliateRevenue)}`} tone="text-emerald-700" />
       </div>
 
       <div className="rounded-lg overflow-hidden border border-gray-100">

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 import { ShieldCheck, ArrowLeft } from 'lucide-react';
 import { adminVerifyEmailOTP, adminSendEmailOTP, adminVerifyTOTP } from '@/services/authApi';
 
@@ -7,6 +8,7 @@ type Method = 'email' | 'totp';
 
 const TwoFactorPage = () => {
   const router = useRouter();
+  const { t } = useTranslation('common');
   const [method, setMethod] = useState<Method>('email');
   const [code, setCode] = useState<string[]>(['', '', '', '', '', '']);
   const [error, setError] = useState('');
@@ -41,7 +43,7 @@ const TwoFactorPage = () => {
     setInfo('');
     const fullCode = code.join('');
     if (fullCode.length !== 6) {
-      setError('Please enter all 6 digits');
+      setError(t('pages.twoFactor.invalidCode'));
       return;
     }
     setLoading(true);
@@ -54,7 +56,7 @@ const TwoFactorPage = () => {
       }
       router.push('/');
     } catch (err) {
-      setError(err instanceof Error ? err.message : '2FA verification failed');
+      setError(err instanceof Error ? err.message : t('pages.twoFactor.invalidCode'));
     } finally {
       setLoading(false);
     }
@@ -66,9 +68,9 @@ const TwoFactorPage = () => {
     setInfo('');
     try {
       await adminSendEmailOTP();
-      setInfo('A new code has been sent to your email');
+      setInfo(t('pages.notifications.send.sentSuccess'));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to resend');
+      setError(err instanceof Error ? err.message : t('pages.notifications.send.sentFailed'));
     } finally {
       setResending(false);
     }
@@ -81,19 +83,17 @@ const TwoFactorPage = () => {
           onClick={() => router.push('/login')}
           className="flex items-center gap-2 text-[12px] text-gray-500 hover:text-black font-medium transition-colors mb-12"
         >
-          <ArrowLeft className="w-3.5 h-3.5" /> Back to login
+          <ArrowLeft className="w-3.5 h-3.5" /> {t('pages.forgotPassword.backToLogin')}
         </button>
 
         <div className="flex items-center gap-2 mb-8">
           <ShieldCheck className="w-5 h-5 text-primary" />
-          <span className="text-sm font-bold tracking-tight">Two-Factor Authentication</span>
+          <span className="text-sm font-bold tracking-tight">{t('pages.twoFactor.title')}</span>
         </div>
 
-        <h2 className="text-2xl font-bold text-black">Verify identity</h2>
+        <h2 className="text-2xl font-bold text-black">{t('pages.twoFactor.title')}</h2>
         <p className="text-gray-500 text-sm mt-1">
-          {method === 'email'
-            ? 'Enter the 6-digit code sent to your email'
-            : 'Enter the 6-digit code from your authenticator app'}
+          {t('pages.twoFactor.subtitle')}
         </p>
 
         <div className="flex gap-2 mt-4 text-[12px]">
@@ -102,14 +102,14 @@ const TwoFactorPage = () => {
             onClick={() => setMethod('email')}
             className={`px-3 py-1 rounded font-medium ${method === 'email' ? 'bg-black text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
           >
-            Email
+            {t('auth.email')}
           </button>
           <button
             type="button"
             onClick={() => setMethod('totp')}
             className={`px-3 py-1 rounded font-medium ${method === 'totp' ? 'bg-black text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
           >
-            Authenticator
+            {t('pages.twoFactor.title')}
           </button>
         </div>
 
@@ -146,7 +146,7 @@ const TwoFactorPage = () => {
             disabled={loading}
             className="w-full mt-8 py-3 bg-black text-white text-sm font-semibold rounded-xl hover:bg-gray-900 transition-colors disabled:opacity-50"
           >
-            {loading ? 'Verifying...' : 'Verify →'}
+            {loading ? t('pages.twoFactor.verifying') : `${t('pages.twoFactor.verify')} →`}
           </button>
 
           {method === 'email' && (
@@ -157,7 +157,7 @@ const TwoFactorPage = () => {
                 onClick={handleResend}
                 className="hover:text-black font-medium disabled:opacity-50"
               >
-                {resending ? 'Sending...' : 'Resend code'}
+                {resending ? t('pages.notifications.send.sending') : t('actions.refresh')}
               </button>
             </div>
           )}

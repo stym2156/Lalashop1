@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal, User, Flag } from "lucide-react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import Avatar from "@/components/ui/Avatar";
 import ReportModal from "@/components/ReportModal";
 import { apiClient } from "@/services/apiClient";
@@ -28,6 +29,7 @@ interface SocialPostProps {
 }
 
 export default function SocialPost({ post, currentUserId }: SocialPostProps) {
+  const { t } = useTranslation("common");
   const [likes, setLikes] = useState<string[]>(post.likes || []);
   const [isSaved, setIsSaved] = useState(false);
   const [showCommentInput, setShowCommentInput] = useState(false);
@@ -115,7 +117,7 @@ export default function SocialPost({ post, currentUserId }: SocialPostProps) {
             <button
               onClick={() => setMenuOpen((s) => !s)}
               className="p-1.5 hover:bg-gray-light rounded-full transition-colors"
-              aria-label="Post options"
+              aria-label={t("actions.more")}
             >
               <MoreHorizontal size={18} className="text-dark" />
             </button>
@@ -129,11 +131,11 @@ export default function SocialPost({ post, currentUserId }: SocialPostProps) {
                     }}
                     className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-red-600 hover:bg-red-50 transition-colors"
                   >
-                    <Flag size={14} /> Report post
+                    <Flag size={14} /> {t("pages.social.reportPost")}
                   </button>
                 ) : (
                   <span className="block px-3 py-2 text-[11px] text-gray-400">
-                    No actions available
+                    {t("status.empty")}
                   </span>
                 )}
               </div>
@@ -198,13 +200,13 @@ export default function SocialPost({ post, currentUserId }: SocialPostProps) {
           </div>
 
           <div className="space-y-1">
-            <p className="text-sm font-bold text-dark">{likes.length.toLocaleString()} likes</p>
+            <p className="text-sm font-bold text-dark">{likes.length.toLocaleString()} {t("pages.profile.likes").toLowerCase()}</p>
             {comments.length > 0 && (
               <button
                 className="text-sm text-gray-500"
                 onClick={() => setShowCommentList((v) => !v)}
               >
-                {showCommentList ? "Hide" : "View all"} {comments.length} comments
+                {showCommentList ? t("common.showLess") : t("pages.social.viewAllComments", { count: comments.length })}
               </button>
             )}
           </div>
@@ -229,7 +231,7 @@ export default function SocialPost({ post, currentUserId }: SocialPostProps) {
                         setReportCommentId(c._id as string);
                         setReportOpen(true);
                       }}
-                      title="Report comment"
+                      title={t("actions.report")}
                       className="opacity-0 group-hover:opacity-100 p-1 rounded text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all"
                     >
                       <Flag size={12} />
@@ -254,7 +256,7 @@ export default function SocialPost({ post, currentUserId }: SocialPostProps) {
                 onKeyDown={(e) => {
                   if (e.key === "Enter") submitComment();
                 }}
-                placeholder="Add a comment..."
+                placeholder={t("pages.social.commentPlaceholder")}
                 className="text-sm outline-none flex-1 text-dark bg-transparent"
               />
             </div>
@@ -263,7 +265,7 @@ export default function SocialPost({ post, currentUserId }: SocialPostProps) {
               disabled={!commentText.trim() || submittingComment}
               className="text-primary font-semibold text-sm hover:text-primary-hover disabled:opacity-40"
             >
-              Post
+              {t("actions.post")}
             </button>
           </div>
         )}

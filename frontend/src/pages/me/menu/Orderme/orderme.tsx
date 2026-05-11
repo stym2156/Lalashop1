@@ -5,12 +5,14 @@ import {
   ShoppingBag,
   MoreHorizontal
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface OrderCreatorProps {
   onBack: () => void;
 }
 
 export default function CreatorOrders({ onBack }: OrderCreatorProps) {
+  const { t } = useTranslation("common");
   const [activeTab, setActiveTab] = useState("ALL");
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -44,10 +46,10 @@ export default function CreatorOrders({ onBack }: OrderCreatorProps) {
   });
 
   const tabs = [
-    { id: "ALL", label: "All", count: orders.length },
-    { id: "TO_SHIP", label: "To Ship", count: orders.filter(o => !o.isDelivered && o.isPaid).length },
-    { id: "SHIPPED", label: "Shipped", count: orders.filter(o => o.isDelivered && !o.isPaid).length },
-    { id: "COMPLETED", label: "Completed", count: orders.filter(o => o.isDelivered && o.isPaid).length },
+    { id: "ALL", label: t("pages.orderme.all"), count: orders.length },
+    { id: "TO_SHIP", label: t("pages.orderme.toShip"), count: orders.filter(o => !o.isDelivered && o.isPaid).length },
+    { id: "SHIPPED", label: t("pages.orderme.shipped"), count: orders.filter(o => o.isDelivered && !o.isPaid).length },
+    { id: "COMPLETED", label: t("pages.orderme.completed"), count: orders.filter(o => o.isDelivered && o.isPaid).length },
   ];
 
   if (loading) {
@@ -61,7 +63,7 @@ export default function CreatorOrders({ onBack }: OrderCreatorProps) {
           <button onClick={onBack} className="active:opacity-50 transition-opacity -ml-1">
             <ChevronLeft size={24} strokeWidth={2} />
           </button>
-          <h1 className="text-[17px] font-bold"> Orders</h1>
+          <h1 className="text-[17px] font-bold"> {t("pages.orderme.title")}</h1>
         </div>
       </nav>
 

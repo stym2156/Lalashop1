@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { Star, Search, MessageSquare, Loader2 } from "lucide-react";
 import { fetchMyReviews, type SellerReviewRow } from "@/services/sellerApi";
 
@@ -19,6 +20,7 @@ const productImage = (p?: SellerReviewRow["product"]): string => {
 };
 
 const ReviewsPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [reviews, setReviews] = useState<SellerReviewRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -64,7 +66,7 @@ const ReviewsPage: React.FC = () => {
 
   return (
     <div className="space-y-4 text-sm">
-      <h1 className="text-[16px] font-bold text-gray-900">Product reviews</h1>
+      <h1 className="text-[16px] font-bold text-gray-900">{t('pages.reviews.title')}</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="rounded-lg border border-gray-100 px-5 py-4 text-center">

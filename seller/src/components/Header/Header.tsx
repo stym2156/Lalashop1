@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Bell, Search, User, LogOut, Settings, Store } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useCurrentSeller } from '@/services/useCurrentSeller';
 import { sellerLogout } from '@/services/authApi';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 const Header = () => {
   const router = useRouter();
+  const { t } = useTranslation('common');
   const { seller } = useCurrentSeller();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -35,12 +38,14 @@ const Header = () => {
         <Search className="h-4 w-4 text-gray-400 mr-2" />
         <input
           type="text"
-          placeholder="Search for orders, products, etc..."
+          placeholder={t('actions.search')}
           className="bg-transparent border-none outline-none text-sm w-full text-black placeholder:text-gray-400"
         />
       </div>
 
       <div className="flex items-center space-x-6">
+        <LanguageSwitcher compact />
+
         <button className="p-2.5 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all text-gray-600 relative">
           <Bell className="h-5 w-5" />
         </button>
@@ -90,7 +95,7 @@ const Header = () => {
                 }}
                 className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-gray-700 hover:bg-gray-50 transition-colors"
               >
-                <Store className="w-3.5 h-3.5" /> Store settings
+                <Store className="w-3.5 h-3.5" /> {t('nav.shopProfile')}
               </button>
               <button
                 onClick={() => {
@@ -99,13 +104,13 @@ const Header = () => {
                 }}
                 className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-gray-700 hover:bg-gray-50 transition-colors"
               >
-                <Settings className="w-3.5 h-3.5" /> Integrations
+                <Settings className="w-3.5 h-3.5" /> {t('nav.settings')}
               </button>
               <button
                 onClick={handleLogout}
                 className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-red-600 hover:bg-red-50 transition-colors border-t border-gray-100"
               >
-                <LogOut className="w-3.5 h-3.5" /> Sign out
+                <LogOut className="w-3.5 h-3.5" /> {t('nav.logout')}
               </button>
             </div>
           )}

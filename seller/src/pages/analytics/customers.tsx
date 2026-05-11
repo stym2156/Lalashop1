@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Loader2, Users, Repeat, ShoppingBag } from "lucide-react";
 import { fetchMyOrders, type SellerOrderRow } from "@/services/sellerApi";
 
@@ -15,6 +16,7 @@ interface CustomerStat {
 }
 
 const CustomersAnalyticsPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [orders, setOrders] = useState<SellerOrderRow[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -66,16 +68,16 @@ const CustomersAnalyticsPage: React.FC = () => {
   return (
     <div className="space-y-4 text-sm">
       <div>
-        <h1 className="text-[16px] font-bold text-gray-900">Customer analytics</h1>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.customersAnalytics.title')}</h1>
         <p className="text-[12px] text-gray-500 mt-0.5">
-          Buyer behavior derived from your paid orders — repeat rate, average spend, top customers.
+          {t('pages.customersAnalytics.subtitle')}
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        <KPI icon={Users} label="Unique customers" value={customers.length.toLocaleString()} tone="text-blue-700" />
-        <KPI icon={Repeat} label="Repeat rate" value={`${repeatRate.toFixed(1)}%`} tone="text-purple-700" />
-        <KPI icon={ShoppingBag} label="Avg lifetime spend" value={`฿${formatMoney(avgSpent)}`} tone="text-emerald-700" />
+        <KPI icon={Users} label={t('pages.customersAnalytics.uniqueCustomers')} value={customers.length.toLocaleString()} tone="text-blue-700" />
+        <KPI icon={Repeat} label={t('pages.customersAnalytics.repeatRate')} value={`${repeatRate.toFixed(1)}%`} tone="text-purple-700" />
+        <KPI icon={ShoppingBag} label={t('pages.customersAnalytics.avgLifetimeSpend')} value={`฿${formatMoney(avgSpent)}`} tone="text-emerald-700" />
       </div>
 
       {loading ? (

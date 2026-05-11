@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 import {
   Search, Calendar, ChevronDown, Receipt, Check, X, Loader2, ExternalLink,
 } from 'lucide-react';
@@ -23,14 +24,14 @@ const statusBadge: Record<OrderStatus, string> = {
   pending_payment: 'bg-orange-50 text-orange-700',
 };
 
-const statusLabel: Record<OrderStatus, string> = {
-  paid: 'Paid',
-  shipping: 'Shipping',
-  delivered: 'Delivered',
-  cancelled: 'Cancelled',
-  refunded: 'Refunded',
-  disputed: 'Disputed',
-  pending_payment: 'Pending Payment',
+const statusLabelKey: Record<OrderStatus, string> = {
+  paid: 'status.paid',
+  shipping: 'status.shipping',
+  delivered: 'status.delivered',
+  cancelled: 'status.cancelled',
+  refunded: 'status.refunded',
+  disputed: 'status.disputed',
+  pending_payment: 'status.pendingPayment',
 };
 
 const formatCurrency = (n: number): string =>
@@ -50,6 +51,7 @@ interface OrderTableProps {
 }
 
 const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTableProps) => {
+  const { t } = useTranslation('common');
   const [filter, setFilter] = useState<'all' | OrderStatus>(initialFilter);
   const [q, setQ] = useState('');
   const [open, setOpen] = useState(false);
@@ -94,7 +96,7 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
       })
       .catch((err: Error) => {
         if (cancelled) return;
-        setError(err.message || 'Failed to load orders');
+        setError(err.message || t('pages.orders.failedToLoad'));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -123,7 +125,7 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
       });
       setOrders(res.data ?? []);
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to approve slip');
+      alert(err instanceof Error ? err.message : t('pages.orders.rejectModal.approveFailed'));
     } finally {
       setBusySlipId(null);
     }
@@ -132,7 +134,7 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
   const handleReject = async () => {
     if (!rejectFor) return;
     if (!rejectReason.trim()) {
-      setRejectError('Please tell the buyer why the slip was rejected.');
+      setRejectError(t('pages.orders.rejectModal.missingReason'));
       return;
     }
     setBusySlipId(rejectFor.slipId);
@@ -151,7 +153,7 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
       });
       setOrders(res.data ?? []);
     } catch (err) {
-      setRejectError(err instanceof Error ? err.message : 'Failed to reject slip');
+      setRejectError(err instanceof Error ? err.message : t('pages.orders.rejectModal.rejectFailed'));
     } finally {
       setBusySlipId(null);
     }
@@ -166,22 +168,22 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
               onClick={() => setOpen(!open)}
               className="inline-flex items-center gap-1.5 px-3 py-1 rounded text-[11px] font-semibold bg-gray-100 hover:bg-gray-200 text-gray-700 min-w-[100px] justify-between"
             >
-              <span>{filter === 'all' ? 'All' : statusLabel[filter as OrderStatus]}</span>
+              <span>{filter === 'all' ? t('common.all') : t(statusLabelKey[filter as OrderStatus])}</span>
               <ChevronDown className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`} />
             </button>
             {open && (
               <div className="absolute top-full left-0 mt-1 bg-white  border-gray-100 rounded-md shadow-md py-1 z-10 min-w-[120px]">
-                {tabs.map((t) => (
+                {tabs.map((tabKey) => (
                   <button
-                    key={t}
-                    onClick={() => { setFilter(t); setOpen(false); }}
+                    key={tabKey}
+                    onClick={() => { setFilter(tabKey); setOpen(false); }}
                     className={`w-full text-left px-3 py-1.5 text-[11px] font-semibold transition-colors ${
-                      filter === t
+                      filter === tabKey
                         ? 'bg-gray-50 text-black'
                         : 'text-gray-600 hover:bg-gray-50 hover:text-black'
                     }`}
                   >
-                    {t === 'all' ? 'All' : statusLabel[t as OrderStatus]}
+                    {tabKey === 'all' ? t('common.all') : t(statusLabelKey[tabKey as OrderStatus])}
                   </button>
                 ))}
               </div>
@@ -190,7 +192,7 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
         )}
 
         <button className="inline-flex items-center text-[11px] font-medium text-gray-700 px-2 py-1 rounded">
-          <Calendar className="w-3.5 h-3.5 mr-1.5 text-gray-400" /> Date Range
+          <Calendar className="w-3.5 h-3.5 mr-1.5 text-gray-400" /> {t('table.dateRange')}
         </button>
 
         <div className="ml-auto relative">
@@ -199,7 +201,7 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
             value={q}
             onChange={(e) => setQ(e.target.value)}
             type="text"
-            placeholder="Search order ID, customer, shop..."
+            placeholder={t('pages.orders.searchPlaceholder')}
             className="pl-7 pr-3 py-1 rounded text-[11px] w-64 bg-gray-50 border border-gray-100 focus:border-primary outline-none"
           />
         </div>
@@ -210,23 +212,23 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
           <table className="w-full text-[12px] tabular-nums">
             <thead className="text-[11px] text-gray-500 tracking-wide">
               <tr>
-                <th className="px-4 py-2 text-left font-semibold">Order ID</th>
-                <th className="px-4 py-2 text-left font-semibold">User</th>
-                <th className="px-4 py-2 text-left font-semibold">Shop</th>
-                <th className="px-4 py-2 text-right font-semibold">Order</th>
-                <th className="px-4 py-2 text-right font-semibold">Amount (₭)</th>
-                <th className="px-4 py-2 text-left font-semibold">Payment</th>
-                <th className="px-4 py-2 text-left font-semibold">Slip</th>
-                <th className="px-4 py-2 text-left font-semibold">Created</th>
-                <th className="px-4 py-2 text-left font-semibold">Status</th>
-                <th className="px-4 py-2 text-right font-semibold">Actions</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.orderId')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.user')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.shop')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('table.order')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('table.amountKip')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.payment')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.slip')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.createdAt')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.status')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('table.actions')}</th>
               </tr>
             </thead>
             <tbody>
               {loading && (
                 <tr>
                   <td colSpan={10} className="px-4 py-12 text-center text-gray-400 text-[12px]">
-                    Loading orders...
+                    {t('pages.orders.loadingOrders')}
                   </td>
                 </tr>
               )}
@@ -276,7 +278,7 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
                       {o.itemCount}
                     </Link>
                   </td>
-                  <td className="px-4 py-2 text-right font-semibold text-gray-900">{formatCurrency(o.amount)}</td>
+                  <td className="px-4 py-2 text-right font-semibold text-gray-900">{t("common.currencySymbol", "฿")}{formatCurrency(o.amount)}</td>
                   <td className="px-4 py-2 text-gray-700">{o.paymentMethod}</td>
                   <td className="px-4 py-2">
                     {/* Slip thumbnail — click to lightbox. Pill colour mirrors slip.status. */}
@@ -285,12 +287,12 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
                         type="button"
                         onClick={() => setSlipPreview(slip.slipImageUrl)}
                         className="group inline-flex items-center gap-2 hover:opacity-90"
-                        title="View slip"
+                        title={t('pages.orders.viewSlip')}
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={slip.slipImageUrl}
-                          alt="Slip"
+                          alt={t('pages.orders.slipAlt')}
                           className="w-9 h-9 rounded object-cover border border-gray-200"
                         />
                         <span
@@ -306,13 +308,13 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
                         </span>
                       </button>
                     ) : (
-                      <span className="text-gray-400 text-[11px]">No slip</span>
+                      <span className="text-gray-400 text-[11px]">{t('pages.orders.noSlip')}</span>
                     )}
                   </td>
                   <td className="px-4 py-2 text-gray-500 text-[11px]">{formatDate(o.createdAt)}</td>
                   <td className="px-4 py-2">
                     <span className={`text-[11px] font-medium px-2 py-0.5 rounded ${statusBadge[o.status]}`}>
-                      {statusLabel[o.status]}
+                      {t(statusLabelKey[o.status])}
                     </span>
                   </td>
                   <td className="px-4 py-2">
@@ -323,7 +325,7 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
                             type="button"
                             disabled={isThisBusy}
                             onClick={() => handleApprove(slip!._id)}
-                            title="Approve payment"
+                            title={t('pages.orders.approveTitle')}
                             className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50"
                           >
                             {isThisBusy ? (
@@ -331,7 +333,7 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
                             ) : (
                               <Check className="w-3 h-3" />
                             )}
-                            Approve
+                            {t('actions.approve')}
                           </button>
                           <button
                             type="button"
@@ -341,11 +343,11 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
                               setRejectReason('');
                               setRejectError(null);
                             }}
-                            title="Reject payment"
+                            title={t('pages.orders.rejectTitle')}
                             className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 disabled:opacity-50"
                           >
                             <X className="w-3 h-3" />
-                            Reject
+                            {t('actions.reject')}
                           </button>
                         </>
                       ) : slip ? (
@@ -357,7 +359,7 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
                           href={`/orders/${o._id}`}
                           className="text-gray-400 hover:text-primary text-[11px] inline-flex items-center gap-1"
                         >
-                          <Receipt className="w-3 h-3" /> Detail
+                          <Receipt className="w-3 h-3" /> {t('actions.detail')}
                         </Link>
                       )}
                     </div>
@@ -368,7 +370,7 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
               {!loading && !error && orders.length === 0 && (
                 <tr>
                   <td colSpan={10} className="px-4 py-12 text-center text-gray-400 text-[12px]">
-                    No orders match your filter
+                    {t('pages.orders.noMatch')}
                   </td>
                 </tr>
               )}
@@ -377,10 +379,10 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
         </div>
 
         <div className="flex items-center justify-between px-4 py-2.5 text-[11px] text-gray-500">
-          <span>Showing {orders.length} of {total} orders</span>
+          <span>{t('pages.orders.showing', { shown: orders.length, total })}</span>
           <div className="flex items-center gap-1">
-            <button className="px-2.5 py-1 rounded text-[11px] font-medium text-gray-400 cursor-not-allowed">Prev</button>
-            <button className="px-2.5 py-1 rounded text-[11px] font-medium text-gray-700">Next</button>
+            <button className="px-2.5 py-1 rounded text-[11px] font-medium text-gray-400 cursor-not-allowed">{t('actions.prev')}</button>
+            <button className="px-2.5 py-1 rounded text-[11px] font-medium text-gray-700">{t('actions.next')}</button>
           </div>
         </div>
       </div>
@@ -395,7 +397,7 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={slipPreview}
-              alt="Transfer slip"
+              alt={t('pages.orders.transferSlipAlt')}
               className="max-w-full max-h-[90vh] rounded-lg shadow-2xl object-contain bg-white"
             />
             <a
@@ -405,7 +407,7 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
               onClick={(e) => e.stopPropagation()}
               className="absolute top-2 right-2 inline-flex items-center gap-1 px-2 py-1 rounded bg-white/90 hover:bg-white text-xs font-bold text-gray-800"
             >
-              <ExternalLink className="w-3 h-3" /> Open
+              <ExternalLink className="w-3 h-3" /> {t('actions.open')}
             </a>
           </div>
         </div>
@@ -417,18 +419,17 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="bg-white w-full max-w-md rounded-xl shadow-xl">
             <div className="px-5 py-3 border-b border-gray-100">
-              <h3 className="text-[14px] font-bold">Reject payment slip</h3>
+              <h3 className="text-[14px] font-bold">{t('pages.orders.rejectModal.title')}</h3>
             </div>
             <div className="px-5 py-4 space-y-3">
               <p className="text-[12px] text-gray-600">
-                Tell the buyer why the slip was rejected. They&apos;ll be able to re-upload from
-                the checkout page.
+                {t('pages.orders.rejectModal.description')}
               </p>
               <textarea
                 value={rejectReason}
                 onChange={(e) => setRejectReason(e.target.value)}
                 rows={3}
-                placeholder="e.g. Slip image is unclear / amount doesn't match / wrong account"
+                placeholder={t('pages.orders.rejectModal.placeholder')}
                 className="w-full px-3 py-2 rounded border border-gray-200 focus:border-primary outline-none text-[12px]"
               />
               {rejectError && (
@@ -443,7 +444,7 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
                 disabled={busySlipId !== null}
                 className="px-3 py-1.5 rounded text-[11px] font-bold bg-gray-100 hover:bg-gray-200 text-gray-700 disabled:opacity-50"
               >
-                Cancel
+                {t('actions.cancel')}
               </button>
               <button
                 onClick={handleReject}
@@ -453,7 +454,7 @@ const OrderTable = ({ initialFilter = 'all', hideFilters = false }: OrderTablePr
                 {busySlipId !== null ? (
                   <Loader2 className="w-3 h-3 animate-spin" />
                 ) : null}
-                {busySlipId !== null ? 'Rejecting…' : 'Reject slip'}
+                {busySlipId !== null ? t('pages.orders.rejectModal.rejectingShort') : t('pages.orders.rejectModal.rejectButton')}
               </button>
             </div>
           </div>

@@ -16,6 +16,7 @@ import Link from "next/link";
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import Cropper from "react-easy-crop";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 import Balance from "./menu/balance";
 import Points from "./menu/Orderme/orderme";
@@ -30,6 +31,7 @@ import { uploadImage } from "@/services/uploadImage";
 type SubView = "none" | "balance" | "points" | "coupons" | "creditLimit" | "withdraw";
 
 const MePage: React.FC = () => {
+   const { t } = useTranslation("common");
    const router = useRouter();
 
    const [user, setUser] = useState<any>(null);
@@ -114,13 +116,13 @@ const MePage: React.FC = () => {
    };
 
    const handleDeletePost = async (postId: string) => {
-      if (!confirm("Are you sure you want to delete this post?")) return;
+      if (!confirm(t("pages.profile.deletePostConfirm"))) return;
       try {
          await apiClient(`/posts/${postId}`, { method: "DELETE" });
          setMyPosts(prev => prev.filter(p => p._id !== postId));
       } catch (err) {
          console.error("Delete failed:", err);
-         alert("Failed to delete post");
+         alert(t("pages.profile.deletePostFailed"));
       }
    };
 
@@ -203,11 +205,11 @@ const MePage: React.FC = () => {
    if (subView === "withdraw") return <Withdraw onBack={() => setSubView("none")} />;
 
    const stats = [
-      { id: "balance", icon: Wallet, label: "Web balance", val: `฿${user?.balance?.toLocaleString() || 0}` },
-      { id: "points", icon: Package, label: "Orders", val: `${user?.orderCount || 0} ` },
-      { id: "coupons", icon: Gift, label: "Coupons", val: "0" },
-      { id: "creditLimit", icon: TrendingUp, label: "Promotions", val: "0" },
-      { id: "withdraw", icon: Banknote, label: "Withdraw", val: `฿${user?.balance?.toLocaleString() || 0}` },
+      { id: "balance", icon: Wallet, label: t("pages.profile.webBalance"), val: `฿${user?.balance?.toLocaleString() || 0}` },
+      { id: "points", icon: Package, label: t("pages.profile.ordersStat"), val: `${user?.orderCount || 0} ` },
+      { id: "coupons", icon: Gift, label: t("pages.profile.couponsStat"), val: "0" },
+      { id: "creditLimit", icon: TrendingUp, label: t("pages.profile.promotions"), val: "0" },
+      { id: "withdraw", icon: Banknote, label: t("pages.profile.withdraw"), val: `฿${user?.balance?.toLocaleString() || 0}` },
    ];
 
    return (
@@ -228,7 +230,7 @@ const MePage: React.FC = () => {
                      <div className="w-full aspect-square bg-black rounded-2xl overflow-hidden">
                         {user?.profileImage
                            ? <img src={user.profileImage} className="w-full h-full object-cover" />
-                           : <div className="flex items-center justify-center h-full text-white">No Image</div>
+                           : <div className="flex items-center justify-center h-full text-white">{t("status.noImage")}</div>
                         }
                      </div>
                   </motion.div>
@@ -243,7 +245,7 @@ const MePage: React.FC = () => {
 
                   {/* Header */}
                   <div className="flex items-center justify-between px-5 pt-4 pb-3">
-                     <span className="text-[15px] font-bold text-slate-800">profile</span>
+                     <span className="text-[15px] font-bold text-slate-800">{t("pages.profile.profile")}</span>
                      <button
                         onClick={() => setImgSrc(null)}
                         className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-sm"
@@ -292,11 +294,11 @@ const MePage: React.FC = () => {
                      <button
                         onClick={() => setImgSrc(null)}
                         className="px-5 py-2 rounded-full border border-gray-200 text-[14px] font-semibold text-slate-700"
-                     >cancel</button>
+                     >{t("pages.profile.cancel")}</button>
                      <button
                         onClick={handleCropUpload}
                         className="px-6 py-2 rounded-full bg-[#0095f6] text-white text-[14px] font-semibold"
-                     >save</button>
+                     >{t("pages.profile.save")}</button>
                   </div>
 
                </div>
@@ -324,14 +326,14 @@ const MePage: React.FC = () => {
                               <button
                                  onClick={() => setPreviewOpen(true)}
                                  className="w-full h-1/2 flex items-center justify-center hover:bg-white/20 transition-colors border-b border-white/10"
-                                 title="View Photo"
+                                 title={t("header.viewProfile")}
                               >
                                  <Eye size={16} className="text-white" />
                               </button>
                               <button
                                  onClick={() => fileInputRef.current?.click()}
                                  className="w-full h-1/2 flex items-center justify-center hover:bg-white/20 transition-colors"
-                                 title="Edit Photo"
+                                 title={t("header.editPhoto")}
                               >
                                  <Camera size={16} className="text-white" />
                               </button>
@@ -354,7 +356,7 @@ const MePage: React.FC = () => {
                      </div>
 
                      <div className="min-w-0">
-                        <h2 className="text-lg sm:text-xl font-black text-slate-800 truncate">{user?.name || "Lala User"}</h2>
+                        <h2 className="text-lg sm:text-xl font-black text-slate-800 truncate">{user?.name || t("pages.profile.lalaUser")}</h2>
                         <p
                            onClick={() => navigator.clipboard.writeText(`@${user?.username || ""}`)}
                            className="text-xs text-[#00aeff] font-black mb-1 cursor-pointer active:opacity-60"
@@ -378,10 +380,10 @@ const MePage: React.FC = () => {
 
                <div className="flex border-t border-slate-50 pt-4">
                   {[
-                     { label: "Posts", val: myPosts.length, onClick: () => setContentTab("posts") },
-                     { label: "Followers", val: user?.followers?.length || 0, onClick: () => openUserList("followers") },
-                     { label: "Following", val: user?.following?.length || 0, onClick: () => openUserList("following") },
-                     { label: "Likes", val: myPosts.reduce((acc, curr) => acc + (curr.likes?.length || 0), 0), onClick: null },
+                     { label: t("pages.profile.posts"), val: myPosts.length, onClick: () => setContentTab("posts") },
+                     { label: t("pages.profile.followers"), val: user?.followers?.length || 0, onClick: () => openUserList("followers") },
+                     { label: t("pages.profile.following"), val: user?.following?.length || 0, onClick: () => openUserList("following") },
+                     { label: t("pages.profile.likes"), val: myPosts.reduce((acc, curr) => acc + (curr.likes?.length || 0), 0), onClick: null },
                   ].map((m, i) => (
                      <button key={i} onClick={m.onClick || undefined} className="flex-1 flex flex-col items-center justify-center px-1 active:scale-95 transition-transform">
                         <span className="text-base sm:text-lg font-bold text-slate-900 leading-none">{m.val.toLocaleString()}</span>
@@ -448,7 +450,7 @@ const MePage: React.FC = () => {
                               <LayoutGrid size={40} strokeWidth={1} />
                            </div>
                            <button onClick={() => router.push("/posts/create-post")} className="flex items-center gap-2 bg-[#00aeff] text-white px-10 py-4 rounded-full text-xs font-black shadow-lg shadow-[#00aeff]/20 active:scale-95 transition-all tracking-widest">
-                              <Plus size={18} /> Post
+                              <Plus size={18} /> {t("pages.profile.newPost")}
                            </button>
                         </div>
                      )}
@@ -466,10 +468,10 @@ const MePage: React.FC = () => {
                               <ShoppingBag size={40} strokeWidth={1.5} />
                            </div>
                            <p className="text-[14px] text-[#94A3B8] max-w-xs mb-10 font-medium leading-relaxed">
-                              Open your shop today and start sharing your exclusive product catalog.
+                              {t("pages.profile.openShopPrompt")}
                            </p>
                            <button onClick={() => router.push("/me/opensho/openshop")} className="w-full sm:w-auto px-12 py-4 bg-[#00aeff] text-white rounded-full font-black text-[13px] tracking-widest shadow-xl shadow-[#00aeff]/30 hover:bg-[#0096db] active:scale-95 transition-all">
-                              Start Selling
+                              {t("pages.profile.startSelling")}
                            </button>
                         </div>
                      )}
@@ -486,7 +488,7 @@ const MePage: React.FC = () => {
             />
 
             <div className="py-20 flex items-center justify-center opacity-10">
-               <p className="text-[11px] font-black tracking-[0.8em] text-dark">LALASHOP Social Commerce</p>
+               <p className="text-[11px] font-black tracking-[0.8em] text-dark">{t("pages.profile.footerTagline")}</p>
             </div>
          </main>
       </div>

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 import { Search, ChevronRight, User, ChevronDown } from 'lucide-react';
 import { fetchKycSubmissions, type AdminKycSubmission, type KycStatus } from '@/services/adminApi';
 
@@ -11,17 +12,17 @@ const statusBadge: Record<KycStatus, string> = {
   rejected: 'bg-red-50 text-red-700',
 };
 
-const statusLabel: Record<KycStatus, string> = {
-  pending: 'Pending',
-  approved: 'Approved',
-  rejected: 'Rejected',
+const statusLabelKey: Record<KycStatus, string> = {
+  pending: 'status.pending',
+  approved: 'status.approved',
+  rejected: 'status.rejected',
 };
 
-const businessTypeLabels: Record<string, string> = {
-  individual: 'Individual',
-  sole_proprietor: 'Sole Proprietor',
-  corporate: 'Corporate',
-  partnership: 'Partnership',
+const businessTypeKey: Record<string, string> = {
+  individual: 'kyc.businessTypes.individual',
+  sole_proprietor: 'kyc.businessTypes.sole_proprietor',
+  corporate: 'kyc.businessTypes.corporate',
+  partnership: 'kyc.businessTypes.partnership',
 };
 
 const formatDateTime = (iso?: string): string => {
@@ -45,6 +46,7 @@ const fullName = (sub: AdminKycSubmission): string => {
 };
 
 const KycListPage = () => {
+  const { t } = useTranslation('common');
   const [filter, setFilter] = useState<StatusFilter>('all');
   const [q, setQ] = useState('');
   const [open, setOpen] = useState(false);
@@ -64,7 +66,7 @@ const KycListPage = () => {
       });
       setSubmissions(res.data ?? []);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load KYC submissions');
+      setError(err instanceof Error ? err.message : t('kyc.failedToLoad'));
       setSubmissions([]);
     } finally {
       setLoading(false);
@@ -96,22 +98,22 @@ const KycListPage = () => {
             onClick={() => setOpen(!open)}
             className="inline-flex items-center gap-1.5 px-3 py-1 rounded text-[11px] font-semibold bg-gray-100 hover:bg-gray-200 text-gray-700 min-w-[100px] justify-between"
           >
-            <span>{filter === 'all' ? 'All' : statusLabel[filter as KycStatus]}</span>
+            <span>{filter === 'all' ? t('common.all') : t(statusLabelKey[filter as KycStatus])}</span>
             <ChevronDown className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`} />
           </button>
           {open && (
             <div className="absolute top-full left-0 mt-1 bg-white border border-gray-100 rounded-md shadow-md py-1 z-10 min-w-[120px]">
-              {tabs.map((t) => (
+              {tabs.map((tabKey) => (
                 <button
-                  key={t}
-                  onClick={() => { setFilter(t); setOpen(false); }}
+                  key={tabKey}
+                  onClick={() => { setFilter(tabKey); setOpen(false); }}
                   className={`w-full text-left px-3 py-1.5 text-[11px] font-semibold transition-colors ${
-                    filter === t
+                    filter === tabKey
                       ? 'bg-gray-50 text-black'
                       : 'text-gray-600 hover:bg-gray-50 hover:text-black'
                   }`}
                 >
-                  {t === 'all' ? 'All' : statusLabel[t as KycStatus]}
+                  {tabKey === 'all' ? t('common.all') : t(statusLabelKey[tabKey as KycStatus])}
                 </button>
               ))}
             </div>
@@ -119,7 +121,7 @@ const KycListPage = () => {
         </div>
 
         <span className="text-[11px] text-gray-500">
-          {loading ? 'Loading…' : `${submissions.length} submissions`}
+          {loading ? t('status.loadingShort') : t('kyc.submissionsCount', { count: submissions.length })}
         </span>
 
         <div className="ml-auto relative">
@@ -128,7 +130,7 @@ const KycListPage = () => {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             type="text"
-            placeholder="Search shop, name, ID..."
+            placeholder={t('kyc.searchPlaceholder')}
             className="pl-7 pr-3 py-1 rounded text-[11px] w-64 bg-gray-50 border border-gray-100 focus:border-primary outline-none"
           />
         </div>
@@ -145,26 +147,26 @@ const KycListPage = () => {
           <table className="w-full text-[12px] tabular-nums">
             <thead className="text-[11px] text-gray-500 tracking-wide">
               <tr>
-                <th className="px-4 py-2 text-left font-semibold">KYC ID</th>
-                <th className="px-4 py-2 text-left font-semibold">Shop</th>
-                <th className="px-4 py-2 text-left font-semibold">Applicant</th>
-                <th className="px-4 py-2 text-left font-semibold">Business Type</th>
-                <th className="px-4 py-2 text-left font-semibold">Submitted</th>
-                <th className="px-4 py-2 text-left font-semibold">Status</th>
-                <th className="px-4 py-2 text-right font-semibold">Action</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.kycId')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.shop')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.applicant')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.businessType')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.submittedAt')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.status')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('table.action')}</th>
               </tr>
             </thead>
             <tbody>
               {loading && submissions.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-4 py-8 text-center text-gray-400 text-[11px]">
-                    Loading submissions…
+                    {t('kyc.loadingSubmissions')}
                   </td>
                 </tr>
               ) : submissions.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-4 py-8 text-center text-gray-400 text-[11px]">
-                    No KYC submissions match the filter.
+                    {t('kyc.noMatch')}
                   </td>
                 </tr>
               ) : (
@@ -183,14 +185,14 @@ const KycListPage = () => {
                       </span>
                     </td>
                     <td className="px-4 py-2 text-gray-700 capitalize">
-                      {businessTypeLabels[sub.businessType] || sub.businessType}
+                      {businessTypeKey[sub.businessType] ? t(businessTypeKey[sub.businessType]) : sub.businessType}
                     </td>
                     <td className="px-4 py-2 text-gray-500 text-[11px]">
                       {formatDateTime(sub.submittedAt || sub.createdAt)}
                     </td>
                     <td className="px-4 py-2">
                       <span className={`text-[11px] font-medium px-2 py-0.5 rounded ${statusBadge[sub.status]}`}>
-                        {statusLabel[sub.status]}
+                        {t(statusLabelKey[sub.status])}
                       </span>
                     </td>
                     <td className="px-4 py-2 text-right">
@@ -198,7 +200,7 @@ const KycListPage = () => {
                         href={`/kyc/kycverification?id=${sub._id}`}
                         className="inline-flex items-center gap-1 text-[12px] font-medium text-primary hover:underline"
                       >
-                        Review <ChevronRight className="w-3.5 h-3.5" />
+                        {t('kyc.review')} <ChevronRight className="w-3.5 h-3.5" />
                       </Link>
                     </td>
                   </tr>

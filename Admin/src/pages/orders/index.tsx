@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Download } from 'lucide-react';
 import OrderTable from '@/components/Orders/OrderTable';
 import { fetchAdminOrderStats, type AdminOrderStats } from '@/services/adminApi';
 
 const OrdersPage = () => {
+  const { t } = useTranslation('common');
   const [stats, setStats] = useState<AdminOrderStats | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,20 +29,20 @@ const OrdersPage = () => {
     <div className="space-y-4 text-sm">
       <div className="flex items-center gap-2">
         <button className="px-3 py-1.5 rounded-md text-xs font-medium text-gray-700 inline-flex items-center hover:bg-gray-100">
-          <Download className="w-3.5 h-3.5 mr-1.5" /> Export CSV
+          <Download className="w-3.5 h-3.5 mr-1.5" /> {t('actions.exportCsv')}
         </button>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <KPI label="All Orders" value={stats ? stats.totalOrders.toLocaleString() : '—'} />
-        <KPI label="Today" value={stats ? stats.todayOrders.toLocaleString() : '—'} tone="text-blue-700" />
-        <KPI label="Disputes" value={stats ? stats.disputes.toLocaleString() : '—'} tone="text-red-700" />
-        <KPI label="Refunds" value={stats ? stats.refunded.toLocaleString() : '—'} tone="text-cyan-700" />
+        <KPI label={t('pages.orders.kpi.allOrders')} value={stats ? stats.totalOrders.toLocaleString() : '—'} />
+        <KPI label={t('pages.orders.kpi.today')} value={stats ? stats.todayOrders.toLocaleString() : '—'} tone="text-blue-700" />
+        <KPI label={t('pages.orders.kpi.disputes')} value={stats ? stats.disputes.toLocaleString() : '—'} tone="text-red-700" />
+        <KPI label={t('pages.orders.kpi.refunds')} value={stats ? stats.refunded.toLocaleString() : '—'} tone="text-cyan-700" />
       </div>
 
       {error && (
         <div className="rounded-lg bg-red-50 px-4 py-2 text-[12px] text-red-700">
-          Failed to load order stats: {error}
+          {t('pages.orders.failedToLoadStats')}: {error}
         </div>
       )}
 

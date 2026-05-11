@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Loader2, Users, MousePointer, DollarSign, Package } from "lucide-react";
 import { fetchAffiliateSummary, type AffiliateSummary } from "@/services/sellerApi";
 
@@ -6,6 +7,7 @@ const formatMoney = (n: number): string =>
   Number(n || 0).toLocaleString("en-US", { maximumFractionDigits: 2 });
 
 const CreatorsPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [data, setData] = useState<AffiliateSummary | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -47,17 +49,17 @@ const CreatorsPage: React.FC = () => {
   return (
     <div className="space-y-4 text-sm">
       <div>
-        <h1 className="text-[16px] font-bold text-gray-900">Affiliate creators</h1>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.creators.title')}</h1>
         <p className="text-[12px] text-gray-500 mt-0.5">
-          Creators who picked up your products to promote, with their commission and click stats.
+          {t('pages.creators.subtitle')}
         </p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <KPI icon={Users} label="Active creators" value={data.totals.activeCreators.toLocaleString()} tone="text-blue-700" />
-        <KPI icon={Package} label="Active products" value={data.totals.activeProducts.toLocaleString()} tone="text-purple-700" />
-        <KPI icon={MousePointer} label="Total clicks" value={data.totals.totalClicks.toLocaleString()} tone="text-amber-700" />
-        <KPI icon={DollarSign} label="Commission paid" value={`฿${formatMoney(data.totals.totalCommissionPaid)}`} tone="text-emerald-700" />
+        <KPI icon={Users} label={t('pages.creators.activeCreators')} value={data.totals.activeCreators.toLocaleString()} tone="text-blue-700" />
+        <KPI icon={Package} label={t('pages.creators.activeProducts')} value={data.totals.activeProducts.toLocaleString()} tone="text-purple-700" />
+        <KPI icon={MousePointer} label={t('pages.creators.totalClicks')} value={data.totals.totalClicks.toLocaleString()} tone="text-amber-700" />
+        <KPI icon={DollarSign} label={t('pages.creators.commissionPaid')} value={`฿${formatMoney(data.totals.totalCommissionPaid)}`} tone="text-emerald-700" />
       </div>
 
       <div className="rounded-lg overflow-hidden border border-gray-100">

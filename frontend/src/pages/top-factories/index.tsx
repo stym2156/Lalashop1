@@ -3,9 +3,11 @@ import Header from "@/components/layout/Header";
 import MainSidebar from "@/components/layout/MainSidebar";
 import { Trophy, ShieldCheck, Factory, Award, ArrowRight, Star } from "lucide-react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { Product } from "@/types";
 
 export default function TopFactoriesPage() {
+  const { t } = useTranslation("common");
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -47,10 +49,9 @@ export default function TopFactoriesPage() {
                       Elite Tier Manufacturers
                    </p>
                 </div>
-                <h1 className="text-3xl md:text-5xl font-extrabold mb-8 leading-tight">Elite Supply Chains. <br /> Verified Excellence.</h1>
+                <h1 className="text-3xl md:text-5xl font-extrabold mb-8 leading-tight">{t("pages.topFactories.title")}</h1>
                 <p className="text-white/40 text-lg font-medium mb-12 leading-relaxed">
-                   Source only from the top 1% of manufacturers on the SupplyNet network. 
-                   Every factory has passed rigorous quality, safety, and reliability audits.
+                   {t("pages.topFactories.subtitle")}
                 </p>
              </div>
              
@@ -73,7 +74,7 @@ export default function TopFactoriesPage() {
           </div>
 
           {/* Factory Product Showcase */}
-          <h2 className="text-2xl font-black text-slate-800 mb-8">Gold Manufacturing Products</h2>
+          <h2 className="text-2xl font-black text-slate-800 mb-8">{t("product.popularProducts")}</h2>
           
           {loading ? (
              <div className="flex justify-center py-20 w-full">
@@ -115,7 +116,7 @@ export default function TopFactoriesPage() {
                        </div>
                        
                        <button className="w-full py-3 bg-[#111111] group-hover:bg-[#00a699] text-white font-extrabold text-[10px] tracking-widest rounded-xl transition-all flex items-center justify-center gap-2">
-                          Order Now <ArrowRight size={12} />
+                          {t("actions.buyNow")} <ArrowRight size={12} />
                        </button>
                     </div>
                  </Link>

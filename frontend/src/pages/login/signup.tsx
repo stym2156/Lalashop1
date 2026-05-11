@@ -3,9 +3,11 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { UserPlus, Mail, Lock, User, Loader2, AlertCircle, ArrowLeft, Eye, EyeOff, Phone } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 
 export default function SignupPage() {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", password: "", confirmPassword: "" });
   const [loading, setLoading] = useState(false);
@@ -20,7 +22,7 @@ export default function SignupPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
+      setError(t("auth.passwordsDoNotMatch"));
       return;
     }
 
@@ -45,7 +47,7 @@ export default function SignupPage() {
       // Redirect to home
       router.push("/");
     } catch (err: any) {
-      setError(err.message || "Failed to create account");
+      setError(err.message || t("auth.failedToCreateAccount"));
     } finally {
       setLoading(false);
     }
@@ -54,7 +56,7 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen bg-gray-light flex items-center justify-center p-4 font-body">
       <Head>
-        <title>Sign Up | LALA</title>
+        <title>{t("auth.signupCta")} | LALA</title>
       </Head>
 
       <div className="bg-white w-full max-w-md rounded-3xl shadow-xl border border-gray-border overflow-hidden animate-in fade-in zoom-in duration-300 relative">
@@ -64,8 +66,8 @@ export default function SignupPage() {
 
         <div className="p-8 pt-12">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-display font-bold text-dark">Create an Account</h1>
-            <p className="text-gray-500 text-sm">Create an account to start bulk purchasing</p>
+            <h1 className="text-2xl font-display font-bold text-dark">{t("auth.createAnAccount")}</h1>
+            <p className="text-gray-500 text-sm">{t("auth.createAccountSubtitle")}</p>
           </div>
 
           {error && (
@@ -77,7 +79,7 @@ export default function SignupPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-xs font-bold text-gray-400  tracking-widest block mb-2">Full Name</label>
+              <label className="text-xs font-bold text-gray-400  tracking-widest block mb-2">{t("auth.fullName")}</label>
               <div className="relative">
                 <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                 <input
@@ -87,14 +89,14 @@ export default function SignupPage() {
                   value={formData.name}
                   onChange={handleChange}
                   className="w-full bg-gray-light border border-gray-border rounded-xl py-3 pl-12 pr-4 outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all text-dark"
-                  placeholder="user name"
+                  placeholder={t("auth.namePlaceholder")}
                 />
               </div>
             </div>
 
 
             <div>
-              <label className="text-xs font-bold text-gray-400  tracking-widest block mb-2">Phone</label>
+              <label className="text-xs font-bold text-gray-400  tracking-widest block mb-2">{t("auth.phone")}</label>
               <div className="relative">
                 <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                 <input
@@ -109,7 +111,7 @@ export default function SignupPage() {
               </div>
             </div>
             <div>
-              <label className="text-xs font-bold text-gray-400  tracking-widest block mb-2">Email</label>
+              <label className="text-xs font-bold text-gray-400  tracking-widest block mb-2">{t("auth.email")}</label>
               <div className="relative">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                 <input
@@ -125,7 +127,7 @@ export default function SignupPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-bold text-gray-400  tracking-widest block mb-2">Password</label>
+                <label className="text-xs font-bold text-gray-400  tracking-widest block mb-2">{t("auth.password")}</label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                   <input
@@ -147,7 +149,7 @@ export default function SignupPage() {
                 </div>
               </div>
               <div>
-                <label className="text-xs font-bold text-gray-400  tracking-widest block mb-2">Confirm Password</label>
+                <label className="text-xs font-bold text-gray-400  tracking-widest block mb-2">{t("auth.confirmPassword")}</label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                   <input
@@ -175,14 +177,14 @@ export default function SignupPage() {
               disabled={loading}
               className="w-full bg-dark hover:bg-navy disabled:bg-gray-300 text-white font-bold py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 mt-4"
             >
-              {loading ? <Loader2 className="animate-spin" size={20} /> : "Create Account"}
+              {loading ? <Loader2 className="animate-spin" size={20} /> : t("auth.createAccount")}
             </button>
           </form>
 
           <div className="mt-8 text-center pb-2">
             <p className="text-sm text-gray-500">
-              Already have an account?{" "}
-              <Link href="/login" className="text-primary font-bold hover:underline">Sign In</Link>
+              {t("auth.haveAccount")}{" "}
+              <Link href="/login" className="text-primary font-bold hover:underline">{t("auth.signIn")}</Link>
             </p>
           </div>
         </div>

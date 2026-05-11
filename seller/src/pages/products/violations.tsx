@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { AlertTriangle, Loader2, Package, Shield } from "lucide-react";
 import { fetchMyProducts, type SellerProductRow } from "@/services/sellerApi";
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Head from 'next/head';
 import Link from 'next/link';
 import { ShoppingCart, Heart, Search } from 'lucide-react';
+import { useTranslation } from "react-i18next";
 import Header from "@/components/layout/Header";
 import Sidebar from "@/components/home/Sidebar";
 import HeroBanner from "@/components/home/HeroBanner";
@@ -16,6 +17,7 @@ interface ShopAdvert {
 }
 
 export default function Home() {
+  const { t } = useTranslation("common");
   const [activeCategory, setActiveCategory] = useState("all");
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -73,7 +75,7 @@ export default function Home() {
   return (
     <div className="flex-1 flex flex-col">
       <Head>
-        <title>Lala Shop</title>
+        <title>{t("app.title", "Lala Shop")}</title>
       </Head>
       <Header />
       <main className="flex-1 bg-gray-50/50">
@@ -106,7 +108,7 @@ export default function Home() {
                       <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
                       <div className="absolute bottom-3 left-4 sm:bottom-6 sm:left-8 text-white">
                         <p className="text-[10px] sm:text-xs font-bold tracking-widest opacity-80">
-                          Featured
+                          {t("product.featured")}
                         </p>
                         <p className="text-sm sm:text-xl font-black drop-shadow-lg line-clamp-1 max-w-md">
                           {ad.name}
@@ -128,7 +130,7 @@ export default function Home() {
                               ? "bg-white w-6"
                               : "bg-white/40 w-1.5 hover:bg-white/70"
                           }`}
-                          aria-label={`Show advert ${i + 1}`}
+                          aria-label={`${t("actions.view")} ${i + 1}`}
                         />
                       ))}
                     </div>
@@ -140,11 +142,11 @@ export default function Home() {
             {/* Row 3: Product Grid (Selected Goods) */}
             <div className="rounded-none sm:rounded-2xl border-x-0 sm:border border-gray-100 bg-white p-4 md:p-6 shadow-none sm:shadow-sm overflow-hidden text-clip mb-8">
               <div className="mb-6 flex items-center gap-6 md:gap-8 border-b border-gray-100 overflow-x-auto whitespace-nowrap pb-1 scrollbar-hide">
-                <button 
+                <button
                   onClick={() => setActiveCategory("all")}
                   className={`relative pb-4 text-sm font-bold transition-all ${activeCategory === "all" ? "border-b-2 border-primary text-primary" : "text-gray-400 hover:text-slate-700"}`}
                 >
-                  Selected Goods
+                  {mounted ? t("product.selectedGoods") : "Selected Goods"}
                 </button>
                 {categories.map((cat) => (
                   <button
@@ -152,7 +154,7 @@ export default function Home() {
                     onClick={() => setActiveCategory(cat.slug)}
                     className={`relative pb-4 text-sm font-bold transition-all ${activeCategory === cat.slug ? "border-b-2 border-primary text-primary" : "text-gray-400 hover:text-slate-700"}`}
                   >
-                    {cat.name}
+                    {mounted ? t(`category.name.${cat.slug}`, cat.name) : cat.name}
                   </button>
                 ))}
               </div>
@@ -186,7 +188,7 @@ export default function Home() {
                               {product.description}
                             </p>
                             <div className="mt-2 flex items-baseline gap-1">
-                              <span className="text-xs font-bold text-primary">฿</span>
+                              <span className="text-xs font-bold text-primary">{mounted ? t("common.currencySymbol", "฿") : "฿"}</span>
                               <span className="text-lg font-bold text-primary">
                                 {product.price.toLocaleString()}
                               </span>
@@ -197,7 +199,7 @@ export default function Home() {
                     ))
                   ) : (
                     <div className="col-span-full py-20 text-center text-gray-500">
-                      No products
+                      {mounted ? t("product.noProducts") : "No Products"}
                     </div>
                   )}
                 </div>
@@ -208,9 +210,9 @@ export default function Home() {
             <div className="rounded-none sm:rounded-2xl border-x-0 sm:border border-gray-100 bg-white p-30 md:p-5 shadow-none sm:shadow-sm overflow-hidden text-clip mb-8">
               <div className="mb-6 flex items-center justify-between border-b border-gray-100 pb-4">
                 <h2 className="text-xl font-black text-slate-800 flex items-center gap-2">
-                  <span className="text-red-500">🔥</span> Hot Sellers
+                  <span className="text-red-500">🔥</span> {mounted ? t("product.hotSellers") : "Hot Sellers"}
                 </h2>
-                <Link href="/products" className="text-xs font-bold text-primary hover:underline">View All</Link>
+                <Link href="/products" className="text-xs font-bold text-primary hover:underline">{mounted ? t("actions.viewAll") : "View All"}</Link>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-7 gap-1 md:gap-1">
                 {hotProducts.map((product) => (
@@ -222,7 +224,7 @@ export default function Home() {
                       <div className="p-3">
                         <h3 className="text-xs font-bold text-gray-800 line-clamp-1">{product.name}</h3>
                         <p className="text-[10px] text-gray-400 line-clamp-2 mt-1 min-h-[30px]">{product.description}</p>
-                        <p className="text-[14px] font-black text-primary mt-2">฿{product.price.toLocaleString()}</p>
+                        <p className="text-[14px] font-black text-primary mt-2">{mounted ? t("common.currencySymbol", "฿") : "฿"}{product.price.toLocaleString()}</p>
                       </div>
                     </div>
                   </Link>
@@ -234,9 +236,9 @@ export default function Home() {
             <div className="rounded-none sm:rounded-2xl border-x-0 sm:border border-gray-100 bg-white p-4 md:p-6 shadow-none sm:shadow-sm overflow-hidden text-clip mb-8">
               <div className="mb-6 flex items-center justify-between border-b border-gray-100 pb-4">
                 <h2 className="text-xl font-black text-slate-800 flex items-center gap-2">
-                  <span className="text-blue-500">✨</span> New Arrivals
+                  <span className="text-blue-500">✨</span> {mounted ? t("header.newArrivals") : "New Arrivals"}
                 </h2>
-                <Link href="/products" className="text-xs font-bold text-primary hover:underline">View All</Link>
+                <Link href="/products" className="text-xs font-bold text-primary hover:underline">{mounted ? t("actions.viewAll") : "View All"}</Link>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-7 gap-1 md:gap-1">
                 {newArrivals.map((product) => (
@@ -248,7 +250,7 @@ export default function Home() {
                       <div className="p-3">
                         <h3 className="text-xs font-bold text-gray-800 line-clamp-1">{product.name}</h3>
                         <p className="text-[10px] text-gray-400 line-clamp-2 mt-1 min-h-[30px]">{product.description}</p>
-                        <p className="text-[14px] font-black text-primary mt-2">฿{product.price.toLocaleString()}</p>
+                        <p className="text-[14px] font-black text-primary mt-2">{mounted ? t("common.currencySymbol", "฿") : "฿"}{product.price.toLocaleString()}</p>
                       </div>
                     </div>
                   </Link>

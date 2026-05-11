@@ -18,6 +18,7 @@ import {
   Lock,
   Store,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 
 type NotificationType =
@@ -221,6 +222,7 @@ const renderBodyText = (body: string): JSX.Element[] => {
 };
 
 export default function SystemNotifications(): JSX.Element {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -234,11 +236,11 @@ export default function SystemNotifications(): JSX.Element {
       const res = await apiClient("/notifications");
       setNotifications(res?.data || []);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to load notifications");
+      setError(err instanceof Error ? err.message : t("pages.notifications.loadFailed"));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     load();
@@ -301,7 +303,7 @@ export default function SystemNotifications(): JSX.Element {
             <ArrowLeft size={24} strokeWidth={2.5} className="text-slate-900" />
           </Link>
           <div className="space-y-0.5">
-            <h1 className="text-2xl font-black tracking-tight text-slate-900">Notifications</h1>
+            <h1 className="text-2xl font-black tracking-tight text-slate-900">{t("pages.notifications.title")}</h1>
             {!loading && notifications.length > 0 && (
               <p className="text-[11px] text-slate-400 font-medium">
                 {notifications.filter((n) => !n.read).length} unread of{" "}
@@ -315,7 +317,7 @@ export default function SystemNotifications(): JSX.Element {
           onClick={handleMarkAllRead}
           className="text-[11px] font-black tracking-widest text-[#00aeff] hover:opacity-70 transition-opacity"
         >
-          all read
+          {t("pages.notifications.markAllRead")}
         </button>
       </div>
 
@@ -375,7 +377,7 @@ export default function SystemNotifications(): JSX.Element {
               <Bell size={48} strokeWidth={1.2} className="text-slate-300" />
             </div>
             <p className="text-[11px] font-black tracking-[0.3em] text-slate-400">
-              System is quiet
+              {t("pages.notifications.noNotifications")}
             </p>
           </div>
         )}
@@ -407,7 +409,7 @@ export default function SystemNotifications(): JSX.Element {
               <button
                 onClick={() => setActive(null)}
                 className="p-2 -mr-2 -mt-2 hover:bg-slate-50 rounded-full active:scale-90 transition-all"
-                aria-label="Close"
+                aria-label={t("actions.close")}
               >
                 <X size={20} className="text-slate-400" />
               </button>

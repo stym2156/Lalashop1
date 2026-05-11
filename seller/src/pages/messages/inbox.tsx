@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import {
   Search, Send, Check, CheckCheck, Loader2, MessageCircle, Package, ExternalLink,
   Image as ImageIcon,
@@ -17,9 +18,13 @@ import { uploadImage } from "@/services/uploadImage";
 
 type FilterKey = "all" | "unread";
 
-const FILTERS: { key: FilterKey; label: string }[] = [
-  { key: "all", label: "All" },
-  { key: "unread", label: "Unread" },
+const FILTER_LABEL_KEYS: Record<FilterKey, string> = {
+  all: "pages.inbox.filterAll",
+  unread: "pages.inbox.filterUnread",
+};
+const FILTERS: { key: FilterKey }[] = [
+  { key: "all" },
+  { key: "unread" },
 ];
 
 const REFRESH_MS = 15000;
@@ -74,6 +79,7 @@ const initial = (name?: string): string =>
   (name || "?").trim().charAt(0).toUpperCase() || "?";
 
 const InboxPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const { seller } = useCurrentSeller();
   const meId = seller?._id || null;
 
@@ -241,9 +247,9 @@ const InboxPage: React.FC = () => {
       {/* Title bar */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-[16px] font-bold text-gray-900">Inbox</h1>
+          <h1 className="text-[16px] font-bold text-gray-900">{t('pages.inbox.title')}</h1>
           <p className="text-[12px] text-gray-500 mt-0.5">
-            Messages from buyers — they appear here in real time when buyers chat from your product pages.
+            {t('pages.inbox.subtitle')}
           </p>
         </div>
         <button
@@ -251,15 +257,15 @@ const InboxPage: React.FC = () => {
           disabled={stats.unread === 0}
           className="px-3 py-1.5 rounded-md text-xs font-medium text-gray-700 hover:bg-gray-100 inline-flex items-center disabled:opacity-50"
         >
-          <Check className="w-3.5 h-3.5 mr-1.5" /> Mark all read
+          <Check className="w-3.5 h-3.5 mr-1.5" /> {t('pages.inbox.markAllRead')}
         </button>
       </div>
 
       {/* KPI strip */}
       <div className="grid grid-cols-3 gap-3">
-        <KPI label="Total conversations" value={stats.total.toString()} />
-        <KPI label="Unread messages" value={stats.unread.toString()} tone="text-rose-600" />
-        <KPI label="Awaiting reply" value={stats.awaiting.toString()} tone="text-amber-600" />
+        <KPI label={t('pages.inbox.totalConversations')} value={stats.total.toString()} />
+        <KPI label={t('pages.inbox.unreadMessages')} value={stats.unread.toString()} tone="text-rose-600" />
+        <KPI label={t('pages.inbox.awaitingReply')} value={stats.awaiting.toString()} tone="text-amber-600" />
       </div>
 
       {/* 3-column workspace */}
@@ -276,7 +282,7 @@ const InboxPage: React.FC = () => {
                     filter === f.key ? "bg-white text-black shadow-sm" : "text-gray-600 hover:text-black"
                   }`}
                 >
-                  {f.label}
+                  {t(FILTER_LABEL_KEYS[f.key])}
                 </button>
               ))}
             </div>
@@ -289,7 +295,7 @@ const InboxPage: React.FC = () => {
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search conversations…"
+                placeholder={t('pages.inbox.searchPlaceholder')}
                 className="w-full bg-gray-50 border border-transparent focus:bg-white focus:border-gray-200 outline-none pl-7 pr-3 py-1.5 rounded text-[11px]"
               />
             </div>
@@ -304,11 +310,11 @@ const InboxPage: React.FC = () => {
               <div className="text-center py-10 px-4 text-gray-400">
                 <MessageCircle className="w-8 h-8 mx-auto mb-2 text-gray-200" />
                 <p className="text-[12px] font-bold text-gray-600">
-                  {conversations.length === 0 ? "No messages yet" : "No matches"}
+                  {conversations.length === 0 ? t('pages.inbox.noMessages') : t('common.noMatches')}
                 </p>
                 {conversations.length === 0 && (
                   <p className="text-[11px] mt-1">
-                    Buyers can chat with you from any of your product pages.
+                    {t('pages.inbox.buyerHint')}
                   </p>
                 )}
               </div>
@@ -316,7 +322,7 @@ const InboxPage: React.FC = () => {
               visibleConversations.map((c) => {
                 const isSelected = c._id === selectedId;
                 const peer = c.peer;
-                const name = peer?.name || peer?.username || "User";
+                const name = peer?.name || peer?.username || t('common.user');
                 return (
                   <button
                     key={c._id}
@@ -356,7 +362,7 @@ const InboxPage: React.FC = () => {
                             c.unreadCount > 0 ? "text-gray-900 font-semibold" : "text-gray-500"
                           }`}
                         >
-                          {c.lastMessageText || "Tap to view"}
+                          {c.lastMessageText || t('pages.inbox.tapToView')}
                         </span>
                         {c.unreadCount > 0 && (
                           <span className="text-[10px] font-bold bg-[#00aeff] text-white rounded-full px-1.5 py-px tabular-nums flex-shrink-0">
@@ -377,8 +383,8 @@ const InboxPage: React.FC = () => {
           {!activeConversation ? (
             <div className="flex-1 flex flex-col items-center justify-center text-gray-400">
               <MessageCircle className="w-10 h-10 text-gray-200 mb-3" />
-              <p className="text-[13px] font-bold text-gray-600">Select a conversation</p>
-              <p className="text-[11px] mt-1">Pick a buyer from the list to view the thread.</p>
+              <p className="text-[13px] font-bold text-gray-600">{t('pages.inbox.selectConversation')}</p>
+              <p className="text-[11px] mt-1">{t('pages.inbox.selectConversationHint')}</p>
             </div>
           ) : (
             <ThreadPane

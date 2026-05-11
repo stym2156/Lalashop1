@@ -1,19 +1,26 @@
 import { Home, ClipboardList, UserSquare2, Globe, Store } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 import { useChat } from "@/components/chat/ChatContext";
 
 export default function MainSidebar() {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const pathname = router.pathname;
   const { unreadTotal } = useChat();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const menuItems = [
-    { icon: Home, label: "Home", href: "/", badge: 0 },
-    { icon: Globe, label: "Social", href: "/Social/SocialPage", badge: unreadTotal },
-    { icon: ClipboardList, label: "Orders", href: "/orders/orders", badge: 0 },
-    { icon: UserSquare2, label: "Creator", href: "/creator/creator", badge: 0 },
-    { icon: Store, label: "Shop", href: "/me/me", badge: 0 },
+    { icon: Home, label: t("nav.home"), href: "/", badge: 0 },
+    { icon: Globe, label: t("nav.social"), href: "/Social/SocialPage", badge: unreadTotal },
+    { icon: ClipboardList, label: t("nav.orders"), href: "/orders/orders", badge: 0 },
+    { icon: UserSquare2, label: t("nav.creator"), href: "/creator/creator", badge: 0 },
+    { icon: Store, label: t("nav.shop"), href: "/me/me", badge: 0 },
   ];
 
   const isCreatePost = pathname === "/posts/create-post";
@@ -35,7 +42,7 @@ export default function MainSidebar() {
 
           return (
             <Link
-              key={item.label}
+              key={item.href}
               href={item.href}
               className={`relative flex flex-col items-center gap-1 py-3 rounded-lg transition-all group ${
                 isActive ? "text-primary " : "text-gray-400 hover:text-primary hover:bg-gray-50"
@@ -49,7 +56,9 @@ export default function MainSidebar() {
                   </span>
                 )}
               </span>
-              <span className="text-[10px] font-bold tracking-tight">{item.label}</span>
+              <span className="text-[10px] font-bold tracking-tight">
+                {mounted ? item.label : ""}
+              </span>
             </Link>
           );
         })}

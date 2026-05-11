@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Loader2, Plus, Zap, Trash2, Edit3, Calendar, TrendingUp } from "lucide-react";
 import {
   fetchMyPromotions,
@@ -52,6 +53,7 @@ const initialForm: PromotionInput = {
 };
 
 const PromotionsPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [items, setItems] = useState<SellerPromotion[]>([]);
   const [products, setProducts] = useState<SellerProductRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -147,16 +149,16 @@ const PromotionsPage: React.FC = () => {
     <div className="space-y-4 text-sm">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-[16px] font-bold text-gray-900">Promotions</h1>
+          <h1 className="text-[16px] font-bold text-gray-900">{t('pages.promotions.title')}</h1>
           <p className="text-[12px] text-gray-500 mt-0.5">
-            Time-limited campaigns: flash sales, bundles, and BOGO deals.
+            {t('pages.promotions.subtitle')}
           </p>
         </div>
         <button
           onClick={openCreate}
           className="bg-[#00aeff] text-white px-3 py-1.5 rounded-md text-xs font-bold inline-flex items-center hover:bg-[#0096db]"
         >
-          <Plus className="w-3.5 h-3.5 mr-1" /> New promotion
+          <Plus className="w-3.5 h-3.5 mr-1" /> {t('pages.promotions.newPromotion')}
         </button>
       </div>
 

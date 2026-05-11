@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 import { Search, Calendar, Check, X, ChevronDown, MoreHorizontal } from 'lucide-react';
 import {
   fetchAdminWithdrawals,
@@ -17,12 +18,12 @@ const statusBadge: Record<WithdrawStatus, string> = {
   failed: 'text-rose-700',
 };
 
-const statusLabel: Record<WithdrawStatus, string> = {
-  pending: 'Pending',
-  approved: 'Approved',
-  completed: 'Completed',
-  rejected: 'Rejected',
-  failed: 'Failed',
+const statusLabelKey: Record<WithdrawStatus, string> = {
+  pending: 'status.pending',
+  approved: 'status.approved',
+  completed: 'status.completed',
+  rejected: 'status.rejected',
+  failed: 'status.failed',
 };
 
 const formatMoney = (n: number): string =>
@@ -47,6 +48,7 @@ const WithdrawalsTable: React.FC<WithdrawalsTableProps> = ({
   paymentMode = false,
   defaultStatus = 'all',
 }) => {
+  const { t } = useTranslation('common');
   const [filter, setFilter] = useState<'all' | WithdrawStatus>(defaultStatus);
   const [q, setQ] = useState('');
   const [open, setOpen] = useState(false);
@@ -81,7 +83,7 @@ const WithdrawalsTable: React.FC<WithdrawalsTableProps> = ({
       setItems(res.data ?? []);
       setTotal(res.meta?.total ?? 0);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load withdrawals');
+      setError(err instanceof Error ? err.message : t('withdraw.failedToLoad'));
     } finally {
       setLoading(false);
     }
@@ -112,7 +114,7 @@ const WithdrawalsTable: React.FC<WithdrawalsTableProps> = ({
       await processAdminWithdrawal(id, { decision });
       await load();
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Action failed');
+      alert(err instanceof Error ? err.message : t('withdraw.actionFailed'));
     } finally {
       setBusyId(null);
     }
@@ -126,28 +128,28 @@ const WithdrawalsTable: React.FC<WithdrawalsTableProps> = ({
             onClick={() => setOpen(!open)}
             className="inline-flex items-center gap-1.5 px-3 py-1 rounded text-[11px] font-semibold bg-gray-100 hover:bg-gray-200 text-gray-700 min-w-[100px] justify-between"
           >
-            <span>{filter === 'all' ? 'All' : statusLabel[filter as WithdrawStatus]}</span>
+            <span>{filter === 'all' ? t('common.all') : t(statusLabelKey[filter as WithdrawStatus])}</span>
             <ChevronDown className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`} />
           </button>
           {open && (
             <div className="absolute top-full left-0 mt-1 bg-white border border-gray-100 rounded-md shadow-md py-1 z-10 min-w-[120px]">
-              {tabs.map((t) => (
+              {tabs.map((tabKey) => (
                 <button
-                  key={t}
-                  onClick={() => { setFilter(t); setOpen(false); }}
-                  className={`w-full text-left px-3 py-1.5 text-[11px] font-semibold transition-colors ${filter === t
+                  key={tabKey}
+                  onClick={() => { setFilter(tabKey); setOpen(false); }}
+                  className={`w-full text-left px-3 py-1.5 text-[11px] font-semibold transition-colors ${filter === tabKey
                       ? 'bg-gray-50 text-black'
                       : 'text-gray-600 hover:bg-gray-50 hover:text-black'
                     }`}
                 >
-                  {t === 'all' ? 'All' : statusLabel[t as WithdrawStatus]}
+                  {tabKey === 'all' ? t('common.all') : t(statusLabelKey[tabKey as WithdrawStatus])}
                 </button>
               ))}
             </div>
           )}
         </div>
         <button className="inline-flex items-center text-[11px] font-medium text-gray-700 px-2 py-1 rounded">
-          <Calendar className="w-3.5 h-3.5 mr-1.5 text-gray-400" /> Date Range
+          <Calendar className="w-3.5 h-3.5 mr-1.5 text-gray-400" /> {t('table.dateRange')}
         </button>
         <div className="ml-auto relative">
           <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
@@ -155,7 +157,7 @@ const WithdrawalsTable: React.FC<WithdrawalsTableProps> = ({
             value={q}
             onChange={(e) => setQ(e.target.value)}
             type="text"
-            placeholder="Search name, email, customId..."
+            placeholder={t('withdraw.searchPlaceholder')}
             className="pl-7 pr-3 py-1 rounded text-[11px] w-64 bg-gray-50 border border-gray-100 focus:border-primary outline-none"
           />
         </div>
@@ -166,24 +168,24 @@ const WithdrawalsTable: React.FC<WithdrawalsTableProps> = ({
           <table className="w-full text-[12px] tabular-nums">
             <thead className="text-[11px] text-gray-500 tracking-wide">
               <tr>
-                <th className="px-4 py-2 text-left font-semibold">Requested</th>
-                <th className="px-4 py-2 text-left font-semibold">Transaction ID</th>
-                <th className="px-4 py-2 text-left font-semibold">User</th>
-                <th className="px-4 py-2 text-left font-semibold">Shop</th>
-                <th className="px-4 py-2 text-left font-semibold">Bank</th>
-                <th className="px-4 py-2 text-left font-semibold">Account</th>
-                <th className="px-4 py-2 text-right font-semibold">Amount (₭)</th>
-                <th className="px-4 py-2 text-right font-semibold">Net (₭)</th>
-                <th className="px-4 py-2 text-left font-semibold">Status</th>
-                <th className="px-4 py-2 text-left font-semibold">Processed by</th>
-                <th className="px-4 py-2 text-right font-semibold">Actions</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.requested')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.transactionId')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.user')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.shop')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.bank')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.account')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('table.amountKip')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('table.netKip')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.status')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.processedBy')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('table.actions')}</th>
               </tr>
             </thead>
             <tbody>
               {loading && (
                 <tr>
                   <td colSpan={11} className="px-4 py-12 text-center text-gray-400 text-[12px]">
-                    Loading withdrawals...
+                    {t('withdraw.loading')}
                   </td>
                 </tr>
               )}
@@ -220,7 +222,7 @@ const WithdrawalsTable: React.FC<WithdrawalsTableProps> = ({
                         href={`/shops/${w.user._id}`}
                         className="text-gray-700 hover:text-primary transition-colors inline-flex items-center gap-1.5"
                       >
-                        {w.shopName || w.user?.name || 'Shop'}
+                        {w.shopName || w.user?.name || t('withdraw.shopFallback')}
                       </Link>
                     ) : (
                       <span className="text-gray-400">—</span>
@@ -232,7 +234,7 @@ const WithdrawalsTable: React.FC<WithdrawalsTableProps> = ({
                   <td className="px-4 py-2 text-right text-gray-700">{formatMoney(w.netAmount)}</td>
                   <td className="px-4 py-2">
                     <span className={`text-[11px] font-medium px-2 py-0.5 rounded ${statusBadge[w.status]}`}>
-                      {statusLabel[w.status]}
+                      {t(statusLabelKey[w.status])}
                     </span>
                   </td>
                   <td className="px-4 py-2">
@@ -243,7 +245,7 @@ const WithdrawalsTable: React.FC<WithdrawalsTableProps> = ({
                         href={`/users/${w.processedBy._id}`}
                         className="text-gray-700 hover:text-primary transition-colors text-[11px]"
                       >
-                        {w.processedBy.name || w.processedBy.email || w.processedBy.customId || 'Admin'}
+                        {w.processedBy.name || w.processedBy.email || w.processedBy.customId || t('withdraw.adminFallback')}
                       </Link>
                     ) : (
                       <span className="text-gray-400 text-[11px]">—</span>
@@ -261,7 +263,7 @@ const WithdrawalsTable: React.FC<WithdrawalsTableProps> = ({
                           <button
                             disabled={busyId === w._id}
                             onClick={() => onProcess(w._id, 'approve')}
-                            title="Approve"
+                            title={t('withdraw.approveTitle')}
                             className="text-gray-500 hover:text-green-700 hover:bg-gray-100 rounded p-1 disabled:opacity-50"
                           >
                             <Check className="w-3.5 h-3.5" />
@@ -269,7 +271,7 @@ const WithdrawalsTable: React.FC<WithdrawalsTableProps> = ({
                           <button
                             disabled={busyId === w._id}
                             onClick={() => onProcess(w._id, 'reject')}
-                            title="Reject"
+                            title={t('withdraw.rejectTitle')}
                             className="text-gray-500 hover:text-red-600 hover:bg-gray-100 rounded p-1 disabled:opacity-50"
                           >
                             <X className="w-3.5 h-3.5" />
@@ -281,7 +283,7 @@ const WithdrawalsTable: React.FC<WithdrawalsTableProps> = ({
                           <button
                             disabled={busyId === w._id}
                             onClick={() => onProcess(w._id, 'complete')}
-                            title="Mark Paid"
+                            title={t('withdraw.markPaidTitle')}
                             className="text-gray-500 hover:text-green-700 hover:bg-gray-100 rounded p-1 disabled:opacity-50"
                           >
                             <Check className="w-3.5 h-3.5" />
@@ -289,7 +291,7 @@ const WithdrawalsTable: React.FC<WithdrawalsTableProps> = ({
                           <button
                             disabled={busyId === w._id}
                             onClick={() => onProcess(w._id, 'fail')}
-                            title="Mark Failed"
+                            title={t('withdraw.markFailedTitle')}
                             className="text-gray-500 hover:text-red-600 hover:bg-gray-100 rounded p-1 disabled:opacity-50"
                           >
                             <X className="w-3.5 h-3.5" />
@@ -298,7 +300,7 @@ const WithdrawalsTable: React.FC<WithdrawalsTableProps> = ({
                       )}
                       <Link
                         href={`/withdrawpage/${w._id}`}
-                        title="Detail"
+                        title={t('withdraw.detailTitle')}
                         className="text-gray-500 hover:text-black hover:bg-gray-100 rounded p-1 inline-flex"
                       >
                         <MoreHorizontal className="w-3.5 h-3.5" />
@@ -310,7 +312,7 @@ const WithdrawalsTable: React.FC<WithdrawalsTableProps> = ({
               {!loading && !error && items.length === 0 && (
                 <tr>
                   <td colSpan={11} className="px-4 py-12 text-center text-gray-400 text-[12px]">
-                    No withdrawals match your filter
+                    {t('withdraw.noMatch')}
                   </td>
                 </tr>
               )}
@@ -319,7 +321,7 @@ const WithdrawalsTable: React.FC<WithdrawalsTableProps> = ({
         </div>
 
         <div className="flex items-center justify-between px-4 py-2.5 text-[11px] text-gray-500">
-          <span>Showing {items.length} of {total}</span>
+          <span>{t('withdraw.showing', { shown: items.length, total })}</span>
         </div>
       </div>
     </>

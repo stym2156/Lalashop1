@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { Loader2, AlertCircle, Plus } from "lucide-react";
 import { fetchMyTickets, type SellerTicketRow, type TicketStatus } from "@/services/sellerApi";
 
@@ -19,6 +20,7 @@ const formatDate = (s?: string): string => {
 
 // Appeals = subset of tickets with category 'shop' (account/policy escalations)
 const AppealsPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [tickets, setTickets] = useState<SellerTicketRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -46,16 +48,16 @@ const AppealsPage: React.FC = () => {
     <div className="space-y-4 text-sm">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-[16px] font-bold text-gray-900">Appeals</h1>
+          <h1 className="text-[16px] font-bold text-gray-900">{t('pages.appeals.title')}</h1>
           <p className="text-[12px] text-gray-500 mt-0.5">
-            Account or shop-policy issues you've escalated to LalaShop.
+            {t('pages.appeals.subtitle')}
           </p>
         </div>
         <Link
           href="/support/tickets"
           className="bg-[#00aeff] text-white px-3 py-1.5 rounded-md text-xs font-bold inline-flex items-center hover:bg-[#0096db]"
         >
-          <Plus className="w-3.5 h-3.5 mr-1.5" /> New appeal
+          <Plus className="w-3.5 h-3.5 mr-1.5" /> {t('pages.appeals.newAppeal')}
         </Link>
       </div>
 

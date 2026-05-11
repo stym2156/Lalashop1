@@ -9,6 +9,7 @@ import {
   Loader2,
 } from "lucide-react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import SocialPost, { BackendPost } from "./components/SocialPost";
 import MediaUpload from "./components/MediaUpload";
 import Avatar from "@/components/ui/Avatar";
@@ -24,6 +25,7 @@ interface MiniUser {
 }
 
 export default function SocialPage() {
+  const { t } = useTranslation("common");
   const { open: openChat, unreadMessages } = useChat();
   const [posts, setPosts] = useState<BackendPost[]>([]);
   const [loadingPosts, setLoadingPosts] = useState(true);
@@ -148,7 +150,7 @@ export default function SocialPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
             <input
               type="text"
-              placeholder="Search people"
+              placeholder={t("pages.social.exploreUsers")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => searchQuery.length > 0 && setShowResults(true)}
@@ -166,18 +168,18 @@ export default function SocialPage() {
             <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-border rounded-xl shadow-xl max-h-[400px] overflow-y-auto z-[70] animate-in fade-in slide-in-from-top-2 duration-200">
               <div className="p-2 border-b border-gray-border flex justify-between items-center bg-gray-light/50">
                 <span className="text-[10px] font-bold text-gray-400 tracking-widest pl-2">
-                  Search Results
+                  {t("actions.search")}
                 </span>
                 <button
                   onClick={() => setShowResults(false)}
                   className="text-[10px] text-primary font-bold pr-2 hover:underline"
                 >
-                  Close
+                  {t("actions.close")}
                 </button>
               </div>
               {searchResults.length === 0 ? (
                 <div className="px-4 py-8 text-center text-[12px] text-gray-400">
-                  {searching ? "Searching..." : `No users found for "${searchQuery}"`}
+                  {searching ? t("pages.search.searching") : t("components.userList.noUsers")}
                 </div>
               ) : (
                 searchResults.map((u) => (
@@ -221,7 +223,7 @@ export default function SocialPage() {
           <button
             onClick={openChat}
             className="relative cursor-pointer text-dark hover:text-primary transition-colors"
-            aria-label="Open messages"
+            aria-label={t("nav.messages")}
           >
             <Send size={24} className="-rotate-12" />
             {unreadMessages > 0 && (

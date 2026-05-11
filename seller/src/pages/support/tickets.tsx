@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Plus, MessageSquare, X, Loader2, Send, AlertCircle } from "lucide-react";
 import {
   fetchMyTickets,
@@ -31,6 +32,7 @@ const formatDate = (s?: string): string => {
 };
 
 const TicketsPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [tickets, setTickets] = useState<SellerTicketRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -89,16 +91,16 @@ const TicketsPage: React.FC = () => {
     <div className="space-y-4 text-sm">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-[16px] font-bold text-gray-900">Support tickets</h1>
+          <h1 className="text-[16px] font-bold text-gray-900">{t('pages.tickets.title')}</h1>
           <p className="text-[12px] text-gray-500 mt-0.5">
-            Open a ticket to reach the LalaShop support team for any account, payment, or shop issue.
+            {t('pages.tickets.subtitle')}
           </p>
         </div>
         <button
           onClick={() => setCreating(true)}
           className="bg-[#00aeff] text-white px-3 py-1.5 rounded-md text-xs font-bold inline-flex items-center hover:bg-[#0096db]"
         >
-          <Plus className="w-3.5 h-3.5 mr-1.5" /> New ticket
+          <Plus className="w-3.5 h-3.5 mr-1.5" /> {t('pages.tickets.newTicket')}
         </button>
       </div>
 

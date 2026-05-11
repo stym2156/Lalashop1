@@ -10,6 +10,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 
 interface OrderItem {
@@ -88,6 +89,7 @@ const productImage = (p: ProductRow): string => {
 };
 
 export default function AttrView({ onBack }: { onBack: () => void }) {
+  const { t } = useTranslation("common");
   const [timeRange, setTimeRange] = useState<RangeKey>("today");
   const [balance, setBalance] = useState<number | null>(null);
   const [orders, setOrders] = useState<OrderRow[]>([]);
@@ -211,7 +213,7 @@ export default function AttrView({ onBack }: { onBack: () => void }) {
           <button onClick={onBack} className="active:opacity-50 transition-opacity -ml-1">
             <ChevronLeft size={26} strokeWidth={2.5} />
           </button>
-          <h1 className="text-[17px] font-bold tracking-tight">Balance</h1>
+          <h1 className="text-[17px] font-bold tracking-tight">{t("pages.balance.title")}</h1>
         </div>
       </nav>
 
@@ -301,7 +303,7 @@ export default function AttrView({ onBack }: { onBack: () => void }) {
           </div>
           <div className="divide-y divide-[#F8F8F8]">
             {loading ? (
-              <div className="px-5 py-8 text-center text-[13px] text-[#86878B]">Loading...</div>
+              <div className="px-5 py-8 text-center text-[13px] text-[#86878B]">{t("status.loading")}</div>
             ) : bestSellers.length === 0 ? (
               <div className="px-5 py-8 text-center text-[13px] text-[#86878B]">
                 No products yet

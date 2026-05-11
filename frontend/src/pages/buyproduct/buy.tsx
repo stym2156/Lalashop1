@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { X, Minus, Plus, ShieldCheck, ChevronRight, CreditCard, Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { ProductData } from "../product/types";
 
 interface BuyPopupProps {
@@ -22,6 +23,7 @@ interface ProductTier {
 }
 
 export default function BuyPopup({ product, isOpen, onClose, initialQty = 1 }: BuyPopupProps) {
+    const { t } = useTranslation("common");
     const [qty, setQty] = useState(initialQty);
     const [selectedVariants, setSelectedVariants] = useState<SelectedVariants>({});
     const [loading, setLoading] = useState(false);
@@ -221,7 +223,7 @@ export default function BuyPopup({ product, isOpen, onClose, initialQty = 1 }: B
                             {/* Description */}
                             {product.description && (
                                 <div>
-                                    <span className="text-[13px] font-bold text-gray-500 block mb-1.5">Description</span>
+                                    <span className="text-[13px] font-bold text-gray-500 block mb-1.5">{t("product.description")}</span>
                                     <p className="text-[12px] leading-relaxed text-slate-600 whitespace-pre-line">
                                         {product.description}
                                     </p>
@@ -331,7 +333,7 @@ export default function BuyPopup({ product, isOpen, onClose, initialQty = 1 }: B
 
                             {/* Quantity */}
                             <div className="flex items-center justify-between">
-                                <span className="font-bold text-dark text-[14px]">Quantity</span>
+                                <span className="font-bold text-dark text-[14px]">{t("product.quantity")}</span>
                                 <div className="flex items-center gap-2">
                                     <motion.button
                                         whileTap={{ scale: 0.9 }}
@@ -365,7 +367,7 @@ export default function BuyPopup({ product, isOpen, onClose, initialQty = 1 }: B
                             {/* Total */}
                             <div className="p-4 bg-primary/5 rounded-lg border border-primary/10">
                                 <div className="flex justify-between items-center">
-                                    <span className="font-bold text-gray-900">Total Amount</span>
+                                    <span className="font-bold text-gray-900">{t("cart.totalAmount")}</span>
                                     <span className="text-[20px] font-bold text-primary">
                                         ฿{(currentPrice * qty).toLocaleString()}
                                     </span>
@@ -381,7 +383,7 @@ export default function BuyPopup({ product, isOpen, onClose, initialQty = 1 }: B
                             <div className="flex justify-center border-t border-gray-100 pt-4">
                                 <div className="flex items-center gap-2 text-gray-400">
                                     <ShieldCheck size={14} className="text-primary" />
-                                    <span className="text-[11px] font-bold">Quality Assured Products</span>
+                                    <span className="text-[11px] font-bold">{t("product.qualitySourcing")}</span>
                                 </div>
                             </div>
                         </div>
@@ -399,7 +401,7 @@ export default function BuyPopup({ product, isOpen, onClose, initialQty = 1 }: B
                                 ) : (
                                     <>
                                         <CreditCard size={18} />
-                                        <span>Buy</span>
+                                        <span>{t("actions.buy")}</span>
                                         <ChevronRight size={18} strokeWidth={3} />
                                     </>
                                 )}

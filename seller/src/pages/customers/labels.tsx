@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Loader2, Tag, X, Plus, Search } from "lucide-react";
 import {
   fetchCustomers,
@@ -29,6 +30,7 @@ const initial = (name?: string): string =>
   (name || "?").trim().charAt(0).toUpperCase() || "?";
 
 const LabelsPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [items, setItems] = useState<SellerCustomer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -115,9 +117,9 @@ const LabelsPage: React.FC = () => {
   return (
     <div className="space-y-4 text-sm">
       <div>
-        <h1 className="text-[16px] font-bold text-gray-900">Customer labels</h1>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.labels.title')}</h1>
         <p className="text-[12px] text-gray-500 mt-0.5">
-          Tag customers manually and override the auto-segment for any individual.
+          {t('pages.labels.subtitle')}
         </p>
       </div>
 

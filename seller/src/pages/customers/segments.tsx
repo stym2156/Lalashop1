@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Loader2, Crown, Users, Sparkles, Moon, TrendingUp } from "lucide-react";
 import { fetchSegmentSummary, type SegmentSummary } from "@/services/sellerApi";
 
@@ -7,49 +8,50 @@ const formatMoney = (n: number): string =>
 
 interface SegmentDef {
   key: keyof Omit<SegmentSummary, "total" | "totalRevenue">;
-  label: string;
-  desc: string;
+  labelKey: string;
+  descKey: string;
+  ruleKey: string;
   icon: typeof Crown;
   color: string;
-  rule: string;
 }
 
 const SEGMENTS: SegmentDef[] = [
   {
     key: "vip",
-    label: "VIP",
-    desc: "Top-spending customers — give them priority shipping and exclusive coupons.",
+    labelKey: "pages.segments.vipLabel",
+    descKey: "pages.segments.vipDesc",
+    ruleKey: "pages.segments.vipRule",
     icon: Crown,
     color: "from-amber-400 to-orange-500",
-    rule: "Spent ฿5,000+ in this shop",
   },
   {
     key: "regular",
-    label: "Regular",
-    desc: "Repeat buyers who consistently come back.",
+    labelKey: "pages.segments.regularLabel",
+    descKey: "pages.segments.regularDesc",
+    ruleKey: "pages.segments.regularRule",
     icon: Users,
     color: "from-blue-400 to-blue-600",
-    rule: "3+ orders",
   },
   {
     key: "newCustomers",
-    label: "New",
-    desc: "Customers in their first 30 days — perfect time for a welcome promo.",
+    labelKey: "pages.segments.newLabel",
+    descKey: "pages.segments.newDesc",
+    ruleKey: "pages.segments.newRule",
     icon: Sparkles,
     color: "from-emerald-400 to-emerald-600",
-    rule: "First order within 30 days",
   },
   {
     key: "inactive",
-    label: "Inactive",
-    desc: "Haven't ordered in 90+ days — try a re-engagement broadcast.",
+    labelKey: "pages.segments.inactiveLabel",
+    descKey: "pages.segments.inactiveDesc",
+    ruleKey: "pages.segments.inactiveRule",
     icon: Moon,
     color: "from-gray-400 to-gray-600",
-    rule: "Last order 90+ days ago",
   },
 ];
 
 const SegmentsPage: React.FC = () => {
+  const { t } = useTranslation("common");
   const [data, setData] = useState<SegmentSummary | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -74,9 +76,9 @@ const SegmentsPage: React.FC = () => {
   return (
     <div className="space-y-4 text-sm">
       <div>
-        <h1 className="text-[16px] font-bold text-gray-900">Customer segments</h1>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.segments.title')}</h1>
         <p className="text-[12px] text-gray-500 mt-0.5">
-          Auto-segmented by purchase behavior. Use these as audiences for broadcasts and coupons.
+          {t('pages.segments.subtitle')}
         </p>
       </div>
 
@@ -93,7 +95,7 @@ const SegmentsPage: React.FC = () => {
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-2xl bg-gradient-to-br from-[#00aeff] to-[#0096db] text-white p-5">
               <div className="flex items-center gap-2 text-white/80 text-[11px] font-bold tracking-wide">
-                <Users className="w-3.5 h-3.5" /> Total customers
+                <Users className="w-3.5 h-3.5" /> {t('pages.segments.totalCustomers')}
               </div>
               <p className="text-[28px] font-black tabular-nums mt-2">
                 {data?.total?.toLocaleString() || 0}
@@ -101,7 +103,7 @@ const SegmentsPage: React.FC = () => {
             </div>
             <div className="rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-700 text-white p-5">
               <div className="flex items-center gap-2 text-white/80 text-[11px] font-bold tracking-wide">
-                <TrendingUp className="w-3.5 h-3.5" /> Lifetime revenue
+                <TrendingUp className="w-3.5 h-3.5" /> {t('pages.segments.lifetimeRevenue')}
               </div>
               <p className="text-[28px] font-black tabular-nums mt-2">
                 ฿{formatMoney(data?.totalRevenue || 0)}
@@ -125,14 +127,14 @@ const SegmentsPage: React.FC = () => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
-                      <h3 className="text-[13px] font-bold text-gray-900">{s.label}</h3>
+                      <h3 className="text-[13px] font-bold text-gray-900">{t(s.labelKey)}</h3>
                       <span className="text-[20px] font-black tabular-nums text-gray-900">
                         {value.toLocaleString()}
                       </span>
                     </div>
-                    <p className="text-[11px] text-gray-500 mt-0.5">{s.desc}</p>
+                    <p className="text-[11px] text-gray-500 mt-0.5">{t(s.descKey)}</p>
                     <p className="text-[10px] text-gray-400 mt-1 inline-block bg-gray-50 px-1.5 py-0.5 rounded">
-                      Rule: {s.rule}
+                      {t('pages.segments.rule')} {t(s.ruleKey)}
                     </p>
                   </div>
                 </div>

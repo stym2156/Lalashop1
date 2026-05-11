@@ -5,6 +5,7 @@ import {
   AtSign, Hash, Send, Loader2, CheckCircle2, Link as LinkIcon,
   MoreHorizontal, MessageCircle, AlertCircle, ShoppingBag, Trash2
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 import { uploadImage } from "@/services/uploadImage";
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,6 +13,7 @@ import { motion, AnimatePresence } from "framer-motion";
 type Visibility = "public" | "friends" | "friends_except" | "specific_friends";
 
 export default function CreatePostPage() {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -130,7 +132,7 @@ export default function CreatePostPage() {
             <textarea
               ref={textareaRef}
               className="w-full h-full p-2 text-sm font-medium outline-none border-none placeholder:text-slate-300 resize-none"
-              placeholder="What's happening? #lalashop @friends"
+              placeholder={t("pages.posts.captionPlaceholder")}
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
             />
@@ -157,10 +159,10 @@ export default function CreatePostPage() {
                 <Users size={20} />
               </div>
               <div className="text-left">
-                <p className="text-xs font-black  tracking-tighter">Who can watch</p>
+                <p className="text-xs font-black  tracking-tighter">{t("pages.posts.addLocation")}</p>
                 <p className="text-[10px] font-bold text-slate-400">
-                  {visibility === "specific_friends" 
-                    ? `${selectedUserIds.length} users selected` 
+                  {visibility === "specific_friends"
+                    ? `${selectedUserIds.length}`
                     : visibility.replace('_', ' ')}
                 </p>
               </div>
@@ -174,7 +176,7 @@ export default function CreatePostPage() {
               <div className="w-10 h-10 bg-gray-light text-slate-400 rounded-xl flex items-center justify-center">
                 <LinkIcon size={20} />
               </div>
-              <p className="text-xs font-black tracking-tighter">Add Product Link</p>
+              <p className="text-xs font-black tracking-tighter">{t("pages.posts.addProductTag")}</p>
             </div>
             <ChevronRight size={18} className="text-slate-300" />
           </button>
@@ -184,7 +186,7 @@ export default function CreatePostPage() {
               <div className="w-10 h-10 bg-gray-light text-slate-400 rounded-xl flex items-center justify-center">
                 <MoreHorizontal size={20} />
               </div>
-              <p className="text-xs font-black  tracking-tighter">More Options</p>
+              <p className="text-xs font-black  tracking-tighter">{t("actions.more")}</p>
             </div>
             <ChevronRight size={18} className="text-slate-300" />
           </button>
@@ -199,7 +201,7 @@ export default function CreatePostPage() {
           className="flex-1 h-14 bg-primary text-white rounded-xl font-black text-xs  tracking-[0.2em] shadow-lg shadow-primary/20 flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50 transition-all"
         >
           {postStage === "saving" ? <Loader2 className="animate-spin" /> : (
-            <>Post </>
+            <>{t("actions.post")} </>
           )}
         </button>
       </div>
@@ -211,7 +213,7 @@ export default function CreatePostPage() {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowVisibilityMenu(false)} className="absolute inset-0 bg-dark/40 backdrop-blur-sm" />
             <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} className="relative bg-white w-full rounded-t-[2.5rem] p-6 pb-12">
               <div className="w-12 h-1 bg-slate-200 rounded-full mx-auto mb-6" />
-              <h3 className="text-center font-display font-black  mb-6 tracking-widest">Privacy Settings</h3>
+              <h3 className="text-center font-display font-black  mb-6 tracking-widest">{t("pages.settings.security")}</h3>
               <div className="grid grid-cols-1 gap-2">
                 {[
                   { id: "public", label: "Everyone", icon: Globe, desc: "Public visibility" },
@@ -250,9 +252,9 @@ export default function CreatePostPage() {
         {showUserSelector && (
           <div className="fixed inset-0 z-[250] bg-white flex flex-col animate-in slide-in-from-bottom duration-300">
             <nav className="h-14 flex items-center justify-between px-4 border-b">
-              <button onClick={() => setShowUserSelector(false)} className="p-2 font-bold text-xs">Back</button>
-              <h3 className="font-black text-sm tracking-widest">Select Friends</h3>
-              <button onClick={() => { setShowUserSelector(false); setShowVisibilityMenu(false); }} className="p-2 font-bold text-xs text-primary">Done</button>
+              <button onClick={() => setShowUserSelector(false)} className="p-2 font-bold text-xs">{t("actions.back")}</button>
+              <h3 className="font-black text-sm tracking-widest">{t("pages.profile.followers")}</h3>
+              <button onClick={() => { setShowUserSelector(false); setShowVisibilityMenu(false); }} className="p-2 font-bold text-xs text-primary">{t("actions.done")}</button>
             </nav>
             <div className="flex-1 overflow-y-auto p-4 space-y-2">
               {connections.length > 0 ? connections.map(friend => (
@@ -275,7 +277,7 @@ export default function CreatePostPage() {
                   </div>
                 </div>
               )) : (
-                <div className="py-20 text-center text-slate-400 text-xs font-bold tracking-widest">No friends found</div>
+                <div className="py-20 text-center text-slate-400 text-xs font-bold tracking-widest">{t("components.userList.noUsers")}</div>
               )}
             </div>
           </div>

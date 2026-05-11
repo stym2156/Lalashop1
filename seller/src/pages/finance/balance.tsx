@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Wallet, TrendingUp, ArrowDownToLine, Loader2 } from 'lucide-react';
 import { useCurrentSeller } from '@/services/useCurrentSeller';
 import {
@@ -20,6 +21,7 @@ const formatDate = (s?: string): string => {
 };
 
 const BalancePage = () => {
+  const { t } = useTranslation('common');
   const { seller } = useCurrentSeller();
   const [orders, setOrders] = useState<SellerOrderRow[]>([]);
   const [withdrawals, setWithdrawals] = useState<SellerWithdrawalRow[]>([]);
@@ -53,38 +55,38 @@ const BalancePage = () => {
 
   return (
     <div className="space-y-4 text-sm">
-      <h1 className="text-[16px] font-bold text-gray-900">Balance</h1>
+      <h1 className="text-[16px] font-bold text-gray-900">{t('pages.balancePage.title')}</h1>
 
       <div className="rounded-2xl bg-gradient-to-br from-[#00aeff] to-[#0096db] text-white p-6">
         <div className="flex items-center gap-2 text-white/80 text-[11px] font-semibold tracking-wide">
-          <Wallet className="w-3.5 h-3.5" /> Available Balance
+          <Wallet className="w-3.5 h-3.5" /> {t('pages.balancePage.availableBalance')}
         </div>
         <p className="text-[36px] font-black mt-2 tabular-nums">
           {loading ? '—' : `฿${formatMoney(seller?.balance ?? 0)}`}
         </p>
         <div className="mt-4 flex items-center gap-3 text-[11px] text-white/80">
-          <span>{orders.filter((o) => o.isPaid).length} paid orders</span>
+          <span>{t('pages.balancePage.paidOrders', { count: orders.filter((o) => o.isPaid).length })}</span>
           <span>·</span>
-          <span>{withdrawals.length} withdrawal{withdrawals.length === 1 ? '' : 's'}</span>
+          <span>{t('pages.balancePage.withdrawalsCount', { count: withdrawals.length })}</span>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         <KPI
           icon={TrendingUp}
-          label="All-time revenue"
+          label={t('pages.balancePage.allTimeRevenue')}
           value={loading ? '—' : `฿${formatMoney(totalRevenue)}`}
           tone="text-green-700"
         />
         <KPI
           icon={ArrowDownToLine}
-          label="Total withdrawn"
+          label={t('pages.balancePage.totalWithdrawn')}
           value={loading ? '—' : `฿${formatMoney(totalWithdrawn)}`}
           tone="text-blue-700"
         />
         <KPI
           icon={Loader2}
-          label="Pending withdraw"
+          label={t('pages.balancePage.pendingWithdraw')}
           value={loading ? '—' : `฿${formatMoney(pendingWithdraw)}`}
           tone="text-orange-700"
         />
@@ -92,28 +94,28 @@ const BalancePage = () => {
 
       <div className="rounded-lg border border-gray-100 overflow-hidden">
         <div className="px-4 py-3 border-b border-gray-100">
-          <h3 className="text-[13px] font-bold text-gray-900">Recent withdrawals</h3>
+          <h3 className="text-[13px] font-bold text-gray-900">{t('pages.balancePage.recentWithdrawals')}</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-[12px] tabular-nums">
             <thead className="text-[11px] text-gray-500 tracking-wide bg-gray-50/50">
               <tr>
-                <th className="px-4 py-2 text-left font-semibold">Reference</th>
-                <th className="px-4 py-2 text-right font-semibold">Amount</th>
-                <th className="px-4 py-2 text-right font-semibold">Net</th>
-                <th className="px-4 py-2 text-left font-semibold">Bank</th>
-                <th className="px-4 py-2 text-left font-semibold">Status</th>
-                <th className="px-4 py-2 text-left font-semibold">Date</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.balancePage.tableReference')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('pages.balancePage.tableAmount')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('pages.balancePage.tableNet')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.balancePage.tableBank')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.balancePage.tableStatus')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.balancePage.tableDate')}</th>
               </tr>
             </thead>
             <tbody>
               {loading && (
-                <tr><td colSpan={6} className="px-4 py-12 text-center text-gray-400 text-[12px]">Loading...</td></tr>
+                <tr><td colSpan={6} className="px-4 py-12 text-center text-gray-400 text-[12px]">{t('status.loading')}</td></tr>
               )}
               {!loading && withdrawals.length === 0 && (
                 <tr>
                   <td colSpan={6} className="px-4 py-12 text-center text-gray-400 text-[12px]">
-                    No withdrawals yet
+                    {t('pages.balancePage.noWithdrawals')}
                   </td>
                 </tr>
               )}

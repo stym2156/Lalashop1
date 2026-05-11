@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 import { Search, MoreHorizontal, Package, ChevronDown } from 'lucide-react';
 import {
   fetchAdminProducts,
@@ -24,13 +25,13 @@ const statusBadge: Record<ProductStatus, string> = {
   draft: 'bg-gray-100 text-gray-600',
 };
 
-const statusLabel: Record<ProductStatus, string> = {
-  live: 'Live',
-  featured: 'Featured',
-  pending_review: 'Pending Review',
-  violation: 'Violation',
-  banned: 'Banned',
-  draft: 'Draft',
+const statusLabelKey: Record<ProductStatus, string> = {
+  live: 'status.active',
+  featured: 'pages.products.featured',
+  pending_review: 'pages.products.pending',
+  violation: 'pages.products.violations',
+  banned: 'pages.products.banned',
+  draft: 'status.draft',
 };
 
 const formatCurrency = (n: number): string =>
@@ -83,6 +84,7 @@ const ProductTable = ({
   hideFilters = false,
   showReportColumn = false,
 }: ProductTableProps) => {
+  const { t } = useTranslation('common');
   const [filter, setFilter] = useState<'all' | ProductStatus>(initialFilter);
   const [q, setQ] = useState('');
   const [open, setOpen] = useState(false);
@@ -142,22 +144,22 @@ const ProductTable = ({
               onClick={() => setOpen(!open)}
               className="inline-flex items-center gap-1.5 px-3 py-1 rounded text-[11px] font-semibold bg-gray-100 hover:bg-gray-200 text-gray-700 min-w-[100px] justify-between"
             >
-              <span>{filter === 'all' ? 'All' : statusLabel[filter as ProductStatus]}</span>
+              <span>{filter === 'all' ? t('common.all') : t(statusLabelKey[filter as ProductStatus])}</span>
               <ChevronDown className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`} />
             </button>
             {open && (
               <div className="absolute top-full left-0 mt-1 bg-white border border-gray-100 rounded-md shadow-md py-1 z-10 min-w-[120px]">
-                {tabs.map((t) => (
+                {tabs.map((tab) => (
                   <button
-                    key={t}
-                    onClick={() => { setFilter(t); setOpen(false); }}
+                    key={tab}
+                    onClick={() => { setFilter(tab); setOpen(false); }}
                     className={`w-full text-left px-3 py-1.5 text-[11px] font-semibold transition-colors ${
-                      filter === t
+                      filter === tab
                         ? 'bg-gray-50 text-black'
                         : 'text-gray-600 hover:bg-gray-50 hover:text-black'
                     }`}
                   >
-                    {t === 'all' ? 'All' : statusLabel[t as ProductStatus]}
+                    {tab === 'all' ? t('common.all') : t(statusLabelKey[tab as ProductStatus])}
                   </button>
                 ))}
               </div>
@@ -171,7 +173,7 @@ const ProductTable = ({
             value={q}
             onChange={(e) => setQ(e.target.value)}
             type="text"
-            placeholder="Search product, shop, ID..."
+            placeholder={t('pages.products.searchPlaceholder')}
             className="pl-7 pr-3 py-1 rounded text-[11px] w-64 bg-gray-50 border border-gray-100 focus:border-primary outline-none"
           />
         </div>
@@ -182,24 +184,24 @@ const ProductTable = ({
           <table className="w-full text-[12px] tabular-nums">
             <thead className="text-[11px] text-gray-500 tracking-wide">
               <tr>
-                <th className="px-4 py-2 text-left font-semibold">Product</th>
-                <th className="px-4 py-2 text-left font-semibold">Shop</th>
-                <th className="px-4 py-2 text-left font-semibold">Category</th>
-                <th className="px-4 py-2 text-right font-semibold">Price (₭)</th>
-                <th className="px-4 py-2 text-right font-semibold">Stock</th>
-                <th className="px-4 py-2 text-right font-semibold">Sales</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.products.table.product')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.products.table.shop')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.products.table.category')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('pages.products.table.price')} ({t('common.currencySymbol', '฿')})</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('pages.products.table.stock')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('table.sales')}</th>
                 {showReportColumn && (
-                  <th className="px-4 py-2 text-right font-semibold">Reviews</th>
+                  <th className="px-4 py-2 text-right font-semibold">{t('actions.review')}</th>
                 )}
-                <th className="px-4 py-2 text-left font-semibold">Status</th>
-                <th className="px-4 py-2 text-right font-semibold">Actions</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('table.status')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('table.actions')}</th>
               </tr>
             </thead>
             <tbody>
               {loading && (
                 <tr>
                   <td colSpan={showReportColumn ? 9 : 8} className="px-4 py-12 text-center text-gray-400 text-[12px]">
-                    Loading products...
+                    {t('pages.products.loadingProducts')}
                   </td>
                 </tr>
               )}
@@ -243,7 +245,7 @@ const ProductTable = ({
                       )}
                     </td>
                     <td className="px-4 py-2 text-gray-700">{p.category}</td>
-                    <td className="px-4 py-2 text-right font-semibold text-gray-900">{formatCurrency(p.price)}</td>
+                    <td className="px-4 py-2 text-right font-semibold text-gray-900">{t('common.currencySymbol', '฿')}{formatCurrency(p.price)}</td>
                     <td className="px-4 py-2 text-right text-gray-900">{p.countInStock}</td>
                     <td className="px-4 py-2 text-right text-gray-900">{p.soldCount ?? 0}</td>
                     {showReportColumn && (
@@ -257,7 +259,7 @@ const ProductTable = ({
                     )}
                     <td className="px-4 py-2">
                       <span className={`text-[11px] font-medium px-2 py-0.5 rounded ${statusBadge[uiStatus]}`}>
-                        {statusLabel[uiStatus]}
+                        {t(statusLabelKey[uiStatus])}
                       </span>
                     </td>
                     <td className="px-4 py-2 text-right">
@@ -271,7 +273,7 @@ const ProductTable = ({
               {!loading && !error && products.length === 0 && (
                 <tr>
                   <td colSpan={showReportColumn ? 9 : 8} className="px-4 py-12 text-center text-gray-400 text-[12px]">
-                    No products match your filter
+                    {t('pages.products.noMatch')}
                   </td>
                 </tr>
               )}
@@ -280,10 +282,10 @@ const ProductTable = ({
         </div>
 
         <div className="flex items-center justify-between px-4 py-2.5 text-[11px] text-gray-500">
-          <span>Showing {products.length} of {total} products</span>
+          <span>{t('table.showingLabeled', { shown: products.length, total, label: t('nav.products').toLowerCase() })}</span>
           <div className="flex items-center gap-1">
-            <button className="px-2.5 py-1 rounded text-[11px] font-medium text-gray-400 cursor-not-allowed">Prev</button>
-            <button className="px-2.5 py-1 rounded text-[11px] font-medium text-gray-700">Next</button>
+            <button className="px-2.5 py-1 rounded text-[11px] font-medium text-gray-400 cursor-not-allowed">{t('actions.prev')}</button>
+            <button className="px-2.5 py-1 rounded text-[11px] font-medium text-gray-700">{t('actions.next')}</button>
           </div>
         </div>
       </div>
