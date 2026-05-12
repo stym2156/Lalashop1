@@ -44,7 +44,8 @@
     "logoutSession": "ອອກຈາກລະບົບ",
     "audit": "ປະຫວັດກວດສອບ",
     "team": "ທີມງານ",
-    "logout": "ອອກຈາກລະບົບ"
+    "logout": "ອອກຈາກລະບົບ",
+    "shopCenter": "ສູນຮ້ານຄ້າ"
   },
   "actions": {
     "save": "ບັນທຶກ",
@@ -91,7 +92,16 @@
     "copy": "ສຳເນົາ",
     "clear": "ລ້າງ",
     "apply": "ນຳໃຊ້",
-    "tryAgain": "ລອງໃໝ່"
+    "tryAgain": "ລອງໃໝ່",
+    "deleteFailed": "ລຶບລົ້ມເຫຼວ",
+    "moveDown": "ເລື່ອນລົງ",
+    "moveUp": "ເລື່ອນຂຶ້ນ",
+    "reorderFailed": "ຮຽງໃໝ່ບໍ່ສຳເລັດ",
+    "resend": "ສົ່ງອີກຄັ້ງ",
+    "revoke": "ຍົກເລີກ",
+    "saveChanges": "ບັນທຶກການປ່ຽນແປງ",
+    "saveFailed": "ບັນທຶກລົ້ມເຫຼວ",
+    "toggleFailed": "ສະຫຼັບລົ້ມເຫຼວ"
   },
   "status": {
     "loading": "ກຳລັງໂຫຼດ...",
@@ -129,7 +139,16 @@
     "on": "ເປີດ",
     "off": "ປິດ",
     "yes": "ແມ່ນ",
-    "no": "ບໍ່"
+    "no": "ບໍ່",
+    "disabled": "ປິດໃຊ້",
+    "enabled": "ເປີດໃຊ້",
+    "notIssued": "ຍັງບໍ່ອອກ",
+    "notSet": "ຍັງບໍ່ໄດ້ຕັ້ງຄ່າ",
+    "processed": "ດຳເນີນການແລ້ວ",
+    "read": "ອ່ານແລ້ວ",
+    "saved": "ບັນທຶກແລ້ວ",
+    "settled": "ຊຳລະແລ້ວ",
+    "unread": "ຍັງບໍ່ໄດ້ອ່ານ"
   },
   "table": {
     "id": "ລະຫັດ",
@@ -188,7 +207,22 @@
     "showColumns": "ສະແດງຖັນ",
     "columns": "ຖັນ",
     "columnsTitle": "ຖັນ",
-    "dateRange": "ຊ່ວງວັນທີ"
+    "dateRange": "ຊ່ວງວັນທີ",
+    "adminIp": "IP ຜູ້ດູແລ",
+    "auditId": "ໄອດີກວດສອບ",
+    "bankAccount": "ບັນຊີທະນາຄານ",
+    "categoryName": "ຊື່ໝວດໝູ່",
+    "date": "ວັນທີ",
+    "description": "ລາຍລະອຽດ",
+    "detail": "ລາຍລະອຽດ",
+    "note": "ໝາຍເຫດ",
+    "readStatus": "ສະຖານະການອ່ານ",
+    "recipient": "ຜູ້ຮັບ",
+    "sent": "ສົ່ງແລ້ວ",
+    "slug": "Slug",
+    "target": "ເປົ້າໝາຍ",
+    "title": "ຫົວຂໍ້",
+    "withdrawId": "ໄອດີຖອນ"
   },
   "auth": {
     "login": "ເຂົ້າສູ່ລະບົບ",
@@ -211,7 +245,10 @@
     "secureHeadline": "ການເຂົ້າໃຊ້ປອດໄພສຳລັບຜູ້ປະຕິບັດງານເທົ່ານັ້ນ.",
     "secureSubtext": "ຄອນໂຊນນີ້ຄວບຄຸມຜູ້ໃຊ້, ຮ້ານຄ້າ, ສິນຄ້າ, ການເງິນ, ແລະ ການກວດສອບເນື້ອຫາ. ທຸກການກະທຳຈະຖືກບັນທຶກ.",
     "internalUseOnly": "ສຳລັບໃຊ້ພາຍໃນເທົ່ານັ້ນ",
-    "restrictedFooter": "ພື້ນທີ່ຈຳກັດ. ການເຂົ້າໂດຍບໍ່ໄດ້ຮັບອະນຸຍາດຈະຖືກບັນທຶກ ແລະ ດຳເນີນຄະດີ."
+    "restrictedFooter": "ພື້ນທີ່ຈຳກັດ. ການເຂົ້າໂດຍບໍ່ໄດ້ຮັບອະນຸຍາດຈະຖືກບັນທຶກ ແລະ ດຳເນີນຄະດີ.",
+    "fullName": "ຊື່ເຕັມ",
+    "name": "ຊື່",
+    "phone": "ເບີໂທ"
   },
   "dashboard": {
     "title": "ແດສບອດ",
@@ -260,7 +297,9 @@
     "hoursAgo": "{{count}} ຊົ່ວໂມງຜ່ານມາ",
     "daysAgo": "{{count}} ມື້ຜ່ານມາ",
     "sellers": "ຜູ້ຂາຍ",
-    "shopCenterLink": "ສູນຮ້ານຄ້າ"
+    "shopCenterLink": "ສູນຮ້ານຄ້າ",
+    "needAttention": "ຕ້ອງການຄວາມສົນໃຈ",
+    "orderCount": "{{count}} ຄຳສັ່ງຊື້"
   },
   "withdraw": {
     "title": "ຄຳຂໍຖອນເງິນ",
@@ -327,17 +366,114 @@
     "optional": "ບໍ່ບັງຄັບ",
     "required": "ຈຳເປັນ",
     "selectAll": "ເລືອກທັງໝົດ",
-    "clearAll": "ລ້າງທັງໝົດ"
+    "clearAll": "ລ້າງທັງໝົດ",
+    "accountName": "ຊື່ບັນຊີ",
+    "accountNumber": "ເລກບັນຊີ",
+    "actions": "ການຈັດການ",
+    "address": "ທີ່ຢູ່",
+    "admin": "ຜູ້ດູແລ",
+    "amount": "ຈຳນວນ",
+    "backToAdmins": "ກັບໄປຜູ້ດູແລ",
+    "balance": "ຍອດຄົງເຫຼືອ",
+    "bank": "ທະນາຄານ",
+    "bankName": "ຊື່ທະນາຄານ",
+    "birthDate": "ວັນເກີດ",
+    "businessLicense": "ໃບອະນຸຍາດປະກອບການ",
+    "businessType": "ປະເພດທຸລະກິດ",
+    "buyer": "ຜູ້ຊື້",
+    "category": "ໝວດໝູ່",
+    "copied": "ສຳເນົາແລ້ວ",
+    "copy": "ສຳເນົາ",
+    "copyFailed": "ສຳເນົາລົ້ມເຫຼວ",
+    "created": "ສ້າງເມື່ອ",
+    "creating": "ກຳລັງສ້າງ...",
+    "date": "ວັນທີ",
+    "document": "ເອກະສານ",
+    "email": "ອີເມວ",
+    "entityName": "ຊື່ນິຕິບຸກຄົນ",
+    "error": "ຜິດພາດ",
+    "expires": "ໝົດອາຍຸ",
+    "fee": "ຄ່າທຳນຽມ",
+    "fullName": "ຊື່ເຕັມ",
+    "guest": "ຜູ້ມາຢ້ຽມຢາມ",
+    "headsUp": "ກະລຸນາຊາບ",
+    "id": "ໄອດີ",
+    "idExpiry": "ວັນໝົດອາຍຸເອກະສານ",
+    "idNumber": "ເລກເອກະສານ",
+    "idType": "ປະເພດເອກະສານ",
+    "inStockUnits": "ຈຳນວນໃນສະຕັອກ",
+    "itemsSold": "ຂາຍແລ້ວ",
+    "joined": "ເຂົ້າຮ່ວມ",
+    "kycDocuments": "ເອກະສານ KYC",
+    "kycIdentity": "ຕົວຕົນ KYC",
+    "kycReviewed": "KYC ກວດສອບແລ້ວ",
+    "kycStatus": "ສະຖານະ KYC",
+    "kycSubmitted": "KYC ສົ່ງແລ້ວ",
+    "lastIp": "IP ຫຼ້າສຸດ",
+    "loading": "ກຳລັງໂຫຼດ...",
+    "loadingError": "ໂຫຼດຂໍ້ມູນລົ້ມເຫຼວ",
+    "locked": "ລ໋ອກ",
+    "message": "ຂໍ້ຄວາມ",
+    "name": "ຊື່",
+    "net": "ສຸດທິ",
+    "noAnalytics": "ບໍ່ມີຂໍ້ມູນວິເຄາະ",
+    "noDocuments": "ບໍ່ມີເອກະສານ",
+    "noHistory": "ບໍ່ມີປະຫວັດ",
+    "noKyc": "ບໍ່ມີ KYC",
+    "noProducts": "ບໍ່ມີສິນຄ້າ",
+    "noReason": "ບໍ່ລະບຸເຫດຜົນ",
+    "noViolations": "ບໍ່ມີການລະເມີດ",
+    "notASeller": "ບໍ່ແມ່ນຜູ້ຂາຍ",
+    "notLinked": "ຍັງບໍ່ເຊື່ອມຕໍ່",
+    "note": "ໝາຍເຫດ",
+    "orderId": "ໄອດີຄຳສັ່ງຊື້",
+    "orders": "ຄຳສັ່ງຊື້",
+    "ownerAccount": "ບັນຊີເຈົ້າຂອງ",
+    "password": "ລະຫັດຜ່ານ",
+    "phone": "ເບີໂທ",
+    "price": "ລາຄາ",
+    "product": "ສິນຄ້າ",
+    "reference": "ອ້າງອີງ",
+    "refunds": "ການຄືນເງິນ",
+    "rejectionReason": "ເຫດຜົນທີ່ປະຕິເສດ",
+    "requests": "ຄຳຂໍ",
+    "reviewNote": "ໝາຍເຫດການກວດສອບ",
+    "reviewedBy": "ກວດສອບໂດຍ",
+    "role": "ບົດບາດ",
+    "sellerType": "ປະເພດຜູ້ຂາຍ",
+    "sent": "ສົ່ງແລ້ວ",
+    "shopCategory": "ໝວດໝູ່ຮ້ານ",
+    "shopEmail": "ອີເມວຮ້ານ",
+    "shopName": "ຊື່ຮ້ານ",
+    "since": "ຕັ້ງແຕ່",
+    "sold": "ຂາຍແລ້ວ",
+    "status": "ສະຖານະ",
+    "stock": "ສະຕັອກ",
+    "supportingDocument": "ເອກະສານປະກອບ",
+    "suspendedAt": "ລະງັບເມື່ອ",
+    "thisShop": "ຮ້ານນີ້",
+    "timestamps": "ເວລາ",
+    "tinNumber": "ເລກປະຈຳຕົວຜູ້ເສຍພາສີ",
+    "totalProducts": "ສິນຄ້າທັງໝົດ",
+    "type": "ປະເພດ",
+    "unknownUser": "ຜູ້ໃຊ້ບໍ່ຮູ້ຈັກ",
+    "unverified": "ຍັງບໍ່ຢືນຢັນ",
+    "updated": "ອັບເດດ",
+    "userId": "ໄອດີຜູ້ໃຊ້",
+    "username": "ຊື່ຜູ້ໃຊ້",
+    "verified": "ຢືນຢັນແລ້ວ",
+    "warehouse": "ຄັງສິນຄ້າ",
+    "when": "ເມື່ອໃດ"
   },
   "pages": {
     "users": {
       "tableTitle": "ຜູ້ໃຊ້ທັງໝົດ",
-      "searchPlaceholder": "ຄົ້ນຫາ ID, ຊື່, ອີເມວ, ເບີໂທ...",
-      "loadingUsers": "ກຳລັງໂຫຼດຜູ້ໃຊ້…",
-      "noMatch": "ບໍ່ມີຜູ້ໃຊ້ທີ່ກົງກັບຕົວຕອງ.",
-      "totalBalance": "ຍອດເງິນລວມ ({{count}} ຜູ້ໃຊ້)",
+      "searchPlaceholder": "ຄົ້ນຫາຜູ້ໃຊ້...",
+      "loadingUsers": "ກຳລັງໂຫຼດຜູ້ໃຊ້...",
+      "noMatch": "ບໍ່ມີຜູ້ໃຊ້ທີ່ຕົງກັນ",
+      "totalBalance": "ຍອດຄົງເຫຼືອລວມ",
       "usersCount": "{{count}} ຜູ້ໃຊ້",
-      "exportTitle": "ສົ່ງອອກມຸມມອງປັດຈຸບັນເປັນ CSV",
+      "exportTitle": "ສົ່ງອອກ CSV",
       "filters": {
         "all": "ທັງໝົດ",
         "seller": "ຜູ້ຂາຍ",
@@ -368,7 +504,22 @@
         "noBank": "ຍັງບໍ່ມີບັນຊີທະນາຄານ",
         "orders": "ການສັ່ງຊື້",
         "noOrders": "ຍັງບໍ່ມີການສັ່ງຊື້",
-        "kycStatus": "ສະຖານະ KYC"
+        "kycStatus": "ສະຖານະ KYC",
+        "bankUpdateError": "ອັບເດດທະນາຄານລົ້ມເຫຼວ",
+        "demoteConfirm": "ຢືນຢັນການລົດສິດ?",
+        "issueConfirm": "ຢືນຢັນອອກລະຫັດ?",
+        "issueError": "ອອກລະຫັດລົ້ມເຫຼວ",
+        "loadingError": "ໂຫຼດຂໍ້ມູນລົ້ມເຫຼວ",
+        "noIncomeWarning": "ຍັງບໍ່ມີລາຍຮັບ",
+        "promoteConfirm": "ຢືນຢັນເລື່ອນສິດ?",
+        "saveError": "ບັນທຶກລົ້ມເຫຼວ",
+        "suspendError": "ລະງັບລົ້ມເຫຼວ",
+        "suspendModal": {
+          "reasonRequired": "ຕ້ອງລະບຸເຫດຜົນ"
+        },
+        "viewAllWithdrawals": "ເບິ່ງການຖອນທັງໝົດ",
+        "viewBuyerOrders": "ເບິ່ງຄຳສັ່ງຊື້ (ຜູ້ຊື້)",
+        "viewSellerOrders": "ເບິ່ງຄຳສັ່ງຊື້ (ຜູ້ຂາຍ)"
       }
     },
     "shops": {
@@ -378,22 +529,22 @@
       "pending": "ລໍຖ້າ",
       "closed": "ປິດ",
       "active": "ໃຊ້ງານ",
-      "totalBalance": "ຍອດເງິນລວມ ({{count}} ຮ້ານ)",
-      "loadingShops": "ກຳລັງໂຫຼດຮ້ານຄ້າ…",
-      "noMatch": "ບໍ່ມີຮ້ານຄ້າທີ່ກົງກັບຕົວຕອງ.",
-      "shopsCount": "{{count}} ຮ້ານ",
-      "searchPlaceholder": "ຄົ້ນຫາຊື່ຮ້ານ, ເຈົ້າຂອງ, ອີເມວ...",
+      "totalBalance": "ຍອດຄົງເຫຼືອລວມ",
+      "loadingShops": "ກຳລັງໂຫຼດຮ້ານຄ້າ...",
+      "noMatch": "ບໍ່ມີຮ້ານຄ້າທີ່ຕົງກັນ",
+      "shopsCount": "{{count}} ຮ້ານຄ້າ",
+      "searchPlaceholder": "ຄົ້ນຫາຮ້ານຄ້າ...",
       "searchTablePlaceholder": "ຄົ້ນຫາຊື່ຮ້ານ, ເຈົ້າຂອງ, ID...",
       "kpi": {
         "allShops": "ຮ້ານຄ້າທັງໝົດ",
         "verified": "ຢືນຢັນແລ້ວ",
         "pending": "ລໍຖ້າ",
-        "totalBalance": "ຍອດເງິນລວມ"
+        "totalBalance": "ຍອດຄົງເຫຼືອລວມ"
       },
       "applications": {
-        "title": "ຄຳຂໍເປີດຮ້ານ",
+        "title": "ໃບສະໝັກຮ້ານຄ້າ",
         "subtitle": "ກວດຄຳຂໍເປີດຮ້ານທີ່ລໍຖ້າ",
-        "noApplications": "ບໍ່ມີຄຳຂໍລໍຖ້າ"
+        "noApplications": "ບໍ່ມີໃບສະໝັກ"
       },
       "details": {
         "title": "ລາຍລະອຽດຮ້ານຄ້າ",
@@ -408,7 +559,8 @@
         "orders": "ການສັ່ງຊື້",
         "rating": "ຄະແນນ",
         "description": "ລາຍລະອຽດ",
-        "policies": "ນະໂຍບາຍ"
+        "policies": "ນະໂຍບາຍ",
+        "loadingError": "ໂຫຼດຂໍ້ມູນລົ້ມເຫຼວ"
       },
       "shopCenter": {
         "active": "ຮ້ານທີ່ໃຊ້ງານ",
@@ -452,7 +604,43 @@
         "approve": "ອະນຸມັດ",
         "reject": "ປະຕິເສດ",
         "ban": "ບລັອກ",
-        "feature": "ແນະນຳ"
+        "feature": "ແນະນຳ",
+        "tabOverview": "ພາບລວມ",
+        "tabImages": "ຮູບພາບ",
+        "tabReviews": "ລີວິວ",
+        "tabReports": "ລາຍງານ",
+        "tabHistory": "ປະຫວັດ",
+        "sectionProductInfo": "ຂໍ້ມູນສິນຄ້າ",
+        "sectionDescription": "ລາຍລະອຽດ",
+        "sectionPerformance": "ຜົນການດຳເນີນງານ",
+        "labelProductId": "ລະຫັດສິນຄ້າ",
+        "labelShop": "ຮ້ານຄ້າ",
+        "labelCategory": "ໝວດໝູ່",
+        "labelPrice": "ລາຄາ",
+        "labelStock": "ສະຕັອກ",
+        "labelStatus": "ສະຖານະ",
+        "labelCreated": "ສ້າງເມື່ອ",
+        "labelTags": "ແທັກ",
+        "metricUnitsSold": "ຍອດຂາຍ",
+        "metricAvgRating": "ຄະແນນສະເລ່ຍ",
+        "metricReviews": "ລີວິວ",
+        "metricStock": "ສະຕັອກ",
+        "noImages": "ບໍ່ມີຮູບ",
+        "noReviews": "ຍັງບໍ່ມີລີວິວ",
+        "loadingReports": "ກຳລັງໂຫຼດລາຍງານ...",
+        "noReports": "ບໍ່ມີລາຍງານ",
+        "noActivity": "ຍັງບໍ່ມີກິດຈະກຳ",
+        "unfeature": "ຍົກເລີກແນະນຳ",
+        "flag": "ໝາຍວ່າລະເມີດ",
+        "clearViolation": "ລ້າງການລະເມີດ",
+        "reinstate": "ຟື້ນຟູ",
+        "reportTableId": "ລະຫັດລາຍງານ",
+        "reportTableReason": "ເຫດຜົນ",
+        "reportTableBy": "ລາຍງານໂດຍ",
+        "reportTableDesc": "ລາຍລະອຽດ",
+        "reportTableStatus": "ສະຖານະ",
+        "reportTableOpen": "ເປີດ",
+        "reportView": "ເບິ່ງ →"
       }
     },
     "orders": {
@@ -553,7 +741,9 @@
         "back": "ກັບໄປຍັງການຖອນເງິນ",
         "loading": "ກຳລັງໂຫຼດການຖອນເງິນ…",
         "notFound": "ບໍ່ພົບການຖອນເງິນ",
-        "user": "ຜູ້ໃຊ້",
+        "user": {
+          "notAvailable": "ບໍ່ມີຂໍ້ມູນຜູ້ໃຊ້"
+        },
         "shop": "ຮ້ານຄ້າ",
         "bank": "ທະນາຄານ",
         "accountNumber": "ເລກບັນຊີ",
@@ -569,7 +759,8 @@
         "approve": "ອະນຸມັດ",
         "reject": "ປະຕິເສດ",
         "markPaid": "ໝາຍວ່າຈ່າຍແລ້ວ",
-        "markFailed": "ໝາຍວ່າລົ້ມເຫຼວ"
+        "markFailed": "ໝາຍວ່າລົ້ມເຫຼວ",
+        "loadingError": "ໂຫຼດການຖອນລົ້ມເຫຼວ"
       }
     },
     "payment": {
@@ -580,7 +771,43 @@
         "subtitle": "ຕັ້ງຄ່າຕົວເລືອກການຊຳລະທົ່ວທັງລະບົບ",
         "active": "ໃຊ້ງານ",
         "inactive": "ບໍ່ໃຊ້ງານ",
-        "addMethod": "ເພີ່ມວິທີ"
+        "addMethod": "ເພີ່ມວິທີ",
+        "header": "ວິທີການຊຳລະ",
+        "headerDesc": "ບັນຊີທະນາຄານ, PromptPay, ແລະ QR ທີ່ລູກຄ້າເຫັນເວລາຊຳລະ",
+        "noMethodsYet": "ຍັງບໍ່ມີວິທີການຊຳລະ",
+        "noMethodsDesc": "ເພີ່ມບັນຊີທະນາຄານ ຫຼື PromptPay ຢ່າງໜ້ອຍ 1 ລາຍການ",
+        "activeLabel": "ໃຊ້ງານ",
+        "disabledLabel": "ປິດໃຊ້",
+        "enable": "ເປີດໃຊ້",
+        "disable": "ປິດໃຊ້",
+        "editModal": "ແກ້ໄຂວິທີການຊຳລະ",
+        "addModal": "ເພີ່ມວິທີການຊຳລະ",
+        "formType": "ປະເພດ",
+        "formLabel": "ຊື່ທີ່ສະແດງ",
+        "formBankName": "ຊື່ທະນາຄານ",
+        "formAccountNumber": "ເລກບັນຊີ",
+        "formAccountName": "ຊື່ບັນຊີ",
+        "formPromptpayId": "PromptPay ID",
+        "formPromptpayHint": "ເບີ 10 ຫຼັກ, ບັດ 13 ຫຼັກ ຫຼື eWallet 15 ຫຼັກ",
+        "formAccountHolderName": "ຊື່ເຈົ້າຂອງບັນຊີ",
+        "formQrImageUrl": "URL ຮູບ QR",
+        "formQrHint": "ອັບໂຫຼດໄປ R2/Cloudinary ກ່ອນ ແລ້ວວາງ URL",
+        "formWalletName": "ຊື່ວອລເລັດ",
+        "formNotes": "ໝາຍເຫດສຳລັບລູກຄ້າ (ບໍ່ບັງຄັບ)",
+        "formDisplayOrder": "ລຳດັບສະແດງ",
+        "formStatus": "ສະຖານະ",
+        "formActiveLabel": "ໃຊ້ງານ (ສະແດງເວລາຊຳລະ)",
+        "formCancel": "ຍົກເລີກ",
+        "formSaving": "ກຳລັງບັນທຶກ…",
+        "formSaveChanges": "ບັນທຶກການປ່ຽນແປງ",
+        "formCreateMethod": "ສ້າງວິທີການຊຳລະ",
+        "kindBank": "ບັນຊີທະນາຄານ",
+        "kindPromptpay": "PromptPay (QR ໄດນາມິກ)",
+        "kindStaticQr": "QR ຄົງທີ່ (ວອລເລັດ)",
+        "promptpayInfo": "💡 QR PromptPay ສ້າງອັດຕະໂນມັດ ບໍ່ຕ້ອງອັບໂຫຼດຮູບ",
+        "updatedSuccess": "ອັບເດດສຳເລັດ",
+        "createdSuccess": "ສ້າງສຳເລັດ",
+        "deleteConfirm": "ລຶບວິທີນີ້? ໃບໂອນທີ່ມີຢູ່ຈະຍັງອ້າງອີງຢູ່"
       }
     },
     "notifications": {
@@ -622,6 +849,28 @@
         "title": "ລາຍງານການສົ່ງ",
         "noReports": "ບໍ່ມີລາຍງານການສົ່ງ",
         "loading": "ກຳລັງໂຫຼດລາຍງານ…"
+      },
+      "form": {
+        "messageLabel": "ຂໍ້ຄວາມ",
+        "messagePlaceholder": "ໃສ່ຂໍ້ຄວາມແຈ້ງເຕືອນ...",
+        "titlePlaceholder": "ໃສ່ຫົວຂໍ້...",
+        "titleRequired": "ຕ້ອງລະບຸຫົວຂໍ້"
+      },
+      "loadingHistory": "ກຳລັງໂຫຼດປະຫວັດ...",
+      "noHistory": "ຍັງບໍ່ມີການແຈ້ງເຕືອນ",
+      "sendButton": "ສົ່ງດຽວນີ້",
+      "sendFailed": "ສົ່ງລົ້ມເຫຼວ",
+      "sending": "ກຳລັງສົ່ງ...",
+      "sentSuccess": "ສົ່ງການແຈ້ງເຕືອນແລ້ວ",
+      "table": {
+        "titleContent": "ຫົວຂໍ້ / ເນື້ອຫາ"
+      },
+      "target": "ເປົ້າໝາຍ",
+      "types": {
+        "info": "ຂໍ້ມູນ",
+        "payout": "ຈ່າຍເງິນ",
+        "security": "ຄວາມປອດໄພ",
+        "system": "ລະບົບ"
       }
     },
     "reports": {
@@ -635,15 +884,6 @@
         "resolved": "ແກ້ໄຂແລ້ວ",
         "dismissed": "ປະຕິເສດ"
       },
-      "table": {
-        "id": "ລະຫັດລາຍງານ",
-        "type": "ປະເພດ",
-        "target": "ເປົ້າໝາຍ",
-        "reporter": "ຜູ້ລາຍງານ",
-        "reason": "ເຫດຜົນ",
-        "submitted": "ສົ່ງເມື່ອ",
-        "status": "ສະຖານະ"
-      },
       "details": {
         "title": "ລາຍລະອຽດລາຍງານ",
         "back": "ກັບໄປຍັງລາຍງານ",
@@ -654,6 +894,83 @@
         "ban": "ບລັອກເປົ້າໝາຍ",
         "evidence": "ຫຼັກຖານ",
         "history": "ປະຫວັດ"
+      },
+      "noMatch": "ບໍ່ມີລາຍງານທີ່ກົງກັບຕົວຕອງ",
+      "searchPlaceholder": "ຄົ້ນຫາລາຍລະອຽດ, ໝາຍເຫດ...",
+      "kpi": {
+        "total": "ທັງໝົດ",
+        "open": "ເປີດ",
+        "reviewing": "ກຳລັງກວດ",
+        "actioned": "ດຳເນີນການແລ້ວ",
+        "dismissed": "ປະຕິເສດ"
+      },
+      "statusLabel": {
+        "open": "ເປີດ",
+        "reviewing": "ກຳລັງກວດ",
+        "actioned": "ດຳເນີນການແລ້ວ",
+        "dismissed": "ປະຕິເສດ"
+      },
+      "reasonLabel": {
+        "spam": "ສະແປມ",
+        "abuse": "ລ່ວງລະເມີດ",
+        "fraud": "ສໍ້ໂກງ",
+        "counterfeit": "ຂອງປອມ",
+        "harassment": "ຄຸກຄາມ",
+        "other": "ອື່ນໆ"
+      },
+      "filterLabel": {
+        "status": "ສະຖານະ",
+        "reason": "ເຫດຜົນ",
+        "target": "ເປົ້າໝາຍ",
+        "all": "ທັງໝົດ"
+      },
+      "table": {
+        "reportId": "ລະຫັດລາຍງານ",
+        "reason": "ເຫດຜົນ",
+        "target": "ເປົ້າໝາຍ",
+        "reportedBy": "ຜູ້ລາຍງານ",
+        "description": "ລາຍລະອຽດ",
+        "reported": "ລາຍງານເມື່ອ",
+        "status": "ສະຖານະ",
+        "actions": "ຈັດການ"
+      },
+      "detail": {
+        "sectionDescription": "ລາຍລະອຽດ",
+        "sectionAdminNote": "ບັນທຶກແອັດມິນ",
+        "sectionTarget": "ເປົ້າໝາຍ",
+        "sectionReporter": "ຜູ້ລາຍງານ",
+        "sectionReviewHistory": "ປະຫວັດກວດ",
+        "labelActionTaken": "ການດຳເນີນການທີ່ທຳ",
+        "labelAdminNote": "ບັນທຶກແອັດມິນ",
+        "adminNotePlaceholder": "ບັນທຶກພາຍໃນ...",
+        "noDescription": "ບໍ່ມີລາຍລະອຽດ",
+        "unknownReporter": "ບໍ່ຮູ້ຜູ້ລາຍງານ",
+        "saved": "ບັນທຶກແລ້ວ",
+        "labelEvidence": "ຫຼັກຖານ",
+        "openTarget": "ເປີດເປົ້າໝາຍ →",
+        "openReporterProfile": "ເປີດໂປຣໄຟລ໌ →",
+        "startReviewing": "ເລີ່ມກວດ",
+        "takeAction": "ດຳເນີນການ",
+        "dismiss": "ປະຕິເສດ",
+        "reOpen": "ເປີດໃໝ່",
+        "save": "ບັນທຶກ",
+        "labelType": "ປະເພດ",
+        "labelId": "ID",
+        "labelName": "ຊື່",
+        "labelEmail": "ອີເມວ",
+        "labelCustomId": "Custom ID",
+        "labelStatus": "ສະຖານະ",
+        "labelAction": "ການດຳເນີນການ",
+        "labelReviewedAt": "ກວດເມື່ອ",
+        "labelReviewedBy": "ກວດໂດຍ",
+        "labelCreated": "ສ້າງເມື່ອ",
+        "labelUpdated": "ອັບເດດ",
+        "labelReported": "ລາຍງານເມື່ອ",
+        "actionNone": "ບໍ່ມີ — ບໍ່ຕ້ອງດຳເນີນການ",
+        "actionWarn": "ເຕືອນ — ແຈ້ງຜູ້ໃຊ້",
+        "actionRemove": "ລຶບ — ນຳເນື້ອຫາອອກ",
+        "actionSuspend": "ລະງັບ — ລະງັບຊົ່ວຄາວ",
+        "actionBan": "ບລັອກ — ບລັອກຖາວອນ"
       }
     },
     "support": {
@@ -675,7 +992,12 @@
         "category": "ໝວດໝູ່",
         "priority": "ຄວາມສຳຄັນ",
         "updated": "ອັບເດດ",
-        "status": "ສະຖານະ"
+        "status": "ສະຖານະ",
+        "ticketId": "ລະຫັດຕົ້ວ",
+        "created": "ສ້າງເມື່ອ",
+        "openLink": "ເປີດ →",
+        "reply": "ຕອບ",
+        "replies": "ຕອບ"
       },
       "details": {
         "title": "ລາຍລະອຽດຕົ້ວ",
@@ -688,7 +1010,41 @@
         "sending": "ກຳລັງສົ່ງ…",
         "close": "ປິດຕົ້ວ",
         "reopen": "ເປີດໃໝ່",
-        "messages": "ຂໍ້ຄວາມ"
+        "messages": "ຂໍ້ຄວາມ",
+        "submittedBy": "ສົ່ງໂດຍ",
+        "conversation": "ການສົນທະນາ",
+        "category": "ໝວດໝູ່",
+        "opened": "ເປີດເມື່ອ",
+        "statusLabel": "ສະຖານະ",
+        "priority": "ຄວາມສຳຄັນ",
+        "statusOptions": {
+          "open": "ເປີດ",
+          "inProgress": "ກຳລັງດຳເນີນ",
+          "resolved": "ແກ້ໄຂແລ້ວ",
+          "closed": "ປິດແລ້ວ"
+        },
+        "priorityOptions": {
+          "low": "ຕ່ຳ",
+          "normal": "ປົກກະຕິ",
+          "high": "ສູງ",
+          "urgent": "ດ່ວນ"
+        },
+        "sendReply": "ສົ່ງການຕອບ",
+        "ticketClosed": "ຕົ້ວນີ້ຖືກປິດແລ້ວ",
+        "viewProfile": "ເບິ່ງໂປຣໄຟລ໌ →",
+        "youAdmin": "ທ່ານ (ແອັດມິນ)"
+      },
+      "headerDesc": "ຕົ້ວທີ່ເປີດໂດຍຜູ້ຂາຍ ແລະ ລູກຄ້າ",
+      "noTicketsYet": "ຍັງບໍ່ມີຕົ້ວ",
+      "noMatches": "ບໍ່ມີລາຍການທີ່ກົງ",
+      "searchPlaceholder": "ຄົ້ນຫາຫົວຂໍ້, ອີເມວ…",
+      "inProgress": "ກຳລັງດຳເນີນ",
+      "kpi": {
+        "total": "ທັງໝົດ",
+        "open": "ເປີດ",
+        "inProgress": "ກຳລັງດຳເນີນ",
+        "resolved": "ແກ້ໄຂແລ້ວ",
+        "closed": "ປິດແລ້ວ"
       }
     },
     "admins": {
@@ -736,7 +1092,8 @@
           "target": "ເປົ້າໝາຍ",
           "ip": "IP",
           "result": "ຜົນລັບ"
-        }
+        },
+        "allTargets": "ທຸກເປົ້າໝາຍ"
       }
     },
     "settings": {
@@ -755,7 +1112,11 @@
       },
       "save": "ບັນທຶກການປ່ຽນແປງ",
       "saving": "ກຳລັງບັນທຶກ…",
-      "saved": "ບັນທຶກການຕັ້ງຄ່າແລ້ວ"
+      "saved": "ບັນທຶກການຕັ້ງຄ່າແລ້ວ",
+      "failedToLoad": "ໂຫຼດການຕັ້ງຄ່າລົ້ມເຫຼວ",
+      "noSettings": "ບໍ່ມີການຕັ້ງຄ່າ",
+      "publicHint": "ສະແດງສາທາລະນະ (ທຸກຄົນເຫັນ)",
+      "settingsCount": "{{count}} ການຕັ້ງຄ່າ"
     },
     "profile": {
       "title": "ໂປຣໄຟລ໌",
@@ -778,7 +1139,32 @@
       "passwordChangeFailed": "ປ່ຽນລະຫັດຜ່ານບໍ່ສຳເລັດ",
       "save": "ບັນທຶກໂປຣໄຟລ໌",
       "saving": "ກຳລັງບັນທຶກ…",
-      "saved": "ອັບເດດໂປຣໄຟລ໌ແລ້ວ"
+      "saved": "ອັບເດດໂປຣໄຟລ໌ແລ້ວ",
+      "tabProfile": "ໂປຣໄຟລ໌",
+      "tabSecurity": "ຄວາມປອດໄພ",
+      "tabSessions": "ເຊດຊັນ",
+      "loadingProfile": "ກຳລັງໂຫຼດໂປຣໄຟລ໌...",
+      "notAvailable": "ບໍ່ພົບໂປຣໄຟລ໌",
+      "adminId": "ໄອດີແອັດມິນ",
+      "fullName": "ຊື່ເຕັມ",
+      "username": "ຊື່ຜູ້ໃຊ້",
+      "roleAdmin": "ແອັດມິນ",
+      "roleUser": "ຜູ້ໃຊ້",
+      "savedShort": "ບັນທຶກແລ້ວ",
+      "saveChanges": "ບັນທຶກການປ່ຽນແປງ",
+      "failedToSave": "ບັນທຶກລົ້ມເຫຼວ",
+      "secPasswordTitle": "ລະຫັດຜ່ານ",
+      "secPasswordDesc": "ປ່ຽນລະຫັດຜ່ານແອັດມິນຂອງທ່ານ",
+      "secChange": "ປ່ຽນ",
+      "secTwoFactorTitle": "ການຢືນຢັນສອງຊັ້ນ",
+      "secTwoFactorDesc": "ຈັດການ 2FA ຜ່ານໜ້າ /2fa ຫຼັງເຂົ້າສູ່ລະບົບ",
+      "secManage": "ຈັດການ",
+      "secEmailTitle": "ອີເມວ",
+      "secUpdate": "ອັບເດດ",
+      "secBackupTitle": "ລະຫັດສຳຮອງ",
+      "secBackupDesc": "ໃຊ້ໄດ້ຫຼັງເປີດໃຊ້ TOTP",
+      "secSetup": "ຕັ້ງຄ່າ",
+      "sessionsNotImpl": "ລະບົບຕິດຕາມເຊດຊັນຍັງບໍ່ພ້ອມ — IP ລ່າສຸດ:"
     },
     "categories": {
       "title": "ໝວດໝູ່",
@@ -797,7 +1183,23 @@
       "confirmDelete": "ລຶບໝວດໝູ່ນີ້?",
       "deleteFailed": "ລຶບໝວດໝູ່ບໍ່ສຳເລັດ",
       "saveSuccess": "ບັນທຶກໝວດໝູ່ແລ້ວ",
-      "saveFailed": "ບັນທຶກໝວດໝູ່ບໍ່ສຳເລັດ"
+      "saveFailed": "ບັນທຶກໝວດໝູ່ບໍ່ສຳເລັດ",
+      "activeCount": "ໃຊ້ງານ {{count}} ໝວດໝູ່",
+      "cannotDeleteWithProducts": "ລຶບບໍ່ໄດ້: ໝວດໝູ່ມີສິນຄ້າ",
+      "categoriesCount": "{{count}} ໝວດໝູ່",
+      "createCategory": "ສ້າງໝວດໝູ່",
+      "failedToLoad": "ໂຫຼດໝວດໝູ່ລົ້ມເຫຼວ",
+      "form": {
+        "activeLabel": "ເປີດໃຊ້",
+        "descriptionPlaceholder": "ລາຍລະອຽດ (ບໍ່ບັງຄັບ)...",
+        "iconLabel": "ໄອຄອນ",
+        "iconPlaceholder": "ຊື່ໄອຄອນ (lucide-react)...",
+        "namePlaceholder": "ຊື່ໝວດໝູ່...",
+        "nameRequired": "ຕ້ອງລະບຸຊື່"
+      },
+      "loadingCategories": "ກຳລັງໂຫຼດໝວດໝູ່...",
+      "noMatch": "ບໍ່ມີໝວດໝູ່ທີ່ຕົງກັນ",
+      "searchPlaceholder": "ຄົ້ນຫາໝວດໝູ່..."
     },
     "history": {
       "title": "ປະຫວັດ",
@@ -818,7 +1220,95 @@
         "withdrawals": "ການຖອນເງິນ"
       },
       "noEntries": "ບໍ່ມີລາຍການ",
-      "loading": "ກຳລັງໂຫຼດປະຫວັດ…"
+      "loading": "ກຳລັງໂຫຼດປະຫວັດ…",
+      "loadingFinancial": "ກຳລັງໂຫຼດຂໍ້ມູນການເງິນ...",
+      "withdrawalsCompleted": "ການຖອນສຳເລັດ",
+      "withdrawalsBreakdown": "ສະຫຼຸບການຖອນ",
+      "count": "ຈຳນວນ",
+      "noWithdrawalData": "ຍັງບໍ່ມີຂໍ້ມູນການຖອນ",
+      "approvalRate": "ອັດຕາອະນຸມັດ",
+      "submissionsApprovedMsg": "ອະນຸມັດ {{approved}} ຈາກ {{total}} ລາຍການ",
+      "riskSignals": {
+        "critical": "ວິກິດ",
+        "high": "ສູງ",
+        "medium": "ກາງ",
+        "low": "ຕ່ຳ",
+        "totalSignals": "ສັນຍານທັງໝົດ",
+        "noSignals": "ບໍ່ພົບສັນຍານຄວາມສ່ຽງ",
+        "loading": "ກຳລັງໂຫຼດ...",
+        "rejectedFrom": "ການຖອນທີ່ຖືກປະຕິເສດຈາກ",
+        "unknownUser": "ຜູ້ໃຊ້ທີ່ບໍ່ຮູ້ຈັກ",
+        "totalRejectedAmount": "ຍອດລວມທີ່ຖືກປະຕິເສດ:",
+        "lastAttempt": "ຄັ້ງລ່າສຸດ"
+      },
+      "supportTab": {
+        "totalTickets": "ຕົ້ວທັງໝົດ",
+        "openInProgress": "ເປີດ / ກຳລັງດຳເນີນ",
+        "resolved": "ແກ້ໄຂແລ້ວ",
+        "closed": "ປິດແລ້ວ",
+        "ticketId": "ລະຫັດຕົ້ວ",
+        "subject": "ຫົວຂໍ້",
+        "user": "ຜູ້ໃຊ້",
+        "category": "ໝວດໝູ່",
+        "status": "ສະຖານະ",
+        "created": "ສ້າງເມື່ອ",
+        "updated": "ອັບເດດ",
+        "noTickets": "ຍັງບໍ່ມີຕົ້ວ",
+        "loading": "ກຳລັງໂຫຼດ..."
+      },
+      "history": {
+        "bankChanges": {
+          "totalRecords": "ບັນຊີທະນາຄານທັງໝົດ",
+          "verified": "ຢືນຢັນແລ້ວ",
+          "unverified": "ຍັງບໍ່ຢືນຢັນ",
+          "lastUpdate": "ອັບເດດລ່າສຸດ",
+          "thUser": "ຜູ້ໃຊ້",
+          "thBank": "ທະນາຄານ",
+          "thAccount": "ເລກບັນຊີ",
+          "thHolderName": "ຊື່ເຈົ້າຂອງ",
+          "thVerified": "ຢືນຢັນ",
+          "thLastUpdated": "ອັບເດດລ່າສຸດ",
+          "statusVerified": "ຢືນຢັນແລ້ວ",
+          "statusUnverified": "ຍັງບໍ່ຢືນຢັນ",
+          "noRecords": "ບໍ່ມີຂໍ້ມູນທະນາຄານ",
+          "loading": "ກຳລັງໂຫຼດ..."
+        },
+        "depositSources": {
+          "breakdownLabel": "ແຫຼ່ງທີ່ມາຂອງເງິນ — ຄຳສັ່ງຊື້ທີ່ຊຳລະແລ້ວ ແຍກຕາມວິທີຊຳລະ",
+          "thPaymentMethod": "ວິທີຊຳລະ",
+          "thOrders": "ຄຳສັ່ງຊື້",
+          "thTotalKip": "ລວມ (₭)",
+          "thPctOfTotal": "% ຂອງທັງໝົດ",
+          "unknown": "ບໍ່ຊາບ",
+          "noSources": "ຍັງບໍ່ມີແຫຼ່ງເງິນຝາກ",
+          "loading": "ກຳລັງໂຫຼດ..."
+        },
+        "linkedAccounts": {
+          "linkedAccountsLabel": "ບັນຊີທີ່ເຊື່ອມຕໍ່",
+          "thUser": "ຜູ້ໃຊ້",
+          "thEmail": "ອີເມວ",
+          "thProviders": "ຜູ້ໃຫ້ບໍລິການທີ່ເຊື່ອມ",
+          "none": "ບໍ່ມີ",
+          "noAccounts": "ບໍ່ມີບັນຊີທີ່ເຊື່ອມຕໍ່",
+          "loading": "ກຳລັງໂຫຼດ..."
+        }
+      },
+      "approved": "ອະນຸມັດແລ້ວ",
+      "dataNote": "ໝາຍເຫດຂໍ້ມູນ",
+      "declined": "ປະຕິເສດ",
+      "lastActive": "ໃຊ້ງານຫຼ້າສຸດ",
+      "lastKnownIpNote": "IP ຫຼ້າສຸດທີ່ບັນທຶກ",
+      "lastRequest": "ຄຳຂໍຫຼ້າສຸດ",
+      "noAuditEvents": "ບໍ່ມີເຫດການກວດສອບ",
+      "noData": "ບໍ່ມີຂໍ້ມູນ",
+      "noWithdrawals": "ບໍ່ມີການຖອນ",
+      "totalEvents": "ເຫດການທັງໝົດ",
+      "totalPaidOut": "ຈ່າຍອອກທັງໝົດ",
+      "totalRequests": "ຄຳຂໍທັງໝົດ",
+      "uniqueActions": "ການກະທຳທີ່ບໍ່ຊໍ້າ",
+      "uniqueAdmins": "ຜູ້ດູແລທີ່ບໍ່ຊໍ້າ",
+      "uniqueIps": "IP ທີ່ບໍ່ຊໍ້າ",
+      "uniqueUsers": "ຜູ້ໃຊ້ທີ່ບໍ່ຊໍ້າ"
     },
     "posts": {
       "title": "ໂພສ",
@@ -865,7 +1355,40 @@
       "accepting": "ກຳລັງຮັບ…",
       "passwordMismatch": "ລະຫັດຜ່ານບໍ່ກົງກັນ",
       "tokenInvalid": "ລິ້ງຄຳເຊີນບໍ່ຖືກຕ້ອງ ຫຼື ໝົດອາຍຸ",
-      "success": "ຮັບຄຳເຊີນແລ້ວ"
+      "success": "ຮັບຄຳເຊີນແລ້ວ",
+      "pageHeader": "ຄຳເຊີນແອັດມິນ",
+      "loadingInvite": "ກຳລັງໂຫຼດຄຳເຊີນ…",
+      "invalidTitle": "ຄຳເຊີນນີ້ບໍ່ຖືກຕ້ອງ",
+      "inviteNotFound": "ບໍ່ພົບຄຳເຊີນ",
+      "failedToLoad": "ໂຫຼດຄຳເຊີນລົ້ມເຫຼວ",
+      "failedToAccept": "ຍອມຮັບຄຳເຊີນລົ້ມເຫຼວ",
+      "statusTitle": "ຄຳເຊີນນີ້{{status}}",
+      "statusAccepted": "ທ່ານສາມາດເຂົ້າສູ່ລະບົບໄດ້ໂດຍກົງ.",
+      "statusExpired": "ກະລຸນາໃຫ້ແອັດມິນສົ່ງຄຳເຊີນໃໝ່ — ຄຳເຊີນນີ້ໝົດອາຍຸແລ້ວ.",
+      "statusRevoked": "ຄຳເຊີນນີ້ຖືກຍົກເລີກ. ຕິດຕໍ່ແອັດມິນເພື່ອຂໍຄຳເຊີນໃໝ່.",
+      "statusValueAccepted": "ຖືກຍອມຮັບແລ້ວ",
+      "statusValueExpired": "ໝົດອາຍຸແລ້ວ",
+      "statusValueRevoked": "ຖືກຍົກເລີກ",
+      "activated": "ບັນຊີຖືກເປີດໃຊ້ງານແລ້ວ",
+      "redirecting": "ກຳລັງໄປໜ້າເຂົ້າສູ່ລະບົບ…",
+      "inviteBanner": "ທ່ານໄດ້ຮັບເຊີນເຂົ້າຮ່ວມທີມແອັດມິນ Lalashop ໃນຕຳແໜ່ງ",
+      "yourEmail": "ອີເມວຂອງທ່ານ",
+      "displayName": "ຊື່ສະແດງ",
+      "displayNamePlaceholder": "ຄວນເອີ້ນທ່ານວ່າແນວໃດ?",
+      "passwordPlaceholder": "ຢ່າງໜ້ອຍ 6 ຕົວອັກສອນ",
+      "returnToLogin": "ກັບໄປເຂົ້າສູ່ລະບົບ",
+      "goToLogin": "ໄປໜ້າເຂົ້າສູ່ລະບົບ",
+      "activate": "ເປີດໃຊ້ບັນຊີແອັດມິນ",
+      "activating": "ກຳລັງເປີດໃຊ້…",
+      "passwordMinError": "ລະຫັດຜ່ານຕ້ອງມີຢ່າງໜ້ອຍ 6 ຕົວອັກສອນ",
+      "roleSuper": "Super Admin",
+      "roleFinance": "ແອັດມິນການເງິນ",
+      "roleSupport": "ແອັດມິນຝ່າຍຊ່ວຍເຫຼືອ",
+      "roleContent": "ແອັດມິນຄອນເທນ",
+      "roleSuperDesc": "ເຂົ້າເຖິງທຸກສ່ວນຂອງແອັດມິນໄດ້ເຕັມທີ່.",
+      "roleFinanceDesc": "ດູແລການຖອນ, ຄືນເງິນ, ການຊຳລະບັນຊີ ແລະ ການອະນຸມັດຈ່າຍ.",
+      "roleSupportDesc": "ທິກເກັດ, ລາຍງານ ແລະ ຊ່ວຍເຫຼືອລູກຄ້າ.",
+      "roleContentDesc": "ສິນຄ້າ, ໝວດໝູ່, ໂພສ ແລະ ດູແລໜ້າຮ້ານ."
     },
     "errors": {
       "notFoundTitle": "ບໍ່ພົບໜ້າ",
@@ -873,6 +1396,9 @@
       "backHome": "ກັບໄປຍັງແດສບອດ",
       "serverErrorTitle": "ມີຄວາມຜິດພາດເກີດຂຶ້ນ",
       "serverErrorMessage": "ມີຄວາມຜິດພາດຂອງເຊີບເວີ. ກະລຸນາລອງໃໝ່."
+    },
+    "withdraw": {
+      "requester": "ຜູ້ຂໍ"
     }
   },
   "components": {
@@ -893,5 +1419,131 @@
     "authGuard": {
       "checking": "ກຳລັງກວດເຊຊັນ…"
     }
+  },
+  "admins": {
+    "audit": {
+      "after": "ຫຼັງ",
+      "before": "ກ່ອນ",
+      "loading": "ກຳລັງໂຫຼດບັນທຶກ...",
+      "noLogs": "ບໍ່ມີເຫດການກວດສອບ",
+      "searchPlaceholder": "ຄົ້ນຫາບັນທຶກ...",
+      "stats": {
+        "activeAdmins": "ຜູ້ດູແລໃຊ້ງານ",
+        "distinctActions": "ການກະທຳທີ່ບໍ່ຊໍ້າ",
+        "last7d": "7 ມື້ຜ່ານມາ",
+        "totalEvents": "ເຫດການທັງໝົດ"
+      },
+      "table": {
+        "action": "ການກະທຳ",
+        "changes": "ການປ່ຽນແປງ",
+        "target": "ເປົ້າໝາຍ",
+        "time": "ເວລາ"
+      },
+      "viewDiff": "ເບິ່ງຄວາມແຕກຕ່າງ"
+    },
+    "invite": {
+      "confirmRevoke": "ຢືນຢັນການຍົກເລີກ?",
+      "copyLink": "ສຳເນົາລິ້ງ",
+      "expiresIn": "ໝົດອາຍຸໃນ",
+      "failed": "ສົ່ງຄຳເຊີນລົ້ມເຫຼວ",
+      "failedToLoad": "ໂຫຼດຄຳເຊີນລົ້ມເຫຼວ",
+      "invitations": "ຄຳເຊີນ",
+      "invitedBy": "ເຊີນໂດຍ",
+      "loading": "ກຳລັງໂຫຼດຄຳເຊີນ...",
+      "messagePlaceholder": "ຂໍ້ຄວາມ (ບໍ່ບັງຄັບ)...",
+      "noInvites": "ບໍ່ມີຄຳເຊີນລໍຖ້າ",
+      "pendingCount": "{{count}} ລໍຖ້າ",
+      "roles": {
+        "contentDesc": "ດູແລສິນຄ້າ ໝວດໝູ່ ໂພສ ແລະ ໜ້າຮ້ານ",
+        "financeDesc": "ການຖອນ ຄືນເງິນ ການຊຳລະບັນຊີ ແລະ ການອະນຸມັດຈ່າຍ",
+        "superDesc": "ເຂົ້າເຖິງທຸກສ່ວນຂອງແອັດມິນໄດ້ເຕັມທີ່",
+        "supportDesc": "ທິກເກັດ ລາຍງານ ແລະ ຊ່ວຍເຫຼືອລູກຄ້າ"
+      },
+      "send": "ສົ່ງຄຳເຊີນ",
+      "sentSuccess": "ສົ່ງຄຳເຊີນແລ້ວ",
+      "subtitle": "ສົ່ງຄຳເຊີນໃຫ້ຜູ້ດູແລໃໝ່",
+      "title": "ເຊີນຜູ້ດູແລ",
+      "viewRoleMatrix": "ເບິ່ງຕາຕະລາງສິດທິ"
+    },
+    "noAdmins": "ຍັງບໍ່ມີຜູ້ດູແລ",
+    "roles": {
+      "adminCount": "{{count}} ຜູ້ດູແລ",
+      "assignRoles": "ກຳນົດບົດບາດ",
+      "confirmRevoke": "ຢືນຢັນການຍົກເລີກ?",
+      "currentRole": "ບົດບາດປັດຈຸບັນ",
+      "failedToAssign": "ກຳນົດບົດບາດລົ້ມເຫຼວ",
+      "failedToLoad": "ໂຫຼດບົດບາດລົ້ມເຫຼວ",
+      "failedToRevoke": "ຍົກເລີກລົ້ມເຫຼວ",
+      "noRole": "ບໍ່ມີບົດບາດ",
+      "noRoleAssigned": "ຍັງບໍ່ກຳນົດບົດບາດ",
+      "note": "ບົດບາດກຳນົດວ່າຜູ້ດູແລເຂົ້າເຖິງສ່ວນໃດໄດ້",
+      "permissions": "ສິດທິ",
+      "perms": {
+        "allAdminPerms": "ສິດທິຜູ້ດູແລທັງໝົດ",
+        "approveWithdrawals": "ອະນຸມັດການຖອນ",
+        "editCategories": "ແກ້ໄຂໝວດໝູ່",
+        "manageAdmins": "ຈັດການຜູ້ດູແລ",
+        "manageBanners": "ຈັດການປ້າຍ",
+        "managePosts": "ຈັດການໂພສ",
+        "manageRoles": "ຈັດການບົດບາດ",
+        "processPayouts": "ດຳເນີນການຈ່າຍເງິນ",
+        "refundOrders": "ຄືນເງິນຄຳສັ່ງຊື້",
+        "replyTickets": "ຕອບກັບທິກເກັດ",
+        "sendNotifications": "ສົ່ງການແຈ້ງເຕືອນ",
+        "verifyKyc": "ກວດສອບ KYC",
+        "viewAuditLog": "ເບິ່ງບັນທຶກກວດສອບ",
+        "viewFinancialReports": "ເບິ່ງລາຍງານການເງິນ",
+        "viewOrders": "ເບິ່ງຄຳສັ່ງຊື້",
+        "viewUsers": "ເບິ່ງຜູ້ໃຊ້"
+      },
+      "revokeTitle": "ຍົກເລີກບົດບາດ"
+    },
+    "title": "ທີມຜູ້ດູແລ"
+  },
+  "financial": {
+    "asBuyer": "ໃນຖານະຜູ້ຊື້",
+    "asSeller": "ໃນຖານະຜູ້ຂາຍ",
+    "averageOrder": "ສະເລ່ຍຕໍ່ຄຳສັ່ງ",
+    "avgOrder": "ສະເລ່ຍຕໍ່ຄຳສັ່ງ",
+    "avgOrderReceived": "ສະເລ່ຍທີ່ໄດ້ຮັບ",
+    "byStatus": "ຕາມສະຖານະ",
+    "creatorCommission": "ຄ່າຄອມຄຣີເອເຕີ",
+    "creatorEarningsSettled": "ລາຍຮັບຄຣີເອເຕີທີ່ຊຳລະແລ້ວ",
+    "currentBalance": "ຍອດຄົງເຫຼືອປັດຈຸບັນ",
+    "drift": "ສ່ວນຕ່າງ",
+    "grossRevenue": "ລາຍຮັບລວມ",
+    "itemsSold": "ສິນຄ້າທີ່ຂາຍໄດ້",
+    "lastPaidOrder": "ຄຳສັ່ງຊື້ທີ່ຊຳລະຫຼ້າສຸດ",
+    "lastWithdrawal": "ການຖອນຫຼ້າສຸດ",
+    "lifetimeIncome": "ລາຍຮັບສະສົມ",
+    "netToBank": "ສຸດທິເຂົ້າທະນາຄານ",
+    "nonWithdrawable": "ຖອນບໍ່ໄດ້",
+    "ordersPlacedLifetime": "ຄຳສັ່ງຊື້ສະສົມຕະຫຼອດອາຍຸ",
+    "ordersReceived": "ຄຳສັ່ງຊື້ທີ່ໄດ້ຮັບ",
+    "paidOrders": "ຄຳສັ່ງຊື້ທີ່ຊຳລະແລ້ວ",
+    "posRevenue": "ລາຍຮັບ POS",
+    "posRevenueInStore": "ລາຍຮັບ POS (ໃນຮ້ານ)",
+    "reconciles": "ກະທົບຍອດ",
+    "refundsIssued": "ການຄືນເງິນທີ່ອອກ",
+    "totalAmount": "ຍອດລວມ",
+    "totalRequests": "ຄຳຂໍທັງໝົດ",
+    "totalSpent": "ໃຊ້ຈ່າຍທັງໝົດ",
+    "unpaidPending": "ຍັງບໍ່ຊຳລະ / ລໍຖ້າ",
+    "webSales": "ຍອດຂາຍເວັບ",
+    "webSalesAsSeller": "ຍອດຂາຍເວັບ (ຜູ້ຂາຍ)",
+    "webSalesOrders": "ຄຳສັ່ງຊື້ຈາກເວັບ",
+    "withdrawnNet": "ຖອນສຸດທິ"
+  },
+  "roles": {
+    "content": "ຄອນເທນ",
+    "finance": "ການເງິນ",
+    "super": "Super Admin",
+    "support": "ຝ່າຍຊ່ວຍເຫຼືອ"
+  },
+  "time": {
+    "daysAgo": "{{count}} ມື້ຜ່ານມາ",
+    "hoursAgo": "{{count}} ຊົ່ວໂມງຜ່ານມາ",
+    "justNow": "ຫາກໍ່ນີ້",
+    "minsAgo": "{{count}} ນາທີຜ່ານມາ"
   }
 }

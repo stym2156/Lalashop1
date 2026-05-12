@@ -269,7 +269,7 @@ export default function BuyPopup({ product, isOpen, onClose, initialQty = 1 }: B
                                 </div>
                             ) : (
                                 <p className="text-[12px] text-slate-400">
-                                    This product has no selectable variants.
+                                    {t("pages.buy.noVariants")}
                                 </p>
                             )}
 
@@ -286,7 +286,7 @@ export default function BuyPopup({ product, isOpen, onClose, initialQty = 1 }: B
                                             </span>
                                         ) : (
                                             <span className="text-[10px] font-medium text-slate-500">
-                                                Add more to unlock discounts
+                                                {t("pages.buy.addMoreUnlock")}
                                             </span>
                                         )}
                                     </div>
@@ -374,7 +374,7 @@ export default function BuyPopup({ product, isOpen, onClose, initialQty = 1 }: B
                                 </div>
                                 {currentDiscountPct > 0 && (
                                     <div className="text-[11px] text-slate-500 mt-1 text-right">
-                                        Saved ฿{((basePrice - currentPrice) * qty).toLocaleString()} on this order
+                                        {t("pages.buy.savedOnOrder", { amount: ((basePrice - currentPrice) * qty).toLocaleString() })}
                                     </div>
                                 )}
                             </div>

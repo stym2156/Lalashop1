@@ -136,7 +136,7 @@ export const GeneralSection: React.FC = () => {
       setTimeout(() => setSuccess(false), 2000);
     } catch (error) {
       console.error("Update failed:", error);
-      alert("Failed to update profile: " + (error as Error).message);
+      alert(t("pages.generalPanel.failedUpdate") + ": " + (error as Error).message);
     } finally {
       setSaving(false);
     }
@@ -154,7 +154,7 @@ export const GeneralSection: React.FC = () => {
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-1">
-          <label className="text-xs font-bold text-gray-500 ">Store Name / Name</label>
+          <label className="text-xs font-bold text-gray-500 ">{t("pages.generalPanel.storeNameLabel")}</label>
           <input
             type="text"
             className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-1 focus:ring-[#00aeff] outline-none"
@@ -163,7 +163,7 @@ export const GeneralSection: React.FC = () => {
           />
         </div>
         <div className="space-y-1">
-          <label className="text-xs font-bold text-gray-500 "> Email</label>
+          <label className="text-xs font-bold text-gray-500 ">{t("pages.generalPanel.emailLabel")}</label>
           <input
             type="email"
             className="w-full border border-gray-200 bg-gray-50 rounded-md px-3 py-2 text-sm text-gray-500 cursor-not-allowed"
@@ -172,7 +172,7 @@ export const GeneralSection: React.FC = () => {
           />
         </div>
         <div className="space-y-1">
-          <label className="text-xs font-bold text-gray-500 ">Username Handle (@)</label>
+          <label className="text-xs font-bold text-gray-500 ">{t("pages.generalPanel.usernameLabel")}</label>
           <div className="relative group">
             <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#00aeff] font-black text-base z-50 pointer-events-none">@</span>
             <input
@@ -183,10 +183,10 @@ export const GeneralSection: React.FC = () => {
               onChange={(e) => setUserData({ ...userData, username: e.target.value.toLowerCase().replace(/\s+/g, "_") })}
             />
           </div>
-          <p className="text-[10px] text-gray-400 italic">Example: @member_shop (Can be changed once every 7 days)</p>
+          <p className="text-[10px] text-gray-400 italic">{t("pages.generalPanel.usernameHint")}</p>
         </div>
         <div className="space-y-1">
-          <label className="text-xs font-bold text-gray-500"> Phone</label>
+          <label className="text-xs font-bold text-gray-500">{t("pages.generalPanel.phoneLabel")}</label>
           {originalPhone ? (
             /* Phone already set — locked */
             <input
@@ -205,7 +205,7 @@ export const GeneralSection: React.FC = () => {
                 value={userData.phone || ""}
                 onChange={(e) => setUserData({ ...userData, phone: e.target.value.replace(/[^0-9+\- ]/g, "") })}
               />
-              <p className="text-[10px] text-amber-500 font-medium">Phone number can only be set once and cannot be changed later.</p>
+              <p className="text-[10px] text-amber-500 font-medium">{t("pages.generalPanel.phoneCannotChange")}</p>
             </>
           )}
         </div>
@@ -248,7 +248,7 @@ export const GeneralSection: React.FC = () => {
 
           {length > maxLength && (
             <p className="text-[10px] text-red-500 font-bold animate-pulse">
-              Bio is too long! Please shorten it.
+              {t("pages.generalPanel.bioTooLong")}
             </p>
           )}
         </div>
@@ -260,7 +260,7 @@ export const GeneralSection: React.FC = () => {
           disabled={saving || uploading || userData.bio.trim().split(/\s+/).filter(Boolean).length > 88}
           className="bg-[#00aeff] text-white px-6 py-2 rounded-lg text-sm font-bold hover:bg-[#008ecc] transition-colors disabled:opacity-50 flex items-center gap-2"
         >
-          {saving ? "Saving..." : "Save Changes"}
+          {saving ? t("pages.generalPanel.saving") : t("pages.generalPanel.saveChanges")}
           {success && <CheckCircle size={16} />}
         </button>
       </div>

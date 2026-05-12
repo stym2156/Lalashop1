@@ -3,6 +3,7 @@ import Link from 'next/link';
 import {
   ArrowLeft, Mail, Send, ShieldCheck, Copy, RefreshCw, X, Check, Loader2,
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import {
   fetchAdminInvites,
   createAdminInvite,

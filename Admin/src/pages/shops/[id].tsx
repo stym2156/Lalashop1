@@ -794,7 +794,7 @@ const OrdersTab = ({ sellerId, t }: OrdersTabProps) => {
                       #{o._id.slice(-6).toUpperCase()}
                     </Link>
                   </td>
-                  <td className="py-2 pr-3">{o.user?.name || '—'}</td>
+                  <td className="py-2 pr-3">{o.customer || '—'}</td>
                   <td className="py-2 pr-3 text-right tabular-nums">{formatCurrency(o.amount, t)}</td>
                   <td className="py-2 pr-3">
                     <span className="text-[10px] font-bold uppercase">{t(`status.${o.rawStatus}`)}</span>

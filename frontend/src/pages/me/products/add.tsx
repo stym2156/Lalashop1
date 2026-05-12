@@ -6,6 +6,7 @@ import {
   ArrowLeft, ImagePlus, Upload, X, Plus, Trash2, ChevronDown,
   Eye, EyeOff, HelpCircle, AlertCircle, CheckCircle2, Tag,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { productCategories } from "../opensho/constants";
 import {
   CATEGORY_CONFIG,
@@ -88,9 +89,13 @@ const Field = ({
   </div>
 );
 
+// Hook-aware Field wrapper to use translated optional label
+
+
 const newId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 
 export default function AddProductPage() {
+  const { t } = useTranslation("common");
   const router = useRouter();
 
   // Auth gate — only sellers may use this page
@@ -105,13 +110,12 @@ export default function AddProductPage() {
       cached = {};
     }
     if (!cached?._id) {
-      setUnauthorized("Please log in to add products.");
+      setUnauthorized(t("pages.productsAdd.pleaseLogin"));
     } else if (!cached?.isSeller) {
-      setUnauthorized(
-        "Your shop is not approved yet. Once your KYC application is approved, you can list products here.",
-      );
+      setUnauthorized(t("pages.productsAdd.notApproved"));
     }
     setIsReady(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // General
@@ -374,9 +378,9 @@ export default function AddProductPage() {
   const handlePublish = async (statusOverride?: ProductStatus) => {
     setSubmitError(null);
 
-    if (!name.trim()) return setSubmitError("Title is required.");
-    if (!price || isNaN(Number(price))) return setSubmitError("Price is required.");
-    if (images.length === 0) return setSubmitError("Add at least one product image.");
+    if (!name.trim()) return setSubmitError(t("pages.productsAdd2.titleRequired"));
+    if (!price || isNaN(Number(price))) return setSubmitError(t("pages.productsAdd2.priceRequired"));
+    if (images.length === 0) return setSubmitError(t("pages.productsAdd2.addOneImage"));
 
     const finalStatus = statusOverride || status;
 
@@ -473,11 +477,11 @@ export default function AddProductPage() {
         },
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data?.message || "Failed to publish product");
+      if (!response.ok) throw new Error(data?.message || t("pages.productsAdd2.failedToPublish"));
 
       setSuccessId(data?.data?._id || "ok");
     } catch (err: any) {
-      setSubmitError(err?.message || "Failed to publish product");
+      setSubmitError(err?.message || t("pages.productsAdd2.failedToPublish"));
     } finally {
       setSubmitting(false);
     }
@@ -486,7 +490,7 @@ export default function AddProductPage() {
   if (!isReady) {
     return (
       <div className="min-h-screen flex items-center justify-center text-sm text-gray-500">
-        Loading…
+        {t("pages.productsAdd.loading")}
       </div>
     );
   }
@@ -498,13 +502,13 @@ export default function AddProductPage() {
           <div className="w-12 h-12 rounded-full bg-orange-50 text-orange-500 mx-auto flex items-center justify-center mb-4">
             <AlertCircle size={22} />
           </div>
-          <h2 className="text-lg font-bold text-gray-900 mb-2">Cannot add products</h2>
+          <h2 className="text-lg font-bold text-gray-900 mb-2">{t("pages.productsAdd.cannotAdd")}</h2>
           <p className="text-sm text-gray-500 leading-relaxed">{unauthorized}</p>
           <button
             onClick={() => router.push("/me/me")}
             className="mt-6 px-6 py-2.5 bg-primary text-white rounded-full text-xs font-bold tracking-widest"
           >
-            BACK TO PROFILE
+            {t("pages.productsAdd.backToProfile")}
           </button>
         </div>
       </div>
@@ -518,16 +522,19 @@ export default function AddProductPage() {
           <div className="w-14 h-14 rounded-full bg-green-50 text-green-500 mx-auto flex items-center justify-center mb-4">
             <CheckCircle2 size={28} />
           </div>
-          <h2 className="text-lg font-bold text-gray-900 mb-2">Product saved</h2>
-          <p className="text-sm text-gray-500 mb-6">
-            Your product is now in your store as <strong>{status}</strong>.
-          </p>
+          <h2 className="text-lg font-bold text-gray-900 mb-2">{t("pages.productsAdd.savedTitle")}</h2>
+          <p
+            className="text-sm text-gray-500 mb-6"
+            dangerouslySetInnerHTML={{
+              __html: t("pages.productsAdd.savedAs", { status }),
+            }}
+          />
           <div className="flex flex-col gap-2">
             <button
               onClick={() => router.push("/me/me")}
               className="px-6 py-2.5 bg-primary text-white rounded-full text-xs font-bold tracking-widest"
             >
-              view my shop
+              {t("pages.productsAdd.viewMyShop")}
             </button>
             <button
               onClick={() => {
@@ -540,7 +547,7 @@ export default function AddProductPage() {
               }}
               className="px-6 py-2.5 border border-gray-200 text-gray-700 rounded-full text-xs font-bold tracking-widest"
             >
-              add another
+              {t("pages.productsAdd.addAnother")}
             </button>
           </div>
         </div>
@@ -558,9 +565,9 @@ export default function AddProductPage() {
               <ArrowLeft className="w-4 h-4" />
             </Link>
             <div className="min-w-0">
-              <h1 className="text-sm font-bold truncate">Add product</h1>
+              <h1 className="text-sm font-bold truncate">{t("pages.productsAdd.title")}</h1>
               <p className="text-[11px] text-gray-400 truncate">
-                Category template: {config.label}
+                {t("pages.productsAdd.categoryTemplate", { label: config.label })}
               </p>
             </div>
           </div>
@@ -569,21 +576,21 @@ export default function AddProductPage() {
               href="/me/me"
               className="px-3 py-1.5 rounded-md text-xs font-medium text-gray-700 hover:bg-gray-50"
             >
-              Cancel
+              {t("pages.productsAdd.cancel")}
             </Link>
             <button
               onClick={() => handlePublish("Draft")}
               disabled={submitting}
               className="px-3 py-1.5 rounded-md text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
             >
-              Save as draft
+              {t("pages.productsAdd.saveDraft")}
             </button>
             <button
               onClick={() => handlePublish("Active")}
               disabled={submitting}
               className="bg-primary text-white px-4 py-1.5 rounded-md text-xs font-semibold hover:bg-primary-hover disabled:opacity-50"
             >
-              {submitting ? "Saving…" : "Publish"}
+              {submitting ? t("pages.productsAdd.saving") : t("pages.productsAdd.publish")}
             </button>
           </div>
         </div>
@@ -601,29 +608,29 @@ export default function AddProductPage() {
             {/* General */}
             <div className="rounded-lg bg-white border border-gray-100">
               <SectionHeader
-                title="General"
-                hint="Basic info shown on the product page and search results."
+                title={t("pages.productsAdd2.general")}
+                hint={t("pages.productsAdd2.generalHint")}
               />
               <div className="p-4 space-y-4">
-                <Field label="Title" required>
+                <Field label={t("pages.productsAdd2.fieldTitle")} required>
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g. Premium Linen Oversized Shirt"
+                    placeholder={t("pages.productsAdd2.titlePlaceholder")}
                     className={inputCls}
                   />
                 </Field>
-                <Field label="Description" optional>
+                <Field label={t("pages.productsAdd2.fieldDescription")} optional>
                   <textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows={5}
-                    placeholder="Describe the product. Include materials, fit, sizing, and unique selling points."
+                    placeholder={t("pages.productsAdd2.descriptionPlaceholder")}
                     className={`${inputCls} resize-y leading-relaxed`}
                   />
                   <p className="text-[10px] text-gray-400">
-                    {description.length} characters · plain text supported.
+                    {t("pages.productsAdd2.characters", { count: description.length })}
                   </p>
                 </Field>
               </div>
@@ -631,8 +638,8 @@ export default function AddProductPage() {
             {/* Media */}
             <div className="rounded-lg bg-white border border-gray-100">
               <SectionHeader
-                title="Media"
-                hint="Upload up to 8 photos. The first image is used as the cover."
+                title={t("pages.productsAdd2.media")}
+                hint={t("pages.productsAdd2.mediaHint")}
               />
               <div className="p-4">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -645,7 +652,7 @@ export default function AddProductPage() {
                       <img src={img.preview} alt="" className="w-full h-full object-cover" />
                       {i === 0 && (
                         <span className="absolute top-1 left-1 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-black/70 text-white">
-                          Cover
+                          {t("pages.productsAdd2.cover")}
                         </span>
                       )}
                       <button
@@ -663,7 +670,7 @@ export default function AddProductPage() {
                       className="aspect-square rounded-md bg-gray-50 border border-dashed border-gray-200 hover:border-gray-300 hover:bg-gray-100 flex flex-col items-center justify-center text-gray-500"
                     >
                       <ImagePlus className="w-5 h-5 mb-1" />
-                      <span className="text-[11px] font-medium">Add image</span>
+                      <span className="text-[11px] font-medium">{t("pages.productsAdd2.addImage")}</span>
                     </button>
                   )}
                 </div>
@@ -684,17 +691,17 @@ export default function AddProductPage() {
                   onClick={() => fileInputRef.current?.click()}
                   className="mt-3 inline-flex items-center text-[11px] font-semibold text-gray-700 hover:text-black"
                 >
-                  <Upload className="w-3.5 h-3.5 mr-1.5" /> Upload from computer
+                  <Upload className="w-3.5 h-3.5 mr-1.5" /> {t("pages.productsAdd2.uploadFromComputer")}
                 </button>
               </div>
             </div>
 
             {/* Pricing */}
             <div className="rounded-lg bg-white border border-gray-100">
-              <SectionHeader title="Pricing" />
+              <SectionHeader title={t("pages.productsAdd2.pricing")} />
               <div className="p-4 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  <Field label="Price" required>
+                  <Field label={t("pages.productsAdd2.fieldPrice")} required>
                     <div className="relative">
                       <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-gray-400">฿</span>
                       <input
@@ -706,7 +713,7 @@ export default function AddProductPage() {
                       />
                     </div>
                   </Field>
-                  <Field label="Compare-at price" hint="Strike-through" optional>
+                  <Field label={t("pages.productsAdd2.compareAt")} hint={t("pages.productsAdd2.strikeThrough")} optional>
                     <div className="relative">
                       <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-gray-400">฿</span>
                       <input
@@ -718,7 +725,7 @@ export default function AddProductPage() {
                       />
                     </div>
                   </Field>
-                  <Field label="Cost per item" hint="Internal" optional>
+                  <Field label={t("pages.productsAdd2.costPerItem")} hint={t("pages.productsAdd2.internal")} optional>
                     <div className="relative">
                       <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-gray-400">฿</span>
                       <input
@@ -734,13 +741,13 @@ export default function AddProductPage() {
 
                 <div className="grid grid-cols-2 gap-3 px-3 py-2 rounded-md bg-gray-50 text-[11px]">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-500">Profit</span>
+                    <span className="text-gray-500">{t("pages.productsAdd2.profit")}</span>
                     <span className="font-semibold text-gray-900 tabular-nums">
                       ฿{profit.toFixed(2)}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-500">Margin</span>
+                    <span className="text-gray-500">{t("pages.productsAdd2.margin")}</span>
                     <span className="font-semibold text-gray-900 tabular-nums">
                       {margin.toFixed(1)}%
                     </span>
@@ -754,26 +761,26 @@ export default function AddProductPage() {
                     onChange={(e) => setChargeTax(e.target.checked)}
                     className="rounded"
                   />
-                  Charge VAT on this product
+                  {t("pages.productsAdd2.chargeVat")}
                 </label>
               </div>
             </div>
 
             {/* Inventory */}
             <div className="rounded-lg bg-white border border-gray-100">
-              <SectionHeader title="Inventory" />
+              <SectionHeader title={t("pages.productsAdd2.inventory")} />
               <div className="p-4 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <Field label="SKU (Stock Keeping Unit)" optional>
+                  <Field label={t("pages.productsAdd2.skuLabel")} optional>
                     <input
                       type="text"
                       value={sku}
                       onChange={(e) => setSku(e.target.value)}
-                      placeholder="e.g. LSO-LSH-238"
+                      placeholder={t("pages.productsAdd2.skuPlaceholder")}
                       className={`${inputCls} font-mono`}
                     />
                   </Field>
-                  <Field label="Barcode" hint="UPC/EAN/ISBN" optional>
+                  <Field label={t("pages.productsAdd2.barcode")} hint="UPC/EAN/ISBN" optional>
                     <input
                       type="text"
                       value={barcode}
@@ -790,12 +797,12 @@ export default function AddProductPage() {
                     onChange={(e) => setTrackInventory(e.target.checked)}
                     className="rounded"
                   />
-                  Track quantity
+                  {t("pages.productsAdd2.trackQuantity")}
                 </label>
 
                 {trackInventory && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pl-6">
-                    <Field label="Quantity on hand">
+                    <Field label={t("pages.productsAdd2.quantityOnHand")}>
                       <input
                         type="number"
                         value={stock}
@@ -804,7 +811,7 @@ export default function AddProductPage() {
                         className={inputCls}
                       />
                     </Field>
-                    <Field label="Low stock threshold" hint="Triggers alert" optional>
+                    <Field label={t("pages.productsAdd2.lowStockThreshold")} hint={t("pages.productsAdd2.triggersAlert")} optional>
                       <input
                         type="number"
                         value={reorderAt}
@@ -823,7 +830,7 @@ export default function AddProductPage() {
                     onChange={(e) => setAllowOversell(e.target.checked)}
                     className="rounded"
                   />
-                  Continue selling when out of stock
+                  {t("pages.productsAdd2.continueSelling")}
                 </label>
               </div>
             </div>
@@ -831,11 +838,11 @@ export default function AddProductPage() {
             {/* Wholesale */}
             <div className="rounded-lg bg-white border border-gray-100">
               <SectionHeader
-                title="Wholesale pricing"
-                hint="Set MOQ and tier pricing for B2B buyers."
+                title={t("pages.productsAdd2.wholesalePricing")}
+                hint={t("pages.productsAdd2.wholesaleHint")}
               />
               <div className="p-4 space-y-4">
-                <Field label="Minimum order quantity (MOQ)" optional>
+                <Field label={t("pages.productsAdd2.moq")} optional>
                   <input
                     type="number"
                     value={moq}
@@ -845,16 +852,15 @@ export default function AddProductPage() {
                   />
                 </Field>
                 <div>
-                  <p className="text-[11px] font-semibold text-gray-700 mb-2">Tier pricing</p>
+                  <p className="text-[11px] font-semibold text-gray-700 mb-2">{t("pages.productsAdd2.tierPricing")}</p>
                   <p className="text-[11px] text-gray-500 mb-2">
-                    Set bulk-buy thresholds. The tier price (or % discount off the base price) is
-                    shown to buyers as a strike-through deal on the product page.
+                    {t("pages.productsAdd2.tierHint")}
                   </p>
                   <div className="space-y-1.5">
                     <div className="grid grid-cols-12 gap-2 text-[10px] font-semibold text-gray-500 tracking-wide px-1">
-                      <span className="col-span-3">Min qty</span>
-                      <span className="col-span-5">Unit price</span>
-                      <span className="col-span-3">Discount %</span>
+                      <span className="col-span-3">{t("pages.productsAdd2.minQty")}</span>
+                      <span className="col-span-5">{t("pages.productsAdd2.unitPrice")}</span>
+                      <span className="col-span-3">{t("pages.productsAdd2.discountPct")}</span>
                       <span className="col-span-1" />
                     </div>
                     {tiers.map((t) => (
@@ -908,7 +914,7 @@ export default function AddProductPage() {
                     onClick={addTier}
                     className="mt-2 inline-flex items-center text-[11px] font-semibold text-primary hover:underline"
                   >
-                    <Plus className="w-3 h-3 mr-1" /> Add tier
+                    <Plus className="w-3 h-3 mr-1" /> {t("pages.productsAdd2.addTier")}
                   </button>
                 </div>
               </div>
@@ -917,13 +923,13 @@ export default function AddProductPage() {
             {/* Specifications — appears in the Specifications tab on product detail */}
             <div className="rounded-lg bg-white border border-gray-100">
               <SectionHeader
-                title="Specifications"
-                hint="Key/value pairs (e.g. Material → 100% cotton). Shown on the Specifications tab of your product page."
+                title={t("pages.productsAdd2.specifications")}
+                hint={t("pages.productsAdd2.specsHint")}
               />
               <div className="p-4 space-y-2">
                 <div className="grid grid-cols-12 gap-2 text-[10px] font-semibold text-gray-500 tracking-wide px-1">
-                  <span className="col-span-4">Label</span>
-                  <span className="col-span-7">Value</span>
+                  <span className="col-span-4">{t("pages.productsAdd2.labelCol")}</span>
+                  <span className="col-span-7">{t("pages.productsAdd2.valueCol")}</span>
                   <span className="col-span-1" />
                 </div>
                 {specifications.map((s) => (
@@ -932,14 +938,14 @@ export default function AddProductPage() {
                       type="text"
                       value={s.label}
                       onChange={(e) => updateSpecification(s.id, { label: e.target.value })}
-                      placeholder="e.g. Material"
+                      placeholder={t("pages.productsAdd2.specLabelPlaceholder")}
                       className={`${inputCls} col-span-4`}
                     />
                     <input
                       type="text"
                       value={s.value}
                       onChange={(e) => updateSpecification(s.id, { value: e.target.value })}
-                      placeholder="e.g. Premium cotton"
+                      placeholder={t("pages.productsAdd2.specValuePlaceholder")}
                       className={`${inputCls} col-span-7`}
                     />
                     <button
@@ -954,7 +960,7 @@ export default function AddProductPage() {
                   onClick={addSpecification}
                   className="mt-2 inline-flex items-center text-[11px] font-semibold text-primary hover:underline"
                 >
-                  <Plus className="w-3 h-3 mr-1" /> Add specification
+                  <Plus className="w-3 h-3 mr-1" /> {t("pages.productsAdd2.addSpec")}
                 </button>
               </div>
             </div>
@@ -964,7 +970,7 @@ export default function AddProductPage() {
               <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
                 <div>
                   <h3 className="text-sm font-bold text-black flex items-center gap-2">
-                    <Tag className="w-3.5 h-3.5 text-primary" /> Variants for {config.label}
+                    <Tag className="w-3.5 h-3.5 text-primary" /> {t("pages.productsAdd2.variantsFor", { label: config.label })}
                   </h3>
                   <p className="text-[11px] text-gray-500 mt-0.5">
                     {config.description}
@@ -974,7 +980,7 @@ export default function AddProductPage() {
               <div className="p-4 space-y-3">
                 {variantOptions.length === 0 ? (
                   <div className="rounded-md bg-gray-50 p-3 text-[11px] text-gray-500">
-                    This category does not require variants. You can still add custom options if needed.
+                    {t("pages.productsAdd2.noVariantsNeeded")}
                   </div>
                 ) : (
                   variantOptions.map((v, idx) => {
@@ -988,7 +994,7 @@ export default function AddProductPage() {
                         <div className="grid grid-cols-12 gap-2 items-start">
                           <div className="col-span-3">
                             <label className="text-[10px] font-semibold text-gray-500 tracking-wide">
-                              Option name {seedAxis?.required && <span className="text-red-500">*</span>}
+                              {t("pages.productsAdd2.optionName")} {seedAxis?.required && <span className="text-red-500">*</span>}
                             </label>
                             <input
                               type="text"
@@ -996,18 +1002,18 @@ export default function AddProductPage() {
                               onChange={(e) =>
                                 updateVariantOption(v.id, { name: e.target.value })
                               }
-                              placeholder={seedAxis?.name || "e.g. Size"}
+                              placeholder={seedAxis?.name || t("pages.productsAdd2.optionPlaceholder")}
                               className={`${inputCls} mt-1`}
                             />
                           </div>
                           <div className="col-span-8">
                             <label className="text-[10px] font-semibold text-gray-500 tracking-wide">
-                              Selected values
+                              {t("pages.productsAdd2.selectedValues")}
                             </label>
                             <div className="mt-1 flex flex-wrap gap-1.5 min-h-[34px] px-2 py-1 rounded-md bg-gray-50 border border-gray-100">
                               {v.values.length === 0 && (
                                 <span className="text-[11px] text-gray-400 px-1.5 py-1">
-                                  Tap suggestions or type your own.
+                                  {t("pages.productsAdd2.tapToAdd")}
                                 </span>
                               )}
                               {v.values.map((val) => (
@@ -1056,6 +1062,8 @@ export default function AddProductPage() {
 
                         <CustomVariantInput
                           onAdd={(value) => addCustomVariantValue(v.id, value)}
+                          addPlaceholder={t("pages.productsAdd2.addCustomValue")}
+                          addLabel={t("pages.productsAdd2.add")}
                         />
                       </div>
                     );
@@ -1066,7 +1074,7 @@ export default function AddProductPage() {
                   onClick={addVariantOption}
                   className="inline-flex items-center text-[11px] font-semibold text-primary hover:underline"
                 >
-                  <Plus className="w-3 h-3 mr-1" /> Add custom option
+                  <Plus className="w-3 h-3 mr-1" /> {t("pages.productsAdd2.addCustomOption")}
                 </button>
               </div>
             </div>
@@ -1075,8 +1083,8 @@ export default function AddProductPage() {
             {config.attributes.length > 0 && (
               <div className="rounded-lg bg-white border border-gray-100">
                 <SectionHeader
-                  title={`${config.label} details`}
-                  hint="These descriptors appear on the product page so buyers know exactly what they're getting."
+                  title={t("pages.productsAdd2.details", { label: config.label })}
+                  hint={t("pages.productsAdd2.detailsHint")}
                 />
                 <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
                   {config.attributes.map((attr) => (
@@ -1101,7 +1109,7 @@ export default function AddProductPage() {
                             onChange={(e) => updateAttribute(attr.key, e.target.value)}
                             className={`${inputCls} appearance-none pr-8`}
                           >
-                            <option value="">Select…</option>
+                            <option value="">{t("pages.productsAdd2.select")}</option>
                             {attr.options.map((o) => (
                               <option key={o} value={o}>{o}</option>
                             ))}
@@ -1126,8 +1134,8 @@ export default function AddProductPage() {
             {/* Creator affiliate */}
             <div className="rounded-lg bg-white border border-gray-100">
               <SectionHeader
-                title="Creator affiliate program"
-                hint="Let approved creators promote this product and earn commission on each verified sale."
+                title={t("pages.productsAdd2.creatorAffiliate")}
+                hint={t("pages.productsAdd2.creatorAffiliateHint")}
               />
               <div className="p-4 space-y-4">
                 <label className="flex items-start gap-2 text-xs text-gray-700 cursor-pointer">
@@ -1138,9 +1146,9 @@ export default function AddProductPage() {
                     className="rounded mt-0.5"
                   />
                   <span>
-                    <span className="font-semibold">Allow creators to promote this product</span>
+                    <span className="font-semibold">{t("pages.productsAdd2.allowCreators")}</span>
                     <span className="block text-[11px] text-gray-500 mt-0.5">
-                      Creators add this product to their feed and you only pay commission on verified sales.
+                      {t("pages.productsAdd2.allowCreatorsDesc")}
                     </span>
                   </span>
                 </label>
@@ -1148,7 +1156,7 @@ export default function AddProductPage() {
                 {allowCreators && (
                   <div className="space-y-4 pl-6 ml-2 border-l-2 border-gray-100 pt-1">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <Field label="Commission type">
+                      <Field label={t("pages.productsAdd2.commissionType")}>
                         <div className="inline-flex bg-gray-100 p-0.5 rounded-md w-full">
                           <button
                             type="button"
@@ -1158,7 +1166,7 @@ export default function AddProductPage() {
                               : "text-gray-600 hover:text-black"
                               }`}
                           >
-                            Percentage (%)
+                            {t("pages.productsAdd2.percentage")}
                           </button>
                           <button
                             type="button"
@@ -1168,14 +1176,14 @@ export default function AddProductPage() {
                               : "text-gray-600 hover:text-black"
                               }`}
                           >
-                            Fixed (฿)
+                            {t("pages.productsAdd2.fixed")}
                           </button>
                         </div>
                       </Field>
 
                       <Field
-                        label={commissionType === "percent" ? "Commission rate" : "Commission amount"}
-                        hint={commissionType === "percent" ? "Of selling price" : "Per unit sold"}
+                        label={commissionType === "percent" ? t("pages.productsAdd2.commissionRate") : t("pages.productsAdd2.commissionAmount")}
+                        hint={commissionType === "percent" ? t("pages.productsAdd2.ofSellingPrice") : t("pages.productsAdd2.perUnitSold")}
                       >
                         <div className="relative">
                           {commissionType === "fixed" && (
@@ -1203,7 +1211,7 @@ export default function AddProductPage() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <Field label="Minimum creator tier" hint="Restricts who can promote">
+                      <Field label={t("pages.productsAdd2.minCreatorTier")} hint={t("pages.productsAdd2.restrictsPromote")}>
                         <div className="relative">
                           <select
                             value={minTier}
@@ -1218,7 +1226,7 @@ export default function AddProductPage() {
                         </div>
                       </Field>
 
-                      <Field label="Attribution window" hint="Days a click stays valid">
+                      <Field label={t("pages.productsAdd2.attributionWindow")} hint={t("pages.productsAdd2.daysClickValid")}>
                         <div className="relative">
                           <input
                             type="number"
@@ -1229,7 +1237,7 @@ export default function AddProductPage() {
                             className={`${inputCls} pr-12`}
                           />
                           <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-gray-400">
-                            days
+                            {t("pages.productsAdd2.days")}
                           </span>
                         </div>
                       </Field>
@@ -1237,19 +1245,19 @@ export default function AddProductPage() {
 
                     <div className="rounded-md bg-gray-50 px-3 py-2.5 grid grid-cols-1 sm:grid-cols-3 gap-3 text-[11px]">
                       <div className="flex items-center justify-between">
-                        <span className="text-gray-500">Creator earns / sale</span>
+                        <span className="text-gray-500">{t("pages.productsAdd2.creatorEarnsSale")}</span>
                         <span className="font-semibold text-primary tabular-nums">
                           ฿{commissionPerSale.toFixed(2)}
                         </span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-gray-500">Your net / sale</span>
+                        <span className="text-gray-500">{t("pages.productsAdd2.yourNetSale")}</span>
                         <span className="font-semibold text-gray-900 tabular-nums">
                           ฿{sellerNet.toFixed(2)}
                         </span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-gray-500">Effective rate</span>
+                        <span className="text-gray-500">{t("pages.productsAdd2.effectiveRate")}</span>
                         <span className="font-semibold text-gray-900 tabular-nums">
                           {parseFloat(price) > 0
                             ? `${((commissionPerSale / parseFloat(price)) * 100).toFixed(1)}%`
@@ -1264,7 +1272,7 @@ export default function AddProductPage() {
 
             {/* Shipping */}
             <div className="rounded-lg bg-white border border-gray-100">
-              <SectionHeader title="Shipping" />
+              <SectionHeader title={t("pages.productsAdd2.shipping")} />
               <div className="p-4 space-y-4">
                 <label className="flex items-start gap-2 text-xs text-gray-700 cursor-pointer">
                   <input
@@ -1274,14 +1282,14 @@ export default function AddProductPage() {
                     className="rounded mt-0.5"
                   />
                   <span>
-                    <span className="font-semibold">Offer free shipping</span>
+                    <span className="font-semibold">{t("pages.productsAdd2.offerFreeShipping")}</span>
                     <span className="block text-[11px] text-gray-500 mt-0.5">
-                      A green &quot;Free shipping&quot; badge will appear on the product page.
+                      {t("pages.productsAdd2.freeShippingDesc")}
                     </span>
                   </span>
                 </label>
 
-                <Field label="Weight" optional>
+                <Field label={t("pages.productsAdd2.weight")} optional>
                   <div className="flex items-center gap-2">
                     <input
                       type="number"
@@ -1302,7 +1310,7 @@ export default function AddProductPage() {
                   </div>
                 </Field>
 
-                <Field label="Package dimensions" hint="L × W × H" optional>
+                <Field label={t("pages.productsAdd2.packageDimensions")} hint="L × W × H" optional>
                   <div className="flex items-center gap-2">
                     <input
                       type="number"
@@ -1339,7 +1347,7 @@ export default function AddProductPage() {
                   </div>
                 </Field>
 
-                <Field label="Country/region of origin" optional>
+                <Field label={t("pages.productsAdd2.originCountry")} optional>
                   <select
                     value={originCountry}
                     onChange={(e) => setOriginCountry(e.target.value)}
@@ -1356,13 +1364,13 @@ export default function AddProductPage() {
             {/* Lead time */}
             <div className="rounded-lg bg-white border border-gray-100">
               <SectionHeader
-                title="Lead time"
-                hint="How long after payment until you ship. Shown as 'Lead Time' on the product page."
+                title={t("pages.productsAdd2.leadTime")}
+                hint={t("pages.productsAdd2.leadTimeHint")}
               />
               <div className="p-4 space-y-3">
                 <div className="grid grid-cols-12 gap-2 items-center">
                   <div className="col-span-4">
-                    <Field label="Minimum">
+                    <Field label={t("pages.productsAdd2.minimum")}>
                       <input
                         type="number"
                         min="0"
@@ -1375,7 +1383,7 @@ export default function AddProductPage() {
                   </div>
                   <div className="col-span-1 text-center text-gray-400 pt-5">–</div>
                   <div className="col-span-4">
-                    <Field label="Maximum">
+                    <Field label={t("pages.productsAdd2.maximum")}>
                       <input
                         type="number"
                         min="0"
@@ -1387,21 +1395,21 @@ export default function AddProductPage() {
                     </Field>
                   </div>
                   <div className="col-span-3">
-                    <Field label="Unit">
+                    <Field label={t("pages.productsAdd2.unit")}>
                       <select
                         value={leadTimeUnit}
                         onChange={(e) => setLeadTimeUnit(e.target.value as any)}
                         className={inputCls}
                       >
-                        <option value="hours">Hours</option>
-                        <option value="days">Business days</option>
-                        <option value="weeks">Weeks</option>
+                        <option value="hours">{t("pages.productsAdd2.hours")}</option>
+                        <option value="days">{t("pages.productsAdd2.businessDays")}</option>
+                        <option value="weeks">{t("pages.productsAdd2.weeks")}</option>
                       </select>
                     </Field>
                   </div>
                 </div>
                 <p className="text-[11px] text-gray-500">
-                  Buyers will see: <strong>{leadTimeMin || "?"}–{leadTimeMax || "?"} {leadTimeUnit === "days" ? "Business Days" : leadTimeUnit === "hours" ? "Hours" : "Weeks"}</strong>
+                  {t("pages.productsAdd2.buyersSee")} <strong>{leadTimeMin || "?"}–{leadTimeMax || "?"} {leadTimeUnit === "days" ? t("pages.productsAdd2.businessDays") : leadTimeUnit === "hours" ? t("pages.productsAdd2.hours") : t("pages.productsAdd2.weeks")}</strong>
                 </p>
               </div>
             </div>
@@ -1409,8 +1417,8 @@ export default function AddProductPage() {
             {/* Returns */}
             <div className="rounded-lg bg-white border border-gray-100">
               <SectionHeader
-                title="Returns"
-                hint="Return window shown on the product page. Disable if you don't accept returns."
+                title={t("pages.productsAdd2.returns")}
+                hint={t("pages.productsAdd2.returnsHint")}
               />
               <div className="p-4 space-y-4">
                 <label className="flex items-start gap-2 text-xs text-gray-700 cursor-pointer">
@@ -1421,16 +1429,16 @@ export default function AddProductPage() {
                     className="rounded mt-0.5"
                   />
                   <span>
-                    <span className="font-semibold">Accept returns on this product</span>
+                    <span className="font-semibold">{t("pages.productsAdd2.acceptReturns")}</span>
                     <span className="block text-[11px] text-gray-500 mt-0.5">
-                      Buyers can request a return within the window below.
+                      {t("pages.productsAdd2.acceptReturnsDesc")}
                     </span>
                   </span>
                 </label>
 
                 {returnAccepts && (
                   <div className="space-y-3 pl-6 ml-2 border-l-2 border-gray-100 pt-1">
-                    <Field label="Return window (days)">
+                    <Field label={t("pages.productsAdd2.returnWindow")}>
                       <input
                         type="number"
                         min="1"
@@ -1440,12 +1448,12 @@ export default function AddProductPage() {
                         className={`${inputCls} max-w-[160px]`}
                       />
                     </Field>
-                    <Field label="Conditions / notes" optional>
+                    <Field label={t("pages.productsAdd2.conditionsNotes")} optional>
                       <textarea
                         value={returnNotes}
                         onChange={(e) => setReturnNotes(e.target.value)}
                         rows={3}
-                        placeholder="e.g. Item must be unopened and in original packaging."
+                        placeholder={t("pages.productsAdd2.conditionsPlaceholder")}
                         className={`${inputCls} resize-y`}
                       />
                     </Field>
@@ -1457,11 +1465,11 @@ export default function AddProductPage() {
             {/* SEO */}
             <div className="rounded-lg bg-white border border-gray-100">
               <SectionHeader
-                title="Search engine listing"
-                hint="How this product appears in Google and social shares."
+                title={t("pages.productsAdd2.seoListing")}
+                hint={t("pages.productsAdd2.seoHint")}
               />
               <div className="p-4 space-y-4">
-                <Field label="Page title" optional>
+                <Field label={t("pages.productsAdd2.pageTitle")} optional>
                   <input
                     type="text"
                     value={seoTitle}
@@ -1471,17 +1479,17 @@ export default function AddProductPage() {
                   />
                   <p className="text-[10px] text-gray-400">{seoTitle.length}/70 characters</p>
                 </Field>
-                <Field label="Meta description" optional>
+                <Field label={t("pages.productsAdd2.metaDescription")} optional>
                   <textarea
                     value={seoDesc}
                     onChange={(e) => setSeoDesc(e.target.value)}
                     rows={3}
-                    placeholder="Short summary that appears on search results."
+                    placeholder={t("pages.productsAdd2.metaPlaceholder")}
                     className={`${inputCls} resize-y`}
                   />
                   <p className="text-[10px] text-gray-400">{seoDesc.length}/160 characters</p>
                 </Field>
-                <Field label="URL handle" optional>
+                <Field label={t("pages.productsAdd2.urlHandle")} optional>
                   <div className="flex items-center">
                     <span className="px-3 py-2 rounded-l-md text-xs text-gray-500 font-mono bg-gray-100">
                       lalashop.com/products/
@@ -1503,9 +1511,9 @@ export default function AddProductPage() {
           <div className="space-y-4">
             {/* Status */}
             <div className="rounded-lg bg-white border border-gray-100">
-              <SectionHeader title="Status" />
+              <SectionHeader title={t("pages.productsAdd2.status")} />
               <div className="p-4 space-y-3">
-                <Field label="Visibility">
+                <Field label={t("pages.productsAdd2.visibility")}>
                   <div className="relative">
                     <select
                       value={status}
@@ -1521,11 +1529,11 @@ export default function AddProductPage() {
                 </Field>
                 <p className="flex items-start gap-1.5 text-[11px] text-gray-500">
                   {status === "Active" ? (
-                    <><Eye className="w-3 h-3 mt-0.5 text-green-600" /> Visible on storefront after publishing.</>
+                    <><Eye className="w-3 h-3 mt-0.5 text-green-600" /> {t("pages.productsAdd2.visibleAfterPublish")}</>
                   ) : status === "Draft" ? (
-                    <><EyeOff className="w-3 h-3 mt-0.5 text-gray-400" /> Hidden until you publish.</>
+                    <><EyeOff className="w-3 h-3 mt-0.5 text-gray-400" /> {t("pages.productsAdd2.hiddenUntilPublish")}</>
                   ) : (
-                    <><EyeOff className="w-3 h-3 mt-0.5 text-gray-400" /> Removed from all sales channels.</>
+                    <><EyeOff className="w-3 h-3 mt-0.5 text-gray-400" /> {t("pages.productsAdd2.removedFromChannels")}</>
                   )}
                 </p>
               </div>
@@ -1533,9 +1541,9 @@ export default function AddProductPage() {
 
             {/* Organization */}
             <div className="rounded-lg bg-white border border-gray-100">
-              <SectionHeader title="Organization" />
+              <SectionHeader title={t("pages.productsAdd2.organization")} />
               <div className="p-4 space-y-4">
-                <Field label="Category" hint="Drives variants" required>
+                <Field label={t("pages.productsAdd2.category")} hint={t("pages.productsAdd2.categoryDrivesVariants")} required>
                   <div className="relative">
                     <select
                       value={category}
@@ -1546,7 +1554,7 @@ export default function AddProductPage() {
                         const supported = !!CATEGORY_CONFIG[c.value];
                         return (
                           <option key={c.value} value={c.value}>
-                            {c.label}{supported ? "" : " (basic template)"}
+                            {c.label}{supported ? "" : t("pages.productsAdd2.basicTemplate")}
                           </option>
                         );
                       })}
@@ -1554,11 +1562,11 @@ export default function AddProductPage() {
                     <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
                   </div>
                   <p className="text-[10px] text-gray-400 mt-1">
-                    Switching the category resets the variant template below.
+                    {t("pages.productsAdd2.categoryResets")}
                   </p>
                 </Field>
 
-                <Field label="Vendor / Brand" optional>
+                <Field label={t("pages.productsAdd2.vendorBrand")} optional>
                   <input
                     type="text"
                     value={vendor}
@@ -1568,7 +1576,7 @@ export default function AddProductPage() {
                   />
                 </Field>
 
-                <Field label="Tags" optional>
+                <Field label={t("pages.productsAdd2.tags")} optional>
                   <div className="flex items-center gap-2">
                     <input
                       type="text"
@@ -1580,14 +1588,14 @@ export default function AddProductPage() {
                           addTag();
                         }
                       }}
-                      placeholder="Add tag and press Enter"
+                      placeholder={t("pages.productsAdd2.tagPlaceholder")}
                       className={inputCls}
                     />
                     <button
                       onClick={addTag}
                       className="px-2 py-1.5 rounded-md text-xs font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200"
                     >
-                      Add
+                      {t("pages.productsAdd2.add")}
                     </button>
                   </div>
                   {tags.length > 0 && (
@@ -1614,14 +1622,14 @@ export default function AddProductPage() {
 
             {/* Sales channels */}
             <div className="rounded-lg bg-white border border-gray-100">
-              <SectionHeader title="Sales channels" />
+              <SectionHeader title={t("pages.productsAdd2.salesChannels")} />
               <div className="p-4 space-y-2">
                 {(
                   [
-                    { key: "storefront", label: "Online storefront" },
-                    { key: "tiktok", label: "TikTok Shop" },
-                    { key: "facebook", label: "Facebook Shop" },
-                    { key: "instagram", label: "Instagram Shop" },
+                    { key: "storefront", label: t("pages.productsAdd2.onlineStorefront") },
+                    { key: "tiktok", label: t("pages.productsAdd2.tiktokShop") },
+                    { key: "facebook", label: t("pages.productsAdd2.facebookShop") },
+                    { key: "instagram", label: t("pages.productsAdd2.instagramShop") },
                   ] as { key: keyof typeof channels; label: string }[]
                 ).map((c) => (
                   <label key={c.key} className="flex items-center justify-between text-xs text-gray-700">
@@ -1643,10 +1651,9 @@ export default function AddProductPage() {
               <div className="flex items-start gap-2">
                 <HelpCircle className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-xs font-semibold text-gray-900">Need help with listings?</p>
+                  <p className="text-xs font-semibold text-gray-900">{t("pages.productsAdd2.needHelp")}</p>
                   <p className="text-[11px] text-gray-500 mt-0.5">
-                    Read our seller guide on writing titles, pricing for wholesale,
-                    and choosing the right variants.
+                    {t("pages.productsAdd2.needHelpDesc")}
                   </p>
                 </div>
               </div>
@@ -1660,21 +1667,21 @@ export default function AddProductPage() {
             href="/me/me"
             className="px-3 py-2 rounded-md text-xs font-medium text-gray-700"
           >
-            Cancel
+            {t("pages.productsAdd.cancel")}
           </Link>
           <button
             onClick={() => handlePublish("Draft")}
             disabled={submitting}
             className="px-4 py-2 rounded-md text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
           >
-            Save as draft
+            {t("pages.productsAdd.saveDraft")}
           </button>
           <button
             onClick={() => handlePublish("Active")}
             disabled={submitting}
             className="bg-primary text-white px-5 py-2 rounded-md text-xs font-semibold hover:bg-primary-hover disabled:opacity-50"
           >
-            {submitting ? "Saving…" : "Publish product"}
+            {submitting ? t("pages.productsAdd.saving") : t("pages.productsAdd.publishProduct")}
           </button>
         </div>
       </main>
@@ -1682,7 +1689,7 @@ export default function AddProductPage() {
   );
 }
 
-const CustomVariantInput = ({ onAdd }: { onAdd: (value: string) => void }) => {
+const CustomVariantInput = ({ onAdd, addPlaceholder, addLabel }: { onAdd: (value: string) => void; addPlaceholder: string; addLabel: string }) => {
   const [value, setValue] = useState("");
   return (
     <div className="flex items-center gap-2">
@@ -1697,7 +1704,7 @@ const CustomVariantInput = ({ onAdd }: { onAdd: (value: string) => void }) => {
             setValue("");
           }
         }}
-        placeholder="Add custom value (press Enter)"
+        placeholder={addPlaceholder}
         className={`${inputCls} text-[11px]`}
       />
       <button
@@ -1708,7 +1715,7 @@ const CustomVariantInput = ({ onAdd }: { onAdd: (value: string) => void }) => {
         }}
         className="px-2 py-1.5 rounded-md text-[11px] font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 shrink-0"
       >
-        Add
+        {addLabel}
       </button>
     </div>
   );

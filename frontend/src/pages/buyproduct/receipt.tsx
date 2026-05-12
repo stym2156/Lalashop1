@@ -246,12 +246,12 @@ export default function ReceiptPage() {
       <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 text-center space-y-4">
         <AlertCircle size={48} className="text-rose-400" />
         <h1 className="text-xl font-bold text-slate-900">{t("status.error")}</h1>
-        <p className="text-sm text-slate-500 max-w-md">{error || "Order not found."}</p>
+        <p className="text-sm text-slate-500 max-w-md">{error || t("pages.receipt.orderNotFound")}</p>
         <Link
           href="/me/me"
           className="inline-flex items-center gap-1.5 text-sm font-bold text-primary hover:underline"
         >
-          <ArrowLeft size={14} /> Back to my account
+          <ArrowLeft size={14} /> {t("pages.receipt.backToAccount")}
         </Link>
       </div>
     );
@@ -292,7 +292,7 @@ export default function ReceiptPage() {
             </div>
             <div className="text-right space-y-1">
               <p className="text-[10px] text-slate-400 font-bold tracking-widest">
-                Order Date
+                {t("pages.receipt.orderDate")}
               </p>
               <p className="text-[13px] font-bold">{formatDateTime(order.createdAt)}</p>
             </div>
@@ -324,7 +324,7 @@ export default function ReceiptPage() {
                   <div className="flex-1 min-w-0">
                     <h4 className="text-[14px] font-bold line-clamp-1">{item.name}</h4>
                     <p className="text-[11px] text-slate-400 font-medium">
-                      Qty: {item.qty} · Unit: ฿{formatMoney(item.price)}
+                      {t("pages.receipt.qtyUnit", { qty: item.qty, price: formatMoney(item.price) })}
                     </p>
                   </div>
                   <div className="text-right flex-shrink-0">
@@ -345,7 +345,7 @@ export default function ReceiptPage() {
               <div className="flex justify-between text-slate-500 text-[14px] font-medium">
                 <span>{t("pages.checkout.shippingFee")}</span>
                 <span className={shippingFee > 0 ? "tabular-nums text-slate-900" : "text-emerald-500 font-bold text-[12px]"}>
-                  {shippingFee > 0 ? `฿${formatMoney(shippingFee)}` : "Free"}
+                  {shippingFee > 0 ? `฿${formatMoney(shippingFee)}` : t("pages.receipt.free")}
                 </span>
               </div>
               <div className="pt-4 flex justify-between items-center">
@@ -366,7 +366,7 @@ export default function ReceiptPage() {
               <div className="pt-8 border-t border-slate-100 space-y-3">
                 <div className="flex items-center justify-between">
                   <p className="text-[10px] text-slate-400 font-bold tracking-widest">
-                    Transfer Proof
+                    {t("pages.receipt.transferProof")}
                   </p>
                   <span
                     className={`text-[10px] font-bold tracking-wide px-2 py-0.5 rounded-full ${
@@ -387,14 +387,14 @@ export default function ReceiptPage() {
                     <img src={slip.slipImageUrl} alt="Transfer Slip" className="w-full h-auto" />
                   </div>
                   <div className="flex-1 text-[12px] space-y-1.5">
-                    <Row label="Transferred" value={`฿${formatMoney(slip.transferAmount)}`} bold />
-                    {slip.transferRef && <Row label="Reference" value={slip.transferRef} mono />}
+                    <Row label={t("pages.receipt.transferred")} value={`฿${formatMoney(slip.transferAmount)}`} bold />
+                    {slip.transferRef && <Row label={t("pages.receipt.reference")} value={slip.transferRef} mono />}
                     {slip.transferredAt && (
-                      <Row label="Transferred at" value={formatDateTime(slip.transferredAt)} />
+                      <Row label={t("pages.receipt.transferredAt")} value={formatDateTime(slip.transferredAt)} />
                     )}
                     {slip.paymentMethod?.bankName && (
                       <Row
-                        label="To"
+                        label={t("pages.receipt.to")}
                         value={`${slip.paymentMethod.bankName}${
                           slip.paymentMethod.accountNumber
                             ? ` ····${slip.paymentMethod.accountNumber.slice(-4)}`
@@ -402,7 +402,7 @@ export default function ReceiptPage() {
                         }`}
                       />
                     )}
-                    {slip.buyerNote && <Row label="Note" value={slip.buyerNote} />}
+                    {slip.buyerNote && <Row label={t("pages.receipt.note")} value={slip.buyerNote} />}
                     {slip.status === "rejected" && slip.rejectionReason && (
                       <p className="mt-2 px-2 py-1.5 rounded bg-rose-50 text-rose-700 text-[11px] font-medium">
                         {slip.rejectionReason}
@@ -417,7 +417,7 @@ export default function ReceiptPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-8 border-t border-slate-100">
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 tracking-widest">
-                  <MapPin size={12} className="text-primary" /> Shipping Address
+                  <MapPin size={12} className="text-primary" /> {t("pages.receipt.shippingAddress")}
                 </div>
                 <div className="text-[13px] text-slate-600 leading-relaxed">
                   <p className="font-bold text-slate-900">
@@ -429,7 +429,7 @@ export default function ReceiptPage() {
               </div>
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 tracking-widest">
-                  <CreditCard size={12} className="text-primary" /> Payment Method
+                  <CreditCard size={12} className="text-primary" /> {t("pages.receipt.paymentMethod")}
                 </div>
                 <div className="text-[13px] text-slate-600 font-medium">
                   <p className="text-slate-900">{formatPaymentMethod(order.paymentMethod)}</p>
@@ -445,7 +445,7 @@ export default function ReceiptPage() {
                   </p>
                   {order.paidAt && (
                     <p className="text-[10px] text-slate-400 mt-0.5">
-                      Paid at {formatDateTime(order.paidAt)}
+                      {t("pages.receipt.paidAt", { date: formatDateTime(order.paidAt) })}
                     </p>
                   )}
                 </div>
@@ -462,13 +462,13 @@ export default function ReceiptPage() {
               onClick={() => window.print()}
               className="flex items-center gap-2 text-[12px] font-bold text-slate-400 hover:text-primary transition-colors tracking-widest"
             >
-              <Printer size={16} /> Print Receipt
+              <Printer size={16} /> {t("pages.receipt.printReceipt")}
             </button>
             <button
               onClick={handleDownloadPDF}
               className="flex items-center gap-2 text-[12px] font-bold text-slate-400 hover:text-primary transition-colors tracking-widest"
             >
-              <Download size={16} /> Save Receipt
+              <Download size={16} /> {t("pages.receipt.saveReceipt")}
             </button>
           </div>
         </section>
@@ -479,7 +479,7 @@ export default function ReceiptPage() {
             href="/me/me"
             className="inline-flex items-center gap-1.5 text-sm font-bold text-primary hover:underline"
           >
-            <ArrowLeft size={14} /> Back to my account
+            <ArrowLeft size={14} /> {t("pages.receipt.backToAccount")}
           </Link>
         </div>
       </main>

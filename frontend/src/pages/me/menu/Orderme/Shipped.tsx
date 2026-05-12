@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 
 interface Order {
@@ -16,6 +17,7 @@ const formatMoney = (n: number): string =>
   Number(n || 0).toLocaleString("en-US", { maximumFractionDigits: 2 });
 
 export default function Shipped() {
+  const { t } = useTranslation("common");
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,10 +42,10 @@ export default function Shipped() {
     };
   }, []);
 
-  if (loading) return <div className="p-6 text-center text-gray-400 text-[13px]">Loading...</div>;
+  if (loading) return <div className="p-6 text-center text-gray-400 text-[13px]">{t("pages.ordermeShipped.loading")}</div>;
   if (error) return <div className="p-6 text-center text-red-500 text-[13px]">{error}</div>;
   if (orders.length === 0)
-    return <div className="p-6 text-center text-gray-400 text-[13px]">No shipped orders</div>;
+    return <div className="p-6 text-center text-gray-400 text-[13px]">{t("pages.ordermeShipped.noOrders")}</div>;
 
   return (
     <div className="flex flex-col gap-2">
@@ -55,7 +57,7 @@ export default function Shipped() {
               <span className="text-[13px] font-bold text-gray-500 italic">
                 #{o._id.slice(-8).toUpperCase()}
               </span>
-              <span className="text-[13px] font-medium text-[#00aeff]">Shipped</span>
+              <span className="text-[13px] font-medium text-[#00aeff]">{t("pages.ordermeShipped.label")}</span>
             </div>
             {first && (
               <div className="flex gap-3">
@@ -80,10 +82,10 @@ export default function Shipped() {
             )}
             <div className="flex justify-end gap-2 pt-2 border-t border-[#F8F8F8]">
               <button className="w-full py-2 border border-[#00aeff] text-[#00aeff] rounded-full text-[13px] font-medium active:bg-blue-50">
-                Check Delivery Status
+                {t("pages.ordermeShipped.checkDelivery")}
               </button>
               <button className="w-full py-2 border border-[#DDDDDD] rounded-full text-[13px] font-medium active:bg-gray-50 text-gray-600">
-                Details
+                {t("pages.ordermeShipped.details")}
               </button>
             </div>
           </div>

@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { ShieldCheck, ChevronDown, Info, Plus, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { countries, productCategories, laoBanks } from "./constants";
 
 interface Props {
@@ -32,6 +33,7 @@ export default function Step2ShopInfo({
     accountEmail,
     errors,
 }: Props) {
+    const { t } = useTranslation("common");
     const isIndividual = businessType === 'individual';
     const [entityName, setEntityName] = useState("");
     const [emailOption, setEmailOption] = useState<"current" | "other">("current");
@@ -56,7 +58,7 @@ export default function Step2ShopInfo({
         const value = otherEmailInput.trim();
         const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
         if (!isValid) {
-            setOtherEmailError("Please enter a valid email address.");
+            setOtherEmailError(t("pages.openshopStep2More.invalidEmail"));
             return;
         }
         setOtherEmailError(null);
@@ -74,21 +76,21 @@ export default function Step2ShopInfo({
                     <div className="space-y-6 pb-6 border-b border-gray-50">
                         <div className="flex items-center gap-2 text-primary">
                             <Info size={20} />
-                            <h2 className="text-[18px] font-bold tracking-tight">Business Entity Details</h2>
+                            <h2 className="text-[18px] font-bold tracking-tight">{t("pages.openshopStep2.businessEntity")}</h2>
                         </div>
                         <div className="space-y-3">
                             <label className="text-[14px] font-bold text-gray-700">
-                                {businessType === 'partnership' ? 'Partnership Name' : 'Registered Company Name'}
+                                {businessType === 'partnership' ? t("pages.openshopStep2More.partnershipName") : t("pages.openshopStep2More.companyName")}
                             </label>
                             <input
                                 type="text"
                                 value={entityName}
                                 onChange={(e) => setEntityName(e.target.value)}
-                                placeholder="Enter exactly as shown on license"
+                                placeholder={t("pages.openshopStep2More.entityPlaceholder")}
                                 className="w-full border border-gray-border rounded-lg px-4 py-3 text-[15px] focus:border-primary outline-none bg-white transition-all font-bold"
                             />
                             <p className="text-[12px] text-gray-400 font-medium italic">
-                                * This must match your official registration documents.
+                                {t("pages.openshopStep2More.entityNote")}
                             </p>
                         </div>
                     </div>
@@ -96,20 +98,18 @@ export default function Step2ShopInfo({
 
                 <div className="flex flex-col md:flex-row gap-10">
                     <div className="flex-1 space-y-6">
-                        <h2 className="text-[20px] font-bold">Shop Bank Account</h2>
+                        <h2 className="text-[20px] font-bold">{t("pages.openshopStep2.shopBankAccount")}</h2>
 
                         <div className="space-y-3">
                             <p className="text-[13px] text-gray-500 leading-relaxed font-medium">
-                                Enter your shop’s bank account information to receive payments.<br />
-                                Please make sure the account name and account number are correct.<br />
-                                This information will be used for withdrawals and settlements.
+                                {t("pages.openshopStep2More.bankInfoDesc")}
                             </p>
 
                             <input
                                 type="text"
                                 value={shopName}
                                 onChange={(e) => setShopName(e.target.value)}
-                                placeholder="Account Holder Name"
+                                placeholder={t("pages.openshopStep2.accountHolderName")}
                                 className={`w-full border rounded-lg px-4 py-3 text-[15px] focus:border-primary outline-none bg-white transition-all ${errors.shopName
                                         ? "border-red-500 bg-red-50/10"
                                         : "border-gray-border"
@@ -130,7 +130,7 @@ export default function Step2ShopInfo({
                                         } ${bankName ? "" : "text-gray-400"}`}
                                 >
                                     <option value="" disabled>
-                                        Select Bank
+                                        {t("pages.openshopStep2.selectBank")}
                                     </option>
                                     {laoBanks.map((b) => (
                                         <option key={b} value={b} className="text-dark">
@@ -153,7 +153,7 @@ export default function Step2ShopInfo({
                                         setShopAccount(val);
                                     }
                                 }}
-                                placeholder="Bank Account Number"
+                                placeholder={t("pages.openshopStep2.bankAccountNumber")}
                                 className={`w-full border rounded-lg px-4 py-3 text-[15px] focus:border-primary outline-none bg-white transition-all ${errors.shopAccount
                                         ? "border-red-500 bg-red-50/10"
                                         : "border-gray-border"
@@ -166,10 +166,10 @@ export default function Step2ShopInfo({
 
             {/* --- SECTION 2: Main Products --- */}
             <section className="bg-white border border-gray-100 rounded-xl p-8 space-y-6 shadow-sm">
-                <h2 className="text-[20px] font-bold">Main Products</h2>
+                <h2 className="text-[20px] font-bold">{t("pages.openshopStep2.mainProducts")}</h2>
                 <div className="space-y-4">
                     <p className="text-[13px] text-gray-500 font-medium">
-                        Choose the category that best describes the products you sell. This will not affect your future business and will be used for registration purposes only.
+                        {t("pages.openshopStep2More.mainProductsDesc")}
                     </p>
                     <div className="relative">
                         <select
@@ -177,7 +177,7 @@ export default function Step2ShopInfo({
                             onChange={(e) => setShopCategory(e.target.value)}
                             className={`w-full border rounded-lg px-4 py-3 text-[15px] focus:border-primary outline-none appearance-none bg-white font-medium cursor-pointer ${errors.shopCategory ? 'border-red-500 bg-red-50/10' : 'border-gray-border'}`}
                         >
-                            <option value="">Select main product/service category</option>
+                            <option value="">{t("pages.openshopStep2.selectMainCategory")}</option>
                             {productCategories.map(cat => (
                                 <option key={cat.value} value={cat.value}>{cat.label}</option>
                             ))}
@@ -191,27 +191,27 @@ export default function Step2ShopInfo({
             <section className="bg-white border border-gray-100 rounded-xl p-8 space-y-8 shadow-sm">
                 <div className="flex items-center gap-2 text-primary">
                     <ShieldCheck size={24} />
-                    <h2 className="text-[18px] font-bold">Secure Registration</h2>
+                    <h2 className="text-[18px] font-bold">{t("pages.openshopStep2.secureRegistration")}</h2>
                 </div>
                 <p className="text-[13px] text-gray-500 font-medium leading-relaxed">
-                    To secure your account, we need your email and phone number for verification. This information will be used for screening. We recommend using a business email for better authentication.
+                    {t("pages.openshopStep2More.secureDesc")}
                 </p>
 
                 {/* Email Address */}
                 <div className="space-y-4 pt-2">
-                    <h3 className="text-[15px] font-bold">Email Address</h3>
+                    <h3 className="text-[15px] font-bold">{t("pages.openshopStep2More.emailAddress")}</h3>
                     <div className="flex flex-wrap gap-6">
                         <label className="flex items-center gap-2 cursor-pointer group">
                             <div onClick={selectCurrentEmail} className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${emailOption === "current" ? "border-primary" : "border-gray-300"}`}>
                                 {emailOption === "current" && <div className="w-2.5 h-2.5 bg-primary rounded-full" />}
                             </div>
-                            <span className="text-[14px] font-medium">Use current</span>
+                            <span className="text-[14px] font-medium">{t("pages.openshopStep2More.useCurrent")}</span>
                         </label>
                         <label className="flex items-center gap-2 cursor-pointer group">
                             <div onClick={selectOtherEmail} className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${emailOption === "other" ? "border-primary" : "border-gray-300"}`}>
                                 {emailOption === "other" && <div className="w-2.5 h-2.5 bg-primary rounded-full" />}
                             </div>
-                            <span className="text-[14px] font-medium text-gray-500">Use other</span>
+                            <span className="text-[14px] font-medium text-gray-500">{t("pages.openshopStep2More.useOther")}</span>
                         </label>
                     </div>
 
@@ -220,25 +220,25 @@ export default function Step2ShopInfo({
                             <div className="w-full border border-gray-200 rounded-lg px-4 py-3 text-[15px] bg-gray-50 font-bold text-gray-700 flex items-center justify-between">
                                 <span className="truncate">
                                     {fallbackEmail || (
-                                        <span className="text-gray-400 italic font-medium">No email on account</span>
+                                        <span className="text-gray-400 italic font-medium">{t("pages.openshopStep2More.noEmailOnAccount")}</span>
                                     )}
                                 </span>
                             </div>
                             <p className="mt-2 text-[12px] text-gray-400">
-                                This is the email currently linked to your account.
+                                {t("pages.openshopStep2More.currentEmailNote")}
                             </p>
                         </div>
                     ) : (
                         <div className="max-w-md space-y-2 animate-in fade-in slide-in-from-top-1 duration-200">
                             <label className="text-[12px] font-bold text-gray-500 tracking-wide">
-                                NEW EMAIL ADDRESS
+                                {t("pages.openshopStep2More.newEmailLabel")}
                             </label>
                             <div className={`flex items-stretch border rounded-lg overflow-hidden focus-within:border-primary transition-all ${otherEmailError ? 'border-red-500' : 'border-gray-border'}`}>
                                 <input
                                     type="email"
                                     value={otherEmailInput}
                                     onChange={(e) => setOtherEmailInput(e.target.value)}
-                                    placeholder="business@yourdomain.com"
+                                    placeholder={t("pages.openshopStep2More.emailPlaceholder")}
                                     className="flex-1 px-4 py-3 outline-none text-[15px] font-medium"
                                 />
                                 <button
@@ -246,7 +246,7 @@ export default function Step2ShopInfo({
                                     onClick={applyOtherEmail}
                                     className="px-4 bg-primary text-white text-[12px] font-bold tracking-widest flex items-center gap-1 hover:bg-primary-hover transition-colors"
                                 >
-                                    <Plus size={14} /> Add
+                                    <Plus size={14} /> {t("pages.openshopStep2More.add")}
                                 </button>
                             </div>
                             {otherEmailError && (

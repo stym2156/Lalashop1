@@ -202,11 +202,11 @@ export default function ProductPage() {
   const handleAddToCart = useCallback(async () => {
     if (cartLoading || !product) return;
     if (!variantsComplete) {
-      showToast("Pick every option first");
+      showToast(t("pages.productPage2.pickOptionFirst"));
       return;
     }
     if (stockLeft <= 0) {
-      showToast("Out of stock");
+      showToast(t("pages.productPage2.outOfStock"));
       return;
     }
     setCartLoading(true);
@@ -223,12 +223,12 @@ export default function ProductPage() {
 
       if (!response.success) throw new Error("Failed to add to cart");
 
-      showToast(`Added ${product?.name} to cart`);
+      showToast(t("pages.productPage2.addedToCart", { name: product?.name }));
       // ส่ง event เพื่อบอก Header ให้อัปเดตตัวเลข
       window.dispatchEvent(new Event('cartUpdated'));
     } catch (error: any) {
       console.error("Cart Error:", error);
-      showToast("Error adding to cart");
+      showToast(t("pages.productPage2.errorAddingCart"));
     } finally {
       setCartLoading(false);
     }
@@ -271,12 +271,12 @@ export default function ProductPage() {
       return;
     }
     if (isOwnProduct) {
-      showToast("This is your own product");
+      showToast(t("pages.productPage2.ownProductMsg"));
       return;
     }
     const seller: any = (product as any)?.seller;
     if (!seller || !sellerId) {
-      showToast("Seller info unavailable");
+      showToast(t("pages.productPage2.sellerUnavailable"));
       return;
     }
     const cover = Array.isArray((product as any).images)
@@ -405,7 +405,7 @@ export default function ProductPage() {
             className="ml-auto inline-flex items-center gap-1.5 text-[10px] font-bold text-gray-400 hover:text-red-500 px-2 py-1 rounded-full transition-colors"
             title="Report this product"
           >
-            <Flag size={12} /> Report
+            <Flag size={12} /> {t("actions.report")}
           </button>
         </nav>
 
@@ -653,10 +653,10 @@ export default function ProductPage() {
                   <CreditCard size={15} />
                 )}
                 {buyLoading
-                  ? "Processing..."
+                  ? t("pages.productPage2.processing")
                   : stockLeft <= 0
-                    ? "Out of stock"
-                    : "Buy"}
+                    ? t("pages.productPage2.outOfStock")
+                    : t("pages.productPage2.buyShort")}
               </button>
 
               {/* Secondary: Add to Cart */}
@@ -671,10 +671,10 @@ export default function ProductPage() {
                   <ShoppingCart size={15} />
                 )}
                 {cartLoading
-                  ? "Adding..."
+                  ? t("pages.productPage2.addingShort")
                   : stockLeft <= 0
-                    ? "Out of stock"
-                    : "Add to Cart"}
+                    ? t("pages.productPage2.outOfStock")
+                    : t("pages.productPage2.addToCart")}
               </button>
 
               {/* Ghost: Message */}
@@ -683,7 +683,7 @@ export default function ProductPage() {
                 className="btn-hover w-full bg-transparent text-slate-600 hover:bg-slate-100 border border-gray-200 font-bold text-sm rounded-2xl py-3.5 mb-6 flex items-center justify-center gap-2 transition-all duration-200"
               >
                 <MessageCircle size={15} />
-                Chat with seller
+                {t("pages.productPage2.chatSeller")}
               </button>
 
               {/* Trust Pills — values pulled from real product fields */}
@@ -759,7 +759,7 @@ export default function ProductPage() {
                 className="flex-1 md:flex-none px-6 py-3 bg-white  text-slate-700 font-bold text-sm rounded-xl transition-all duration-200 flex items-center justify-center gap-2"
               >
                 <Store size={16} />
-                View Shop
+                {t("pages.productPage2.viewShop")}
               </Link>
               <button
                 onClick={handleChatSeller}
@@ -824,7 +824,7 @@ export default function ProductPage() {
                 ))
               ) : (
                 <div className="col-span-full py-10 text-center text-gray-400 font-medium bg-white rounded-2xl border border-dashed">
-                  No similar products found.
+                  {t("pages.productPage2.noSimilarProducts")}
                 </div>
               )}
             </div>
@@ -841,7 +841,7 @@ export default function ProductPage() {
             className="flex-1 bg-sky-500 text-white font-bold text-sm rounded-2xl py-3.5 flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-60"
           >
             <ShoppingCart size={15} />
-            To Cart
+            {t("pages.productPage2.toCart")}
           </button>
           <button
             onClick={handleBuy}
@@ -849,7 +849,7 @@ export default function ProductPage() {
             className="flex-1 bg-slate-900 text-white font-bold text-sm rounded-2xl py-3.5 flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-60"
           >
             <CreditCard size={15} />
-            Buy Now
+            {t("pages.productPage2.buyNow")}
           </button>
         </div>
       </div>

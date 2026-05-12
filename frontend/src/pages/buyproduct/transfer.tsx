@@ -268,7 +268,7 @@ export default function TransferPage() {
     const file = e.target.files?.[0];
     if (!file) return;
     if (!file.type.startsWith("image/")) {
-      setSubmitError("Please pick an image file");
+      setSubmitError(t("pages.transfer.pickImage"));
       return;
     }
     setSlipFile(file);
@@ -279,7 +279,7 @@ export default function TransferPage() {
   const handleSubmitSlip = async () => {
     if (!orderId || !selectedMethod) return;
     if (!slipFile) {
-      setSubmitError("Please attach the transfer slip image first");
+      setSubmitError(t("pages.transfer.attachSlipFirst"));
       return;
     }
     setSubmitting(true);
@@ -334,14 +334,14 @@ export default function TransferPage() {
         {/* Order header */}
         <div className="rounded-xl border border-gray-100 bg-white p-5">
           <p className="text-[11px] font-bold text-gray-500 tracking-widest">
-            Total to pay
+            {t("pages.transfer.totalToPay")}
           </p>
           <p className="text-3xl font-black tabular-nums text-[#00aeff] mt-1">
             ฿{formatMoney(orderTotal || expectedTotal)}
           </p>
           {orderId ? (
             <p className="text-[11px] text-gray-500 mt-2">
-              Order: <span className="font-mono">#{orderId.slice(-8).toUpperCase()}</span>
+              {t("pages.transfer.orderShort")} <span className="font-mono">#{orderId.slice(-8).toUpperCase()}</span>
             </p>
           ) : orderInitError ? (
             <div className="mt-2 rounded-md bg-red-50 px-3 py-2 text-[11px] text-red-700 inline-flex items-center gap-2">
@@ -349,7 +349,7 @@ export default function TransferPage() {
             </div>
           ) : (
             <p className="text-[11px] text-gray-400 mt-2 inline-flex items-center gap-1">
-              <Loader2 className="w-3 h-3 animate-spin" /> Creating order…
+              <Loader2 className="w-3 h-3 animate-spin" /> {t("pages.transfer.creatingOrder")}
             </p>
           )}
         </div>
@@ -361,13 +361,13 @@ export default function TransferPage() {
           </div>
         ) : methods.length === 0 ? (
           <div className="rounded-xl bg-amber-50 border border-amber-200 px-4 py-3 text-[12px] text-amber-800">
-            No payment methods configured yet. Please contact support.
+            {t("pages.transfer.noPaymentMethods")}
           </div>
         ) : (
           <>
             <div>
               <h3 className="text-[11px] font-bold text-gray-500 tracking-widest mb-2">
-                Choose payment method
+                {t("pages.transfer.choosePaymentMethod")}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {methods.map((m) => (
@@ -385,7 +385,7 @@ export default function TransferPage() {
             {selectedMethod && (
               <div className="rounded-xl bg-white border border-gray-100 p-5 space-y-3">
                 <h3 className="text-[13px] font-bold text-gray-900">
-                  Transfer instructions
+                  {t("pages.transfer.transferInstructions")}
                 </h3>
 
                 {selectedMethod.kind === "bank" && (
@@ -418,7 +418,7 @@ export default function TransferPage() {
               <div>
                 <h3 className="text-[13px] font-bold text-gray-900">{t("pages.checkout.uploadSlip")}</h3>
                 <p className="text-[11px] text-gray-500 mt-0.5">
-                  Upload the bank/wallet transfer slip and the admin will verify within a few hours.
+                  {t("pages.transfer.uploadDesc")}
                 </p>
               </div>
 
@@ -459,20 +459,20 @@ export default function TransferPage() {
               />
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <Field label="Reference number (optional)">
+                <Field label={t("pages.transfer.referenceLabel")}>
                   <input
                     className={inputCls}
                     value={transferRef}
                     onChange={(e) => setTransferRef(e.target.value)}
-                    placeholder="e.g. last 4 digits of slip ref"
+                    placeholder={t("pages.transfer.referencePlaceholder")}
                   />
                 </Field>
-                <Field label="Note for admin (optional)">
+                <Field label={t("pages.transfer.noteAdmin")}>
                   <input
                     className={inputCls}
                     value={buyerNote}
                     onChange={(e) => setBuyerNote(e.target.value)}
-                    placeholder="anything we should know?"
+                    placeholder={t("pages.transfer.notePlaceholder")}
                   />
                 </Field>
               </div>
@@ -491,16 +491,16 @@ export default function TransferPage() {
                 {submitting ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    {slipUploading ? "Uploading slip…" : "Submitting…"}
+                    {slipUploading ? t("pages.transfer.uploadingSlip") : t("pages.transfer.submitting")}
                   </>
                 ) : (
                   <>
-                    Submit slip <ArrowRight className="w-4 h-4" />
+                    {t("pages.transfer.submitSlip")} <ArrowRight className="w-4 h-4" />
                   </>
                 )}
               </button>
               <p className="text-[10px] text-gray-400 text-center">
-                Your order will be marked paid once the admin verifies the slip.
+                {t("pages.transfer.orderMarkedPaid")}
               </p>
             </div>
           </>
@@ -580,7 +580,9 @@ const PromptPayDetails: React.FC<{
   qrDataUrl: string | null;
   qrLoading: boolean;
   amount: number;
-}> = ({ method, qrDataUrl, qrLoading, amount }) => (
+}> = ({ method, qrDataUrl, qrLoading, amount }) => {
+  const { t } = useTranslation("common");
+  return (
   <div className="flex flex-col items-center gap-3">
     {qrLoading ? (
       <div className="w-56 h-56 rounded-md bg-gray-100 flex items-center justify-center">
@@ -591,7 +593,7 @@ const PromptPayDetails: React.FC<{
       <img src={qrDataUrl} alt="PromptPay QR" className="w-56 h-56 rounded-md border border-gray-200 bg-white p-2" />
     ) : (
       <div className="w-56 h-56 rounded-md bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
-        QR unavailable
+        {t("pages.transfer.qrUnavailable")}
       </div>
     )}
     <p className="text-[11px] text-gray-500 text-center">
@@ -604,9 +606,12 @@ const PromptPayDetails: React.FC<{
       ID: {method.promptpayId}
     </p>
   </div>
-);
+  );
+};
 
-const StaticQrDetails: React.FC<{ method: PaymentMethod }> = ({ method }) => (
+const StaticQrDetails: React.FC<{ method: PaymentMethod }> = ({ method }) => {
+  const { t } = useTranslation("common");
+  return (
   <div className="flex flex-col items-center gap-3">
     {method.qrImageUrl ? (
       // eslint-disable-next-line @next/next/no-img-element
@@ -617,17 +622,18 @@ const StaticQrDetails: React.FC<{ method: PaymentMethod }> = ({ method }) => (
       />
     ) : (
       <div className="w-56 h-56 bg-gray-100 rounded-md flex items-center justify-center text-gray-400 text-xs">
-        QR not uploaded
+        {t("pages.transfer.qrNotUploaded")}
       </div>
     )}
     {method.accountName && (
       <p className="text-[12px] font-bold text-gray-900 text-center">{method.accountName}</p>
     )}
     <p className="text-[11px] text-amber-700 text-center">
-      ⚠ This QR is fixed — make sure you transfer the exact total above.
+      {t("pages.transfer.qrFixedWarning")}
     </p>
   </div>
-);
+  );
+};
 
 const CopyRow: React.FC<{
   label: string;
@@ -636,7 +642,9 @@ const CopyRow: React.FC<{
   onCopy: (text: string, key: string) => void;
   copied: string | null;
   mono?: boolean;
-}> = ({ label, value, keyName, onCopy, copied, mono }) => (
+}> = ({ label, value, keyName, onCopy, copied, mono }) => {
+  const { t } = useTranslation("common");
+  return (
   <div className="flex items-center justify-between gap-3 rounded-md bg-gray-50 px-3 py-2">
     <div className="flex-1 min-w-0">
       <p className="text-[10px] font-bold text-gray-500 tracking-wide">{label}</p>
@@ -651,17 +659,18 @@ const CopyRow: React.FC<{
       >
         {copied === keyName ? (
           <>
-            <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Copied
+            <CheckCircle2 className="w-3 h-3 text-emerald-600" /> {t("actions.copied")}
           </>
         ) : (
           <>
-            <Copy className="w-3 h-3" /> Copy
+            <Copy className="w-3 h-3" /> {t("actions.copy")}
           </>
         )}
       </button>
     )}
   </div>
-);
+  );
+};
 
 const inputCls =
   "w-full px-3 py-2 rounded-md text-sm bg-gray-50 border border-gray-100 focus:border-[#00aeff] focus:bg-white focus:outline-none transition-colors";

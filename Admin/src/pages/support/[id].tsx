@@ -5,6 +5,7 @@ import {
   ArrowLeft, Loader2, AlertCircle, Send, CheckCircle2,
   Mail, Calendar, User as UserIcon,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   fetchAdminTicket,
   replyAdminTicket,
@@ -35,6 +36,7 @@ const STATUS_BADGE: Record<TicketStatus, string> = {
 };
 
 const SupportDetailPage: React.FC = () => {
+  const { t } = useTranslation('common');
   const router = useRouter();
   const ticketId = typeof router.query.id === "string" ? router.query.id : null;
 
@@ -53,7 +55,7 @@ const SupportDetailPage: React.FC = () => {
       const res = await fetchAdminTicket(ticketId);
       setTicket(res.data ?? null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load ticket");
+      setError(err instanceof Error ? err.message : t('pages.support.details.notFound'));
     } finally {
       setLoading(false);
     }
@@ -73,7 +75,7 @@ const SupportDetailPage: React.FC = () => {
       if (res.data) setTicket(res.data);
       setReply("");
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Reply failed");
+      alert(err instanceof Error ? err.message : t('pages.support.details.reply'));
     } finally {
       setSending(false);
     }
@@ -88,7 +90,7 @@ const SupportDetailPage: React.FC = () => {
       const res = await updateAdminTicket(ticketId, payload);
       if (res.data) setTicket(res.data);
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Update failed");
+      alert(err instanceof Error ? err.message : t('actions.update'));
     } finally {
       setUpdating(false);
     }
@@ -106,10 +108,10 @@ const SupportDetailPage: React.FC = () => {
     return (
       <div className="space-y-3">
         <Link href="/support" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-black">
-          <ArrowLeft className="w-4 h-4" /> Back to tickets
+          <ArrowLeft className="w-4 h-4" /> {t('pages.support.details.back')}
         </Link>
         <div className="rounded-md bg-red-50 px-3 py-2 text-[12px] text-red-700 inline-flex items-center gap-2">
-          <AlertCircle className="w-3.5 h-3.5" /> {error || "Ticket not found"}
+          <AlertCircle className="w-3.5 h-3.5" /> {error || t('pages.support.details.notFound')}
         </div>
       </div>
     );
@@ -121,7 +123,7 @@ const SupportDetailPage: React.FC = () => {
         href="/support"
         className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-black"
       >
-        <ArrowLeft className="w-3.5 h-3.5" /> Back to tickets
+        <ArrowLeft className="w-3.5 h-3.5" /> {t('pages.support.details.back')}
       </Link>
 
       {/* Header */}
@@ -137,7 +139,7 @@ const SupportDetailPage: React.FC = () => {
               </span>
             </div>
             <p className="text-[11px] text-gray-500 mt-1">
-              Category: <span className="font-bold capitalize">{ticket.category}</span> · Opened{" "}
+              {t('pages.support.details.category')}: <span className="font-bold capitalize">{ticket.category}</span> · {t('pages.support.details.opened')}{" "}
               {formatDate(ticket.createdAt)}
             </p>
           </div>
@@ -145,30 +147,30 @@ const SupportDetailPage: React.FC = () => {
 
         {/* Quick controls */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
-          <Field label="Status">
+          <Field label={t('pages.support.details.statusLabel')}>
             <select
               value={ticket.status}
               onChange={(e) => updateField({ status: e.target.value as TicketStatus })}
               disabled={updating}
               className="w-full bg-gray-50 border border-gray-100 focus:bg-white focus:border-gray-200 outline-none rounded px-2 py-1.5 text-xs disabled:opacity-50"
             >
-              <option value="open">Open</option>
-              <option value="in_progress">In progress</option>
-              <option value="resolved">Resolved</option>
-              <option value="closed">Closed</option>
+              <option value="open">{t('pages.support.details.statusOptions.open')}</option>
+              <option value="in_progress">{t('pages.support.details.statusOptions.inProgress')}</option>
+              <option value="resolved">{t('pages.support.details.statusOptions.resolved')}</option>
+              <option value="closed">{t('pages.support.details.statusOptions.closed')}</option>
             </select>
           </Field>
-          <Field label="Priority">
+          <Field label={t('pages.support.details.priority')}>
             <select
               value={ticket.priority}
               onChange={(e) => updateField({ priority: e.target.value as TicketPriority })}
               disabled={updating}
               className="w-full bg-gray-50 border border-gray-100 focus:bg-white focus:border-gray-200 outline-none rounded px-2 py-1.5 text-xs disabled:opacity-50"
             >
-              <option value="low">Low</option>
-              <option value="normal">Normal</option>
-              <option value="high">High</option>
-              <option value="urgent">Urgent</option>
+              <option value="low">{t('pages.support.details.priorityOptions.low')}</option>
+              <option value="normal">{t('pages.support.details.priorityOptions.normal')}</option>
+              <option value="high">{t('pages.support.details.priorityOptions.high')}</option>
+              <option value="urgent">{t('pages.support.details.priorityOptions.urgent')}</option>
             </select>
           </Field>
         </div>
@@ -177,7 +179,7 @@ const SupportDetailPage: React.FC = () => {
       {/* User panel */}
       <div className="rounded-lg border border-gray-100 p-4 bg-white">
         <h3 className="text-[11px] font-bold text-gray-500 tracking-wide mb-3">
-          Submitted by
+          {t('pages.support.details.submittedBy')}
         </h3>
         <div className="flex items-center gap-3">
           {ticket.user?.profileImage ? (
@@ -210,7 +212,7 @@ const SupportDetailPage: React.FC = () => {
               href={`/users/${ticket.user._id}`}
               className="text-[11px] font-bold text-[#00aeff] hover:underline"
             >
-              View profile →
+              {t('pages.support.details.viewProfile')}
             </Link>
           )}
         </div>
@@ -219,15 +221,16 @@ const SupportDetailPage: React.FC = () => {
       {/* Conversation */}
       <div className="rounded-lg border border-gray-100 bg-white">
         <div className="px-4 py-3 border-b border-gray-100">
-          <h3 className="text-sm font-bold text-gray-900">Conversation</h3>
+          <h3 className="text-sm font-bold text-gray-900">{t('pages.support.details.conversation')}</h3>
         </div>
         <div className="p-4 space-y-3">
           {/* Initial message */}
           <MessageBubble
             authorRole="user"
-            authorName={ticket.user?.name || ticket.user?.email || "User"}
+            authorName={ticket.user?.name || ticket.user?.email || t('table.user')}
             message={ticket.description}
             createdAt={ticket.createdAt}
+            youAdminLabel={t('pages.support.details.youAdmin')}
           />
           {ticket.replies.map((r) => (
             <MessageBubble
@@ -240,6 +243,7 @@ const SupportDetailPage: React.FC = () => {
               }
               message={r.message}
               createdAt={r.createdAt}
+              youAdminLabel={t('pages.support.details.youAdmin')}
             />
           ))}
         </div>
@@ -248,7 +252,7 @@ const SupportDetailPage: React.FC = () => {
         {ticket.status === "closed" ? (
           <div className="px-4 py-3 border-t border-gray-100 bg-gray-50 text-center">
             <p className="text-[11px] text-gray-500">
-              <CheckCircle2 className="w-3 h-3 inline mr-1" /> This ticket is closed.
+              <CheckCircle2 className="w-3 h-3 inline mr-1" /> {t('pages.support.details.ticketClosed')}
             </p>
           </div>
         ) : (
@@ -257,7 +261,7 @@ const SupportDetailPage: React.FC = () => {
               value={reply}
               onChange={(e) => setReply(e.target.value)}
               rows={3}
-              placeholder="Reply to the user…"
+              placeholder={t('pages.support.details.replyPlaceholder')}
               className="w-full bg-gray-50 border border-gray-100 focus:bg-white focus:border-gray-200 outline-none rounded px-3 py-2 text-xs resize-none"
             />
             <div className="flex justify-end">
@@ -271,7 +275,7 @@ const SupportDetailPage: React.FC = () => {
                 ) : (
                   <Send className="w-3.5 h-3.5 mr-1.5" />
                 )}
-                {sending ? "Sending…" : "Send reply"}
+                {sending ? t('pages.support.details.sending') : t('pages.support.details.sendReply')}
               </button>
             </div>
           </form>
@@ -286,9 +290,10 @@ interface MessageBubbleProps {
   authorName: string;
   message: string;
   createdAt: string;
+  youAdminLabel: string;
 }
 
-const MessageBubble: React.FC<MessageBubbleProps> = ({ authorRole, authorName, message, createdAt }) => {
+const MessageBubble: React.FC<MessageBubbleProps> = ({ authorRole, authorName, message, createdAt, youAdminLabel }) => {
   const mine = authorRole === "admin";
   return (
     <div className={`flex ${mine ? "justify-end" : "justify-start"}`}>
@@ -304,7 +309,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ authorRole, authorName, m
             mine ? "text-white/80" : "text-gray-500"
           }`}
         >
-          <span className="font-bold">{mine ? "You (admin)" : authorName}</span>
+          <span className="font-bold">{mine ? youAdminLabel : authorName}</span>
           <Calendar className="w-2.5 h-2.5" />
           <span>{formatDate(createdAt)}</span>
         </div>

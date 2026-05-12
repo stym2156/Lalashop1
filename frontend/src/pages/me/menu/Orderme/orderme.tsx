@@ -99,7 +99,7 @@ export default function CreatorOrders({ onBack }: OrderCreatorProps) {
                 <div className="flex justify-between items-center mb-3">
                   <span className="text-[11px] font-bold text-gray-400">#{order._id.slice(-8).toUpperCase()}</span>
                   <span className={`text-[10px] font-black px-2 py-0.5 rounded ${order.isPaid ? 'bg-emerald-50 text-emerald-600' : 'bg-orange-50 text-orange-600'}`}>
-                    {order.isPaid ? 'Paid' : 'Pending'}
+                    {order.isPaid ? t("pages.ordermePanel.paid") : t("pages.ordermePanel.pending")}
                   </span>
                 </div>
                 {order.orderItems.map((item: any, idx: number) => (
@@ -112,7 +112,7 @@ export default function CreatorOrders({ onBack }: OrderCreatorProps) {
                   </div>
                 ))}
                 <div className="border-t border-dashed border-gray-100 pt-3 flex justify-between items-center">
-                  <span className="text-xs text-gray-500">Order Income</span>
+                  <span className="text-xs text-gray-500">{t("pages.ordermePanel.orderIncome")}</span>
                   <span className="text-sm font-black text-[#00aeff]">฿{order.orderItems.reduce((acc: number, item: any) => acc + (item.price * item.qty), 0).toLocaleString()}</span>
                 </div>
               </div>
@@ -121,7 +121,7 @@ export default function CreatorOrders({ onBack }: OrderCreatorProps) {
         ) : (
           <div className="py-20 flex flex-col items-center justify-center text-[#CCCCCC]">
             <ShoppingBag size={48} strokeWidth={1} />
-            <p className="mt-2 text-[14px]">No orders found</p>
+            <p className="mt-2 text-[14px]">{t("pages.ordermePanel.noOrdersFound")}</p>
           </div>
         )}
       </main>

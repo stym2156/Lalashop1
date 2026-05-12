@@ -44,7 +44,8 @@
     "logoutSession": "Đăng xuất phiên",
     "audit": "Nhật ký kiểm tra",
     "team": "Đội ngũ",
-    "logout": "Đăng xuất"
+    "logout": "Đăng xuất",
+    "shopCenter": "Trung tâm cửa hàng"
   },
   "actions": {
     "save": "Lưu",
@@ -91,7 +92,16 @@
     "copy": "Sao chép",
     "clear": "Xóa",
     "apply": "Áp dụng",
-    "tryAgain": "Thử lại"
+    "tryAgain": "Thử lại",
+    "deleteFailed": "Xóa thất bại",
+    "moveDown": "Chuyển xuống",
+    "moveUp": "Chuyển lên",
+    "reorderFailed": "Sắp xếp thất bại",
+    "resend": "Gửi lại",
+    "revoke": "Thu hồi",
+    "saveChanges": "Lưu thay đổi",
+    "saveFailed": "Lưu thất bại",
+    "toggleFailed": "Chuyển đổi thất bại"
   },
   "status": {
     "loading": "Đang tải...",
@@ -129,7 +139,16 @@
     "on": "Bật",
     "off": "Tắt",
     "yes": "Có",
-    "no": "Không"
+    "no": "Không",
+    "disabled": "Đã tắt",
+    "enabled": "Đã bật",
+    "notIssued": "Chưa cấp",
+    "notSet": "Chưa thiết lập",
+    "processed": "Đã xử lý",
+    "read": "Đã đọc",
+    "saved": "Đã lưu",
+    "settled": "Đã thanh toán",
+    "unread": "Chưa đọc"
   },
   "table": {
     "id": "ID",
@@ -188,7 +207,22 @@
     "showColumns": "Hiển thị cột",
     "columns": "Cột",
     "columnsTitle": "Cột",
-    "dateRange": "Khoảng ngày"
+    "dateRange": "Khoảng ngày",
+    "adminIp": "IP quản trị",
+    "auditId": "Mã kiểm toán",
+    "bankAccount": "Tài khoản ngân hàng",
+    "categoryName": "Tên danh mục",
+    "date": "Ngày",
+    "description": "Mô tả",
+    "detail": "Chi tiết",
+    "note": "Ghi chú",
+    "readStatus": "Trạng thái đọc",
+    "recipient": "Người nhận",
+    "sent": "Đã gửi",
+    "slug": "Slug",
+    "target": "Mục tiêu",
+    "title": "Tiêu đề",
+    "withdrawId": "Mã rút"
   },
   "auth": {
     "login": "Đăng nhập",
@@ -211,7 +245,10 @@
     "secureHeadline": "Truy cập an toàn chỉ dành cho người vận hành.",
     "secureSubtext": "Bảng điều khiển này quản lý người dùng, cửa hàng, sản phẩm, tài chính và kiểm duyệt nội dung trên toàn nền tảng. Mọi hành động đều được ghi lại.",
     "internalUseOnly": "Chỉ dùng nội bộ",
-    "restrictedFooter": "Đây là khu vực hạn chế. Truy cập trái phép sẽ bị ghi lại và truy tố."
+    "restrictedFooter": "Đây là khu vực hạn chế. Truy cập trái phép sẽ bị ghi lại và truy tố.",
+    "fullName": "Họ tên",
+    "name": "Tên",
+    "phone": "Điện thoại"
   },
   "dashboard": {
     "title": "Bảng điều khiển",
@@ -260,7 +297,9 @@
     "hoursAgo": "{{count}} giờ trước",
     "daysAgo": "{{count}} ngày trước",
     "sellers": "Người bán",
-    "shopCenterLink": "Trung tâm cửa hàng"
+    "shopCenterLink": "Trung tâm cửa hàng",
+    "needAttention": "Cần chú ý",
+    "orderCount": "{{count}} đơn hàng"
   },
   "withdraw": {
     "title": "Yêu cầu rút tiền",
@@ -327,17 +366,114 @@
     "optional": "Tùy chọn",
     "required": "Bắt buộc",
     "selectAll": "Chọn tất cả",
-    "clearAll": "Xóa tất cả"
+    "clearAll": "Xóa tất cả",
+    "accountName": "Tên tài khoản",
+    "accountNumber": "Số tài khoản",
+    "actions": "Thao tác",
+    "address": "Địa chỉ",
+    "admin": "Quản trị viên",
+    "amount": "Số tiền",
+    "backToAdmins": "Về quản trị viên",
+    "balance": "Số dư",
+    "bank": "Ngân hàng",
+    "bankName": "Tên ngân hàng",
+    "birthDate": "Ngày sinh",
+    "businessLicense": "Giấy phép kinh doanh",
+    "businessType": "Loại hình kinh doanh",
+    "buyer": "Người mua",
+    "category": "Danh mục",
+    "copied": "Đã sao chép",
+    "copy": "Sao chép",
+    "copyFailed": "Sao chép thất bại",
+    "created": "Tạo lúc",
+    "creating": "Đang tạo...",
+    "date": "Ngày",
+    "document": "Tài liệu",
+    "email": "Email",
+    "entityName": "Tên pháp nhân",
+    "error": "Lỗi",
+    "expires": "Hết hạn",
+    "fee": "Phí",
+    "fullName": "Họ tên",
+    "guest": "Khách",
+    "headsUp": "Lưu ý",
+    "id": "Mã",
+    "idExpiry": "Ngày hết hạn giấy tờ",
+    "idNumber": "Số giấy tờ",
+    "idType": "Loại giấy tờ",
+    "inStockUnits": "Đơn vị tồn kho",
+    "itemsSold": "Đã bán",
+    "joined": "Tham gia",
+    "kycDocuments": "Tài liệu KYC",
+    "kycIdentity": "Danh tính KYC",
+    "kycReviewed": "KYC đã xem xét",
+    "kycStatus": "Trạng thái KYC",
+    "kycSubmitted": "KYC đã gửi",
+    "lastIp": "IP gần nhất",
+    "loading": "Đang tải...",
+    "loadingError": "Tải dữ liệu thất bại",
+    "locked": "Đã khóa",
+    "message": "Tin nhắn",
+    "name": "Tên",
+    "net": "Ròng",
+    "noAnalytics": "Không có dữ liệu phân tích",
+    "noDocuments": "Không có tài liệu",
+    "noHistory": "Không có lịch sử",
+    "noKyc": "Không có KYC",
+    "noProducts": "Không có sản phẩm",
+    "noReason": "Không có lý do",
+    "noViolations": "Không có vi phạm",
+    "notASeller": "Không phải người bán",
+    "notLinked": "Chưa liên kết",
+    "note": "Ghi chú",
+    "orderId": "Mã đơn hàng",
+    "orders": "Đơn hàng",
+    "ownerAccount": "Tài khoản chủ sở hữu",
+    "password": "Mật khẩu",
+    "phone": "Điện thoại",
+    "price": "Giá",
+    "product": "Sản phẩm",
+    "reference": "Tham chiếu",
+    "refunds": "Hoàn tiền",
+    "rejectionReason": "Lý do từ chối",
+    "requests": "Yêu cầu",
+    "reviewNote": "Ghi chú xem xét",
+    "reviewedBy": "Người xem xét",
+    "role": "Vai trò",
+    "sellerType": "Loại người bán",
+    "sent": "Đã gửi",
+    "shopCategory": "Danh mục cửa hàng",
+    "shopEmail": "Email cửa hàng",
+    "shopName": "Tên cửa hàng",
+    "since": "Từ",
+    "sold": "Đã bán",
+    "status": "Trạng thái",
+    "stock": "Tồn kho",
+    "supportingDocument": "Tài liệu hỗ trợ",
+    "suspendedAt": "Khóa lúc",
+    "thisShop": "Cửa hàng này",
+    "timestamps": "Dấu thời gian",
+    "tinNumber": "Mã số thuế",
+    "totalProducts": "Tổng sản phẩm",
+    "type": "Loại",
+    "unknownUser": "Người dùng lạ",
+    "unverified": "Chưa xác minh",
+    "updated": "Cập nhật",
+    "userId": "Mã người dùng",
+    "username": "Tên đăng nhập",
+    "verified": "Đã xác minh",
+    "warehouse": "Kho hàng",
+    "when": "Khi nào"
   },
   "pages": {
     "users": {
       "tableTitle": "Tất cả người dùng",
-      "searchPlaceholder": "Tìm ID, tên, email, điện thoại...",
-      "loadingUsers": "Đang tải người dùng…",
-      "noMatch": "Không có người dùng khớp bộ lọc.",
-      "totalBalance": "Tổng số dư ({{count}} người dùng)",
+      "searchPlaceholder": "Tìm người dùng...",
+      "loadingUsers": "Đang tải người dùng...",
+      "noMatch": "Không có người dùng khớp",
+      "totalBalance": "Tổng số dư",
       "usersCount": "{{count}} người dùng",
-      "exportTitle": "Xuất chế độ xem hiện tại dưới dạng CSV",
+      "exportTitle": "Xuất CSV",
       "filters": {
         "all": "Tất cả",
         "seller": "Người bán",
@@ -368,7 +504,22 @@
         "noBank": "Chưa liên kết tài khoản ngân hàng",
         "orders": "Đơn hàng",
         "noOrders": "Chưa có đơn hàng",
-        "kycStatus": "Trạng thái KYC"
+        "kycStatus": "Trạng thái KYC",
+        "bankUpdateError": "Cập nhật ngân hàng thất bại",
+        "demoteConfirm": "Xác nhận hạ cấp?",
+        "issueConfirm": "Xác nhận cấp thông tin?",
+        "issueError": "Cấp thông tin thất bại",
+        "loadingError": "Tải dữ liệu thất bại",
+        "noIncomeWarning": "Chưa có thu nhập",
+        "promoteConfirm": "Xác nhận thăng cấp?",
+        "saveError": "Lưu thất bại",
+        "suspendError": "Tạm khóa thất bại",
+        "suspendModal": {
+          "reasonRequired": "Lý do bắt buộc"
+        },
+        "viewAllWithdrawals": "Xem tất cả rút tiền",
+        "viewBuyerOrders": "Xem đơn (người mua)",
+        "viewSellerOrders": "Xem đơn (người bán)"
       }
     },
     "shops": {
@@ -378,11 +529,11 @@
       "pending": "Đang chờ",
       "closed": "Đã đóng",
       "active": "Hoạt động",
-      "totalBalance": "Tổng số dư ({{count}} cửa hàng)",
-      "loadingShops": "Đang tải cửa hàng…",
-      "noMatch": "Không có cửa hàng khớp bộ lọc.",
+      "totalBalance": "Tổng số dư",
+      "loadingShops": "Đang tải cửa hàng...",
+      "noMatch": "Không có cửa hàng khớp",
       "shopsCount": "{{count}} cửa hàng",
-      "searchPlaceholder": "Tìm tên cửa hàng, chủ sở hữu, email...",
+      "searchPlaceholder": "Tìm cửa hàng...",
       "searchTablePlaceholder": "Tìm tên cửa hàng, chủ sở hữu, ID...",
       "kpi": {
         "allShops": "Tất cả cửa hàng",
@@ -391,9 +542,9 @@
         "totalBalance": "Tổng số dư"
       },
       "applications": {
-        "title": "Đơn mở cửa hàng",
+        "title": "Đơn đăng ký cửa hàng",
         "subtitle": "Xem xét đơn mở cửa hàng đang chờ",
-        "noApplications": "Không có đơn đang chờ"
+        "noApplications": "Không có đơn"
       },
       "details": {
         "title": "Chi tiết cửa hàng",
@@ -408,7 +559,8 @@
         "orders": "Đơn hàng",
         "rating": "Đánh giá",
         "description": "Mô tả",
-        "policies": "Chính sách"
+        "policies": "Chính sách",
+        "loadingError": "Tải dữ liệu thất bại"
       },
       "shopCenter": {
         "active": "Cửa hàng hoạt động",
@@ -452,7 +604,43 @@
         "approve": "Duyệt",
         "reject": "Từ chối",
         "ban": "Cấm",
-        "feature": "Đề xuất"
+        "feature": "Đề xuất",
+        "tabOverview": "Tổng quan",
+        "tabImages": "Hình ảnh",
+        "tabReviews": "Đánh giá",
+        "tabReports": "Báo cáo",
+        "tabHistory": "Lịch sử",
+        "sectionProductInfo": "Thông tin sản phẩm",
+        "sectionDescription": "Mô tả",
+        "sectionPerformance": "Hiệu suất bán hàng",
+        "labelProductId": "ID sản phẩm",
+        "labelShop": "Cửa hàng",
+        "labelCategory": "Danh mục",
+        "labelPrice": "Giá",
+        "labelStock": "Tồn kho",
+        "labelStatus": "Trạng thái",
+        "labelCreated": "Đã tạo",
+        "labelTags": "Thẻ",
+        "metricUnitsSold": "Đã bán",
+        "metricAvgRating": "Điểm trung bình",
+        "metricReviews": "Đánh giá",
+        "metricStock": "Tồn kho",
+        "noImages": "Không có ảnh",
+        "noReviews": "Chưa có đánh giá",
+        "loadingReports": "Đang tải báo cáo...",
+        "noReports": "Không có báo cáo",
+        "noActivity": "Chưa có hoạt động",
+        "unfeature": "Bỏ đề xuất",
+        "flag": "Đánh dấu vi phạm",
+        "clearViolation": "Xóa vi phạm",
+        "reinstate": "Khôi phục",
+        "reportTableId": "ID báo cáo",
+        "reportTableReason": "Lý do",
+        "reportTableBy": "Người báo cáo",
+        "reportTableDesc": "Mô tả",
+        "reportTableStatus": "Trạng thái",
+        "reportTableOpen": "Mở",
+        "reportView": "Xem →"
       }
     },
     "orders": {
@@ -553,7 +741,9 @@
         "back": "Quay lại rút tiền",
         "loading": "Đang tải rút tiền…",
         "notFound": "Không tìm thấy rút tiền",
-        "user": "Người dùng",
+        "user": {
+          "notAvailable": "Không có thông tin người dùng"
+        },
         "shop": "Cửa hàng",
         "bank": "Ngân hàng",
         "accountNumber": "Số tài khoản",
@@ -569,7 +759,8 @@
         "approve": "Duyệt",
         "reject": "Từ chối",
         "markPaid": "Đánh dấu đã thanh toán",
-        "markFailed": "Đánh dấu thất bại"
+        "markFailed": "Đánh dấu thất bại",
+        "loadingError": "Tải rút tiền thất bại"
       }
     },
     "payment": {
@@ -580,7 +771,43 @@
         "subtitle": "Cấu hình tùy chọn thanh toán toàn nền tảng",
         "active": "Hoạt động",
         "inactive": "Không hoạt động",
-        "addMethod": "Thêm phương thức"
+        "addMethod": "Thêm phương thức",
+        "header": "Phương thức thanh toán",
+        "headerDesc": "Tài khoản ngân hàng và mã QR hiển thị cho khách khi thanh toán",
+        "noMethodsYet": "Chưa có phương thức thanh toán",
+        "noMethodsDesc": "Thêm ít nhất một tài khoản để khách có thể thanh toán",
+        "activeLabel": "Hoạt động",
+        "disabledLabel": "Đã tắt",
+        "enable": "Bật",
+        "disable": "Tắt",
+        "editModal": "Sửa phương thức",
+        "addModal": "Thêm phương thức",
+        "formType": "Loại",
+        "formLabel": "Tên hiển thị",
+        "formBankName": "Tên ngân hàng",
+        "formAccountNumber": "Số tài khoản",
+        "formAccountName": "Tên tài khoản",
+        "formPromptpayId": "PromptPay ID",
+        "formPromptpayHint": "10 số điện thoại, 13 số CMND hoặc 15 số ví điện tử",
+        "formAccountHolderName": "Tên chủ tài khoản",
+        "formQrImageUrl": "URL hình QR",
+        "formQrHint": "Tải lên R2/Cloudinary trước, rồi dán URL vào đây",
+        "formWalletName": "Tên ví",
+        "formNotes": "Ghi chú cho khách (tùy chọn)",
+        "formDisplayOrder": "Thứ tự hiển thị",
+        "formStatus": "Trạng thái",
+        "formActiveLabel": "Hoạt động (hiển thị khi thanh toán)",
+        "formCancel": "Hủy",
+        "formSaving": "Đang lưu…",
+        "formSaveChanges": "Lưu thay đổi",
+        "formCreateMethod": "Tạo phương thức",
+        "kindBank": "Tài khoản ngân hàng",
+        "kindPromptpay": "PromptPay (QR động)",
+        "kindStaticQr": "QR tĩnh (ví)",
+        "promptpayInfo": "💡 QR PromptPay được tạo tự động theo từng đơn hàng, không cần tải ảnh.",
+        "updatedSuccess": "Cập nhật thành công",
+        "createdSuccess": "Tạo thành công",
+        "deleteConfirm": "Xóa phương thức này? Các biên lai hiện tại vẫn tham chiếu đến nó."
       }
     },
     "notifications": {
@@ -622,6 +849,28 @@
         "title": "Báo cáo gửi",
         "noReports": "Không có báo cáo gửi",
         "loading": "Đang tải báo cáo…"
+      },
+      "form": {
+        "messageLabel": "Tin nhắn",
+        "messagePlaceholder": "Nhập tin nhắn thông báo...",
+        "titlePlaceholder": "Nhập tiêu đề thông báo...",
+        "titleRequired": "Tiêu đề bắt buộc"
+      },
+      "loadingHistory": "Đang tải lịch sử...",
+      "noHistory": "Chưa gửi thông báo",
+      "sendButton": "Gửi ngay",
+      "sendFailed": "Gửi thất bại",
+      "sending": "Đang gửi...",
+      "sentSuccess": "Đã gửi thông báo",
+      "table": {
+        "titleContent": "Tiêu đề / Nội dung"
+      },
+      "target": "Mục tiêu",
+      "types": {
+        "info": "Thông tin",
+        "payout": "Thanh toán",
+        "security": "Bảo mật",
+        "system": "Hệ thống"
       }
     },
     "reports": {
@@ -635,15 +884,6 @@
         "resolved": "Đã giải quyết",
         "dismissed": "Đã bỏ qua"
       },
-      "table": {
-        "id": "ID báo cáo",
-        "type": "Loại",
-        "target": "Đối tượng",
-        "reporter": "Người báo cáo",
-        "reason": "Lý do",
-        "submitted": "Đã gửi",
-        "status": "Trạng thái"
-      },
       "details": {
         "title": "Chi tiết báo cáo",
         "back": "Quay lại báo cáo",
@@ -654,6 +894,83 @@
         "ban": "Cấm đối tượng",
         "evidence": "Bằng chứng",
         "history": "Lịch sử"
+      },
+      "noMatch": "Không có báo cáo khớp bộ lọc",
+      "searchPlaceholder": "Tìm mô tả, ghi chú...",
+      "kpi": {
+        "total": "Tổng",
+        "open": "Đang mở",
+        "reviewing": "Đang xem",
+        "actioned": "Đã xử lý",
+        "dismissed": "Đã bỏ qua"
+      },
+      "statusLabel": {
+        "open": "Đang mở",
+        "reviewing": "Đang xem",
+        "actioned": "Đã xử lý",
+        "dismissed": "Đã bỏ qua"
+      },
+      "reasonLabel": {
+        "spam": "Thư rác",
+        "abuse": "Lạm dụng",
+        "fraud": "Gian lận",
+        "counterfeit": "Hàng giả",
+        "harassment": "Quấy rối",
+        "other": "Khác"
+      },
+      "filterLabel": {
+        "status": "Trạng thái",
+        "reason": "Lý do",
+        "target": "Đối tượng",
+        "all": "Tất cả"
+      },
+      "table": {
+        "reportId": "ID báo cáo",
+        "reason": "Lý do",
+        "target": "Đối tượng",
+        "reportedBy": "Người báo cáo",
+        "description": "Mô tả",
+        "reported": "Đã báo cáo",
+        "status": "Trạng thái",
+        "actions": "Hành động"
+      },
+      "detail": {
+        "sectionDescription": "Mô tả",
+        "sectionAdminNote": "Ghi chú quản trị",
+        "sectionTarget": "Đối tượng",
+        "sectionReporter": "Người báo cáo",
+        "sectionReviewHistory": "Lịch sử xem xét",
+        "labelActionTaken": "HÀNH ĐỘNG ĐÃ THỰC HIỆN",
+        "labelAdminNote": "GHI CHÚ QUẢN TRỊ",
+        "adminNotePlaceholder": "Ghi chú nội bộ...",
+        "noDescription": "Không có mô tả",
+        "unknownReporter": "Người báo cáo không rõ",
+        "saved": "Đã lưu",
+        "labelEvidence": "BẰNG CHỨNG",
+        "openTarget": "Mở đối tượng →",
+        "openReporterProfile": "Mở hồ sơ người báo cáo →",
+        "startReviewing": "Bắt đầu xem xét",
+        "takeAction": "Thực hiện hành động",
+        "dismiss": "Bỏ qua",
+        "reOpen": "Mở lại",
+        "save": "Lưu",
+        "labelType": "Loại",
+        "labelId": "ID",
+        "labelName": "Tên",
+        "labelEmail": "Email",
+        "labelCustomId": "Custom ID",
+        "labelStatus": "Trạng thái",
+        "labelAction": "Hành động",
+        "labelReviewedAt": "Xem xét lúc",
+        "labelReviewedBy": "Xem xét bởi",
+        "labelCreated": "Đã tạo",
+        "labelUpdated": "Đã cập nhật",
+        "labelReported": "Đã báo cáo",
+        "actionNone": "Không — không cần hành động",
+        "actionWarn": "Cảnh báo — thông báo người dùng",
+        "actionRemove": "Xóa — gỡ nội dung",
+        "actionSuspend": "Tạm dừng — tạm ngừng",
+        "actionBan": "Cấm — cấm vĩnh viễn"
       }
     },
     "support": {
@@ -675,7 +992,12 @@
         "category": "Danh mục",
         "priority": "Ưu tiên",
         "updated": "Đã cập nhật",
-        "status": "Trạng thái"
+        "status": "Trạng thái",
+        "ticketId": "ID phiếu",
+        "created": "Đã tạo",
+        "openLink": "Mở →",
+        "reply": "trả lời",
+        "replies": "trả lời"
       },
       "details": {
         "title": "Chi tiết phiếu",
@@ -688,7 +1010,41 @@
         "sending": "Đang gửi…",
         "close": "Đóng phiếu",
         "reopen": "Mở lại",
-        "messages": "Tin nhắn"
+        "messages": "Tin nhắn",
+        "submittedBy": "Gửi bởi",
+        "conversation": "Cuộc trò chuyện",
+        "category": "Danh mục",
+        "opened": "Mở lúc",
+        "statusLabel": "Trạng thái",
+        "priority": "Ưu tiên",
+        "statusOptions": {
+          "open": "Đang mở",
+          "inProgress": "Đang xử lý",
+          "resolved": "Đã giải quyết",
+          "closed": "Đã đóng"
+        },
+        "priorityOptions": {
+          "low": "Thấp",
+          "normal": "Bình thường",
+          "high": "Cao",
+          "urgent": "Khẩn cấp"
+        },
+        "sendReply": "Gửi trả lời",
+        "ticketClosed": "Phiếu này đã đóng.",
+        "viewProfile": "Xem hồ sơ →",
+        "youAdmin": "Bạn (quản trị)"
+      },
+      "headerDesc": "Phiếu được mở bởi người bán và khách hàng — trả lời, thay đổi trạng thái.",
+      "noTicketsYet": "Chưa có phiếu",
+      "noMatches": "Không có kết quả",
+      "searchPlaceholder": "Tìm chủ đề, email…",
+      "inProgress": "Đang xử lý",
+      "kpi": {
+        "total": "Tổng",
+        "open": "Đang mở",
+        "inProgress": "Đang xử lý",
+        "resolved": "Đã giải quyết",
+        "closed": "Đã đóng"
       }
     },
     "admins": {
@@ -736,7 +1092,8 @@
           "target": "Đối tượng",
           "ip": "IP",
           "result": "Kết quả"
-        }
+        },
+        "allTargets": "Tất cả mục tiêu"
       }
     },
     "settings": {
@@ -755,7 +1112,11 @@
       },
       "save": "Lưu thay đổi",
       "saving": "Đang lưu…",
-      "saved": "Đã lưu cài đặt"
+      "saved": "Đã lưu cài đặt",
+      "failedToLoad": "Tải cài đặt thất bại",
+      "noSettings": "Không có cài đặt",
+      "publicHint": "Công khai (mọi người dùng thấy)",
+      "settingsCount": "{{count}} cài đặt"
     },
     "profile": {
       "title": "Hồ sơ",
@@ -778,7 +1139,32 @@
       "passwordChangeFailed": "Không thể đổi mật khẩu",
       "save": "Lưu hồ sơ",
       "saving": "Đang lưu…",
-      "saved": "Đã cập nhật hồ sơ"
+      "saved": "Đã cập nhật hồ sơ",
+      "tabProfile": "Hồ sơ",
+      "tabSecurity": "Bảo mật",
+      "tabSessions": "Phiên",
+      "loadingProfile": "Đang tải hồ sơ...",
+      "notAvailable": "Không có hồ sơ",
+      "adminId": "ID quản trị",
+      "fullName": "Họ tên",
+      "username": "Tên đăng nhập",
+      "roleAdmin": "Quản trị viên",
+      "roleUser": "Người dùng",
+      "savedShort": "Đã lưu",
+      "saveChanges": "Lưu thay đổi",
+      "failedToSave": "Lưu thất bại",
+      "secPasswordTitle": "Mật khẩu",
+      "secPasswordDesc": "Đổi mật khẩu quản trị",
+      "secChange": "Đổi",
+      "secTwoFactorTitle": "Xác thực hai yếu tố",
+      "secTwoFactorDesc": "Quản lý 2FA qua trang /2fa sau khi đăng nhập",
+      "secManage": "Quản lý",
+      "secEmailTitle": "Email",
+      "secUpdate": "Cập nhật",
+      "secBackupTitle": "Mã dự phòng",
+      "secBackupDesc": "Có sẵn sau khi kích hoạt TOTP",
+      "secSetup": "Thiết lập",
+      "sessionsNotImpl": "Hệ thống theo dõi phiên chưa được triển khai — IP gần nhất:"
     },
     "categories": {
       "title": "Danh mục",
@@ -797,7 +1183,23 @@
       "confirmDelete": "Xóa danh mục này?",
       "deleteFailed": "Không thể xóa danh mục",
       "saveSuccess": "Đã lưu danh mục",
-      "saveFailed": "Không thể lưu danh mục"
+      "saveFailed": "Không thể lưu danh mục",
+      "activeCount": "{{count}} danh mục đang dùng",
+      "cannotDeleteWithProducts": "Không thể xóa: danh mục có sản phẩm",
+      "categoriesCount": "{{count}} danh mục",
+      "createCategory": "Tạo danh mục",
+      "failedToLoad": "Tải danh mục thất bại",
+      "form": {
+        "activeLabel": "Kích hoạt",
+        "descriptionPlaceholder": "Mô tả tùy chọn...",
+        "iconLabel": "Biểu tượng",
+        "iconPlaceholder": "Tên biểu tượng (lucide-react)...",
+        "namePlaceholder": "Tên danh mục...",
+        "nameRequired": "Tên bắt buộc"
+      },
+      "loadingCategories": "Đang tải danh mục...",
+      "noMatch": "Không có danh mục khớp",
+      "searchPlaceholder": "Tìm danh mục..."
     },
     "history": {
       "title": "Lịch sử",
@@ -818,7 +1220,95 @@
         "withdrawals": "Rút tiền"
       },
       "noEntries": "Không có mục",
-      "loading": "Đang tải lịch sử…"
+      "loading": "Đang tải lịch sử…",
+      "loadingFinancial": "Đang tải dữ liệu tài chính...",
+      "withdrawalsCompleted": "Rút tiền hoàn tất",
+      "withdrawalsBreakdown": "Tổng hợp rút tiền",
+      "count": "Số lượng",
+      "noWithdrawalData": "Chưa có dữ liệu rút tiền",
+      "approvalRate": "Tỷ lệ duyệt",
+      "submissionsApprovedMsg": "Đã duyệt {{approved}} trong {{total}} yêu cầu",
+      "riskSignals": {
+        "critical": "Nghiêm trọng",
+        "high": "Cao",
+        "medium": "Trung bình",
+        "low": "Thấp",
+        "totalSignals": "Tổng tín hiệu",
+        "noSignals": "Không phát hiện tín hiệu rủi ro",
+        "loading": "Đang tải...",
+        "rejectedFrom": "lần rút bị từ chối/thất bại từ",
+        "unknownUser": "người dùng không rõ",
+        "totalRejectedAmount": "Tổng số tiền bị từ chối/thất bại:",
+        "lastAttempt": "lần thử cuối"
+      },
+      "supportTab": {
+        "totalTickets": "tổng phiếu",
+        "openInProgress": "mở / đang xử lý",
+        "resolved": "đã giải quyết",
+        "closed": "đã đóng",
+        "ticketId": "ID phiếu",
+        "subject": "Chủ đề",
+        "user": "Người dùng",
+        "category": "Danh mục",
+        "status": "Trạng thái",
+        "created": "Đã tạo",
+        "updated": "Cập nhật",
+        "noTickets": "Chưa có phiếu hỗ trợ",
+        "loading": "Đang tải..."
+      },
+      "history": {
+        "bankChanges": {
+          "totalRecords": "tổng tài khoản ngân hàng",
+          "verified": "đã xác minh",
+          "unverified": "chưa xác minh",
+          "lastUpdate": "cập nhật gần nhất",
+          "thUser": "người dùng",
+          "thBank": "ngân hàng",
+          "thAccount": "số tài khoản",
+          "thHolderName": "tên chủ tài khoản",
+          "thVerified": "xác minh",
+          "thLastUpdated": "cập nhật gần nhất",
+          "statusVerified": "đã xác minh",
+          "statusUnverified": "chưa xác minh",
+          "noRecords": "Không có bản ghi ngân hàng",
+          "loading": "Đang tải..."
+        },
+        "depositSources": {
+          "breakdownLabel": "Phân tích nguồn tiền — đơn hàng đã thanh toán theo phương thức",
+          "thPaymentMethod": "Phương thức",
+          "thOrders": "Đơn hàng",
+          "thTotalKip": "Tổng (₭)",
+          "thPctOfTotal": "% tổng",
+          "unknown": "Không rõ",
+          "noSources": "Chưa có nguồn nạp",
+          "loading": "Đang tải..."
+        },
+        "linkedAccounts": {
+          "linkedAccountsLabel": "tài khoản liên kết",
+          "thUser": "Người dùng",
+          "thEmail": "Email",
+          "thProviders": "Nhà cung cấp đã liên kết",
+          "none": "không có",
+          "noAccounts": "Chưa có tài khoản liên kết",
+          "loading": "Đang tải..."
+        }
+      },
+      "approved": "Đã duyệt",
+      "dataNote": "Ghi chú dữ liệu",
+      "declined": "Đã từ chối",
+      "lastActive": "Hoạt động gần nhất",
+      "lastKnownIpNote": "IP gần nhất đã ghi",
+      "lastRequest": "Yêu cầu gần nhất",
+      "noAuditEvents": "Không có sự kiện kiểm toán",
+      "noData": "Không có dữ liệu",
+      "noWithdrawals": "Không có giao dịch rút",
+      "totalEvents": "Tổng sự kiện",
+      "totalPaidOut": "Tổng đã trả",
+      "totalRequests": "Tổng yêu cầu",
+      "uniqueActions": "Thao tác khác nhau",
+      "uniqueAdmins": "Quản trị viên khác nhau",
+      "uniqueIps": "IP khác nhau",
+      "uniqueUsers": "Người dùng khác nhau"
     },
     "posts": {
       "title": "Bài đăng",
@@ -865,7 +1355,40 @@
       "accepting": "Đang chấp nhận…",
       "passwordMismatch": "Mật khẩu không khớp",
       "tokenInvalid": "Liên kết lời mời không hợp lệ hoặc đã hết hạn",
-      "success": "Đã chấp nhận lời mời"
+      "success": "Đã chấp nhận lời mời",
+      "pageHeader": "Lời mời quản trị",
+      "loadingInvite": "Đang tải lời mời…",
+      "invalidTitle": "Lời mời này không hợp lệ",
+      "inviteNotFound": "Không tìm thấy lời mời",
+      "failedToLoad": "Tải lời mời thất bại",
+      "failedToAccept": "Chấp nhận lời mời thất bại",
+      "statusTitle": "Lời mời này {{status}}",
+      "statusAccepted": "Bạn có thể đăng nhập trực tiếp.",
+      "statusExpired": "Vui lòng yêu cầu quản trị viên gửi lời mời mới — lời mời này đã hết hạn.",
+      "statusRevoked": "Lời mời này đã bị thu hồi. Liên hệ quản trị viên để có lời mời mới.",
+      "statusValueAccepted": "đã được chấp nhận",
+      "statusValueExpired": "đã hết hạn",
+      "statusValueRevoked": "đã bị thu hồi",
+      "activated": "Tài khoản đã kích hoạt",
+      "redirecting": "Đang chuyển đến trang đăng nhập…",
+      "inviteBanner": "Bạn được mời gia nhập đội ngũ quản trị Lalashop với vai trò",
+      "yourEmail": "Email của bạn",
+      "displayName": "Tên hiển thị",
+      "displayNamePlaceholder": "Chúng tôi nên gọi bạn là gì?",
+      "passwordPlaceholder": "Tối thiểu 6 ký tự",
+      "returnToLogin": "Quay lại đăng nhập",
+      "goToLogin": "Đi đến đăng nhập",
+      "activate": "Kích hoạt tài khoản quản trị",
+      "activating": "Đang kích hoạt…",
+      "passwordMinError": "Mật khẩu phải có ít nhất 6 ký tự",
+      "roleSuper": "Super Admin",
+      "roleFinance": "Quản trị tài chính",
+      "roleSupport": "Quản trị hỗ trợ",
+      "roleContent": "Quản trị nội dung",
+      "roleSuperDesc": "Truy cập đầy đủ tất cả phần quản trị.",
+      "roleFinanceDesc": "Rút tiền, hoàn tiền, đối soát và quyết định thanh toán.",
+      "roleSupportDesc": "Tickets, báo cáo và hỗ trợ khách hàng.",
+      "roleContentDesc": "Sản phẩm, danh mục, bài đăng và kiểm duyệt cửa hàng."
     },
     "errors": {
       "notFoundTitle": "Không tìm thấy trang",
@@ -873,6 +1396,9 @@
       "backHome": "Về bảng điều khiển",
       "serverErrorTitle": "Đã xảy ra lỗi",
       "serverErrorMessage": "Lỗi máy chủ không mong muốn. Vui lòng thử lại."
+    },
+    "withdraw": {
+      "requester": "Người yêu cầu"
     }
   },
   "components": {
@@ -893,5 +1419,131 @@
     "authGuard": {
       "checking": "Đang kiểm tra phiên…"
     }
+  },
+  "admins": {
+    "audit": {
+      "after": "Sau",
+      "before": "Trước",
+      "loading": "Đang tải nhật ký...",
+      "noLogs": "Không có sự kiện kiểm toán",
+      "searchPlaceholder": "Tìm trong nhật ký...",
+      "stats": {
+        "activeAdmins": "Quản trị viên hoạt động",
+        "distinctActions": "Thao tác khác nhau",
+        "last7d": "7 ngày qua",
+        "totalEvents": "Tổng sự kiện"
+      },
+      "table": {
+        "action": "Thao tác",
+        "changes": "Thay đổi",
+        "target": "Mục tiêu",
+        "time": "Thời gian"
+      },
+      "viewDiff": "Xem khác biệt"
+    },
+    "invite": {
+      "confirmRevoke": "Xác nhận thu hồi?",
+      "copyLink": "Sao chép liên kết",
+      "expiresIn": "Hết hạn sau",
+      "failed": "Gửi lời mời thất bại",
+      "failedToLoad": "Tải lời mời thất bại",
+      "invitations": "Lời mời",
+      "invitedBy": "Người mời",
+      "loading": "Đang tải lời mời...",
+      "messagePlaceholder": "Lời nhắn tùy chọn...",
+      "noInvites": "Không có lời mời đang chờ",
+      "pendingCount": "{{count}} đang chờ",
+      "roles": {
+        "contentDesc": "Quản lý sản phẩm, danh mục, bài đăng và cửa hàng",
+        "financeDesc": "Rút tiền, hoàn tiền, đối soát và quyết định thanh toán",
+        "superDesc": "Truy cập đầy đủ tất cả phần quản trị",
+        "supportDesc": "Tickets, báo cáo và hỗ trợ khách hàng"
+      },
+      "send": "Gửi lời mời",
+      "sentSuccess": "Đã gửi lời mời",
+      "subtitle": "Gửi lời mời cho quản trị viên mới",
+      "title": "Mời quản trị viên",
+      "viewRoleMatrix": "Xem ma trận vai trò"
+    },
+    "noAdmins": "Chưa có quản trị viên",
+    "roles": {
+      "adminCount": "{{count}} quản trị viên",
+      "assignRoles": "Gán vai trò",
+      "confirmRevoke": "Xác nhận thu hồi?",
+      "currentRole": "Vai trò hiện tại",
+      "failedToAssign": "Gán vai trò thất bại",
+      "failedToLoad": "Tải vai trò thất bại",
+      "failedToRevoke": "Thu hồi thất bại",
+      "noRole": "Không có vai trò",
+      "noRoleAssigned": "Chưa gán vai trò",
+      "note": "Vai trò quyết định quản trị viên có thể truy cập phần nào",
+      "permissions": "Quyền",
+      "perms": {
+        "allAdminPerms": "Tất cả quyền quản trị",
+        "approveWithdrawals": "Duyệt rút tiền",
+        "editCategories": "Sửa danh mục",
+        "manageAdmins": "Quản lý quản trị viên",
+        "manageBanners": "Quản lý banner",
+        "managePosts": "Quản lý bài đăng",
+        "manageRoles": "Quản lý vai trò",
+        "processPayouts": "Xử lý thanh toán",
+        "refundOrders": "Hoàn tiền đơn hàng",
+        "replyTickets": "Trả lời ticket",
+        "sendNotifications": "Gửi thông báo",
+        "verifyKyc": "Xác minh KYC",
+        "viewAuditLog": "Xem nhật ký kiểm toán",
+        "viewFinancialReports": "Xem báo cáo tài chính",
+        "viewOrders": "Xem đơn hàng",
+        "viewUsers": "Xem người dùng"
+      },
+      "revokeTitle": "Thu hồi vai trò"
+    },
+    "title": "Đội ngũ quản trị"
+  },
+  "financial": {
+    "asBuyer": "Với tư cách người mua",
+    "asSeller": "Với tư cách người bán",
+    "averageOrder": "Đơn trung bình",
+    "avgOrder": "TB / đơn",
+    "avgOrderReceived": "TB nhận",
+    "byStatus": "Theo trạng thái",
+    "creatorCommission": "Hoa hồng creator",
+    "creatorEarningsSettled": "Thu nhập creator đã thanh toán",
+    "currentBalance": "Số dư hiện tại",
+    "drift": "Chênh lệch",
+    "grossRevenue": "Tổng doanh thu",
+    "itemsSold": "Sản phẩm đã bán",
+    "lastPaidOrder": "Đơn đã thanh toán gần nhất",
+    "lastWithdrawal": "Rút tiền gần nhất",
+    "lifetimeIncome": "Thu nhập tích lũy",
+    "netToBank": "Ròng vào ngân hàng",
+    "nonWithdrawable": "Không thể rút",
+    "ordersPlacedLifetime": "Tổng đơn đã đặt",
+    "ordersReceived": "Đơn đã nhận",
+    "paidOrders": "Đơn đã thanh toán",
+    "posRevenue": "Doanh thu POS",
+    "posRevenueInStore": "Doanh thu POS (tại cửa hàng)",
+    "reconciles": "Đối chiếu",
+    "refundsIssued": "Hoàn tiền đã phát hành",
+    "totalAmount": "Tổng số tiền",
+    "totalRequests": "Tổng yêu cầu",
+    "totalSpent": "Tổng chi tiêu",
+    "unpaidPending": "Chưa thanh toán / chờ",
+    "webSales": "Doanh số web",
+    "webSalesAsSeller": "Doanh số web (người bán)",
+    "webSalesOrders": "Đơn hàng web",
+    "withdrawnNet": "Ròng đã rút"
+  },
+  "roles": {
+    "content": "Nội dung",
+    "finance": "Tài chính",
+    "super": "Super Admin",
+    "support": "Hỗ trợ"
+  },
+  "time": {
+    "daysAgo": "{{count}} ngày trước",
+    "hoursAgo": "{{count}} giờ trước",
+    "justNow": "Vừa xong",
+    "minsAgo": "{{count}} phút trước"
   }
 }

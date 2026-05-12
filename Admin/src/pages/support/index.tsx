@@ -3,6 +3,7 @@ import Link from "next/link";
 import {
   Search, Loader2, AlertCircle, MessageSquare, ArrowRight,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   fetchAdminTickets,
   fetchAdminTicketStats,
@@ -35,14 +36,6 @@ const PRIORITY_BADGE: Record<TicketPriority, string> = {
   urgent: "bg-red-50 text-red-700",
 };
 
-const STATUS_TABS: Array<{ key: TicketStatus | "all"; label: string }> = [
-  { key: "all", label: "All" },
-  { key: "open", label: "Open" },
-  { key: "in_progress", label: "In progress" },
-  { key: "resolved", label: "Resolved" },
-  { key: "closed", label: "Closed" },
-];
-
 const CATEGORIES: Array<TicketCategory | "all"> = [
   "all",
   "payments",
@@ -54,6 +47,14 @@ const CATEGORIES: Array<TicketCategory | "all"> = [
 ];
 
 const SupportListPage: React.FC = () => {
+  const { t } = useTranslation('common');
+  const STATUS_TABS: Array<{ key: TicketStatus | "all"; label: string }> = [
+    { key: "all", label: t('pages.support.filters.all') },
+    { key: "open", label: t('pages.support.filters.open') },
+    { key: "in_progress", label: t('pages.support.inProgress') },
+    { key: "resolved", label: t('pages.support.filters.resolved') },
+    { key: "closed", label: t('pages.support.filters.closed') },
+  ];
   const [items, setItems] = useState<AdminTicketRow[]>([]);
   const [stats, setStats] = useState<AdminTicketStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -73,7 +74,7 @@ const SupportListPage: React.FC = () => {
       setItems(list.data ?? []);
       setStats(st.data ?? null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load tickets");
+      setError(err instanceof Error ? err.message : t('pages.support.loading'));
     } finally {
       setLoading(false);
     }
@@ -88,46 +89,46 @@ const SupportListPage: React.FC = () => {
     const q = search.trim().toLowerCase();
     if (!q) return items;
     return items.filter(
-      (t) =>
-        t.subject.toLowerCase().includes(q) ||
-        t.user?.email?.toLowerCase().includes(q) ||
-        t.user?.name?.toLowerCase().includes(q) ||
-        t.description?.toLowerCase().includes(q)
+      (item) =>
+        item.subject.toLowerCase().includes(q) ||
+        item.user?.email?.toLowerCase().includes(q) ||
+        item.user?.name?.toLowerCase().includes(q) ||
+        item.description?.toLowerCase().includes(q)
     );
   }, [items, search]);
 
   return (
     <div className="space-y-4 text-sm">
       <div>
-        <h1 className="text-[16px] font-bold text-gray-900">Support tickets</h1>
+        <h1 className="text-[16px] font-bold text-gray-900">{t('pages.support.title')}</h1>
         <p className="text-[12px] text-gray-500 mt-0.5">
-          Tickets opened by sellers and customers — reply, change status, or assign.
+          {t('pages.support.headerDesc')}
         </p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <Stat label="Total" value={stats?.total?.toLocaleString() ?? "—"} />
-        <Stat label="Open" value={stats?.open?.toLocaleString() ?? "—"} tone="text-blue-700" />
-        <Stat label="In progress" value={stats?.inProgress?.toLocaleString() ?? "—"} tone="text-amber-700" />
-        <Stat label="Resolved" value={stats?.resolved?.toLocaleString() ?? "—"} tone="text-emerald-700" />
-        <Stat label="Closed" value={stats?.closed?.toLocaleString() ?? "—"} tone="text-gray-700" />
+        <Stat label={t('pages.support.kpi.total')} value={stats?.total?.toLocaleString() ?? "—"} />
+        <Stat label={t('pages.support.kpi.open')} value={stats?.open?.toLocaleString() ?? "—"} tone="text-blue-700" />
+        <Stat label={t('pages.support.kpi.inProgress')} value={stats?.inProgress?.toLocaleString() ?? "—"} tone="text-amber-700" />
+        <Stat label={t('pages.support.kpi.resolved')} value={stats?.resolved?.toLocaleString() ?? "—"} tone="text-emerald-700" />
+        <Stat label={t('pages.support.kpi.closed')} value={stats?.closed?.toLocaleString() ?? "—"} tone="text-gray-700" />
       </div>
 
       {/* Filters */}
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-1.5 bg-gray-100 rounded p-0.5">
-          {STATUS_TABS.map((t) => (
+          {STATUS_TABS.map((tab) => (
             <button
-              key={t.key}
-              onClick={() => setStatus(t.key)}
+              key={tab.key}
+              onClick={() => setStatus(tab.key)}
               className={`px-3 py-1 rounded text-[11px] font-bold ${
-                status === t.key
+                status === tab.key
                   ? "bg-white text-black shadow-sm"
                   : "text-gray-500 hover:text-black"
               }`}
             >
-              {t.label}
+              {tab.label}
             </button>
           ))}
         </div>
@@ -139,7 +140,7 @@ const SupportListPage: React.FC = () => {
           >
             {CATEGORIES.map((c) => (
               <option key={c} value={c}>
-                {c.charAt(0).toUpperCase() + c.slice(1)}
+                {c === 'all' ? t('pages.support.filters.all') : c.charAt(0).toUpperCase() + c.slice(1)}
               </option>
             ))}
           </select>
@@ -148,7 +149,7 @@ const SupportListPage: React.FC = () => {
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search subject, email…"
+              placeholder={t('pages.support.searchPlaceholder')}
               className="bg-gray-50 border border-gray-100 focus:bg-white focus:border-gray-200 outline-none rounded pl-8 pr-3 py-1.5 text-xs w-64"
             />
           </div>
@@ -169,7 +170,7 @@ const SupportListPage: React.FC = () => {
         <div className="py-16 text-center">
           <MessageSquare className="w-8 h-8 mx-auto mb-3 text-gray-300" />
           <p className="text-[13px] font-bold text-gray-700">
-            {items.length === 0 ? "No tickets yet" : "No matches"}
+            {items.length === 0 ? t('pages.support.noTicketsYet') : t('pages.support.noMatches')}
           </p>
         </div>
       ) : (
@@ -177,54 +178,54 @@ const SupportListPage: React.FC = () => {
           <table className="w-full text-xs">
             <thead className="bg-gray-50 text-[10px] font-bold text-gray-500 tracking-wider">
               <tr>
-                <th className="px-4 py-2 text-left">Subject</th>
-                <th className="px-4 py-2 text-left">User</th>
-                <th className="px-4 py-2 text-left">Category</th>
-                <th className="px-4 py-2 text-left">Priority</th>
-                <th className="px-4 py-2 text-left">Status</th>
-                <th className="px-4 py-2 text-left">Updated</th>
+                <th className="px-4 py-2 text-left">{t('pages.support.table.subject')}</th>
+                <th className="px-4 py-2 text-left">{t('pages.support.table.user')}</th>
+                <th className="px-4 py-2 text-left">{t('pages.support.table.category')}</th>
+                <th className="px-4 py-2 text-left">{t('pages.support.table.priority')}</th>
+                <th className="px-4 py-2 text-left">{t('pages.support.table.status')}</th>
+                <th className="px-4 py-2 text-left">{t('pages.support.table.updated')}</th>
                 <th className="px-4 py-2"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {filtered.map((t) => (
-                <tr key={t._id} className="hover:bg-gray-50/50 transition-colors">
+              {filtered.map((tk) => (
+                <tr key={tk._id} className="hover:bg-gray-50/50 transition-colors">
                   <td className="px-4 py-3">
-                    <p className="font-bold text-gray-900 truncate max-w-xs">{t.subject}</p>
+                    <p className="font-bold text-gray-900 truncate max-w-xs">{tk.subject}</p>
                     <p className="text-[10px] text-gray-500 truncate max-w-xs">
-                      {t.replies.length} {t.replies.length === 1 ? "reply" : "replies"}
+                      {tk.replies.length} {tk.replies.length === 1 ? t('pages.support.table.reply') : t('pages.support.table.replies')}
                     </p>
                   </td>
                   <td className="px-4 py-3">
                     <p className="text-gray-900 truncate max-w-[160px]">
-                      {t.user?.name || t.user?.email || "—"}
+                      {tk.user?.name || tk.user?.email || "—"}
                     </p>
                     <p className="text-[10px] text-gray-500 truncate max-w-[160px]">
-                      {t.user?.customId || "—"}
+                      {tk.user?.customId || "—"}
                     </p>
                   </td>
-                  <td className="px-4 py-3 capitalize">{t.category}</td>
+                  <td className="px-4 py-3 capitalize">{tk.category}</td>
                   <td className="px-4 py-3">
                     <span
-                      className={`text-[10px] px-1.5 py-0.5 rounded font-bold tracking-wide ${PRIORITY_BADGE[t.priority]}`}
+                      className={`text-[10px] px-1.5 py-0.5 rounded font-bold tracking-wide ${PRIORITY_BADGE[tk.priority]}`}
                     >
-                      {t.priority}
+                      {tk.priority}
                     </span>
                   </td>
                   <td className="px-4 py-3">
                     <span
-                      className={`text-[10px] px-1.5 py-0.5 rounded font-bold tracking-wide ${STATUS_BADGE[t.status]}`}
+                      className={`text-[10px] px-1.5 py-0.5 rounded font-bold tracking-wide ${STATUS_BADGE[tk.status]}`}
                     >
-                      {t.status.replace("_", " ")}
+                      {tk.status.replace("_", " ")}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-[11px] text-gray-500">{formatDate(t.updatedAt)}</td>
+                  <td className="px-4 py-3 text-[11px] text-gray-500">{formatDate(tk.updatedAt)}</td>
                   <td className="px-4 py-3 text-right">
                     <Link
-                      href={`/support/${t._id}`}
+                      href={`/support/${tk._id}`}
                       className="text-[11px] font-bold text-[#00aeff] hover:underline inline-flex items-center"
                     >
-                      Open <ArrowRight className="w-3 h-3 ml-0.5" />
+                      {t('pages.support.table.openLink')} <ArrowRight className="w-3 h-3 ml-0.5" />
                     </Link>
                   </td>
                 </tr>

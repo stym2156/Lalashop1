@@ -856,7 +856,22 @@
       "statusDraft": "草稿",
       "statusActive": "启用",
       "statusPaused": "暂停",
-      "statusExpired": "过期"
+      "statusExpired": "过期",
+      "code": "优惠券代码",
+      "titleLabel": "优惠券标题",
+      "descriptionLabel": "描述",
+      "type": "折扣类型",
+      "percent": "百分比",
+      "fixed": "固定金额",
+      "freeship": "免运费",
+      "value": "折扣值",
+      "maxDiscount": "最高折扣",
+      "usageLimitHint": "允许总兑换次数",
+      "startsAt": "开始时间",
+      "expiresAt": "过期时间",
+      "status": "状态",
+      "saveChanges": "保存更改",
+      "saving": "保存中..."
     },
     "campaignsList": {
       "title": "活动",
@@ -1265,6 +1280,11 @@
       "errMissingToken": "登录响应缺少 token",
       "errNotSeller": "该账户尚未注册为卖家。请先提交 KYC 申请并等待审核。",
       "errLoginFailed": "登录失败"
+    },
+    "kyc": {
+      "verification": {
+        "failedToLoad": "加载 KYC 失败"
+      }
     }
   },
   "components": {

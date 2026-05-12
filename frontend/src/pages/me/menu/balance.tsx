@@ -229,7 +229,7 @@ export default function AttrView({ onBack }: { onBack: () => void }) {
                   : "bg-white text-[#86878B] border border-[#EEEEEE]"
               }`}
             >
-              {id === "today" ? "Today" : id === "7d" ? "7 Days" : id === "30d" ? "30 Days" : "Custom"}
+              {id === "today" ? t("pages.creatorAttr2.today") : id === "7d" ? t("pages.creatorAttr2.sevenDays") : id === "30d" ? t("pages.creatorAttr2.thirtyDays") : t("pages.balancePanel.custom")}
             </button>
           ))}
         </div>
@@ -240,29 +240,29 @@ export default function AttrView({ onBack }: { onBack: () => void }) {
 
         <div className="bg-white grid grid-cols-2 border-b border-[#EEEEEE]">
           <MetricItem
-            title="Current Balance"
+            title={t("pages.balancePanel.currentBalance")}
             value={balance == null ? "—" : `฿${formatCurrency(balance)}`}
             isFirst
           />
           <MetricItem
-            title="Revenue (in range)"
+            title={t("pages.balancePanel.revenueInRange")}
             value={`฿${formatCurrency(totalRevenue)}`}
           />
-          <MetricItem title="Orders (in range)" value={ordersCount.toLocaleString()} isFirst />
-          <MetricItem title="Total Products" value={productCount.toLocaleString()} />
+          <MetricItem title={t("pages.balancePanel.ordersInRange")} value={ordersCount.toLocaleString()} isFirst />
+          <MetricItem title={t("pages.balancePanel.totalProducts")} value={productCount.toLocaleString()} />
         </div>
 
         <div className="bg-white mt-2 border-y border-[#EEEEEE] py-6 px-4">
           <div className="flex justify-between items-center mb-6 px-1">
             <div>
-              <h3 className="text-[14px] font-bold">Revenue Trend</h3>
+              <h3 className="text-[14px] font-bold">{t("pages.balancePanel.revenueTrend")}</h3>
               <p className="text-[11px] text-[#86878B]">
-                {loading ? "Loading..." : `Based on ${ordersCount} order${ordersCount === 1 ? "" : "s"}`}
+                {loading ? t("pages.balancePanel.loadingShort") : t("pages.balancePanel.basedOnOrders", { count: ordersCount })}
               </p>
             </div>
             <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#00aeff]">
               <div className="w-2 h-2 rounded-full bg-[#00aeff] animate-pulse"></div>
-              LIVE
+              {t("pages.balancePanel.live")}
             </div>
           </div>
 
@@ -298,7 +298,7 @@ export default function AttrView({ onBack }: { onBack: () => void }) {
 
         <div className="bg-white mt-2 border-y border-[#EEEEEE]">
           <div className="px-5 py-4 border-b border-[#F8F8F8] flex justify-between items-center">
-            <h3 className="text-[14px] font-bold tracking-tight">Best Sellers</h3>
+            <h3 className="text-[14px] font-bold tracking-tight">{t("pages.balancePanel.bestSellers")}</h3>
             <ChevronRight size={18} className="text-[#C8C9CC]" />
           </div>
           <div className="divide-y divide-[#F8F8F8]">
@@ -306,7 +306,7 @@ export default function AttrView({ onBack }: { onBack: () => void }) {
               <div className="px-5 py-8 text-center text-[13px] text-[#86878B]">{t("status.loading")}</div>
             ) : bestSellers.length === 0 ? (
               <div className="px-5 py-8 text-center text-[13px] text-[#86878B]">
-                No products yet
+                {t("pages.balancePanel.noProductsYet")}
               </div>
             ) : (
               bestSellers.map((p) => {
@@ -330,7 +330,7 @@ export default function AttrView({ onBack }: { onBack: () => void }) {
                       <div className="space-y-1 min-w-0">
                         <p className="text-[14px] font-bold line-clamp-1">{p.name}</p>
                         <p className="text-[12px] text-[#86878B]">
-                          {p.unitsSold.toLocaleString()} sold · ฿{formatCurrency(p.price)} ea
+                          {t("pages.balancePanel.soldEa", { count: p.unitsSold, price: formatCurrency(p.price) })}
                         </p>
                       </div>
                     </div>
@@ -338,7 +338,7 @@ export default function AttrView({ onBack }: { onBack: () => void }) {
                       <p className="text-[13px] font-bold tabular-nums">
                         ฿{formatCurrency(p.revenue)}
                       </p>
-                      <p className="text-[10px] text-[#86878B]">revenue</p>
+                      <p className="text-[10px] text-[#86878B]">{t("pages.balancePanel.revenueLabel")}</p>
                     </div>
                   </div>
                 );

@@ -856,7 +856,22 @@
       "statusDraft": "ສະບັບຮ່າງ",
       "statusActive": "ໃຊ້ງານ",
       "statusPaused": "ຢຸດຊົ່ວຄາວ",
-      "statusExpired": "ໝົດອາຍຸ"
+      "statusExpired": "ໝົດອາຍຸ",
+      "code": "ລະຫັດບັດສ່ວນຫຼຸດ",
+      "titleLabel": "ຊື່ບັດສ່ວນຫຼຸດ",
+      "descriptionLabel": "ລາຍລະອຽດ",
+      "type": "ປະເພດສ່ວນຫຼຸດ",
+      "percent": "ເປີເຊັນ",
+      "fixed": "ຈຳນວນຄົງທີ່",
+      "freeship": "ສົ່ງຟຣີ",
+      "value": "ມູນຄ່າສ່ວນຫຼຸດ",
+      "maxDiscount": "ສ່ວນຫຼຸດສູງສຸດ",
+      "usageLimitHint": "ຈຳນວນຄັ້ງທີ່ໃຊ້ໄດ້ທັງໝົດ",
+      "startsAt": "ເລີ່ມເມື່ອ",
+      "expiresAt": "ໝົດອາຍຸເມື່ອ",
+      "status": "ສະຖານະ",
+      "saveChanges": "ບັນທຶກການປ່ຽນແປງ",
+      "saving": "ກຳລັງບັນທຶກ..."
     },
     "campaignsList": {
       "title": "ແຄມເປນ",
@@ -1265,6 +1280,11 @@
       "errMissingToken": "ການຕອບກັບການເຂົ້າສູ່ລະບົບບໍ່ມີ token",
       "errNotSeller": "ບັນຊີນີ້ຍັງບໍ່ໄດ້ລົງທະບຽນເປັນຜູ້ຂາຍ.",
       "errLoginFailed": "ເຂົ້າສູ່ລະບົບລົ້ມເຫຼວ"
+    },
+    "kyc": {
+      "verification": {
+        "failedToLoad": "ໂຫຼດ KYC ລົ້ມເຫຼວ"
+      }
     }
   },
   "components": {

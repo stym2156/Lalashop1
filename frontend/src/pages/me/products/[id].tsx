@@ -13,6 +13,7 @@ import {
   Save,
   Trash,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { productCategories } from "../opensho/constants";
 import {
   CATEGORY_CONFIG,
@@ -88,6 +89,7 @@ const Field = ({
 );
 
 export default function MyProductDetailPage() {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const productId = router.query.id as string | undefined;
 
@@ -279,9 +281,9 @@ export default function MyProductDetailPage() {
   const handleSave = async () => {
     setServerError(null);
     setSaved(false);
-    if (!name.trim()) return setServerError("Title is required.");
-    if (!price || isNaN(Number(price))) return setServerError("Price is required.");
-    if (images.length === 0) return setServerError("Add at least one product image.");
+    if (!name.trim()) return setServerError(t("pages.productsAdd2.titleRequired"));
+    if (!price || isNaN(Number(price))) return setServerError(t("pages.productsAdd2.priceRequired"));
+    if (images.length === 0) return setServerError(t("pages.productsAdd2.addOneImage"));
 
     setSubmitting(true);
     try {
@@ -327,26 +329,26 @@ export default function MyProductDetailPage() {
       });
       setSaved(true);
     } catch (e: any) {
-      setServerError(e?.message || "Failed to save product");
+      setServerError(e?.message || t("pages.productsAdd2.saveFailed"));
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleDelete = async () => {
-    if (!confirm("Delete this product permanently?")) return;
+    if (!confirm(t("pages.productsAdd2.deletePermConfirm"))) return;
     try {
       await apiClient(`/products/${productId}`, { method: "DELETE" });
       router.push("/me/me");
     } catch (e: any) {
-      alert(e?.message || "Delete failed");
+      alert(e?.message || t("pages.productsAdd2.deleteFailed"));
     }
   };
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-sm text-gray-500">
-        Loading…
+        {t("pages.productsEdit.loading")}
       </div>
     );
   }
@@ -358,12 +360,12 @@ export default function MyProductDetailPage() {
           <div className="w-12 h-12 rounded-full bg-orange-50 text-orange-500 mx-auto flex items-center justify-center mb-4">
             <AlertCircle size={22} />
           </div>
-          <h2 className="text-lg font-bold text-gray-900 mb-2">Product not found</h2>
+          <h2 className="text-lg font-bold text-gray-900 mb-2">{t("pages.productsEdit.notFound")}</h2>
           <button
             onClick={() => router.push("/me/me")}
             className="mt-4 px-6 py-2.5 bg-primary text-white rounded-full text-xs font-bold tracking-widest"
           >
-            BACK TO MY SHOP
+            {t("pages.productsEdit.backToMyShop")}
           </button>
         </div>
       </div>
@@ -377,15 +379,15 @@ export default function MyProductDetailPage() {
           <div className="w-12 h-12 rounded-full bg-red-50 text-red-500 mx-auto flex items-center justify-center mb-4">
             <AlertCircle size={22} />
           </div>
-          <h2 className="text-lg font-bold text-gray-900 mb-2">Not your product</h2>
+          <h2 className="text-lg font-bold text-gray-900 mb-2">{t("pages.productsEdit.notYourProduct")}</h2>
           <p className="text-sm text-gray-500">
-            You can only edit products you own. Use the public product page to view this one.
+            {t("pages.productsEdit.onlyOwn")}
           </p>
           <button
             onClick={() => router.push(`/product/${productId}`)}
             className="mt-4 px-6 py-2.5 bg-primary text-white rounded-full text-xs font-bold tracking-widest"
           >
-            VIEW PUBLIC PAGE
+            {t("pages.productsEdit.viewPublicPage")}
           </button>
         </div>
       </div>
@@ -401,9 +403,9 @@ export default function MyProductDetailPage() {
               <ArrowLeft className="w-4 h-4" />
             </Link>
             <div className="min-w-0">
-              <h1 className="text-sm font-bold truncate">Edit product</h1>
+              <h1 className="text-sm font-bold truncate">{t("pages.productsEdit.title")}</h1>
               <p className="text-[11px] text-gray-400 truncate">
-                Category template: {config.label}
+                {t("pages.productsEdit2.categoryTemplate", { label: config.label })}
               </p>
             </div>
           </div>
@@ -412,13 +414,13 @@ export default function MyProductDetailPage() {
               href={`/product/${productId}`}
               className="px-3 py-1.5 rounded-md text-xs font-medium text-gray-700 hover:bg-gray-50"
             >
-              View public page
+              {t("pages.productsEdit.viewPublic")}
             </Link>
             <button
               onClick={handleDelete}
               className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100"
             >
-              <Trash className="w-3.5 h-3.5" /> Delete
+              <Trash className="w-3.5 h-3.5" /> {t("pages.productsEdit.delete")}
             </button>
             <button
               onClick={handleSave}
@@ -426,7 +428,7 @@ export default function MyProductDetailPage() {
               className="inline-flex items-center gap-1 bg-primary text-white px-4 py-1.5 rounded-md text-xs font-semibold hover:bg-primary-hover disabled:opacity-50"
             >
               <Save className="w-3.5 h-3.5" />
-              {submitting ? "Saving…" : "Save changes"}
+              {submitting ? t("pages.productsAdd.saving") : t("pages.productsAdd2.saveChanges")}
             </button>
           </div>
         </div>
@@ -438,7 +440,7 @@ export default function MyProductDetailPage() {
           >
             {saved ? (
               <span className="inline-flex items-center gap-1">
-                <CheckCircle2 size={14} /> Changes saved.
+                <CheckCircle2 size={14} /> {t("pages.productsAdd2.changesSaved")}
               </span>
             ) : (
               serverError
@@ -453,9 +455,9 @@ export default function MyProductDetailPage() {
           <div className="lg:col-span-2 space-y-4">
             {/* General */}
             <div className="rounded-lg bg-white border border-gray-100">
-              <SectionHeader title="General" />
+              <SectionHeader title={t("pages.productsAdd2.general")} />
               <div className="p-4 space-y-4">
-                <Field label="Title" required>
+                <Field label={t("pages.productsAdd2.fieldTitle")} required>
                   <input
                     type="text"
                     value={name}
@@ -463,7 +465,7 @@ export default function MyProductDetailPage() {
                     className={inputCls}
                   />
                 </Field>
-                <Field label="Description" optional>
+                <Field label={t("pages.productsAdd2.fieldDescription")} optional>
                   <textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
@@ -475,7 +477,7 @@ export default function MyProductDetailPage() {
             </div>
             {/* Media */}
             <div className="rounded-lg bg-white border border-gray-100">
-              <SectionHeader title="Media" hint="Up to 8 photos. The first is the cover." />
+              <SectionHeader title={t("pages.productsAdd2.media")} hint={t("pages.productsEdit2.mediaUpTo8")} />
               <div className="p-4">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {images.map((img, i) => (
@@ -487,7 +489,7 @@ export default function MyProductDetailPage() {
                       <img src={img.preview} alt="" className="w-full h-full object-cover" />
                       {i === 0 && (
                         <span className="absolute top-1 left-1 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-black/70 text-white">
-                          Cover
+                          {t("pages.productsAdd2.cover")}
                         </span>
                       )}
                       <button
@@ -504,7 +506,7 @@ export default function MyProductDetailPage() {
                       className="aspect-square rounded-md bg-gray-50 border border-dashed border-gray-200 hover:border-gray-300 flex flex-col items-center justify-center text-gray-500"
                     >
                       <ImagePlus className="w-5 h-5 mb-1" />
-                      <span className="text-[11px] font-medium">Add image</span>
+                      <span className="text-[11px] font-medium">{t("pages.productsAdd2.addImage")}</span>
                     </button>
                   )}
                 </div>
@@ -524,9 +526,9 @@ export default function MyProductDetailPage() {
 
             {/* Pricing & stock */}
             <div className="rounded-lg bg-white border border-gray-100">
-              <SectionHeader title="Pricing & stock" />
+              <SectionHeader title={t("pages.productsAdd2.pricingStock")} />
               <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-3">
-                <Field label="Price" required>
+                <Field label={t("pages.productsAdd2.fieldPrice")} required>
                   <input
                     type="number"
                     value={price}
@@ -534,7 +536,7 @@ export default function MyProductDetailPage() {
                     className={inputCls}
                   />
                 </Field>
-                <Field label="Compare-at price" optional>
+                <Field label={t("pages.productsAdd2.compareAt")} optional>
                   <input
                     type="number"
                     value={compareAt}
@@ -542,7 +544,7 @@ export default function MyProductDetailPage() {
                     className={inputCls}
                   />
                 </Field>
-                <Field label="Stock">
+                <Field label={t("pages.productsAdd2.stockLabel")}>
                   <input
                     type="number"
                     value={stock}
@@ -555,7 +557,7 @@ export default function MyProductDetailPage() {
 
             {/* Wholesale tiers */}
             <div className="rounded-lg bg-white border border-gray-100">
-              <SectionHeader title="Wholesale pricing" />
+              <SectionHeader title={t("pages.productsAdd2.wholesalePricing")} />
               <div className="p-4 space-y-3">
                 <Field label="MOQ" optional>
                   <input
@@ -567,9 +569,9 @@ export default function MyProductDetailPage() {
                 </Field>
                 <div className="space-y-1.5">
                   <div className="grid grid-cols-12 gap-2 text-[10px] font-semibold text-gray-500 px-1">
-                    <span className="col-span-3">Min qty</span>
-                    <span className="col-span-5">Unit price</span>
-                    <span className="col-span-3">Discount %</span>
+                    <span className="col-span-3">{t("pages.productsAdd2.minQty")}</span>
+                    <span className="col-span-5">{t("pages.productsAdd2.unitPrice")}</span>
+                    <span className="col-span-3">{t("pages.productsAdd2.discountPct")}</span>
                     <span className="col-span-1" />
                   </div>
                   {tiers.map((t) => (
@@ -606,7 +608,7 @@ export default function MyProductDetailPage() {
                     onClick={addTier}
                     className="mt-2 inline-flex items-center text-[11px] font-semibold text-primary hover:underline"
                   >
-                    <Plus className="w-3 h-3 mr-1" /> Add tier
+                    <Plus className="w-3 h-3 mr-1" /> {t("pages.productsAdd2.addTier")}
                   </button>
                 </div>
               </div>
@@ -614,11 +616,11 @@ export default function MyProductDetailPage() {
 
             {/* Specifications */}
             <div className="rounded-lg bg-white border border-gray-100">
-              <SectionHeader title="Specifications" />
+              <SectionHeader title={t("pages.productsAdd2.specifications")} />
               <div className="p-4 space-y-2">
                 <div className="grid grid-cols-12 gap-2 text-[10px] font-semibold text-gray-500 px-1">
-                  <span className="col-span-4">Label</span>
-                  <span className="col-span-7">Value</span>
+                  <span className="col-span-4">{t("pages.productsAdd2.labelCol")}</span>
+                  <span className="col-span-7">{t("pages.productsAdd2.valueCol")}</span>
                   <span className="col-span-1" />
                 </div>
                 {specifications.map((s) => (
@@ -647,7 +649,7 @@ export default function MyProductDetailPage() {
                   onClick={addSpec}
                   className="mt-2 inline-flex items-center text-[11px] font-semibold text-primary hover:underline"
                 >
-                  <Plus className="w-3 h-3 mr-1" /> Add specification
+                  <Plus className="w-3 h-3 mr-1" /> {t("pages.productsAdd2.addSpec")}
                 </button>
               </div>
             </div>
@@ -655,7 +657,7 @@ export default function MyProductDetailPage() {
             {/* Variants */}
             <div className="rounded-lg bg-white border border-gray-100">
               <SectionHeader
-                title={`Variants for ${config.label}`}
+                title={t("pages.productsAdd2.variantsFor", { label: config.label })}
                 hint={config.description}
               />
               <div className="p-4 space-y-3">
@@ -667,22 +669,22 @@ export default function MyProductDetailPage() {
                       <div className="grid grid-cols-12 gap-2 items-start">
                         <div className="col-span-3">
                           <label className="text-[10px] font-semibold text-gray-500">
-                            Option name
+                            {t("pages.productsAdd2.optionName")}
                           </label>
                           <input
                             type="text"
                             value={v.name}
                             onChange={(e) => updateVariantOption(v.id, { name: e.target.value })}
-                            placeholder={seed?.name || "e.g. Size"}
+                            placeholder={seed?.name || t("pages.productsAdd2.optionPlaceholder")}
                             className={`${inputCls} mt-1`}
                           />
                         </div>
                         <div className="col-span-8">
-                          <label className="text-[10px] font-semibold text-gray-500">Values</label>
+                          <label className="text-[10px] font-semibold text-gray-500">{t("pages.productsAdd2.valueCol")}s</label>
                           <div className="mt-1 flex flex-wrap gap-1.5 min-h-[34px] px-2 py-1 rounded-md bg-gray-50 border border-gray-100">
                             {v.values.length === 0 && (
                               <span className="text-[11px] text-gray-400 px-1.5 py-1">
-                                Tap suggestions to add.
+                                {t("pages.productsAdd2.tapSuggestions")}
                               </span>
                             )}
                             {v.values.map((val) => (
@@ -735,7 +737,7 @@ export default function MyProductDetailPage() {
                   onClick={addVariantOption}
                   className="inline-flex items-center text-[11px] font-semibold text-primary hover:underline"
                 >
-                  <Plus className="w-3 h-3 mr-1" /> Add option
+                  <Plus className="w-3 h-3 mr-1" /> {t("pages.productsAdd2.addOption")}
                 </button>
               </div>
             </div>
@@ -744,9 +746,9 @@ export default function MyProductDetailPage() {
           {/* Sidebar */}
           <div className="space-y-4">
             <div className="rounded-lg bg-white border border-gray-100">
-              <SectionHeader title="Status" />
+              <SectionHeader title={t("pages.productsAdd2.status")} />
               <div className="p-4 space-y-3">
-                <Field label="Visibility">
+                <Field label={t("pages.productsAdd2.visibility")}>
                   <select
                     value={status}
                     onChange={(e) => setStatus(e.target.value as ProductStatus)}
@@ -763,9 +765,9 @@ export default function MyProductDetailPage() {
             </div>
 
             <div className="rounded-lg bg-white border border-gray-100">
-              <SectionHeader title="Organization" />
+              <SectionHeader title={t("pages.productsAdd2.organization")} />
               <div className="p-4 space-y-3">
-                <Field label="Category" required>
+                <Field label={t("pages.productsAdd2.category")} required>
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
@@ -776,7 +778,7 @@ export default function MyProductDetailPage() {
                       return (
                         <option key={c.value} value={c.value}>
                           {c.label}
-                          {supported ? "" : " (basic template)"}
+                          {supported ? "" : t("pages.productsAdd2.basicTemplate")}
                         </option>
                       );
                     })}
@@ -786,7 +788,7 @@ export default function MyProductDetailPage() {
             </div>
 
             <div className="rounded-lg bg-white border border-gray-100">
-              <SectionHeader title="Shipping" />
+              <SectionHeader title={t("pages.productsAdd2.shipping")} />
               <div className="p-4">
                 <label className="flex items-start gap-2 text-xs text-gray-700 cursor-pointer">
                   <input
@@ -796,9 +798,9 @@ export default function MyProductDetailPage() {
                     className="rounded mt-0.5"
                   />
                   <span>
-                    <span className="font-semibold">Offer free shipping</span>
+                    <span className="font-semibold">{t("pages.productsAdd2.offerFreeShipping")}</span>
                     <span className="block text-[11px] text-gray-500 mt-0.5">
-                      A green &quot;Free shipping&quot; badge will show on the product page.
+                      {t("pages.productsAdd2.freeShippingDesc")}
                     </span>
                   </span>
                 </label>

@@ -97,6 +97,7 @@ interface CopyButtonProps {
 }
 
 const CopyButton: React.FC<CopyButtonProps> = ({ value, label }) => {
+  const { t } = useTranslation("common");
   const [copied, setCopied] = useState(false);
 
   const onCopy = async (): Promise<void> => {
@@ -117,11 +118,11 @@ const CopyButton: React.FC<CopyButtonProps> = ({ value, label }) => {
     >
       {copied ? (
         <>
-          <Check size={12} /> Copied
+          <Check size={12} /> {t("pages.notifications2.copiedShort")}
         </>
       ) : (
         <>
-          <Copy size={12} /> Copy
+          <Copy size={12} /> {t("pages.notifications2.copyShort")}
         </>
       )}
     </button>
@@ -133,6 +134,7 @@ interface CredentialsCardProps {
 }
 
 const CredentialsCard: React.FC<CredentialsCardProps> = ({ credentials }) => {
+  const { t } = useTranslation("common");
   const [revealed, setRevealed] = useState(false);
 
   return (
@@ -140,7 +142,7 @@ const CredentialsCard: React.FC<CredentialsCardProps> = ({ credentials }) => {
       <div className="flex items-center gap-2">
         <Store className="w-4 h-4 text-emerald-600" />
         <h3 className="text-[13px] font-black text-emerald-900 tracking-wide ">
-          Seller Dashboard Credentials
+          {t("pages.notifications2.sellerCredentials")}
         </h3>
       </div>
 
@@ -148,7 +150,7 @@ const CredentialsCard: React.FC<CredentialsCardProps> = ({ credentials }) => {
         <div className="rounded-lg bg-white border border-emerald-100 px-4 py-3">
           <div className="flex items-center justify-between gap-3 mb-1">
             <span className="inline-flex items-center gap-1.5 text-[10px] font-black text-slate-500 tracking-widest">
-              <Mail size={11} /> Email
+              <Mail size={11} /> {t("pages.notifications2.email")}
             </span>
             <CopyButton value={credentials.email} label="email" />
           </div>
@@ -158,14 +160,14 @@ const CredentialsCard: React.FC<CredentialsCardProps> = ({ credentials }) => {
         <div className="rounded-lg bg-white border border-emerald-100 px-4 py-3">
           <div className="flex items-center justify-between gap-3 mb-1">
             <span className="inline-flex items-center gap-1.5 text-[10px] font-black text-slate-500 tracking-widest">
-              <Lock size={11} /> Password
+              <Lock size={11} /> {t("pages.notifications2.password")}
             </span>
             <div className="inline-flex items-center gap-3">
               <button
                 onClick={() => setRevealed((v) => !v)}
                 className="text-[11px] font-bold text-slate-500 hover:text-slate-800"
               >
-                {revealed ? "Hide" : "Reveal"}
+                {revealed ? t("pages.notifications2.hide") : t("pages.notifications2.reveal")}
               </button>
               <CopyButton value={credentials.password} label="password" />
             </div>
@@ -183,12 +185,11 @@ const CredentialsCard: React.FC<CredentialsCardProps> = ({ credentials }) => {
         className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-black py-3 rounded-xl transition-colors shadow-md shadow-emerald-200"
       >
         <ExternalLink size={16} />
-        Open Seller Dashboard
+        {t("pages.notifications2.openSellerDashboard")}
       </a>
 
       <div className="text-[11px] text-emerald-800 bg-emerald-100/60 rounded-lg px-3 py-2 leading-relaxed">
-        <strong className="font-black">Save this password now.</strong> The system shows it
-        once. The credentials above are <em>separate from your customer login</em>.
+        <strong className="font-black">{t("pages.notifications2.savePassword")}</strong> {t("pages.notifications2.savePasswordDesc")}
       </div>
     </div>
   );
@@ -306,8 +307,7 @@ export default function SystemNotifications(): JSX.Element {
             <h1 className="text-2xl font-black tracking-tight text-slate-900">{t("pages.notifications.title")}</h1>
             {!loading && notifications.length > 0 && (
               <p className="text-[11px] text-slate-400 font-medium">
-                {notifications.filter((n) => !n.read).length} unread of{" "}
-                {notifications.length}
+                {t("pages.notifications2.unreadOf", { unread: notifications.filter((n) => !n.read).length, total: notifications.length })}
               </p>
             )}
           </div>
@@ -360,7 +360,7 @@ export default function SystemNotifications(): JSX.Element {
                 </p>
                 {n.metadata?.credentials && (
                   <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded tracking-wider">
-                    <Store size={10} /> Tap to view shop credentials
+                    <Store size={10} /> {t("pages.notifications2.tapToViewCreds")}
                   </span>
                 )}
                 <div className="absolute bottom-0 right-0 bg-white/50 pl-2">
@@ -420,7 +420,7 @@ export default function SystemNotifications(): JSX.Element {
                 <CredentialsCard credentials={active.metadata.credentials} />
               )}
 
-              <div className="space-y-1">{renderBodyText(active.body || "(no content)")}</div>
+              <div className="space-y-1">{renderBodyText(active.body || t("pages.notifications2.noContent"))}</div>
 
               {active.link && !active.metadata?.credentials && (
                 <button
@@ -428,7 +428,7 @@ export default function SystemNotifications(): JSX.Element {
                   className="w-full inline-flex items-center justify-center gap-2 bg-[#00aeff] hover:bg-[#0096db] text-white text-sm font-black py-3 rounded-xl transition-colors mt-4"
                 >
                   <ExternalLink size={16} />
-                  Open link
+                  {t("pages.notifications2.openLink")}
                 </button>
               )}
             </div>

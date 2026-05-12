@@ -36,3 +36,8 @@ Thumbs.db
 
 # Legacy multer uploads — we use Cloudflare R2 now
 backend/uploads/
+
+# Python helper-script artifacts
+scripts/__pycache__/
+scripts/*.pyc
+scripts/admin_missing.json

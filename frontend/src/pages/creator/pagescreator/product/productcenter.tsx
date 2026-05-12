@@ -3,6 +3,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { ChevronLeft, ShoppingBag, Search, Filter, Sparkles, Star } from "lucide-react";
 import { Product } from "@/types";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 interface ToolkitProps {
     onBack: () => void;
@@ -11,6 +12,7 @@ interface ToolkitProps {
 const CATEGORIES = ["ALL", "ELECTRONICS", "FASHION", "BEAUTY", "HOME", "KITCHEN"];
 
 export default function Marketplace({ onBack }: ToolkitProps) {
+    const { t } = useTranslation("common");
     const router = useRouter();
     const [activeCategory, setActiveCategory] = useState("ALL");
     const [searchQuery, setSearchQuery] = useState("");
@@ -55,7 +57,7 @@ export default function Marketplace({ onBack }: ToolkitProps) {
                         <button onClick={onBack} className="p-1 hover:bg-slate-100 rounded-full transition-all">
                             <ChevronLeft size={24} strokeWidth={2.5} className="text-slate-900" />
                         </button>
-                        <h1 className="text-lg font-black tracking-tighter">Product Detail</h1>
+                        <h1 className="text-lg font-black tracking-tighter">{t("pages.creatorProductCenter.productDetail")}</h1>
                     </div>
                     <div className="p-2 bg-slate-50 rounded-xl">
                         <ShoppingBag size={20} className="text-slate-900" />
@@ -172,8 +174,8 @@ export default function Marketplace({ onBack }: ToolkitProps) {
                         <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
                             <Search size={24} className="text-slate-300" />
                         </div>
-                        <h3 className="text-sm font-black text-slate-900">No products found</h3>
-                        <p className="text-[11px] text-slate-500 mt-1">Try searching for something else or change category</p>
+                        <h3 className="text-sm font-black text-slate-900">{t("pages.creatorProductCenter.noProductsFound")}</h3>
+                        <p className="text-[11px] text-slate-500 mt-1">{t("pages.creatorProductCenter.trySearching")}</p>
                     </div>
                 )}
             </main>

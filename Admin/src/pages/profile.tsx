@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ShieldCheck, Key, Smartphone, Mail, Save, User, Activity } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { adminMe, type MeResponse } from '@/services/authApi';
 import { updateUser as updateAdminUser } from '@/services/adminApi';
 
@@ -14,6 +15,7 @@ const formatDate = (s?: string): string => {
 };
 
 const ProfilePage = () => {
+  const { t } = useTranslation('common');
   const [tab, setTab] = useState<Tab>('profile');
   const [me, setMe] = useState<MeResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -53,41 +55,41 @@ const ProfilePage = () => {
     setSavedMessage(null);
     try {
       await updateAdminUser(me._id, { name: editName, email: editEmail, phone: editPhone });
-      setSavedMessage('Saved');
+      setSavedMessage(t('pages.profile.savedShort'));
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to save');
+      alert(err instanceof Error ? err.message : t('pages.profile.failedToSave'));
     } finally {
       setSaving(false);
     }
   };
 
   if (loading) {
-    return <div className="text-[13px] text-gray-400 py-12 text-center">Loading profile...</div>;
+    return <div className="text-[13px] text-gray-400 py-12 text-center">{t('pages.profile.loadingProfile')}</div>;
   }
 
   if (error || !me) {
-    return <div className="rounded-lg bg-red-50 px-4 py-3 text-[13px] text-red-700">{error || 'Profile not available'}</div>;
+    return <div className="rounded-lg bg-red-50 px-4 py-3 text-[13px] text-red-700">{error || t('pages.profile.notAvailable')}</div>;
   }
 
   return (
     <div className="space-y-4 text-sm">
       <div className="flex border-b border-gray-100 text-[12px]">
         {([
-          { id: 'profile', label: 'Profile', icon: User },
-          { id: 'security', label: 'Security', icon: ShieldCheck },
-          { id: 'sessions', label: 'Sessions', icon: Activity },
-        ] as { id: Tab; label: string; icon: typeof User }[]).map((t) => (
+          { id: 'profile', label: t('pages.profile.tabProfile'), icon: User },
+          { id: 'security', label: t('pages.profile.tabSecurity'), icon: ShieldCheck },
+          { id: 'sessions', label: t('pages.profile.tabSessions'), icon: Activity },
+        ] as { id: Tab; label: string; icon: typeof User }[]).map((tabItem) => (
           <button
-            key={t.id}
-            onClick={() => setTab(t.id)}
+            key={tabItem.id}
+            onClick={() => setTab(tabItem.id)}
             className={`px-4 py-2.5 inline-flex items-center gap-2 -mb-px font-medium transition-colors ${
-              tab === t.id
+              tab === tabItem.id
                 ? 'text-primary border-b-2 border-primary'
                 : 'text-gray-500 hover:text-black border-b-2 border-transparent'
             }`}
           >
-            <t.icon className="w-3.5 h-3.5" />
-            {t.label}
+            <tabItem.icon className="w-3.5 h-3.5" />
+            {tabItem.label}
           </button>
         ))}
       </div>
@@ -95,12 +97,12 @@ const ProfilePage = () => {
       {tab === 'profile' && (
         <div className="max-w-2xl space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Admin ID" value={me.customId || me._id || ''} readOnly />
-            <Field label="Role" value={me.isAdmin ? 'Admin' : 'User'} readOnly />
-            <Field label="Full Name" value={editName} onChange={setEditName} />
-            <Field label="Email" value={editEmail} onChange={setEditEmail} />
-            <Field label="Phone" value={editPhone} onChange={setEditPhone} />
-            <Field label="Username" value={me.username || ''} readOnly />
+            <Field label={t('pages.profile.adminId')} value={me.customId || me._id || ''} readOnly />
+            <Field label={t('pages.profile.role')} value={me.isAdmin ? t('pages.profile.roleAdmin') : t('pages.profile.roleUser')} readOnly />
+            <Field label={t('pages.profile.fullName')} value={editName} onChange={setEditName} />
+            <Field label={t('pages.profile.email')} value={editEmail} onChange={setEditEmail} />
+            <Field label={t('pages.profile.phone')} value={editPhone} onChange={setEditPhone} />
+            <Field label={t('pages.profile.username')} value={me.username || ''} readOnly />
           </div>
 
           <div className="flex items-center gap-3">
@@ -109,7 +111,7 @@ const ProfilePage = () => {
               disabled={saving}
               className="bg-black text-white px-3 py-1.5 rounded-md text-xs font-semibold inline-flex items-center hover:bg-gray-900 disabled:opacity-50"
             >
-              <Save className="w-3.5 h-3.5 mr-1.5" /> {saving ? 'Saving...' : 'Save Changes'}
+              <Save className="w-3.5 h-3.5 mr-1.5" /> {saving ? t('pages.profile.saving') : t('pages.profile.saveChanges')}
             </button>
             {savedMessage && (
               <span className="text-[12px] text-green-700 font-medium">{savedMessage}</span>
@@ -120,21 +122,21 @@ const ProfilePage = () => {
 
       {tab === 'security' && (
         <div className="max-w-2xl space-y-3">
-          <SecurityRow icon={Key} title="Password" description="Change your admin password" actionLabel="Change" />
+          <SecurityRow icon={Key} title={t('pages.profile.secPasswordTitle')} description={t('pages.profile.secPasswordDesc')} actionLabel={t('pages.profile.secChange')} />
           <SecurityRow
             icon={Smartphone}
-            title="Two-Factor Authentication"
-            description="Manage 2FA via /2fa page after login"
-            actionLabel="Manage"
+            title={t('pages.profile.secTwoFactorTitle')}
+            description={t('pages.profile.secTwoFactorDesc')}
+            actionLabel={t('pages.profile.secManage')}
           />
-          <SecurityRow icon={Mail} title="Email" description={me.email || '—'} actionLabel="Update" />
-          <SecurityRow icon={ShieldCheck} title="Backup Codes" description="Available after enabling TOTP" actionLabel="Setup" />
+          <SecurityRow icon={Mail} title={t('pages.profile.secEmailTitle')} description={me.email || '—'} actionLabel={t('pages.profile.secUpdate')} />
+          <SecurityRow icon={ShieldCheck} title={t('pages.profile.secBackupTitle')} description={t('pages.profile.secBackupDesc')} actionLabel={t('pages.profile.secSetup')} />
         </div>
       )}
 
       {tab === 'sessions' && (
         <div className="rounded-lg py-12 text-center text-gray-400 text-[12px]">
-          Session tracking model not implemented yet — last known IP: <span className="font-mono">{(me as any).lastKnownIp || '—'}</span>
+          {t('pages.profile.sessionsNotImpl')} <span className="font-mono">{(me as any).lastKnownIp || '—'}</span>
         </div>
       )}
     </div>

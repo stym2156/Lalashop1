@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Mail, Globe } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { fetchHistoryLinkedAccounts } from '@/services/adminApi';
 
 interface LinkedRow {
@@ -13,6 +14,7 @@ interface LinkedRow {
 }
 
 const LinkedAccountsTab = () => {
+  const { t } = useTranslation('common');
   const [items, setItems] = useState<LinkedRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +45,7 @@ const LinkedAccountsTab = () => {
     <div className="space-y-3">
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2 px-4 py-3 bg-gray-50/50 text-[11px]">
         <div>
-          <p className="text-gray-500">linked accounts</p>
+          <p className="text-gray-500">{t('pages.history.history.linkedAccounts.linkedAccountsLabel')}</p>
           <p className="text-base font-bold tabular-nums">{items.length}</p>
         </div>
         <div>
@@ -60,14 +62,14 @@ const LinkedAccountsTab = () => {
         <table className="w-full text-[12px] tabular-nums">
           <thead className="text-[11px] text-gray-500 tracking-wide">
             <tr>
-              <th className="px-4 py-2 text-left font-semibold">User</th>
-              <th className="px-4 py-2 text-left font-semibold">Email</th>
-              <th className="px-4 py-2 text-left font-semibold">Linked Providers</th>
+              <th className="px-4 py-2 text-left font-semibold">{t('pages.history.history.linkedAccounts.thUser')}</th>
+              <th className="px-4 py-2 text-left font-semibold">{t('pages.history.history.linkedAccounts.thEmail')}</th>
+              <th className="px-4 py-2 text-left font-semibold">{t('pages.history.history.linkedAccounts.thProviders')}</th>
             </tr>
           </thead>
           <tbody>
             {loading && (
-              <tr><td colSpan={3} className="px-4 py-12 text-center text-gray-400 text-[12px]">Loading...</td></tr>
+              <tr><td colSpan={3} className="px-4 py-12 text-center text-gray-400 text-[12px]">{t('pages.history.history.linkedAccounts.loading')}</td></tr>
             )}
             {!loading && error && (
               <tr><td colSpan={3} className="px-4 py-12 text-center text-red-500 text-[12px]">{error}</td></tr>
@@ -97,13 +99,13 @@ const LinkedAccountsTab = () => {
                         <Globe className="w-3 h-3" /> Facebook
                       </span>
                     )}
-                    {!u.googleId && !u.facebookId && <span className="text-gray-300 text-[11px]">none</span>}
+                    {!u.googleId && !u.facebookId && <span className="text-gray-300 text-[11px]">{t('pages.history.history.linkedAccounts.none')}</span>}
                   </div>
                 </td>
               </tr>
             ))}
             {!loading && !error && items.length === 0 && (
-              <tr><td colSpan={3} className="px-4 py-12 text-center text-gray-400 text-[12px]">No linked accounts</td></tr>
+              <tr><td colSpan={3} className="px-4 py-12 text-center text-gray-400 text-[12px]">{t('pages.history.history.linkedAccounts.noAccounts')}</td></tr>
             )}
           </tbody>
         </table>

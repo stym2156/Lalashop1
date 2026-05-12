@@ -1,6 +1,7 @@
 "use client";
 import React, { useRef } from "react";
 import { Info, Upload, CheckCircle2, ChevronDown, HelpCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { countries } from "./constants";
 
 interface Props {
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export default function Step3Identity({ businessType, data, setData, errors }: Props) {
+  const { t } = useTranslation("common");
   const isIndividual = businessType === 'individual';
   const fileInputRef = useRef<HTMLInputElement>(null);
   const licenseInputRef = useRef<HTMLInputElement>(null);
@@ -40,10 +42,10 @@ export default function Step3Identity({ businessType, data, setData, errors }: P
 
   const getDocLabel = () => {
     switch (businessType) {
-      case 'sole_proprietor': return "Business Registration Certificate";
-      case 'corporate': return "Company Business License";
-      case 'partnership': return "Partnership Agreement";
-      default: return "Identity Document";
+      case 'sole_proprietor': return t("pages.openshopStep3More.businessRegCert");
+      case 'corporate': return t("pages.openshopStep3More.companyBusinessLicense");
+      case 'partnership': return t("pages.openshopStep3More.partnershipAgreement");
+      default: return t("pages.openshopStep3More.identityDocument");
     }
   };
 
@@ -68,29 +70,29 @@ export default function Step3Identity({ businessType, data, setData, errors }: P
       {/* --- Main Header Section --- */}
       <div className="space-y-2">
         <h2 className="text-[28px] font-bold tracking-tight text-dark">
-            {isIndividual ? "Primary Representative" : "Legal Entity Information"}
+            {isIndividual ? t("pages.openshopStep3.primaryRepresentative") : t("pages.openshopStep3.legalEntityInformation")}
         </h2>
         <p className="text-[12px] text-gray-500 font-medium">
-          This information will be used and stored for identity verification, screening, and fraud prevention purposes.
+          {t("pages.openshopStep3.identityInfo")}
         </p>
       </div>
 
       {/* --- SECTION 1: Business Documents (NEW for non-individual) --- */}
       {!isIndividual && (
         <section className="bg-white border border-gray-100 rounded-xl p-8 space-y-6 shadow-sm">
-          <h3 className="text-[18px] font-bold">Business Documents</h3>
+          <h3 className="text-[18px] font-bold">{t("pages.openshopStep3.businessDocuments")}</h3>
           <div className="space-y-4">
-             <label className="text-[14px] font-bold text-gray-700">Tax Identification Number (TIN)</label>
-             <input 
-                type="text" value={data.tinNumber || ""} 
+             <label className="text-[14px] font-bold text-gray-700">{t("pages.openshopStep3.tinLabel")}</label>
+             <input
+                type="text" value={data.tinNumber || ""}
                 onChange={(e) => updateField("tinNumber", e.target.value)}
-                placeholder="Enter 10-digit TIN" 
+                placeholder={t("pages.openshopStep3.tinPlaceholder")}
                 className={`w-full p-3 border rounded-md outline-none focus:border-primary text-[14px] font-bold ${errors.tinNumber ? 'border-red-500 bg-red-50/10' : 'border-gray-border'}`} 
               />
           </div>
 
           <div className="space-y-4 pt-2">
-            <p className="text-[14px] font-bold text-gray-700">Upload {getDocLabel()}</p>
+            <p className="text-[14px] font-bold text-gray-700">{t("pages.openshopStep3.uploadDoc", { doc: getDocLabel() })}</p>
             <div className="flex gap-4 pt-2">
               <div 
                 onClick={() => licenseInputRef.current?.click()}
@@ -102,7 +104,7 @@ export default function Step3Identity({ businessType, data, setData, errors }: P
                  ) : (
                    <>
                      <Upload size={24} />
-                     <span className="text-[12px] font-bold mt-2 tracking-tight">Click to upload document</span>
+                     <span className="text-[12px] font-bold mt-2 tracking-tight">{t("pages.openshopStep3.clickToUpload")}</span>
                    </>
                  )}
               </div>
@@ -113,16 +115,16 @@ export default function Step3Identity({ businessType, data, setData, errors }: P
 
       {/* --- SECTION 2: Identity Documents --- */}
       <section className="bg-white border border-gray-100 rounded-xl p-8 space-y-6 shadow-sm">
-        <h3 className="text-[18px] font-bold">{isIndividual ? "Identity Documents" : "Representative Identity"}</h3>
+        <h3 className="text-[18px] font-bold">{isIndividual ? t("pages.openshopStep3.identityDocuments") : t("pages.openshopStep3.representativeIdentity")}</h3>
         
         {/* ... rest of identity doc UI ... */}
         
         <div className="space-y-4">
-          <p className="text-[14px] font-bold text-gray-700">ID Type:</p>
+          <p className="text-[14px] font-bold text-gray-700">{t("pages.openshopStep3.idType")}</p>
           <div className="flex flex-wrap gap-6">
             {[
-              { id: "passport", label: "Passport" },
-              { id: "state_id", label: "National ID Card" },
+              { id: "passport", label: t("pages.openshopStep3.passport") },
+              { id: "state_id", label: t("pages.openshopStep3.nationalId") },
             ].map((item) => (
               <label key={item.id} className="flex items-center gap-2 cursor-pointer group">
                 <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${data.idType === item.id ? "border-primary" : "border-gray-300"}`}>
@@ -136,11 +138,11 @@ export default function Step3Identity({ businessType, data, setData, errors }: P
         </div>
 
         <div className="space-y-4 pt-2">
-          <p className="text-[14px] font-bold text-gray-700">Upload</p>
+          <p className="text-[14px] font-bold text-gray-700">{t("pages.openshopStep3.upload")}</p>
           <ul className="text-[13px] text-gray-500 space-y-1 list-disc pl-5 leading-relaxed font-medium">
-            <li>Upload images of both biometric pages of your passport...</li>
-            <li>Files must be smaller than 10 MB in JPG, PNG, JPEG, or PDF format.</li>
-            <li>Ensure the image clearly shows all information on your ID...</li>
+            <li>{t("pages.openshopStep3.uploadHintPassport")}</li>
+            <li>{t("pages.openshopStep3.uploadHintSize")}</li>
+            <li>{t("pages.openshopStep3.uploadHintClarity")}</li>
           </ul>
 
           <div className="flex gap-4 pt-2">
@@ -149,9 +151,9 @@ export default function Step3Identity({ businessType, data, setData, errors }: P
                {previewUrl ? (
                  <img src={previewUrl} className="w-full h-full object-cover" alt="Preview" />
                ) : (
-                 <div className="flex-1 bg-gray-200 flex items-center justify-center text-[10px] text-gray-400">Sample Image</div>
+                 <div className="flex-1 bg-gray-200 flex items-center justify-center text-[10px] text-gray-400">{t("pages.openshopStep3More.sampleImage")}</div>
                )}
-               <div className="bg-gray-600 text-white text-[10px] py-1">Sample</div>
+               <div className="bg-gray-600 text-white text-[10px] py-1">{t("pages.openshopStep3More.sample")}</div>
             </div>
             <div 
               onClick={() => fileInputRef.current?.click()}
@@ -159,7 +161,7 @@ export default function Step3Identity({ businessType, data, setData, errors }: P
             >
                <input type="file" ref={fileInputRef} className="hidden" accept="image/*,.pdf" onChange={(e) => handleFileChange(e, "idFile", "idPreview")} />
                <Upload size={20} />
-               <span className="text-[10px] font-bold mt-1">Upload</span>
+               <span className="text-[10px] font-bold mt-1">{t("pages.openshopStep3.upload")}</span>
             </div>
           </div>
         </div>
@@ -167,36 +169,36 @@ export default function Step3Identity({ businessType, data, setData, errors }: P
 
       {/* --- SECTION 2: Add Personal Information --- */}
       <section className="bg-white border border-gray-100 rounded-xl p-8 space-y-8 shadow-sm">
-        <h3 className="text-[18px] font-bold">Add Your Personal Information</h3>
-        
+        <h3 className="text-[18px] font-bold">{t("pages.openshopStep3.addPersonalInfo")}</h3>
+
         <div className="bg-gray-50 p-4 rounded-lg flex gap-3 items-center border border-gray-100">
            <Info size={18} className="text-gray-400 shrink-0" />
-           <p className="text-[13px] text-gray-600 font-medium">Ensure that all information entered below matches exactly what appears on your uploaded ID.</p>
+           <p className="text-[13px] text-gray-600 font-medium">{t("pages.openshopStep3.personalInfoNote")}</p>
         </div>
 
         <div className="space-y-6">
           {/* Legal Name */}
           <div className="space-y-2">
             <div className="flex items-center gap-1">
-              <label className="text-[14px] font-bold">Legal Name</label>
+              <label className="text-[14px] font-bold">{t("pages.openshopStep3More.legalName")}</label>
               <HelpCircle size={14} className="text-gray-400" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <input 
                 type="text" value={data.firstName} 
                 onChange={(e) => { if (e.target.value === "" || /^[a-zA-Z\s]*$/.test(e.target.value)) updateField("firstName", e.target.value); }}
-                placeholder="First Name" 
+                placeholder={t("pages.openshopStep3More.firstName")}
                 className={`p-3 border rounded-md outline-none focus:border-primary text-[14px] ${errors.firstName ? 'border-red-500 bg-red-50/10' : 'border-gray-border'}`} 
               />
               <input 
                 type="text" value={data.middleName} 
                 onChange={(e) => { if (e.target.value === "" || /^[a-zA-Z\s]*$/.test(e.target.value)) updateField("middleName", e.target.value); }}
-                placeholder="Middle Name (Optional)" className="p-3 border border-gray-border rounded-md outline-none focus:border-primary text-[14px]" 
+                placeholder={t("pages.openshopStep3More.middleName")} className="p-3 border border-gray-border rounded-md outline-none focus:border-primary text-[14px]"
               />
               <input 
                 type="text" value={data.lastName} 
                 onChange={(e) => { if (e.target.value === "" || /^[a-zA-Z\s]*$/.test(e.target.value)) updateField("lastName", e.target.value); }}
-                placeholder="Last Name" 
+                placeholder={t("pages.openshopStep3More.lastName")}
                 className={`p-3 border rounded-md outline-none focus:border-primary text-[14px] ${errors.lastName ? 'border-red-500 bg-red-50/10' : 'border-gray-border'}`} 
               />
             </div>
@@ -204,11 +206,11 @@ export default function Step3Identity({ businessType, data, setData, errors }: P
 
           {/* ID Number */}
           <div className="space-y-2">
-            <label className="text-[14px] font-bold">ID Number / Passport Number</label>
+            <label className="text-[14px] font-bold">{t("pages.openshopStep3More.idPassportNumber")}</label>
             <input 
               type="text" value={data.idNumber} 
               onChange={(e) => { if (e.target.value === "" || /^\d+$/.test(e.target.value)) updateField("idNumber", e.target.value); }}
-              placeholder="Enter numbers only" 
+              placeholder={t("pages.openshopStep3More.enterNumbersOnly")}
               className={`w-full p-3 border rounded-md outline-none focus:border-primary text-[14px] ${errors.idNumber ? 'border-red-500 bg-red-50/10' : 'border-gray-border'}`} 
             />
           </div>
@@ -216,19 +218,19 @@ export default function Step3Identity({ businessType, data, setData, errors }: P
           {/* Date of Birth & Expiry */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-[14px] font-bold">Date of Birth</label>
+              <label className="text-[14px] font-bold">{t("pages.openshopStep3More.dateOfBirth")}</label>
               <div className={`grid grid-cols-3 gap-2 p-1 rounded-lg ${errors.birthDate ? 'bg-red-50 ring-1 ring-red-500' : ''}`}>
-                <Select value={data.birthMonth} onChange={(v: string) => updateField("birthMonth", v)} placeholder="Month" options={months} />
-                <Select value={data.birthDay} onChange={(v: string) => updateField("birthDay", v)} placeholder="Day" options={days} />
-                <Select value={data.birthYear} onChange={(v: string) => updateField("birthYear", v)} placeholder="Year" options={birthYears} />
+                <Select value={data.birthMonth} onChange={(v: string) => updateField("birthMonth", v)} placeholder={t("pages.openshopStep3More.month")} options={months} />
+                <Select value={data.birthDay} onChange={(v: string) => updateField("birthDay", v)} placeholder={t("pages.openshopStep3More.day")} options={days} />
+                <Select value={data.birthYear} onChange={(v: string) => updateField("birthYear", v)} placeholder={t("pages.openshopStep3More.year")} options={birthYears} />
               </div>
             </div>
             <div className="space-y-2">
-              <label className="text-[14px] font-bold">Expiry Date</label>
+              <label className="text-[14px] font-bold">{t("pages.openshopStep3More.expiryDate")}</label>
               <div className={`grid grid-cols-3 gap-2 p-1 rounded-lg ${errors.expiryDate ? 'bg-red-50 ring-1 ring-red-500' : ''}`}>
-                <Select value={data.expiryMonth} onChange={(v: string) => updateField("expiryMonth", v)} placeholder="Month" options={months} />
-                <Select value={data.expiryDay} onChange={(v: string) => updateField("expiryDay", v)} placeholder="Day" options={days} />
-                <Select value={data.expiryYear} onChange={(v: string) => updateField("expiryYear", v)} placeholder="Year" options={expiryYears} />
+                <Select value={data.expiryMonth} onChange={(v: string) => updateField("expiryMonth", v)} placeholder={t("pages.openshopStep3More.month")} options={months} />
+                <Select value={data.expiryDay} onChange={(v: string) => updateField("expiryDay", v)} placeholder={t("pages.openshopStep3More.day")} options={days} />
+                <Select value={data.expiryYear} onChange={(v: string) => updateField("expiryYear", v)} placeholder={t("pages.openshopStep3More.year")} options={expiryYears} />
               </div>
             </div>
           </div>
@@ -236,32 +238,32 @@ export default function Step3Identity({ businessType, data, setData, errors }: P
           {/* Residential Address */}
           <div className="space-y-3 pt-2">
             <div className="flex items-center gap-1">
-              <label className="text-[14px] font-bold">Residential Address</label>
+              <label className="text-[14px] font-bold">{t("pages.openshopStep3More.residentialAddress")}</label>
               <HelpCircle size={14} className="text-gray-400" />
             </div>
             <input 
               type="text" value={data.resAddress} onChange={(e) => updateField("resAddress", e.target.value)}
-              placeholder="Street Address" 
+              placeholder={t("pages.openshopStep3More.streetAddress")}
               className={`w-full p-3 border rounded-md text-[14px] outline-none focus:border-primary ${errors.resAddress ? 'border-red-500 bg-red-50/10' : 'border-gray-border'}`} 
             />
             <input 
               type="text" value={data.apartment} onChange={(e) => updateField("apartment", e.target.value)}
-              placeholder="Apartment, suite, building, etc. (Optional)" className="w-full p-3 border border-gray-border rounded-md text-[14px]" 
+              placeholder={t("pages.openshopStep3More.apartmentOptional")} className="w-full p-3 border border-gray-border rounded-md text-[14px]"
             />
             <div className="grid grid-cols-2 gap-3">
                <input 
                 type="text" value={data.resCity} onChange={(e) => updateField("resCity", e.target.value)}
-                placeholder="City" 
+                placeholder={t("pages.openshopStep3More.city")}
                 className={`p-3 border rounded-md outline-none focus:border-primary text-[14px] ${errors.resCity ? 'border-red-500 bg-red-50/10' : 'border-gray-border'}`} 
                />
-               <Select value={data.resState} onChange={(v: string) => updateField("resState", v)} error={errors.resState} placeholder="State" options={usStates} />
+               <Select value={data.resState} onChange={(v: string) => updateField("resState", v)} error={errors.resState} placeholder={t("pages.openshopStep3More.state")} options={usStates} />
             </div>
             <div className="grid grid-cols-2 gap-3">
                <div className="relative">
                  <input 
                   type="text" value={data.resZip} 
                   onChange={(e) => { if (e.target.value === "" || /^\d+$/.test(e.target.value)) updateField("resZip", e.target.value); }}
-                  placeholder="Postal Code" 
+                  placeholder={t("pages.openshopStep3More.postalCode")}
                   className={`w-full p-3 border rounded-md text-[14px] outline-none focus:border-primary ${errors.resZip ? 'border-red-500 bg-red-50/10' : 'border-gray-border'}`} 
                  />
                </div>
@@ -270,17 +272,17 @@ export default function Step3Identity({ businessType, data, setData, errors }: P
 
           {/* Address Options */}
           <div className="space-y-4 pt-4 border-t border-gray-50">
-            <p className="text-[14px] font-bold">Which option applies to the address you entered?</p>
+            <p className="text-[14px] font-bold">{t("pages.openshopStep3More.addressOptionsQ")}</p>
             <div className="space-y-3">
-              <RadioOption 
-                label="This is a business address only. I understand that my address will be displayed on the product details page." 
-                checked={data.addressOption === "business"} 
-                onChange={() => updateField("addressOption", "business")} 
+              <RadioOption
+                label={t("pages.openshopStep3More.businessOnlyAddress")}
+                checked={data.addressOption === "business"}
+                onChange={() => updateField("addressOption", "business")}
               />
-              <RadioOption 
-                label="This is also my residence. I certify that I do not have a business-only address." 
-                checked={data.addressOption === "residential"} 
-                onChange={() => updateField("addressOption", "residential")} 
+              <RadioOption
+                label={t("pages.openshopStep3More.alsoResidence")}
+                checked={data.addressOption === "residential"}
+                onChange={() => updateField("addressOption", "residential")}
               />
             </div>
           </div>

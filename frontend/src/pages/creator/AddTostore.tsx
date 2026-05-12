@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { ChevronRight, Check, Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 
 interface AddToStoreProps {
@@ -35,6 +36,7 @@ const computeEarn = (p: RecommendedProduct): number => {
 };
 
 export default function AddToStore({ onBack: _onBack }: AddToStoreProps) {
+  const { t } = useTranslation("common");
   const [products, setProducts] = useState<RecommendedProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState<string | null>(null);
@@ -70,7 +72,7 @@ export default function AddToStore({ onBack: _onBack }: AddToStoreProps) {
         }, 1200);
       }
     } catch (err: any) {
-      alert(err?.message || "Failed to add product");
+      alert(err?.message || t("pages.creatorAddToStore2.failedAdd"));
     } finally {
       setAdding(null);
     }
@@ -91,9 +93,9 @@ export default function AddToStore({ onBack: _onBack }: AddToStoreProps) {
 
       <div className="space-y-1 pt-1">
         <div className="flex justify-between items-center px-1 animate-in fade-in slide-in-from-bottom-2 duration-500">
-          <h3 className="font-black text-lg text-slate-900 tracking-tighter">Recommended Products</h3>
+          <h3 className="font-black text-lg text-slate-900 tracking-tighter">{t("pages.creatorAddToStore.recommendedProducts")}</h3>
           <div className="flex items-center gap-1 text-[10px] font-bold text-slate-400">
-            Marketplace <ChevronRight size={12} />
+            {t("pages.creatorAddToStore2.marketplace")} <ChevronRight size={12} />
           </div>
         </div>
 
@@ -103,7 +105,7 @@ export default function AddToStore({ onBack: _onBack }: AddToStoreProps) {
           </div>
         ) : products.length === 0 ? (
           <div className="py-16 text-center text-slate-400 text-sm font-medium">
-            No new products to add right now.
+            {t("pages.creatorAddToStore2.noNewProducts")}
           </div>
         ) : (
           <div className="grid grid-cols-4 md:grid-cols-4 lg:grid-cols-7 gap-1 pb-8">
@@ -142,7 +144,7 @@ export default function AddToStore({ onBack: _onBack }: AddToStoreProps) {
 
                       {p.freeShipping && (
                         <div className="inline-block bg-slate-100 text-slate-600 text-[7px] font-black px-1 py-0.5 rounded mb-1">
-                          Free Ship
+                          {t("pages.creatorAddToStore2.freeShip")}
                         </div>
                       )}
 

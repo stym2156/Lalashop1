@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { CheckCircle, Plus } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import AddBankAccount from "../../creator/pagescreator/window/addbank";
 import { apiClient } from "@/services/apiClient";
 
 export function PaymentSection() {
+  const { t } = useTranslation("common");
   const [view, setView] = useState<"main" | "addAccount">("main");
   const [bankAccounts, setBankAccounts] = useState<any[]>([]); // Array of accounts
   const [loading, setLoading] = useState(true);
@@ -43,12 +45,12 @@ export function PaymentSection() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h3 className="text-sm font-bold  tracking-tight text-slate-800">Payment Accounts</h3>
+        <h3 className="text-sm font-bold  tracking-tight text-slate-800">{t("pages.paymentPanel.title")}</h3>
         <button 
           onClick={() => setView("addAccount")}
           className="bg-[#00aeff] text-white px-5 py-2 rounded-full font-black text-[10px] tracking-widest shadow-lg shadow-[#00aeff]/20 hover:bg-[#0096db] transition-all active:scale-95 flex items-center gap-2"
         >
-          <Plus size={14} /> Add Account
+          <Plus size={14} /> {t("pages.paymentPanel.addAccount")}
         </button>
       </div>
 
@@ -87,8 +89,8 @@ export function PaymentSection() {
           <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-200 mb-4 group-hover:scale-110 group-hover:text-[#00aeff] transition-all">
              <Plus size={32} />
           </div>
-          <p className="text-[11px] font-black text-slate-400 tracking-widest">No bank accounts linked</p>
-          <p className="text-[10px] text-slate-300 mt-1">Click to link your first account</p>
+          <p className="text-[11px] font-black text-slate-400 tracking-widest">{t("pages.paymentPanel.noBankAccounts")}</p>
+          <p className="text-[10px] text-slate-300 mt-1">{t("pages.paymentPanel.clickToLink")}</p>
         </div>
       )}
     </div>

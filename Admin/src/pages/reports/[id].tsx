@@ -5,6 +5,7 @@ import {
   ArrowLeft, AlertCircle, User, Tag, FileText, Save, Check, X,
   Shield, Eye, Loader2,
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import {
   fetchAdminReport,
   updateAdminReport,
@@ -12,15 +13,6 @@ import {
   type ReportAction,
   type ReportStatus,
 } from '@/services/adminApi';
-
-const reasonLabel: Record<string, string> = {
-  spam: 'Spam',
-  abuse: 'Abuse',
-  fraud: 'Fraud',
-  counterfeit: 'Counterfeit',
-  harassment: 'Harassment',
-  other: 'Other',
-};
 
 const reasonBadge: Record<string, string> = {
   spam: 'bg-orange-50 text-orange-700',
@@ -60,6 +52,7 @@ const targetLink = (r: AdminReportRow): string => {
 };
 
 const ReportDetailPage = () => {
+  const { t } = useTranslation('common');
   const router = useRouter();
   const { id } = router.query;
   const [report, setReport] = useState<AdminReportRow | null>(null);
@@ -70,6 +63,9 @@ const ReportDetailPage = () => {
 
   const [adminNote, setAdminNote] = useState('');
   const [actionTaken, setActionTaken] = useState<ReportAction>('none');
+
+  const reasonLabelT = (r: string) => t(`pages.reports.reasonLabel.${r}`);
+  const statusLabelT = (s: string) => t(`pages.reports.statusLabel.${s}`);
 
   const load = async (reportId: string) => {
     setLoading(true);
@@ -83,7 +79,7 @@ const ReportDetailPage = () => {
         setActionTaken(data.actionTaken ?? 'none');
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load report');
+      setError(err instanceof Error ? err.message : t('pages.reports.details.loading'));
     } finally {
       setLoading(false);
     }
@@ -103,9 +99,9 @@ const ReportDetailPage = () => {
     try {
       await updateAdminReport(id, payload);
       await load(id);
-      setSavedMessage('Saved');
+      setSavedMessage(t('pages.reports.detail.saved'));
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed');
+      alert(err instanceof Error ? err.message : t('actions.save'));
     } finally {
       setBusy(false);
     }
@@ -126,10 +122,10 @@ const ReportDetailPage = () => {
           onClick={() => router.push('/reports')}
           className="inline-flex items-center gap-2 text-[12px] text-gray-500 hover:text-black font-medium transition-colors"
         >
-          <ArrowLeft className="w-3.5 h-3.5" /> Back to reports
+          <ArrowLeft className="w-3.5 h-3.5" /> {t('pages.reports.details.back')}
         </button>
         <div className="rounded-lg bg-red-50 px-4 py-3 text-[13px] text-red-700">
-          {error || 'Report not found'}
+          {error || t('pages.reports.details.notFound')}
         </div>
       </div>
     );
@@ -143,7 +139,7 @@ const ReportDetailPage = () => {
         onClick={() => router.push('/reports')}
         className="inline-flex items-center gap-2 text-[12px] text-gray-500 hover:text-black font-medium transition-colors"
       >
-        <ArrowLeft className="w-3.5 h-3.5" /> Back to reports
+        <ArrowLeft className="w-3.5 h-3.5" /> {t('pages.reports.details.back')}
       </button>
 
       <div className="flex items-start justify-between gap-4 flex-wrap">
@@ -157,12 +153,12 @@ const ReportDetailPage = () => {
             </h1>
             <div className="flex items-center gap-2 mt-1 flex-wrap">
               <span className={`text-[11px] font-medium px-2 py-0.5 rounded ${reasonBadge[report.reason]}`}>
-                {reasonLabel[report.reason] ?? report.reason}
+                {reasonLabelT(report.reason)}
               </span>
               <span className={`text-[11px] font-medium px-2 py-0.5 rounded ${statusBadge[report.status]}`}>
-                {report.status}
+                {statusLabelT(report.status)}
               </span>
-              <span className="text-[11px] text-gray-500">Reported {formatDate(report.createdAt)}</span>
+              <span className="text-[11px] text-gray-500">{t('pages.reports.table.reported')} {formatDate(report.createdAt)}</span>
             </div>
           </div>
         </div>
@@ -174,7 +170,7 @@ const ReportDetailPage = () => {
               onClick={() => onUpdate({ status: 'reviewing' })}
               className="px-3 py-1.5 rounded-md text-xs font-semibold text-orange-700 bg-orange-50 inline-flex items-center hover:bg-orange-100 disabled:opacity-50"
             >
-              <Eye className="w-3.5 h-3.5 mr-1.5" /> Start reviewing
+              <Eye className="w-3.5 h-3.5 mr-1.5" /> {t('pages.reports.detail.startReviewing')}
             </button>
           )}
           {(report.status === 'open' || report.status === 'reviewing') && (
@@ -184,14 +180,14 @@ const ReportDetailPage = () => {
                 onClick={() => onUpdate({ status: 'actioned', actionTaken })}
                 className="px-3 py-1.5 rounded-md text-xs font-semibold text-green-700 bg-green-50 inline-flex items-center hover:bg-green-100 disabled:opacity-50"
               >
-                <Check className="w-3.5 h-3.5 mr-1.5" /> Take action
+                <Check className="w-3.5 h-3.5 mr-1.5" /> {t('pages.reports.detail.takeAction')}
               </button>
               <button
                 disabled={busy}
                 onClick={() => onUpdate({ status: 'dismissed', actionTaken: 'none' })}
                 className="px-3 py-1.5 rounded-md text-xs font-semibold text-red-600 bg-red-50 inline-flex items-center hover:bg-red-100 disabled:opacity-50"
               >
-                <X className="w-3.5 h-3.5 mr-1.5" /> Dismiss
+                <X className="w-3.5 h-3.5 mr-1.5" /> {t('pages.reports.detail.dismiss')}
               </button>
             </>
           )}
@@ -201,7 +197,7 @@ const ReportDetailPage = () => {
               onClick={() => onUpdate({ status: 'reviewing' })}
               className="px-3 py-1.5 rounded-md text-xs font-medium text-gray-700 bg-gray-100 inline-flex items-center hover:bg-gray-200 disabled:opacity-50"
             >
-              Re-open
+              {t('pages.reports.detail.reOpen')}
             </button>
           )}
         </div>
@@ -209,14 +205,14 @@ const ReportDetailPage = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2 space-y-4">
-          <Section icon={FileText} title="Description">
+          <Section icon={FileText} title={t('pages.reports.detail.sectionDescription')}>
             <p className="text-[13px] text-gray-700 leading-relaxed whitespace-pre-line">
-              {report.description || <span className="text-gray-400">No description provided</span>}
+              {report.description || <span className="text-gray-400">{t('pages.reports.detail.noDescription')}</span>}
             </p>
 
             {report.evidence && report.evidence.length > 0 && (
               <>
-                <h4 className="text-[11px] font-semibold text-gray-500 tracking-wide mt-4 mb-2">EVIDENCE</h4>
+                <h4 className="text-[11px] font-semibold text-gray-500 tracking-wide mt-4 mb-2">{t('pages.reports.detail.labelEvidence')}</h4>
                 <div className="grid grid-cols-3 gap-2">
                   {report.evidence.map((src, i) => (
                     <a key={`${src}-${i}`} href={src} target="_blank" rel="noopener noreferrer" className="block aspect-square rounded-lg overflow-hidden bg-gray-100">
@@ -229,30 +225,30 @@ const ReportDetailPage = () => {
             )}
           </Section>
 
-          <Section icon={Shield} title="Admin note & action">
+          <Section icon={Shield} title={t('pages.reports.detail.sectionAdminNote')}>
             <div className="space-y-3">
               <label className="block">
-                <span className="text-[11px] font-semibold text-gray-500 tracking-wide">ACTION TAKEN</span>
+                <span className="text-[11px] font-semibold text-gray-500 tracking-wide">{t('pages.reports.detail.labelActionTaken')}</span>
                 <select
                   value={actionTaken}
                   onChange={(e) => setActionTaken(e.target.value as ReportAction)}
                   className="w-full mt-1 px-3 py-2 bg-gray-50 border border-gray-100 rounded-md text-[12px] outline-none focus:border-primary"
                 >
-                  <option value="none">None — no action needed</option>
-                  <option value="warn">Warn — notify the user/seller</option>
-                  <option value="remove">Remove — take down the content</option>
-                  <option value="suspend">Suspend — temporary suspension</option>
-                  <option value="ban">Ban — permanent ban</option>
+                  <option value="none">{t('pages.reports.detail.actionNone')}</option>
+                  <option value="warn">{t('pages.reports.detail.actionWarn')}</option>
+                  <option value="remove">{t('pages.reports.detail.actionRemove')}</option>
+                  <option value="suspend">{t('pages.reports.detail.actionSuspend')}</option>
+                  <option value="ban">{t('pages.reports.detail.actionBan')}</option>
                 </select>
               </label>
 
               <label className="block">
-                <span className="text-[11px] font-semibold text-gray-500 tracking-wide">ADMIN NOTE</span>
+                <span className="text-[11px] font-semibold text-gray-500 tracking-wide">{t('pages.reports.detail.labelAdminNote')}</span>
                 <textarea
                   value={adminNote}
                   onChange={(e) => setAdminNote(e.target.value)}
                   rows={4}
-                  placeholder="Internal notes about this report..."
+                  placeholder={t('pages.reports.detail.adminNotePlaceholder')}
                   className="w-full mt-1 px-3 py-2 bg-gray-50 border border-gray-100 rounded-md text-[12px] outline-none focus:border-primary resize-none"
                 />
               </label>
@@ -266,7 +262,7 @@ const ReportDetailPage = () => {
                   onClick={() => onUpdate({ actionTaken, adminNote })}
                   className="bg-black text-white px-3 py-1.5 rounded-md text-xs font-semibold inline-flex items-center hover:bg-gray-900 disabled:opacity-50"
                 >
-                  <Save className="w-3.5 h-3.5 mr-1.5" /> Save
+                  <Save className="w-3.5 h-3.5 mr-1.5" /> {t('pages.reports.detail.save')}
                 </button>
               </div>
             </div>
@@ -274,10 +270,10 @@ const ReportDetailPage = () => {
         </div>
 
         <div className="space-y-4">
-          <Section icon={Tag} title="Target">
-            <Row label="Type" value={<span className="capitalize text-gray-900">{report.targetType}</span>} />
+          <Section icon={Tag} title={t('pages.reports.detail.sectionTarget')}>
+            <Row label={t('pages.reports.detail.labelType')} value={<span className="capitalize text-gray-900">{report.targetType}</span>} />
             <Row
-              label="ID"
+              label={t('pages.reports.detail.labelId')}
               value={
                 <Link href={targetLink(report)} className="font-mono text-[11px] text-gray-900 hover:text-primary truncate">
                   {report.targetId}
@@ -288,38 +284,38 @@ const ReportDetailPage = () => {
               href={targetLink(report)}
               className="block mt-3 px-3 py-2 rounded-md text-xs font-medium text-center bg-gray-100 hover:bg-gray-200 text-gray-700"
             >
-              Open target →
+              {t('pages.reports.detail.openTarget')}
             </Link>
           </Section>
 
-          <Section icon={User} title="Reporter">
+          <Section icon={User} title={t('pages.reports.detail.sectionReporter')}>
             {reporter ? (
               <>
-                <Row label="Name" value={reporter.name || reporter.email || '—'} />
-                {reporter.email && <Row label="Email" value={reporter.email} />}
-                {reporter.customId && <Row label="Custom ID" value={reporter.customId} mono />}
+                <Row label={t('pages.reports.detail.labelName')} value={reporter.name || reporter.email || '—'} />
+                {reporter.email && <Row label={t('pages.reports.detail.labelEmail')} value={reporter.email} />}
+                {reporter.customId && <Row label={t('pages.reports.detail.labelCustomId')} value={reporter.customId} mono />}
                 <Link
                   href={`/users/${reporter._id}`}
                   className="block mt-3 px-3 py-2 rounded-md text-xs font-medium text-center bg-gray-100 hover:bg-gray-200 text-gray-700"
                 >
-                  Open reporter profile →
+                  {t('pages.reports.detail.openReporterProfile')}
                 </Link>
               </>
             ) : (
-              <p className="text-[12px] text-gray-400">Unknown reporter</p>
+              <p className="text-[12px] text-gray-400">{t('pages.reports.detail.unknownReporter')}</p>
             )}
           </Section>
 
-          <Section icon={Shield} title="Review history">
-            <Row label="Status" value={<span className={`text-[11px] font-medium px-2 py-0.5 rounded ${statusBadge[report.status]}`}>{report.status}</span>} />
-            <Row label="Action" value={<span className="text-[11px] capitalize">{report.actionTaken}</span>} />
-            <Row label="Reviewed at" value={formatDate(report.reviewedAt)} />
+          <Section icon={Shield} title={t('pages.reports.detail.sectionReviewHistory')}>
+            <Row label={t('pages.reports.detail.labelStatus')} value={<span className={`text-[11px] font-medium px-2 py-0.5 rounded ${statusBadge[report.status]}`}>{statusLabelT(report.status)}</span>} />
+            <Row label={t('pages.reports.detail.labelAction')} value={<span className="text-[11px] capitalize">{report.actionTaken}</span>} />
+            <Row label={t('pages.reports.detail.labelReviewedAt')} value={formatDate(report.reviewedAt)} />
             <Row
-              label="Reviewed by"
+              label={t('pages.reports.detail.labelReviewedBy')}
               value={report.reviewedBy?.name || report.reviewedBy?.email || '—'}
             />
-            <Row label="Created" value={formatDate(report.createdAt)} />
-            <Row label="Updated" value={formatDate(report.updatedAt)} />
+            <Row label={t('pages.reports.detail.labelCreated')} value={formatDate(report.createdAt)} />
+            <Row label={t('pages.reports.detail.labelUpdated')} value={formatDate(report.updatedAt)} />
           </Section>
         </div>
       </div>

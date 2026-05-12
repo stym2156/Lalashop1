@@ -402,12 +402,14 @@ const UserDetailsPage = () => {
               value={issuedCreds.email}
               copied={copiedField === "email"}
               onCopy={() => onCopy("email", issuedCreds.email)}
+              t={t}
             />
             <CredCard
               label={t('common.password')}
               value={issuedCreds.password}
               copied={copiedField === "password"}
               onCopy={() => onCopy("password", issuedCreds.password)}
+              t={t}
             />
           </div>
           <a

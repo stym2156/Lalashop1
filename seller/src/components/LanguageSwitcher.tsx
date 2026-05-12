@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Globe, Check } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { SUPPORTED_LANGUAGES } from "@/i18n/config";
+import { SUPPORTED_LANGUAGES, setLanguage } from "@/i18n/config";
 
 interface LanguageSwitcherProps {
   compact?: boolean;
@@ -24,7 +24,7 @@ export default function LanguageSwitcher({ compact = false }: LanguageSwitcherPr
   }, [open]);
 
   const handleSwitch = (code: string) => {
-    i18n.changeLanguage(code);
+    setLanguage(code);
     setOpen(false);
   };
 

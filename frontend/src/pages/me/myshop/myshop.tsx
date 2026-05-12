@@ -3,12 +3,14 @@ import {
   Search, ShoppingBag, Grid, List, Star, Plus, Store
 } from "lucide-react";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 interface MyShopProps {
   isSeller?: boolean;
 }
 
 export default function TikTokStyleProducts({ isSeller = false }: MyShopProps) {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [activeTab, setActiveTab] = useState("all");
@@ -52,14 +54,14 @@ export default function TikTokStyleProducts({ isSeller = false }: MyShopProps) {
           <Store size={32} />
         </div>
         <div className="space-y-1">
-          <h3 className="font-black text-slate-800 tracking-tight">Your Shop is not open</h3>
-          <p className="text-xs text-slate-400 font-medium">Open your shop today to start listing and selling products.</p>
+          <h3 className="font-black text-slate-800 tracking-tight">{t("pages.myshopPanel.notOpen")}</h3>
+          <p className="text-xs text-slate-400 font-medium">{t("pages.myshopPanel.openToday")}</p>
         </div>
         <button
           onClick={() => router.push("/me/opensho/openshop")}
           className="bg-[#00aeff] text-white px-8 py-2.5 rounded-full text-[11px] font-black tracking-widest shadow-lg shadow-[#00aeff]/20 active:scale-95 transition-all"
         >
-          OPEN SHOP NOW
+          {t("pages.myshopPanel2.openShopNow")}
         </button>
       </div>
     );
@@ -99,7 +101,7 @@ export default function TikTokStyleProducts({ isSeller = false }: MyShopProps) {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
           <input
             type="text"
-            placeholder="Search products in your store..."
+            placeholder={t("pages.myshopPanel2.searchProductsStore")}
             className="w-full bg-slate-100 rounded-full py-2 pl-10 pr-4 text-xs outline-none focus:ring-1 focus:ring-[#00aeff] transition-all"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -139,7 +141,7 @@ export default function TikTokStyleProducts({ isSeller = false }: MyShopProps) {
       {products.length === 0 && (
         <div className="py-20 flex flex-col items-center justify-center text-slate-300">
           <ShoppingBag size={48} strokeWidth={1} />
-          <p className="mt-4 text-[11px] font-bold tracking-widest">No products yet</p>
+          <p className="mt-4 text-[11px] font-bold tracking-widest">{t("pages.myshopPanel.noProductsYet")}</p>
         </div>
       )}
 
@@ -178,7 +180,7 @@ export default function TikTokStyleProducts({ isSeller = false }: MyShopProps) {
                 )}
                 {product.freeShipping && (
                   <span className="absolute bottom-1 left-1 text-[9px] font-bold px-1.5 py-0.5 rounded bg-green-600 text-white">
-                    Free ship
+                    {t("pages.myshopPanel2.freeShip")}
                   </span>
                 )}
               </div>

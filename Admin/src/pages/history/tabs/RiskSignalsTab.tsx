@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { AlertTriangle, AlertCircle } from 'lucide-react';
 import { fetchHistoryRiskSignals } from '@/services/adminApi';
+import { useTranslation } from 'react-i18next';
 
 interface RiskRow {
   _id: string;
@@ -37,6 +38,7 @@ const sevBadge: Record<string, { cls: string; icon: typeof AlertTriangle }> = {
 };
 
 const RiskSignalsTab = () => {
+  const { t } = useTranslation();
   const [items, setItems] = useState<RiskRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -66,37 +68,37 @@ const RiskSignalsTab = () => {
     return acc;
   }, {});
 
-  if (loading) return <div className="px-4 py-12 text-center text-gray-400 text-[12px]">Loading...</div>;
+  if (loading) return <div className="px-4 py-12 text-center text-gray-400 text-[12px]">{t('pages.history.riskSignals.loading')}</div>;
   if (error) return <div className="px-4 py-12 text-center text-red-500 text-[12px]">{error}</div>;
 
   return (
     <div className="space-y-3">
       <div className="grid grid-cols-2 md:grid-cols-5 gap-2 px-4 py-3 bg-gray-50/50 text-[11px]">
         <div>
-          <p className="text-gray-500">critical</p>
+          <p className="text-gray-500">{t('pages.history.riskSignals.critical')}</p>
           <p className="text-base font-bold tabular-nums text-red-700">{counts.critical || 0}</p>
         </div>
         <div>
-          <p className="text-gray-500">high</p>
+          <p className="text-gray-500">{t('pages.history.riskSignals.high')}</p>
           <p className="text-base font-bold tabular-nums text-orange-700">{counts.high || 0}</p>
         </div>
         <div>
-          <p className="text-gray-500">medium</p>
+          <p className="text-gray-500">{t('pages.history.riskSignals.medium')}</p>
           <p className="text-base font-bold tabular-nums text-amber-700">{counts.medium || 0}</p>
         </div>
         <div>
-          <p className="text-gray-500">low</p>
+          <p className="text-gray-500">{t('pages.history.riskSignals.low')}</p>
           <p className="text-base font-bold tabular-nums text-blue-700">{counts.low || 0}</p>
         </div>
         <div>
-          <p className="text-gray-500">total signals</p>
+          <p className="text-gray-500">{t('pages.history.riskSignals.totalSignals')}</p>
           <p className="text-base font-bold tabular-nums">{items.length}</p>
         </div>
       </div>
 
       <div className="space-y-2 px-4">
         {items.length === 0 && (
-          <div className="py-8 text-center text-gray-400 text-[12px]">No risk signals detected — based on rejected/failed withdrawals</div>
+          <div className="py-8 text-center text-gray-400 text-[12px]">{t('pages.history.riskSignals.noSignals')}</div>
         )}
         {items.map((r) => {
           const sev = severityFor(r.count);
@@ -109,15 +111,15 @@ const RiskSignalsTab = () => {
                   <Icon className="w-4 h-4 mt-0.5 shrink-0" />
                   <div>
                     <p className="font-semibold">
-                      {r.count} rejected/failed withdrawals from{' '}
+                      {r.count} {t('pages.history.riskSignals.rejectedFrom')}{' '}
                       {r.user?._id ? (
                         <Link href={`/users/${r.user._id}`} className="underline hover:text-primary">
                           {r.user?.name || r.user?.email}
                         </Link>
-                      ) : 'unknown user'}
+                      ) : t('pages.history.riskSignals.unknownUser')}
                     </p>
                     <p className="text-gray-700 mt-0.5">
-                      Total rejected/failed amount: {formatMoney(r.totalRejected)} ₭ — last attempt {formatDate(r.lastAt)}
+                      {t('pages.history.riskSignals.totalRejectedAmount')} {formatMoney(r.totalRejected)} ₭ — {t('pages.history.riskSignals.lastAttempt')} {formatDate(r.lastAt)}
                     </p>
                   </div>
                 </div>

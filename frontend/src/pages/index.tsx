@@ -18,11 +18,16 @@ interface ShopAdvert {
 
 export default function Home() {
   const { t } = useTranslation("common");
+  const [mounted, setMounted] = useState(false);
   const [activeCategory, setActiveCategory] = useState("all");
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [adverts, setAdverts] = useState<ShopAdvert[]>([]);
   const [advertIndex, setAdvertIndex] = useState(0);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {

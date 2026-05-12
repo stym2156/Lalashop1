@@ -258,7 +258,7 @@ export default function SocialPage() {
                 onClick={() => setShowUpload(true)}
                 className="flex-1 bg-slate-50 hover:bg-slate-100 text-slate-400 text-left px-5 py-2.5 rounded-full text-sm transition-colors"
               >
-                {me ? `What's on your mind, ${me.username || me.name || ""}?` : "What's on your mind?"}
+                {me ? t("pages.socialPage2.whatsOnMind", { name: me.username || me.name || "" }) : t("pages.socialPage2.whatsOnMindGeneric")}
               </button>
             </div>
             <div className="flex items-center justify-around pt-3 border-t border-slate-50">
@@ -266,13 +266,13 @@ export default function SocialPage() {
                 onClick={() => setShowUpload(true)}
                 className="flex items-center gap-2 text-slate-600 text-sm font-bold hover:bg-slate-50 px-4 py-2 rounded-lg transition-colors"
               >
-                <ImageIcon size={18} className="text-emerald-500" /> Photo
+                <ImageIcon size={18} className="text-emerald-500" /> {t("pages.socialPage2.photo")}
               </button>
               <button
                 onClick={() => setShowUpload(true)}
                 className="flex items-center gap-2 text-slate-600 text-sm font-bold hover:bg-slate-50 px-4 py-2 rounded-lg transition-colors"
               >
-                <Video size={18} className="text-rose-500" /> Video
+                <Video size={18} className="text-rose-500" /> {t("pages.socialPage2.video")}
               </button>
             </div>
           </div>
@@ -312,7 +312,7 @@ export default function SocialPage() {
               </div>
             ) : posts.length === 0 ? (
               <div className="bg-white border border-slate-100 rounded-2xl py-20 text-center text-sm text-slate-400">
-                No posts yet. Be the first to share something.
+                {t("pages.socialPage2.noPostsYet")}
               </div>
             ) : (
               posts.map((post) => (
@@ -325,13 +325,13 @@ export default function SocialPage() {
         <aside className="hidden lg:block w-80 space-y-6 sticky top-24 self-start">
           <div className="bg-white border border-gray-border rounded-xl p-4 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm font-bold text-gray-500">Suggested for you</span>
-              <button className="text-xs font-bold text-dark hover:underline">See All</button>
+              <span className="text-sm font-bold text-gray-500">{t("pages.socialPage2.suggestedForYou")}</span>
+              <button className="text-xs font-bold text-dark hover:underline">{t("pages.socialPage2.seeAll")}</button>
             </div>
 
             <div className="space-y-4">
               {storyAuthors.length === 0 ? (
-                <p className="text-xs text-gray-400">No suggestions yet</p>
+                <p className="text-xs text-gray-400">{t("pages.socialPage2.noSuggestions")}</p>
               ) : (
                 storyAuthors.slice(0, 5).map((u) => (
                   <div key={u._id} className="flex items-center justify-between group">
@@ -348,7 +348,7 @@ export default function SocialPage() {
                         <span className="text-sm font-bold text-dark truncate group-hover:text-primary transition-colors">
                           {u.username || u.name || "user"}
                         </span>
-                        <span className="text-[10px] text-gray-500">Suggested for you</span>
+                        <span className="text-[10px] text-gray-500">{t("pages.socialPage2.suggestedForYou")}</span>
                       </div>
                     </Link>
                   </div>

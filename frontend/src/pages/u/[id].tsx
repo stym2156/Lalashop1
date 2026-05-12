@@ -70,13 +70,13 @@ export default function UserProfilePage() {
     isOpen: boolean;
     type: "followers" | "following";
     title: string;
-  }>({ isOpen: false, type: "followers", title: "Followers" });
+  }>({ isOpen: false, type: "followers", title: "" });
 
   const openUserList = (type: "followers" | "following") => {
     setUserListModal({
       isOpen: true,
       type,
-      title: type === "followers" ? "Followers" : "Following",
+      title: type === "followers" ? t("pages.publicShop.followers") : t("pages.publicShop.following"),
     });
   };
 
@@ -222,7 +222,7 @@ export default function UserProfilePage() {
       });
     } catch (err: any) {
       setIsFollowing(wasFollowing);
-      alert(err?.message || "Failed to update follow");
+      alert(err?.message || t("pages.publicShop.failedFollow"));
     } finally {
       setFollowLoading(false);
     }
@@ -241,7 +241,7 @@ export default function UserProfilePage() {
       <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-4">
         <p className="text-sm text-slate-500">{t("status.empty")}</p>
         <button onClick={() => router.back()} className="text-sm font-bold text-primary">
-          Go back
+          {t("pages.publicShop.goBack")}
         </button>
       </div>
     );
@@ -272,14 +272,14 @@ export default function UserProfilePage() {
                     onClick={() => openReport("user")}
                     className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-red-600 hover:bg-red-50 transition-colors"
                   >
-                    <Flag size={14} /> Report user
+                    <Flag size={14} /> {t("pages.publicShop.reportUser")}
                   </button>
                   {profile.isSeller && (
                     <button
                       onClick={() => openReport("shop")}
                       className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-red-600 hover:bg-red-50 transition-colors"
                     >
-                      <Flag size={14} /> Report shop
+                      <Flag size={14} /> {t("pages.publicShop.reportShop")}
                     </button>
                   )}
                 </div>
@@ -322,11 +322,11 @@ export default function UserProfilePage() {
                     <Loader2 size={14} className="animate-spin" />
                   ) : isFollowing ? (
                     <>
-                      <UserCheck size={14} /> Following
+                      <UserCheck size={14} /> {t("pages.publicShop.following2")}
                     </>
                   ) : (
                     <>
-                      <UserPlus size={14} /> Follow
+                      <UserPlus size={14} /> {t("pages.publicShop.follow")}
                     </>
                   )}
                 </button>
@@ -336,7 +336,7 @@ export default function UserProfilePage() {
                   onClick={handleMessage}
                   className="px-4 py-1.5 rounded-lg text-xs font-black tracking-wide bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center gap-1.5"
                 >
-                  <MessageCircle size={14} /> Message
+                  <MessageCircle size={14} /> {t("pages.publicShop.message")}
                 </button>
               )}
               {isOwnProfile && (
@@ -344,7 +344,7 @@ export default function UserProfilePage() {
                   href="/me"
                   className="px-4 py-1.5 rounded-lg text-xs font-black tracking-wide bg-slate-100 text-slate-700 hover:bg-slate-200"
                 >
-                  Edit Profile
+                  {t("pages.publicShop.editProfile")}
                 </Link>
               )}
             </div>
@@ -488,7 +488,7 @@ export default function UserProfilePage() {
                   </span>
                   {p.freeShipping && (
                     <span className="absolute top-1 left-1 text-[9px] font-bold px-1.5 py-0.5 rounded bg-green-600 text-white">
-                      Free
+                      {t("pages.publicShop.free")}
                     </span>
                   )}
 

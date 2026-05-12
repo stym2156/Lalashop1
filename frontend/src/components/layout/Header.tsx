@@ -4,7 +4,7 @@ import { Search, Camera, ClipboardList, ShoppingCart, Bell, Globe, Check, LogOut
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
-import { SUPPORTED_LANGUAGES } from "@/i18n/config";
+import { SUPPORTED_LANGUAGES, setLanguage } from "@/i18n/config";
 
 interface UserInfo {
   name: string;
@@ -22,10 +22,24 @@ interface AutocompleteItem {
 
 export default function Header() {
   const { t, i18n } = useTranslation("common");
+  const router = useRouter();
+  const selectedLang = i18n.language?.split("-")[0] || "th";
+  const switchLang = (code: string) => {
+    setLanguage(code);
+    setIsLangOpen(false);
+  };
   const [mounted, setMounted] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLangOpen, setIsLangOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState<UserInfo | null>(null);
+  const [cartCount, setCartCount] = useState(0);
+  const [notificationCount, setNotificationCount] = useState(0);
+  const [acItems, setAcItems] = useState<AutocompleteItem[]>([]);
+  const [acOpen, setAcOpen] = useState(false);
+  const [acLoading, setAcLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const acRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -178,7 +192,7 @@ export default function Header() {
               <Search size={18} className="text-gray-400" />
               <input
                 type="text"
-                placeholder={mounted ? t("header.searchPlaceholder") : ""}
+                placeholder={t("header.searchPlaceholder")}
                 className="flex-1 bg-transparent outline-none text-sm text-slate-700 px-3 placeholder:text-gray-400"
                 value={searchQuery}
                 onChange={(e) => {
@@ -192,7 +206,7 @@ export default function Header() {
               </button>
               <div className="w-[1.5px] h-4 bg-gray-300 mx-2 opacity-50" />
               <button type="submit" className="text-primary font-bold text-sm px-2 hover:scale-110 transition-transform">
-                {mounted ? t("actions.search") : ""}
+                {t("actions.search")}
               </button>
             </div>
           </form>
@@ -204,12 +218,12 @@ export default function Header() {
             <div className="absolute left-4 right-4 top-full mt-2 bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden z-50">
               {acLoading && (
                 <div className="px-4 py-6 text-center text-[12px] text-gray-400">
-                  {mounted ? t("status.loading") : ""}
+                  {t("status.loading")}
                 </div>
               )}
               {!acLoading && acItems.length === 0 && (
                 <div className="px-4 py-6 text-center text-[12px] text-gray-400">
-                  {mounted ? t("header.searchPlaceholder") : ""}
+                  {t("header.searchPlaceholder")}
                 </div>
               )}
               {!acLoading &&
@@ -252,7 +266,7 @@ export default function Header() {
                   onClick={() => setAcOpen(false)}
                   className="flex items-center justify-center gap-1 px-3 py-2.5 border-t border-slate-100 bg-slate-50 text-[12px] font-bold text-sky-600 hover:bg-slate-100"
                 >
-                  {mounted ? t("actions.viewAll") : ""} — &ldquo;{searchQuery}&rdquo;
+                  {t("actions.viewAll")} — &ldquo;{searchQuery}&rdquo;
                 </Link>
               )}
             </div>
@@ -286,7 +300,7 @@ export default function Header() {
                       {badgeCount > 99 ? '99+' : badgeCount}
                     </span>
                   )}
-                  <span className="text-[10px] font-bold text-slate-400 group-hover:text-primary tracking-tight">{mounted ? item.label : ""}</span>
+                  <span className="text-[10px] font-bold text-slate-400 group-hover:text-primary tracking-tight">{item.label}</span>
                 </Link>
               );
             })}
@@ -328,7 +342,7 @@ export default function Header() {
               </div>
             ) : (
               <Link href="/login" className="bg-primary text-white px-4 sm:px-5 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-xs font-black shadow-lg shadow-primary/20 hover:bg-primary-hover transition-all">
-                {mounted ? t("nav.login") : ""}
+                {t("nav.login")}
               </Link>
             )}
           </div>
@@ -353,7 +367,7 @@ export default function Header() {
                     className="flex items-center gap-4 p-4 hover:bg-gray-50 rounded-xl transition-colors"
                   >
                     <item.icon size={20} className="text-slate-500" />
-                    <span className="text-sm font-bold text-slate-700">{mounted ? item.label : ""}</span>
+                    <span className="text-sm font-bold text-slate-700">{item.label}</span>
                     {badgeCount > 0 && (
                       <span className="ml-auto bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
                         {badgeCount > 99 ? "99+" : badgeCount}
@@ -387,12 +401,12 @@ export default function Header() {
             <Search size={16} className="text-gray-400" />
             <input
               type="text"
-              placeholder={mounted ? t("header.searchPlaceholder") : ""}
+              placeholder={t("header.searchPlaceholder")}
               className="flex-1 bg-transparent outline-none text-xs text-slate-700 px-2"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button type="submit" className="text-primary font-bold text-xs px-2">{mounted ? t("actions.search") : ""}</button>
+            <button type="submit" className="text-primary font-bold text-xs px-2">{t("actions.search")}</button>
           </div>
         </form>
       </div>

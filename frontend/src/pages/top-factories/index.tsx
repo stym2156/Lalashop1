@@ -46,7 +46,7 @@ export default function TopFactoriesPage() {
                 <div className="bg-[#00a699]/20 backdrop-blur-md rounded-full px-6 py-2 mb-8 border border-[#00a699]/20 inline-block">
                    <p className="text-[#00a699] text-[10px] font-extrabold tracking-[0.2em] flex items-center gap-2">
                       <Trophy size={16} fill="currentColor" />
-                      Elite Tier Manufacturers
+                      {t("pages.topFactories2.eliteTier")}
                    </p>
                 </div>
                 <h1 className="text-3xl md:text-5xl font-extrabold mb-8 leading-tight">{t("pages.topFactories.title")}</h1>
@@ -58,15 +58,15 @@ export default function TopFactoriesPage() {
              <div className="relative z-10 hidden xl:block">
                 <div className="w-80 h-80 bg-white/5 rounded-3xl p-8 border border-white/5 backdrop-blur-sm -rotate-6 flex flex-col items-center text-center">
                    <Award size={80} className="text-[#00a699] mb-8 animate-pulse" />
-                   <h2 className="text-xl font-bold mb-4">Quality Verified</h2>
-                   <p className="text-xs text-white/40 font-medium">Platform-wide standard for <br /> tier-one manufacturing partners.</p>
+                   <h2 className="text-xl font-bold mb-4">{t("pages.topFactories2.qualityVerified")}</h2>
+                   <p className="text-xs text-white/40 font-medium">{t("pages.topFactories2.qualityVerifiedDesc")}</p>
                 </div>
              </div>
           </div>
 
           {/* Categories Bar */}
           <div className="flex items-center gap-6 mb-12 overflow-x-auto pb-4 scrollbar-hide">
-             {["All Factories", "Electronics", "Industrial", "Apparel", "Home & Garden", "Automotive"].map((cat, i) => (
+             {[t("pages.topFactories2.allFactories"), t("pages.topFactories2.electronics"), t("pages.topFactories2.industrial"), t("pages.topFactories2.apparel"), t("pages.topFactories2.homeGarden"), t("pages.topFactories2.automotive")].map((cat, i) => (
                <button key={i} className={`px-8 py-3 rounded-full text-xs font-bold whitespace-nowrap transition-all ${i === 0 ? "bg-[#00a699] text-white shadow-xl shadow-[#00a699]/20" : "bg-white text-slate-500 border border-gray-100 hover:border-[#00a699] hover:text-[#00a699]"}`}>
                   {cat}
                </button>
@@ -92,7 +92,7 @@ export default function TopFactoriesPage() {
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                           />
                           <div className="absolute top-3 left-3 bg-[#00a699] text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg">
-                             FACTORY
+                             {t("pages.topFactories2.factoryBadge")}
                           </div>
                        </div>
                        
@@ -103,7 +103,7 @@ export default function TopFactoriesPage() {
                           <div className="mt-auto">
                              <p className="text-[10px] text-gray-400 font-bold flex items-center gap-2 mb-3">
                                 <ShieldCheck size={14} className="text-[#00a699]" />
-                                Verified Source • CN
+                                {t("pages.topFactories2.verifiedSource")}
                              </p>
                              <div className="flex items-center justify-between">
                                 <span className="text-xl font-black text-[#00a699]">฿{product.price.toLocaleString()}</span>

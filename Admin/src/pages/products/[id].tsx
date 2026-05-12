@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import {
   ArrowLeft, Package, AlertCircle, Image as ImageIcon, Ban, CheckCircle, Star, Tag, Award, Flag,
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import {
   fetchAdminProduct,
   updateAdminProduct,
@@ -34,6 +35,7 @@ const productImages = (p: AdminProductRow): string[] => {
 };
 
 const ProductDetailPage = () => {
+  const { t } = useTranslation('common');
   const router = useRouter();
   const { id } = router.query;
   const [tab, setTab] = useState<Tab>('overview');
@@ -51,7 +53,7 @@ const ProductDetailPage = () => {
       const res = await fetchAdminProduct(productId);
       setProduct(res.data ?? null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load product');
+      setError(err instanceof Error ? err.message : t('pages.products.details.loading'));
     } finally {
       setLoading(false);
     }
@@ -91,14 +93,14 @@ const ProductDetailPage = () => {
       await updateAdminProduct(String(id), { action });
       await loadProduct(String(id));
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Action failed');
+      alert(err instanceof Error ? err.message : t('actions.update'));
     } finally {
       setBusy(false);
     }
   };
 
   if (loading) {
-    return <div className="text-[13px] text-gray-400 py-12 text-center">Loading product...</div>;
+    return <div className="text-[13px] text-gray-400 py-12 text-center">{t('pages.products.details.loading')}</div>;
   }
 
   if (error || !product) {
@@ -108,10 +110,10 @@ const ProductDetailPage = () => {
           onClick={() => router.push('/products')}
           className="inline-flex items-center gap-2 text-[12px] text-gray-500 hover:text-black font-medium transition-colors"
         >
-          <ArrowLeft className="w-3.5 h-3.5" /> Back to products
+          <ArrowLeft className="w-3.5 h-3.5" /> {t('pages.products.details.back')}
         </button>
         <div className="rounded-lg bg-red-50 px-4 py-3 text-[13px] text-red-700">
-          {error || 'Product not found'}
+          {error || t('pages.products.details.notFound')}
         </div>
       </div>
     );
@@ -129,7 +131,7 @@ const ProductDetailPage = () => {
         onClick={() => router.push('/products')}
         className="inline-flex items-center gap-2 text-[12px] text-gray-500 hover:text-black font-medium transition-colors"
       >
-        <ArrowLeft className="w-3.5 h-3.5" /> Back to products
+        <ArrowLeft className="w-3.5 h-3.5" /> {t('pages.products.details.back')}
       </button>
 
       <div className="flex items-start justify-between gap-4">
@@ -158,7 +160,7 @@ const ProductDetailPage = () => {
               onClick={() => onAction('feature')}
               className="px-3 py-1.5 rounded-md text-xs font-semibold text-purple-700 bg-purple-50 inline-flex items-center hover:bg-purple-100 disabled:opacity-50"
             >
-              <Award className="w-3.5 h-3.5 mr-1.5" /> Feature
+              <Award className="w-3.5 h-3.5 mr-1.5" /> {t('pages.products.details.feature')}
             </button>
           ) : (
             <button
@@ -166,7 +168,7 @@ const ProductDetailPage = () => {
               onClick={() => onAction('unfeature')}
               className="px-3 py-1.5 rounded-md text-xs font-medium text-gray-700 inline-flex items-center hover:bg-gray-100 disabled:opacity-50"
             >
-              Unfeature
+              {t('pages.products.details.unfeature')}
             </button>
           )}
           {!hasViolation ? (
@@ -175,7 +177,7 @@ const ProductDetailPage = () => {
               onClick={() => onAction('flag-violation')}
               className="px-3 py-1.5 rounded-md text-xs font-medium text-amber-700 bg-amber-50 inline-flex items-center hover:bg-amber-100 disabled:opacity-50"
             >
-              <Flag className="w-3.5 h-3.5 mr-1.5" /> Flag
+              <Flag className="w-3.5 h-3.5 mr-1.5" /> {t('pages.products.details.flag')}
             </button>
           ) : (
             <button
@@ -183,7 +185,7 @@ const ProductDetailPage = () => {
               onClick={() => onAction('clear-violation')}
               className="px-3 py-1.5 rounded-md text-xs font-medium text-gray-700 inline-flex items-center hover:bg-gray-100 disabled:opacity-50"
             >
-              Clear violation
+              {t('pages.products.details.clearViolation')}
             </button>
           )}
           {!isBanned ? (
@@ -192,7 +194,7 @@ const ProductDetailPage = () => {
               onClick={() => onAction('ban')}
               className="px-3 py-1.5 rounded-md text-xs font-semibold text-red-600 bg-red-50 inline-flex items-center hover:bg-red-100 disabled:opacity-50"
             >
-              <Ban className="w-3.5 h-3.5 mr-1.5" /> Ban
+              <Ban className="w-3.5 h-3.5 mr-1.5" /> {t('pages.products.details.ban')}
             </button>
           ) : (
             <button
@@ -200,7 +202,7 @@ const ProductDetailPage = () => {
               onClick={() => onAction('unban')}
               className="px-3 py-1.5 rounded-md text-xs font-semibold text-green-700 bg-green-50 inline-flex items-center hover:bg-green-100 disabled:opacity-50"
             >
-              <CheckCircle className="w-3.5 h-3.5 mr-1.5" /> Reinstate
+              <CheckCircle className="w-3.5 h-3.5 mr-1.5" /> {t('pages.products.details.reinstate')}
             </button>
           )}
           {product.status === 'Draft' && (
@@ -209,7 +211,7 @@ const ProductDetailPage = () => {
               onClick={() => onAction('approve')}
               className="px-3 py-1.5 rounded-md text-xs font-semibold text-green-700 bg-green-50 inline-flex items-center hover:bg-green-100 disabled:opacity-50"
             >
-              <CheckCircle className="w-3.5 h-3.5 mr-1.5" /> Approve
+              <CheckCircle className="w-3.5 h-3.5 mr-1.5" /> {t('pages.products.details.approve')}
             </button>
           )}
         </div>
@@ -217,23 +219,23 @@ const ProductDetailPage = () => {
 
       <div className="flex border-b border-gray-100 text-[12px]">
         {([
-          { id: 'overview', label: 'Overview', icon: Tag },
-          { id: 'images', label: 'Images', icon: ImageIcon },
-          { id: 'reviews', label: 'Reviews', icon: Star },
-          { id: 'reports', label: 'Reports', icon: AlertCircle },
-          { id: 'history', label: 'History', icon: Package },
-        ] as { id: Tab; label: string; icon: typeof Tag }[]).map((t) => (
+          { id: 'overview', label: t('pages.products.details.tabOverview'), icon: Tag },
+          { id: 'images', label: t('pages.products.details.tabImages'), icon: ImageIcon },
+          { id: 'reviews', label: t('pages.products.details.tabReviews'), icon: Star },
+          { id: 'reports', label: t('pages.products.details.tabReports'), icon: AlertCircle },
+          { id: 'history', label: t('pages.products.details.tabHistory'), icon: Package },
+        ] as { id: Tab; label: string; icon: typeof Tag }[]).map((tabItem) => (
           <button
-            key={t.id}
-            onClick={() => setTab(t.id)}
+            key={tabItem.id}
+            onClick={() => setTab(tabItem.id)}
             className={`px-4 py-2.5 inline-flex items-center gap-2 -mb-px font-medium transition-colors ${
-              tab === t.id
+              tab === tabItem.id
                 ? 'text-primary border-b-2 border-primary'
                 : 'text-gray-500 hover:text-black border-b-2 border-transparent'
             }`}
           >
-            <t.icon className="w-3.5 h-3.5" />
-            {t.label}
+            <tabItem.icon className="w-3.5 h-3.5" />
+            {tabItem.label}
           </button>
         ))}
       </div>
@@ -242,24 +244,24 @@ const ProductDetailPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div className="rounded-lg p-5 lg:col-span-1 space-y-4">
             <div>
-              <h3 className="text-[11px] font-semibold text-gray-500 tracking-wide mb-3">Product Info</h3>
+              <h3 className="text-[11px] font-semibold text-gray-500 tracking-wide mb-3">{t('pages.products.details.sectionProductInfo')}</h3>
               <div className="space-y-2 text-[12px]">
-                <Row label="Product ID" value={product._id} mono />
-                <Row label="Shop" value={product.seller?.name || '—'} link={product.seller?._id ? `/shops/${product.seller._id}` : undefined} />
-                <Row label="Category" value={product.category} />
-                <Row label="Price" value={`${formatMoney(product.price)} ₭`} />
-                <Row label="Stock" value={product.countInStock.toString()} />
-                <Row label="Status" value={product.status} />
-                <Row label="Created" value={formatDate(product.createdAt)} />
+                <Row label={t('pages.products.details.labelProductId')} value={product._id} mono />
+                <Row label={t('pages.products.details.labelShop')} value={product.seller?.name || '—'} link={product.seller?._id ? `/shops/${product.seller._id}` : undefined} />
+                <Row label={t('pages.products.details.labelCategory')} value={product.category} />
+                <Row label={t('pages.products.details.labelPrice')} value={`${formatMoney(product.price)} ₭`} />
+                <Row label={t('pages.products.details.labelStock')} value={product.countInStock.toString()} />
+                <Row label={t('pages.products.details.labelStatus')} value={product.status} />
+                <Row label={t('pages.products.details.labelCreated')} value={formatDate(product.createdAt)} />
                 {product.tags && product.tags.length > 0 && (
-                  <Row label="Tags" value={product.tags.join(', ')} />
+                  <Row label={t('pages.products.details.labelTags')} value={product.tags.join(', ')} />
                 )}
               </div>
             </div>
 
             {product.description && (
               <div>
-                <h3 className="text-[11px] font-semibold text-gray-500 tracking-wide mb-2">Description</h3>
+                <h3 className="text-[11px] font-semibold text-gray-500 tracking-wide mb-2">{t('pages.products.details.sectionDescription')}</h3>
                 <p className="text-[12px] text-gray-700 leading-relaxed whitespace-pre-line">{product.description}</p>
               </div>
             )}
@@ -267,18 +269,18 @@ const ProductDetailPage = () => {
 
           <div className="lg:col-span-2 space-y-4">
             <div>
-              <h3 className="text-[11px] font-semibold text-gray-500 tracking-wide mb-2">Performance</h3>
+              <h3 className="text-[11px] font-semibold text-gray-500 tracking-wide mb-2">{t('pages.products.details.sectionPerformance')}</h3>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                <Metric label="Units Sold" value={(product.soldCount ?? 0).toString()} tone="text-black" />
-                <Metric label="Avg Rating" value={`${(product.rating ?? 0).toFixed(1)} ★`} tone="text-orange-700" />
-                <Metric label="Reviews" value={(product.numReviews ?? 0).toString()} tone="text-black" />
-                <Metric label="Stock" value={product.countInStock.toString()} tone={product.countInStock > 0 ? 'text-green-700' : 'text-red-700'} />
+                <Metric label={t('pages.products.details.metricUnitsSold')} value={(product.soldCount ?? 0).toString()} tone="text-black" />
+                <Metric label={t('pages.products.details.metricAvgRating')} value={`${(product.rating ?? 0).toFixed(1)} ★`} tone="text-orange-700" />
+                <Metric label={t('pages.products.details.metricReviews')} value={(product.numReviews ?? 0).toString()} tone="text-black" />
+                <Metric label={t('pages.products.details.metricStock')} value={product.countInStock.toString()} tone={product.countInStock > 0 ? 'text-green-700' : 'text-red-700'} />
               </div>
             </div>
 
             <div>
               <h3 className="text-[11px] font-semibold text-gray-500 tracking-wide mb-2">
-                Images ({images.length})
+                {t('pages.products.details.images')} ({images.length})
               </h3>
               <div className="grid grid-cols-4 gap-3">
                 {images.length === 0 && (
@@ -304,7 +306,7 @@ const ProductDetailPage = () => {
       {tab === 'images' && (
         <div className="grid grid-cols-3 gap-3">
           {images.length === 0 && (
-            <div className="col-span-3 text-center py-12 text-gray-400 text-[12px]">No images</div>
+            <div className="col-span-3 text-center py-12 text-gray-400 text-[12px]">{t('pages.products.details.noImages')}</div>
           )}
           {images.map((src, i) => (
             // eslint-disable-next-line @next/next/no-img-element
@@ -316,17 +318,17 @@ const ProductDetailPage = () => {
       {tab === 'reviews' && (
         <div className="rounded-lg py-12 text-center text-gray-400 text-[12px]">
           {(product.numReviews ?? 0) > 0
-            ? `${product.numReviews} review${product.numReviews === 1 ? '' : 's'} — listing detail not yet wired`
-            : 'No reviews yet'}
+            ? `${product.numReviews} ${product.numReviews === 1 ? t('pages.support.table.reply') : t('pages.support.table.replies')}`
+            : t('pages.products.details.noReviews')}
         </div>
       )}
 
       {tab === 'reports' && (
         reportsLoading ? (
-          <div className="rounded-lg py-12 text-center text-gray-400 text-[12px]">Loading reports...</div>
+          <div className="rounded-lg py-12 text-center text-gray-400 text-[12px]">{t('pages.products.details.loadingReports')}</div>
         ) : reports.length === 0 ? (
           <div className="rounded-lg py-12 text-center text-gray-400 text-[12px]">
-            {hasViolation ? 'Product is flagged for violation review (no individual reports filed yet)' : 'No reports'}
+            {hasViolation ? t('pages.products.details.noReports') : t('pages.products.details.noReports')}
           </div>
         ) : (
           <div className="rounded-lg overflow-hidden">
@@ -334,12 +336,12 @@ const ProductDetailPage = () => {
               <table className="w-full text-[12px] tabular-nums">
                 <thead className="text-[11px] text-gray-500 tracking-wide">
                   <tr>
-                    <th className="px-4 py-2 text-left font-semibold">Report ID</th>
-                    <th className="px-4 py-2 text-left font-semibold">Reason</th>
-                    <th className="px-4 py-2 text-left font-semibold">Reported By</th>
-                    <th className="px-4 py-2 text-left font-semibold">Description</th>
-                    <th className="px-4 py-2 text-left font-semibold">Status</th>
-                    <th className="px-4 py-2 text-right font-semibold">Open</th>
+                    <th className="px-4 py-2 text-left font-semibold">{t('pages.products.details.reportTableId')}</th>
+                    <th className="px-4 py-2 text-left font-semibold">{t('pages.products.details.reportTableReason')}</th>
+                    <th className="px-4 py-2 text-left font-semibold">{t('pages.products.details.reportTableBy')}</th>
+                    <th className="px-4 py-2 text-left font-semibold">{t('pages.products.details.reportTableDesc')}</th>
+                    <th className="px-4 py-2 text-left font-semibold">{t('pages.products.details.reportTableStatus')}</th>
+                    <th className="px-4 py-2 text-right font-semibold">{t('pages.products.details.reportTableOpen')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -350,17 +352,17 @@ const ProductDetailPage = () => {
                           RPT-{r._id.slice(-6).toUpperCase()}
                         </Link>
                       </td>
-                      <td className="px-4 py-2 text-gray-700 capitalize">{r.reason}</td>
+                      <td className="px-4 py-2 text-gray-700 capitalize">{t(`pages.reports.reasonLabel.${r.reason}`)}</td>
                       <td className="px-4 py-2 text-gray-900 font-medium">
                         {r.reportedBy?.name || r.reportedBy?.email || '—'}
                       </td>
                       <td className="px-4 py-2 text-gray-700">
                         <p className="line-clamp-1 max-w-xs">{r.description || <span className="text-gray-300">—</span>}</p>
                       </td>
-                      <td className="px-4 py-2 text-gray-700 capitalize">{r.status}</td>
+                      <td className="px-4 py-2 text-gray-700 capitalize">{t(`pages.reports.statusLabel.${r.status}`)}</td>
                       <td className="px-4 py-2 text-right">
                         <Link href={`/reports/${r._id}`} className="text-[12px] text-primary hover:underline font-medium">
-                          View →
+                          {t('pages.products.details.reportView')}
                         </Link>
                       </td>
                     </tr>
@@ -373,7 +375,7 @@ const ProductDetailPage = () => {
       )}
 
       {tab === 'history' && (
-        <ProductHistoryTimeline product={product} reports={reports} />
+        <ProductHistoryTimeline product={product} reports={reports} t={t} />
       )}
     </div>
   );
@@ -382,6 +384,7 @@ const ProductDetailPage = () => {
 interface HistoryTimelineProps {
   product: AdminProductRow;
   reports: AdminReportRow[];
+  t: (k: string, opts?: Record<string, unknown>) => string;
 }
 
 interface TimelineEvent {
@@ -391,12 +394,12 @@ interface TimelineEvent {
   tone: 'created' | 'updated' | 'flag' | 'report';
 }
 
-const ProductHistoryTimeline: React.FC<HistoryTimelineProps> = ({ product, reports }) => {
+const ProductHistoryTimeline: React.FC<HistoryTimelineProps> = ({ product, reports, t }) => {
   const events: TimelineEvent[] = [
     {
       at: product.createdAt,
-      title: 'Product created',
-      detail: `Listed by ${product.seller?.name || product.seller?.email || 'seller'}`,
+      title: t('pages.products.details.tabOverview'),
+      detail: `${t('pages.products.details.labelShop')}: ${product.seller?.name || product.seller?.email || '—'}`,
       tone: 'created',
     },
   ];
@@ -404,8 +407,8 @@ const ProductHistoryTimeline: React.FC<HistoryTimelineProps> = ({ product, repor
   if (product.updatedAt && product.updatedAt !== product.createdAt) {
     events.push({
       at: product.updatedAt,
-      title: 'Product last updated',
-      detail: `Status: ${product.status}` + (product.tags?.length ? ` · Tags: ${product.tags.join(', ')}` : ''),
+      title: t('table.updatedAt'),
+      detail: `${t('table.status')}: ${product.status}` + (product.tags?.length ? ` · ${t('pages.products.details.labelTags')}: ${product.tags.join(', ')}` : ''),
       tone: 'updated',
     });
   }
@@ -413,8 +416,8 @@ const ProductHistoryTimeline: React.FC<HistoryTimelineProps> = ({ product, repor
   for (const r of reports) {
     events.push({
       at: r.createdAt,
-      title: `Report filed (${r.reason})`,
-      detail: r.description?.slice(0, 120) || `Status: ${r.status}`,
+      title: `${t('pages.products.details.tabReports')} (${t(`pages.reports.reasonLabel.${r.reason}`)})`,
+      detail: r.description?.slice(0, 120) || `${t('table.status')}: ${t(`pages.reports.statusLabel.${r.status}`)}`,
       tone: 'report',
     });
   }
@@ -424,8 +427,8 @@ const ProductHistoryTimeline: React.FC<HistoryTimelineProps> = ({ product, repor
       if (['banned', 'featured', 'violation', 'reported'].includes(tag)) {
         events.push({
           at: product.updatedAt,
-          title: `Flag: ${tag}`,
-          detail: `Currently tagged as "${tag}"`,
+          title: `${t('pages.products.details.flag')}: ${tag}`,
+          detail: `"${tag}"`,
           tone: 'flag',
         });
       }
@@ -437,7 +440,7 @@ const ProductHistoryTimeline: React.FC<HistoryTimelineProps> = ({ product, repor
   if (events.length === 0) {
     return (
       <div className="rounded-lg py-12 text-center text-gray-400 text-[12px]">
-        No activity yet
+        {t('pages.products.details.noActivity')}
       </div>
     );
   }
@@ -452,8 +455,7 @@ const ProductHistoryTimeline: React.FC<HistoryTimelineProps> = ({ product, repor
   return (
     <div className="px-2">
       <div className="rounded-lg bg-amber-50 px-4 py-2 mb-4 text-[11px] text-amber-700">
-        Showing snapshot timeline based on createdAt, updatedAt, current tags, and report records.
-        Detailed change-by-change history will activate when AdminAuditLog is enabled.
+        {t('pages.products.details.tabHistory')}
       </div>
       <div className="border-l border-gray-200 ml-2 pl-2">
         {events.map((e, i) => (

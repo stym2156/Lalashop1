@@ -158,7 +158,7 @@ const Sidebar = () => {
                   )}
 
                   <Icon className={`mr-3 h-5 w-5 ${isActive ? 'text-primary' : 'text-gray-400'}`} />
-                  <span className="flex-1 text-left">{mounted ? item.name : ''}</span>
+                  <span className="flex-1 text-left">{item.name}</span>
 
                   {hasSub && (
                     <ChevronDown
@@ -185,7 +185,7 @@ const Sidebar = () => {
                               : 'text-gray-500 hover:text-black hover:bg-gray-50'
                           }`}
                         >
-                          {mounted ? sub.name : ''}
+                          {sub.name}
                         </Link>
                       ))}
                     </motion.div>
@@ -210,7 +210,7 @@ const Sidebar = () => {
           className="flex items-center justify-center w-full py-3 text-xs font-bold text-red-500 rounded-xl hover:bg-red-50 transition-all"
         >
           <LogOut className="mr-2 h-4 w-4" />
-          {mounted ? t('nav.logoutSession') : ''}
+          {t('nav.logoutSession')}
         </button>
       </div>
     </div>

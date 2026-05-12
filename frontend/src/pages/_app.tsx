@@ -1,5 +1,5 @@
 import "@/pages/globals.css";
-import "@/i18n/config";
+import i18n, { getStoredLanguage } from "@/i18n/config";
 import type { AppProps } from "next/app";
 import { useEffect } from "react";
 import MainSidebar from "@/components/layout/MainSidebar";
@@ -48,6 +48,14 @@ export default function App({ Component, pageProps }: AppProps) {
   const hideBottomNav = ["/login", "/register", "/Adminsell"].some((path) =>
     router.pathname.startsWith(path)
   );
+
+  // Switch i18n language after mount to avoid SSR/CSR hydration mismatch.
+  useEffect(() => {
+    const stored = getStoredLanguage();
+    if (stored && stored !== i18n.language) {
+      void i18n.changeLanguage(stored);
+    }
+  }, []);
 
   // Fire a page-view event on every navigation. Listening to routeChangeComplete
   // catches client-side navigations; the initial server-rendered load is also

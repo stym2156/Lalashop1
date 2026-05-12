@@ -8,6 +8,7 @@ import {
   MoreHorizontal,
 } from "lucide-react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import FollowButton from "@/pages/Social/components/FollowButton";
 import BottomNav from "@/components/layout/BottomNav";
 import { apiClient } from "@/services/apiClient";
@@ -22,6 +23,7 @@ interface FollowerUser {
 }
 
 export default function FollowersPage() {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const { username } = router.query;
   const [searchQuery, setSearchQuery] = useState("");
@@ -89,7 +91,7 @@ export default function FollowersPage() {
             <ChevronLeft size={28} className="text-dark" />
           </button>
           <div className="flex flex-col">
-            <h1 className="text-base font-bold text-dark">Followers</h1>
+            <h1 className="text-base font-bold text-dark">{t("pages.followersPage.title")}</h1>
             <span className="text-[10px] text-gray-500 font-medium tracking-wider">@{username}</span>
           </div>
         </div>
@@ -167,7 +169,7 @@ export default function FollowersPage() {
               <div className="w-20 h-20 rounded-full bg-gray-light flex items-center justify-center mb-4">
                 <Search size={32} strokeWidth={1.5} className="opacity-40" />
               </div>
-              <p className="text-base font-bold text-dark mb-1">No followers yet</p>
+              <p className="text-base font-bold text-dark mb-1">{t("pages.followersPage.noFollowers")}</p>
               <p className="text-sm">Once people follow @{username}, they'll appear here</p>
             </div>
           )}

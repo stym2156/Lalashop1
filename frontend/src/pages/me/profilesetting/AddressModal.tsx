@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, MapPin, Phone, User, Home, Navigation, Truck } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 
 interface Address {
@@ -22,6 +23,7 @@ interface AddressModalProps {
 }
 
 export function AddressModal({ isOpen, onClose, onSuccess, editData }: AddressModalProps) {
+  const { t } = useTranslation("common");
   const [loading, setLoading] = React.useState(false);
   const [formData, setFormData] = React.useState<Address>({
     recipientName: "",
@@ -65,7 +67,7 @@ export function AddressModal({ isOpen, onClose, onSuccess, editData }: AddressMo
   const handleSubmit = async () => {
     // Check basic info
     if (!formData.recipientName || !formData.phoneNumber || !formData.village || !formData.district || !formData.province || !formData.shippingBranch) {
-      alert("Please fill in all information");
+      alert(t("pages.addressForm2.fillAllInfo"));
       return;
     }
 
@@ -79,11 +81,11 @@ export function AddressModal({ isOpen, onClose, onSuccess, editData }: AddressMo
         body: JSON.stringify(formData),
       });
 
-      alert(editData ? "Address updated successfully!" : "Address saved successfully!");
+      alert(editData ? t("pages.addressForm2.addressUpdated") : t("pages.addressForm2.addressSaved"));
       if (onSuccess) onSuccess();
       onClose();
     } catch (error: any) {
-      alert(error.message || "Cannot connect to server");
+      alert(error.message || t("pages.addressForm2.cannotConnect"));
     } finally {
       setLoading(false);
     }
@@ -113,7 +115,7 @@ export function AddressModal({ isOpen, onClose, onSuccess, editData }: AddressMo
                 <div className="p-2 bg-[#00aeff]/10 rounded-lg text-[#00aeff]">
                   <MapPin size={18} />
                 </div>
-                {editData ? "Edit Address" : "Add Address"}
+                {editData ? t("pages.addressForm.editAddress") : t("pages.addressForm.addAddress")}
               </h3>
               <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full text-gray-400">
                 <X size={20} />
@@ -125,7 +127,7 @@ export function AddressModal({ isOpen, onClose, onSuccess, editData }: AddressMo
               <div className="grid grid-cols-1 gap-4">
                 {/* Recipient Name */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-gray-500 ml-1">Recipient Name</label>
+                  <label className="text-xs font-bold text-gray-500 ml-1">{t("pages.addressForm.recipientName")}</label>
                   <div className="relative">
                     <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><User size={18} /></div>
                     <input
@@ -133,7 +135,7 @@ export function AddressModal({ isOpen, onClose, onSuccess, editData }: AddressMo
                       value={formData.recipientName}
                       onChange={handleChange}
                       type="text"
-                      placeholder="Full name"
+                      placeholder={t("pages.addressForm2.fullName")}
                       className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#00aeff]/20 focus:border-[#00aeff] outline-none text-sm"
                     />
                   </div>
@@ -141,7 +143,7 @@ export function AddressModal({ isOpen, onClose, onSuccess, editData }: AddressMo
 
                 {/* Phone Number */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-gray-500 ml-1">Phone Number</label>
+                  <label className="text-xs font-bold text-gray-500 ml-1">{t("pages.addressForm.phoneNumber")}</label>
                   <div className="relative">
                     <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><Phone size={18} /></div>
                     <input
@@ -149,7 +151,7 @@ export function AddressModal({ isOpen, onClose, onSuccess, editData }: AddressMo
                       value={formData.phoneNumber}
                       onChange={handleChange}
                       type="tel"
-                      placeholder="Phone number"
+                      placeholder={t("pages.addressForm2.phoneNumberPh")}
                       className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#00aeff]/20 focus:border-[#00aeff] outline-none text-sm"
                     />
                   </div>
@@ -157,7 +159,7 @@ export function AddressModal({ isOpen, onClose, onSuccess, editData }: AddressMo
 
                 {/* Village */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-gray-500 ml-1">Village</label>
+                  <label className="text-xs font-bold text-gray-500 ml-1">{t("pages.addressForm.village")}</label>
                   <div className="relative">
                     <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><Home size={18} /></div>
                     <input
@@ -165,7 +167,7 @@ export function AddressModal({ isOpen, onClose, onSuccess, editData }: AddressMo
                       value={formData.village}
                       onChange={handleChange}
                       type="text"
-                      placeholder="Village name"
+                      placeholder={t("pages.addressForm2.villagePh")}
                       className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#00aeff]/20 focus:border-[#00aeff] outline-none text-sm"
                     />
                   </div>
@@ -174,7 +176,7 @@ export function AddressModal({ isOpen, onClose, onSuccess, editData }: AddressMo
                 {/* District & Province */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-gray-500 ml-1">District</label>
+                    <label className="text-xs font-bold text-gray-500 ml-1">{t("pages.addressForm.district")}</label>
                     <div className="relative">
                       <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><Navigation size={18} /></div>
                       <input
@@ -182,13 +184,13 @@ export function AddressModal({ isOpen, onClose, onSuccess, editData }: AddressMo
                         value={formData.district}
                         onChange={handleChange}
                         type="text"
-                        placeholder="District"
+                        placeholder={t("pages.addressForm2.districtPh")}
                         className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#00aeff]/20 focus:border-[#00aeff] outline-none text-sm"
                       />
                     </div>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-gray-500 ml-1">Province</label>
+                    <label className="text-xs font-bold text-gray-500 ml-1">{t("pages.addressForm.province")}</label>
                     <div className="relative">
                       <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><MapPin size={18} /></div>
                       <input
@@ -196,7 +198,7 @@ export function AddressModal({ isOpen, onClose, onSuccess, editData }: AddressMo
                         value={formData.province}
                         onChange={handleChange}
                         type="text"
-                        placeholder="Province"
+                        placeholder={t("pages.addressForm2.provincePh")}
                         className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#00aeff]/20 focus:border-[#00aeff] outline-none text-sm"
                       />
                     </div>
@@ -205,7 +207,7 @@ export function AddressModal({ isOpen, onClose, onSuccess, editData }: AddressMo
 
                 {/* Shipping Branch */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-gray-500 ml-1">Shipping Branch</label>
+                  <label className="text-xs font-bold text-gray-500 ml-1">{t("pages.addressForm.shippingBranch")}</label>
                   <div className="relative">
                     <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><Truck size={18} /></div>
                     <input
@@ -213,7 +215,7 @@ export function AddressModal({ isOpen, onClose, onSuccess, editData }: AddressMo
                       value={formData.shippingBranch}
                       onChange={handleChange}
                       type="text"
-                      placeholder="Preferred shipping branch"
+                      placeholder={t("pages.addressForm2.branchPh")}
                       className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#00aeff]/20 focus:border-[#00aeff] outline-none text-sm"
                     />
                   </div>
@@ -230,7 +232,7 @@ export function AddressModal({ isOpen, onClose, onSuccess, editData }: AddressMo
                     className="w-4 h-4 text-[#00aeff] border-gray-300 rounded focus:ring-[#00aeff]"
                   />
                   <label htmlFor="isDefault" className="text-sm text-gray-600 font-medium cursor-pointer">
-                    Set as default address
+                    {t("pages.addressForm2.setAsDefault")}
                   </label>
                 </div>
               </div>
@@ -243,14 +245,14 @@ export function AddressModal({ isOpen, onClose, onSuccess, editData }: AddressMo
                 onClick={onClose}
                 className="flex-1 py-3 px-4 border border-gray-200 rounded-xl text-sm font-bold text-gray-500 hover:bg-white transition-all disabled:opacity-50"
               >
-                Cancel
+                {t("pages.addressForm2.cancel")}
               </button>
               <button
                 disabled={loading}
                 onClick={handleSubmit}
                 className="flex-1 py-3 px-4 bg-[#00aeff] hover:bg-[#00aeff]/90 text-white rounded-xl text-sm font-bold shadow-lg shadow-[#00aeff]/20 transition-all active:scale-95 disabled:opacity-50"
               >
-                {loading ? "Saving..." : editData ? "Update Address" : "Save Address"}
+                {loading ? t("pages.addressForm.saving") : editData ? t("pages.addressForm.updateAddress") : t("pages.addressForm.saveAddress")}
               </button>
             </div>
           </motion.div>

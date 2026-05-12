@@ -253,14 +253,13 @@ export default function ShopOnboarding({ onBack, onComplete }: OnboardingProps) 
         </div>
         <h2 className="text-[32px] font-bold text-dark mb-4">{t("pages.openshop.submitSuccess")}</h2>
         <p className="text-[16px] text-gray-500 max-w-md leading-relaxed mb-10 font-medium">
-          Your store application is being reviewed by our staff. <br />
-          We will notify you of the result via your registered email and phone number within 2-3 business days.
+          {t("pages.openshopPanel.applicationReviewing")}
         </p>
         <button
           onClick={() => router.push('/')}
           className="px-12 py-4 bg-primary text-white rounded-xl font-bold text-[15px] hover:bg-primary-hover transition-all shadow-lg shadow-primary/20"
         >
-          Back to Home
+          {t("pages.openshopPanel.backToHome")}
         </button>
       </div>
     );
@@ -344,7 +343,7 @@ export default function ShopOnboarding({ onBack, onComplete }: OnboardingProps) 
               : "bg-primary text-white shadow-lg shadow-primary/20 hover:bg-primary-hover hover:scale-[1.02] active:scale-95"
               }`}
           >
-            {step === 4 ? (submitting ? "Submitting…" : "Submit Application") : "Next"}
+            {step === 4 ? (submitting ? t("pages.openshopPanel.submittingApplication") : t("pages.openshopPanel.submitApplication")) : t("pages.openshopPanel.nextBtn")}
             {step === 4 ? <ChevronRight size={18} strokeWidth={3} /> : <ArrowRight size={18} strokeWidth={2.5} />}
           </button>
         </div>

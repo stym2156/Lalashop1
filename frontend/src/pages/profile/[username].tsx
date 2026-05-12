@@ -169,14 +169,14 @@ export default function UserProfilePage() {
                     onClick={() => openReport("user")}
                     className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-red-600 hover:bg-red-50 transition-colors"
                   >
-                    <Flag size={14} /> Report user
+                    <Flag size={14} /> {t("pages.publicShop.reportUser")}
                   </button>
                   {targetUser.isSeller && (
                     <button
                       onClick={() => openReport("shop")}
                       className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-medium text-red-600 hover:bg-red-50 transition-colors"
                     >
-                      <Flag size={14} /> Report shop
+                      <Flag size={14} /> {t("pages.publicShop.reportShop")}
                     </button>
                   )}
                 </div>
@@ -222,7 +222,7 @@ export default function UserProfilePage() {
                       initialFollowing={isFollowing}
                   />
                   <button className="px-8 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-bold transition-colors">
-                    Message
+                    {t("pages.profile2.message")}
                   </button>
                 </div>
               )}
@@ -358,7 +358,7 @@ export default function UserProfilePage() {
                         />
                         {p.freeShipping && (
                           <span className="absolute bottom-1 left-1 text-[9px] font-bold px-1.5 py-0.5 rounded bg-green-600 text-white">
-                            Free shipping
+                            {t("pages.profile2.freeShipping")}
                           </span>
                         )}
                       </div>
@@ -380,7 +380,7 @@ export default function UserProfilePage() {
                             ({Number(p.numReviews) || 0})
                           </span>
                           <span className="text-[10px] text-slate-400 font-medium ml-auto">
-                            Stock {Number(p.countInStock) || 0}
+                            {t("pages.profile2.stockShort", { count: Number(p.countInStock) || 0 })}
                           </span>
                         </div>
                         <p className="mt-1.5 text-sm font-black text-primary">

@@ -856,7 +856,22 @@
       "statusDraft": "Nháp",
       "statusActive": "Hoạt động",
       "statusPaused": "Tạm dừng",
-      "statusExpired": "Hết hạn"
+      "statusExpired": "Hết hạn",
+      "code": "Mã giảm giá",
+      "titleLabel": "Tên mã giảm giá",
+      "descriptionLabel": "Mô tả",
+      "type": "Loại giảm giá",
+      "percent": "Phần trăm",
+      "fixed": "Số tiền cố định",
+      "freeship": "Miễn phí vận chuyển",
+      "value": "Giá trị giảm",
+      "maxDiscount": "Giảm tối đa",
+      "usageLimitHint": "Số lần đổi tối đa",
+      "startsAt": "Bắt đầu",
+      "expiresAt": "Hết hạn",
+      "status": "Trạng thái",
+      "saveChanges": "Lưu thay đổi",
+      "saving": "Đang lưu..."
     },
     "campaignsList": {
       "title": "Chiến dịch",
@@ -1265,6 +1280,11 @@
       "errMissingToken": "Phản hồi đăng nhập thiếu token",
       "errNotSeller": "Tài khoản này chưa được đăng ký làm người bán. Hãy nộp đơn KYC trước và đợi duyệt.",
       "errLoginFailed": "Đăng nhập thất bại"
+    },
+    "kyc": {
+      "verification": {
+        "failedToLoad": "Tải KYC thất bại"
+      }
     }
   },
   "components": {

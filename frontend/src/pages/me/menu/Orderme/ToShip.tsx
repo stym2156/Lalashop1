@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 
 interface Order {
@@ -16,6 +17,7 @@ const formatMoney = (n: number): string =>
   Number(n || 0).toLocaleString("en-US", { maximumFractionDigits: 2 });
 
 export default function ToShip() {
+  const { t } = useTranslation("common");
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -46,10 +48,10 @@ export default function ToShip() {
     };
   }, []);
 
-  if (loading) return <div className="p-6 text-center text-gray-400 text-[13px]">Loading...</div>;
+  if (loading) return <div className="p-6 text-center text-gray-400 text-[13px]">{t("pages.ordermeToShip.loading")}</div>;
   if (error) return <div className="p-6 text-center text-red-500 text-[13px]">{error}</div>;
   if (orders.length === 0)
-    return <div className="p-6 text-center text-gray-400 text-[13px]">No orders to ship</div>;
+    return <div className="p-6 text-center text-gray-400 text-[13px]">{t("pages.ordermeToShip.noOrders")}</div>;
 
   return (
     <div className="flex flex-col gap-2">
@@ -61,7 +63,7 @@ export default function ToShip() {
               <span className="text-[13px] font-bold text-gray-500 italic">
                 #{o._id.slice(-8).toUpperCase()}
               </span>
-              <span className="text-[13px] font-medium text-[#00aeff]">To Ship</span>
+              <span className="text-[13px] font-medium text-[#00aeff]">{t("pages.ordermeToShip.label")}</span>
             </div>
             {first && (
               <div className="flex gap-3">
@@ -86,10 +88,10 @@ export default function ToShip() {
             )}
             <div className="flex justify-end gap-2 pt-2 border-t border-[#F8F8F8]">
               <button className="px-5 py-1.5 border border-[#DDDDDD] rounded-full text-[13px] font-medium active:bg-gray-50">
-                Print Label
+                {t("pages.ordermeToShip.printLabel")}
               </button>
               <button className="px-5 py-1.5 bg-[#00aeff] text-white rounded-full text-[13px] font-medium active:opacity-80">
-                Ship Product
+                {t("pages.ordermeToShip.shipProduct")}
               </button>
             </div>
           </div>

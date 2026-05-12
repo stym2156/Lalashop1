@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, Clock, Loader2, Package } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 
 interface OrderItem {
@@ -55,6 +56,7 @@ const statusBadge = (status: CreatorOrder["status"]): string => {
 };
 
 export default function CreatorOrders({ onBack }: OrderCreatorProps) {
+  const { t } = useTranslation("common");
   const [orders, setOrders] = useState<CreatorOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeStatus, setActiveStatus] = useState<(typeof STATUS_TABS)[number]["id"]>("all");
@@ -102,25 +104,25 @@ export default function CreatorOrders({ onBack }: OrderCreatorProps) {
           <button onClick={onBack} className="p-1 active:opacity-50 transition-opacity">
             <ChevronLeft size={26} strokeWidth={2.5} />
           </button>
-          <h1 className="text-[17px] font-bold tracking-tight">Orders</h1>
+          <h1 className="text-[17px] font-bold tracking-tight">{t("pages.creatorOrder.orders")}</h1>
         </div>
         <button onClick={fetchOrders} className="text-[13px] font-bold text-[#161823] active:opacity-50">
-          Refresh
+          {t("pages.creatorOrder.refresh")}
         </button>
       </nav>
 
       <main className="w-full">
         <div className="bg-white p-4 mb-2 grid grid-cols-3 border-b border-[#EBEBEB] divide-x divide-[#F1F1F2]">
           <div className="pr-3">
-            <p className="text-[10px] font-bold text-[#8A8B91] mb-0.5 tracking-wider">Earned</p>
+            <p className="text-[10px] font-bold text-[#8A8B91] mb-0.5 tracking-wider">{t("pages.creatorOrder.earned")}</p>
             <p className="text-lg font-black text-[#00B67A]">฿{summary.earned.toFixed(2)}</p>
           </div>
           <div className="px-3">
-            <p className="text-[10px] font-bold text-[#8A8B91] mb-0.5 tracking-wider">Pending</p>
+            <p className="text-[10px] font-bold text-[#8A8B91] mb-0.5 tracking-wider">{t("pages.creatorOrder.pending")}</p>
             <p className="text-lg font-black text-amber-600">฿{summary.pending.toFixed(2)}</p>
           </div>
           <div className="pl-3">
-            <p className="text-[10px] font-bold text-[#8A8B91] mb-0.5 tracking-wider">Orders</p>
+            <p className="text-[10px] font-bold text-[#8A8B91] mb-0.5 tracking-wider">{t("pages.creatorOrder.orders")}</p>
             <p className="text-lg font-black text-[#161823]">{summary.count}</p>
           </div>
         </div>
@@ -151,7 +153,7 @@ export default function CreatorOrders({ onBack }: OrderCreatorProps) {
         ) : filtered.length === 0 ? (
           <div className="py-20 text-center">
             <Package size={48} className="mx-auto text-slate-200 mb-4" />
-            <p className="text-[13px] font-bold text-[#8A8B91] tracking-widest">No orders</p>
+            <p className="text-[13px] font-bold text-[#8A8B91] tracking-widest">{t("pages.creatorOrder.noOrders")}</p>
           </div>
         ) : (
           <section className="w-full space-y-2">
@@ -204,7 +206,7 @@ export default function CreatorOrders({ onBack }: OrderCreatorProps) {
                   </div>
                   <div className="text-right">
                     <p className="text-[10px] font-black text-[#00B67A] tracking-tighter leading-none mb-1">
-                      Commission
+                      {t("pages.creatorAttr2.commission")}
                     </p>
                     <p className="text-[18px] font-black text-[#00B67A]">
                       ฿

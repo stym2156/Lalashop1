@@ -126,14 +126,14 @@ export default function PostDetailPage() {
       }
     } catch (err) {
       console.error(err);
-      alert("Failed to update post");
+      alert(t("pages.posts2.failedUpdatePost"));
     } finally {
       setUpdating(false);
     }
   };
 
   const handleDeletePost = async () => {
-    if (!confirm("Are you sure you want to delete this post?")) return;
+    if (!confirm(t("pages.profile.deletePostConfirm"))) return;
     try {
       const res = await apiClient(`/posts/${id}`, { method: "DELETE" });
       if (res.success) {
@@ -141,14 +141,14 @@ export default function PostDetailPage() {
       }
     } catch (err) {
       console.error(err);
-      alert("Failed to delete post");
+      alert(t("pages.posts2.failedDeletePost"));
     }
   };
 
   const copyToClipboard = () => {
     const url = window.location.href;
     navigator.clipboard.writeText(url);
-    alert("Link copied to clipboard!");
+    alert(t("pages.posts2.linkCopiedShort"));
   };
 
   const timeAgo = (date: any) => {
@@ -156,7 +156,7 @@ export default function PostDetailPage() {
     const seconds = Math.floor(
       (new Date().getTime() - new Date(date).getTime()) / 1000
     );
-    if (seconds < 60) return "just now";
+    if (seconds < 60) return t("pages.posts2.justNow");
     const m = Math.floor(seconds / 60);
     if (m < 60) return `${m}m`;
     const h = Math.floor(m / 60);
@@ -242,14 +242,14 @@ export default function PostDetailPage() {
                 <button 
                   onClick={() => setIsEditing(!isEditing)}
                   className="p-2 hover:bg-gray-100 rounded-full text-gray-500 transition-colors"
-                  title="Edit Caption"
+                  title={t("pages.posts2.editCaption")}
                 >
                   <Edit3 size={18} />
                 </button>
                 <button 
                   onClick={handleDeletePost}
                   className="p-2 hover:bg-red-50 text-red-500 rounded-full transition-colors"
-                  title="Delete Post"
+                  title={t("pages.posts2.deletePostTitle")}
                 >
                   <Trash2 size={18} />
                 </button>
@@ -273,14 +273,14 @@ export default function PostDetailPage() {
                     onClick={() => { setIsEditing(false); setEditedCaption(post.caption); }}
                     className="px-3 py-1.5 text-xs font-bold text-gray-500 hover:bg-gray-100 rounded-lg"
                   >
-                    Cancel
+                    {t("pages.posts2.cancel")}
                   </button>
-                  <button 
+                  <button
                     onClick={handleUpdateCaption}
                     disabled={updating}
                     className="px-4 py-1.5 bg-[#00aeff] text-white text-xs font-bold rounded-lg shadow-sm"
                   >
-                    {updating ? "Saving..." : "Save"}
+                    {updating ? t("pages.posts2.saving") : t("pages.posts2.save")}
                   </button>
                 </div>
               </div>
@@ -389,25 +389,25 @@ export default function PostDetailPage() {
                   <div className="w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200 group-hover:scale-110 transition-transform">
                     <Facebook size={22} fill="white" />
                   </div>
-                  <span className="text-[10px] font-bold text-gray-500 ">Facebook</span>
+                  <span className="text-[10px] font-bold text-gray-500 ">{t("pages.posts2.facebook")}</span>
                 </button>
                 <button className="flex flex-col items-center gap-2 group">
                   <div className="w-12 h-12 bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-red-100 group-hover:scale-110 transition-transform">
                     <Instagram size={22} />
                   </div>
-                  <span className="text-[10px] font-bold text-gray-500 ">Instagram</span>
+                  <span className="text-[10px] font-bold text-gray-500 ">{t("pages.posts2.instagram")}</span>
                 </button>
                 <button className="flex flex-col items-center gap-2 group">
                   <div className="w-12 h-12 bg-sky-500 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-sky-100 group-hover:scale-110 transition-transform">
                     <Twitter size={22} fill="white" />
                   </div>
-                  <span className="text-[10px] font-bold text-gray-500 ">Twitter</span>
+                  <span className="text-[10px] font-bold text-gray-500 ">{t("pages.posts2.twitter")}</span>
                 </button>
                 <button className="flex flex-col items-center gap-2 group">
                   <div className="w-12 h-12 bg-gray-900 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-gray-200 group-hover:scale-110 transition-transform">
                     <Send size={22} className="-rotate-12" />
                   </div>
-                  <span className="text-[10px] font-bold text-gray-500 ">Telegram</span>
+                  <span className="text-[10px] font-bold text-gray-500 ">{t("pages.posts2.telegram")}</span>
                 </button>
               </div>
 

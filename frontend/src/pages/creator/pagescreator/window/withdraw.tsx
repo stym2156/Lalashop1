@@ -11,6 +11,7 @@ import {
   History,
   Shield,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import AddBankAccount from "./addbank";
 import { apiClient } from "@/services/apiClient";
 
@@ -48,6 +49,7 @@ interface WithdrawRules {
 const PENDING_STATUSES = new Set(["pending", "approved"]);
 
 export default function Earnings({ onBack }: ToolkitProps) {
+  const { t } = useTranslation("common");
   const [view, setView] = useState<"main" | "addAccount" | "selectBank" | "history">("main");
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([]);
   const [selectedBank, setSelectedBank] = useState<BankAccount | null>(null);
@@ -126,24 +128,24 @@ export default function Earnings({ onBack }: ToolkitProps) {
 
   const initiateWithdrawal = () => {
     if (!hasWithdrawPin) {
-      alert("Please set your 6-digit withdrawal PIN in Security Settings before withdrawing.");
+      alert(t("pages.creatorWithdraw2.setPinAlert"));
       return;
     }
     if (!selectedBank) {
-      alert("Please select a payment method");
+      alert(t("pages.creatorWithdraw2.selectMethod"));
       return;
     }
     const amount = parseFloat(withdrawAmount);
     if (isNaN(amount) || amount <= 0) {
-      alert("Please enter a valid amount");
+      alert(t("pages.creatorWithdraw2.validAmount"));
       return;
     }
     if (rules && amount < rules.minAmount) {
-      alert(`Minimum withdrawal is ${rules.minAmount} ${rules.currency}`);
+      alert(t("pages.creatorWithdraw2.minWithdraw", { amount: rules.minAmount, currency: rules.currency }));
       return;
     }
     if (amount > balance) {
-      alert("Insufficient balance");
+      alert(t("pages.creatorWithdraw2.insufficientBalance"));
       return;
     }
     setShowPinModal(true);
@@ -151,7 +153,7 @@ export default function Earnings({ onBack }: ToolkitProps) {
 
   const handleWithdraw = async () => {
     if (pinInput.length !== 6) {
-      alert("Please enter 6-digit PIN");
+      alert(t("pages.creatorWithdraw2.enter6Pin"));
       return;
     }
     setLoading(true);
@@ -166,7 +168,7 @@ export default function Earnings({ onBack }: ToolkitProps) {
       });
 
       if (response.success) {
-        alert("Withdrawal request submitted successfully!");
+        alert(t("pages.creatorWithdraw2.withdrawSuccess"));
         setWithdrawAmount("");
         setPinInput("");
         setShowPinModal(false);
@@ -174,7 +176,7 @@ export default function Earnings({ onBack }: ToolkitProps) {
       }
     } catch (error: any) {
       console.error("Withdraw error:", error);
-      alert(error.message || "Failed to withdraw. Please check your PIN.");
+      alert(error.message || t("pages.creatorWithdraw2.failedWithdraw"));
     } finally {
       setLoading(false);
     }
@@ -186,12 +188,12 @@ export default function Earnings({ onBack }: ToolkitProps) {
   };
 
   const cancelTransaction = async (id: string) => {
-    if (!confirm("Cancel this withdrawal? Funds will be returned to your balance.")) return;
+    if (!confirm(t("pages.creatorWithdraw2.cancelConfirm"))) return;
     try {
       await apiClient(`/withdraw/${id}/cancel`, { method: "PUT" });
       await Promise.all([fetchWithdrawals(), fetchProfile()]);
     } catch (error: any) {
-      alert(error.message || "Failed to cancel withdrawal");
+      alert(error.message || t("pages.creatorWithdraw2.failedCancel"));
     }
   };
 
@@ -213,7 +215,7 @@ export default function Earnings({ onBack }: ToolkitProps) {
             onClick={() => setView("addAccount")}
             className="w-full bg-white p-5 border-2 border-dashed border-[#EEEEEE] rounded-2xl flex items-center justify-center gap-2 text-[#00aeff] font-bold hover:bg-white/50 transition-colors"
           >
-            <Plus size={20} /> Add New Bank Account
+            <Plus size={20} /> {t("pages.creatorWithdraw2.addNewBankAccount")}
           </button>
 
           <div className="space-y-3">
@@ -304,7 +306,7 @@ export default function Earnings({ onBack }: ToolkitProps) {
                       onClick={() => cancelTransaction(tx._id)}
                       className="text-[10px] font-bold text-[#FE2C55] active:opacity-60"
                     >
-                      Cancel
+                      {t("actions.cancel")}
                     </button>
                   )}
                 </div>
@@ -314,7 +316,7 @@ export default function Earnings({ onBack }: ToolkitProps) {
             <div className="py-20 text-center text-[#86878B]">
               <History size={48} className="mx-auto mb-4 opacity-10" />
               <p className="text-[13px] font-bold tracking-widest">
-                {historyTab === "pending" ? "No pending withdrawals" : "No history yet"}
+                {historyTab === "pending" ? t("pages.creatorWithdraw2.noPending") : t("pages.creatorWithdraw2.noHistoryYet")}
               </p>
             </div>
           )}
@@ -349,7 +351,7 @@ export default function Earnings({ onBack }: ToolkitProps) {
             className="pointer-events-none absolute right-0 top-full mt-2 w-[300px] bg-white border border-slate-100 rounded-2xl shadow-xl p-4 text-[12px] text-slate-700 leading-relaxed opacity-0 translate-y-1 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:visible transition-all duration-150 z-50"
           >
             <p className="text-[11px] font-black text-slate-900 mb-2 tracking-wide">
-              Withdrawal Rules
+              {t("pages.creatorWithdraw2.withdrawalRules")}
             </p>
             {rules ? (
               <>
@@ -363,10 +365,10 @@ export default function Earnings({ onBack }: ToolkitProps) {
                   <RuleRow label="Processing" value={`${rules.processingDays} business days`} />
                 </div>
                 <ul className="text-[10.5px] text-slate-500 list-disc pl-4 space-y-1 pt-2">
-                  <li>Earnings unlock after buyer confirms receipt.</li>
-                  <li>Verify your bank to avoid delays.</li>
-                  <li>Pending requests can be canceled before approval.</li>
-                  <li>Set a 6-digit PIN before your first withdrawal.</li>
+                  <li>{t("pages.creatorWithdraw.earningsUnlock")}</li>
+                  <li>{t("pages.creatorWithdraw.verifyBank")}</li>
+                  <li>{t("pages.creatorWithdraw.pendingCanCancel")}</li>
+                  <li>{t("pages.creatorWithdraw.setPin")}</li>
                 </ul>
               </>
             ) : (
@@ -379,7 +381,7 @@ export default function Earnings({ onBack }: ToolkitProps) {
       <main className="w-full">
         <div className="bg-white px-6 py-10 border-b border-[#EEEEEE]">
           <div className="flex items-center gap-1.5 mb-4">
-            <span className="text-[11px] text-[#86878B] font-bold tracking-wider">Balance</span>
+            <span className="text-[11px] text-[#86878B] font-bold tracking-wider">{t("pages.creatorWithdraw2.balance")}</span>
           </div>
 
           <div className="flex justify-between items-baseline mb-8">
@@ -390,7 +392,7 @@ export default function Earnings({ onBack }: ToolkitProps) {
           </div>
 
           <div className="mb-6">
-            <label className="text-[10px] font-bold text-[#86878B] tracking-widest block mb-2">Withdraw Amount</label>
+            <label className="text-[10px] font-bold text-[#86878B] tracking-widest block mb-2">{t("pages.creatorWithdraw2.withdrawAmount")}</label>
             <div className="relative">
               <span className="absolute left-0 top-1/2 -translate-y-1/2 text-2xl font-bold">฿</span>
               <input
@@ -422,7 +424,7 @@ export default function Earnings({ onBack }: ToolkitProps) {
                 : "bg-[#00aeff] text-white active:opacity-80"
             }`}
           >
-            {loading ? "Processing..." : "withdraw now"}
+            {loading ? t("pages.creatorWithdraw.processing") : t("pages.creatorWithdraw.withdrawNow")}
           </button>
         </div>
 
@@ -435,7 +437,7 @@ export default function Earnings({ onBack }: ToolkitProps) {
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="text-lg font-black text-slate-800">Verify Withdrawal</h3>
+                  <h3 className="text-lg font-black text-slate-800">{t("pages.creatorWithdraw2.verifyWithdrawal")}</h3>
                   <p className="text-xs text-slate-400 font-medium">
                     Please enter your 6-digit PIN to confirm withdrawal of ฿
                     {parseFloat(withdrawAmount || "0").toLocaleString()}
@@ -461,7 +463,7 @@ export default function Earnings({ onBack }: ToolkitProps) {
                     }}
                     className="flex-1 py-4 text-xs font-black tracking-widest text-slate-400 hover:text-slate-600 transition-colors"
                   >
-                    Cancel
+                    {t("actions.cancel")}
                   </button>
                   <button
                     onClick={handleWithdraw}

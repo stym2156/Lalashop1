@@ -3,6 +3,7 @@ import {
   Loader2, Plus, Trash2, Edit3, X, Building2, Smartphone, QrCode,
   CheckCircle2, AlertCircle, Image as ImageIcon, Upload,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   fetchAdminPaymentMethods,
   createAdminPaymentMethod,
@@ -13,10 +14,10 @@ import {
   type PaymentMethodKind,
 } from "@/services/adminApi";
 
-const KIND_META: Record<PaymentMethodKind, { label: string; icon: typeof Building2; color: string }> = {
-  bank: { label: "Bank account", icon: Building2, color: "from-blue-400 to-blue-600" },
-  promptpay: { label: "PromptPay (dynamic QR)", icon: Smartphone, color: "from-emerald-400 to-emerald-600" },
-  static_qr: { label: "Static QR (wallet)", icon: QrCode, color: "from-purple-400 to-purple-600" },
+const KIND_META: Record<PaymentMethodKind, { labelKey: string; icon: typeof Building2; color: string }> = {
+  bank: { labelKey: "pages.payment.methods.kindBank", icon: Building2, color: "from-blue-400 to-blue-600" },
+  promptpay: { labelKey: "pages.payment.methods.kindPromptpay", icon: Smartphone, color: "from-emerald-400 to-emerald-600" },
+  static_qr: { labelKey: "pages.payment.methods.kindStaticQr", icon: QrCode, color: "from-purple-400 to-purple-600" },
 };
 
 const initialForm: PaymentMethodInput = {
@@ -33,6 +34,7 @@ const initialForm: PaymentMethodInput = {
 };
 
 const PaymentMethodsPage: React.FC = () => {
+  const { t } = useTranslation('common');
   const [items, setItems] = useState<AdminPaymentMethod[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,7 +51,7 @@ const PaymentMethodsPage: React.FC = () => {
       const res = await fetchAdminPaymentMethods();
       setItems(res.data ?? []);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load methods");
+      setError(err instanceof Error ? err.message : t('status.loading'));
     } finally {
       setLoading(false);
     }
@@ -89,10 +91,10 @@ const PaymentMethodsPage: React.FC = () => {
     try {
       if (editingId) {
         await updateAdminPaymentMethod(editingId, form);
-        setSuccess("Updated successfully");
+        setSuccess(t('pages.payment.methods.updatedSuccess'));
       } else {
         await createAdminPaymentMethod(form);
-        setSuccess("Created successfully");
+        setSuccess(t('pages.payment.methods.createdSuccess'));
       }
       setShowForm(false);
       setForm(initialForm);
@@ -100,19 +102,19 @@ const PaymentMethodsPage: React.FC = () => {
       await reload();
       setTimeout(() => setSuccess(null), 2500);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Save failed");
+      setError(err instanceof Error ? err.message : t('actions.save'));
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm("Delete this payment method? Existing slips will keep referencing it.")) return;
+    if (!window.confirm(t('pages.payment.methods.deleteConfirm'))) return;
     try {
       await deleteAdminPaymentMethod(id);
       await reload();
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Delete failed");
+      alert(err instanceof Error ? err.message : t('actions.delete'));
     }
   };
 
@@ -121,7 +123,7 @@ const PaymentMethodsPage: React.FC = () => {
       await updateAdminPaymentMethod(m._id, { isActive: !m.isActive });
       await reload();
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Toggle failed");
+      alert(err instanceof Error ? err.message : t('actions.update'));
     }
   };
 
@@ -129,17 +131,16 @@ const PaymentMethodsPage: React.FC = () => {
     <div className="space-y-4 text-sm">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-[16px] font-bold text-gray-900">Payment methods</h1>
+          <h1 className="text-[16px] font-bold text-gray-900">{t('pages.payment.methods.header')}</h1>
           <p className="text-[12px] text-gray-500 mt-0.5">
-            Bank accounts, PromptPay IDs, and wallet QRs that customers see at checkout.
-            Toggle off any account that has issues — it disappears from checkout instantly.
+            {t('pages.payment.methods.headerDesc')}
           </p>
         </div>
         <button
           onClick={openCreate}
           className="bg-[#00aeff] text-white px-3 py-1.5 rounded-md text-xs font-bold inline-flex items-center hover:bg-[#0096db]"
         >
-          <Plus className="w-3.5 h-3.5 mr-1" /> Add method
+          <Plus className="w-3.5 h-3.5 mr-1" /> {t('pages.payment.methods.addMethod')}
         </button>
       </div>
 
@@ -161,9 +162,9 @@ const PaymentMethodsPage: React.FC = () => {
       ) : items.length === 0 ? (
         <div className="py-16 text-center rounded-lg border border-dashed border-gray-200">
           <Building2 className="w-8 h-8 mx-auto mb-3 text-gray-300" />
-          <p className="text-[13px] font-bold text-gray-700">No payment methods yet</p>
+          <p className="text-[13px] font-bold text-gray-700">{t('pages.payment.methods.noMethodsYet')}</p>
           <p className="text-[11px] text-gray-500 mt-1">
-            Add at least one bank account or PromptPay ID so customers can pay.
+            {t('pages.payment.methods.noMethodsDesc')}
           </p>
         </div>
       ) : (
@@ -187,7 +188,7 @@ const PaymentMethodsPage: React.FC = () => {
                   <div className="flex items-center gap-2 flex-wrap">
                     <h3 className="text-[13px] font-bold text-gray-900 truncate">{m.label}</h3>
                     <span className="text-[10px] text-gray-500 bg-gray-50 px-1.5 py-0.5 rounded">
-                      {meta.label}
+                      {t(meta.labelKey)}
                     </span>
                     <span
                       className={`text-[10px] px-1.5 py-0.5 rounded font-bold tracking-wide ${
@@ -196,7 +197,7 @@ const PaymentMethodsPage: React.FC = () => {
                           : "bg-gray-100 text-gray-500"
                       }`}
                     >
-                      {m.isActive ? "Active" : "Disabled"}
+                      {m.isActive ? t('pages.payment.methods.activeLabel') : t('pages.payment.methods.disabledLabel')}
                     </span>
                   </div>
                   {m.kind === "bank" && (
@@ -207,7 +208,7 @@ const PaymentMethodsPage: React.FC = () => {
                   )}
                   {m.kind === "promptpay" && (
                     <p className="text-[11px] text-gray-700 mt-1">
-                      PromptPay ID: <span className="font-mono">{m.promptpayId}</span>
+                      {t('pages.payment.methods.formPromptpayId')}: <span className="font-mono">{m.promptpayId}</span>
                       {m.accountName && ` · ${m.accountName}`}
                     </p>
                   )}
@@ -230,7 +231,7 @@ const PaymentMethodsPage: React.FC = () => {
                         : "bg-emerald-600 text-white hover:bg-emerald-700"
                     }`}
                   >
-                    {m.isActive ? "Disable" : "Enable"}
+                    {m.isActive ? t('pages.payment.methods.disable') : t('pages.payment.methods.enable')}
                   </button>
                   <button
                     onClick={() => openEdit(m)}
@@ -253,12 +254,12 @@ const PaymentMethodsPage: React.FC = () => {
 
       {showForm && (
         <Modal
-          title={editingId ? "Edit payment method" : "Add payment method"}
+          title={editingId ? t('pages.payment.methods.editModal') : t('pages.payment.methods.addModal')}
           onClose={() => setShowForm(false)}
           disabled={saving}
         >
           <form onSubmit={handleSubmit} className="space-y-3">
-            <Field label="Type">
+            <Field label={t('pages.payment.methods.formType')}>
               <div className="grid grid-cols-3 gap-2">
                 {(Object.keys(KIND_META) as PaymentMethodKind[]).map((k) => {
                   const meta = KIND_META[k];
@@ -275,14 +276,14 @@ const PaymentMethodsPage: React.FC = () => {
                       }`}
                     >
                       <Icon className="w-4 h-4" />
-                      <span className="text-[10px]">{meta.label}</span>
+                      <span className="text-[10px]">{t(meta.labelKey)}</span>
                     </button>
                   );
                 })}
               </div>
             </Field>
 
-            <Field label="Display label" required>
+            <Field label={t('pages.payment.methods.formLabel')} required>
               <input
                 required
                 className={inputCls}
@@ -300,7 +301,7 @@ const PaymentMethodsPage: React.FC = () => {
 
             {form.kind === "bank" && (
               <>
-                <Field label="Bank name" required>
+                <Field label={t('pages.payment.methods.formBankName')} required>
                   <input
                     required
                     className={inputCls}
@@ -309,7 +310,7 @@ const PaymentMethodsPage: React.FC = () => {
                     placeholder="Kasikornbank"
                   />
                 </Field>
-                <Field label="Account number" required>
+                <Field label={t('pages.payment.methods.formAccountNumber')} required>
                   <input
                     required
                     className={`${inputCls} font-mono`}
@@ -318,7 +319,7 @@ const PaymentMethodsPage: React.FC = () => {
                     placeholder="123-4-56789-0"
                   />
                 </Field>
-                <Field label="Account name" required>
+                <Field label={t('pages.payment.methods.formAccountName')} required>
                   <input
                     required
                     className={inputCls}
@@ -333,9 +334,9 @@ const PaymentMethodsPage: React.FC = () => {
             {form.kind === "promptpay" && (
               <>
                 <Field
-                  label="PromptPay ID"
+                  label={t('pages.payment.methods.formPromptpayId')}
                   required
-                  hint="10-digit phone, 13-digit national ID, or 15-digit eWallet"
+                  hint={t('pages.payment.methods.formPromptpayHint')}
                 >
                   <input
                     required
@@ -345,7 +346,7 @@ const PaymentMethodsPage: React.FC = () => {
                     placeholder="0812345678"
                   />
                 </Field>
-                <Field label="Account holder name">
+                <Field label={t('pages.payment.methods.formAccountHolderName')}>
                   <input
                     className={inputCls}
                     value={form.accountName}
@@ -354,8 +355,7 @@ const PaymentMethodsPage: React.FC = () => {
                   />
                 </Field>
                 <p className="text-[10px] text-gray-500 bg-gray-50 px-2 py-1.5 rounded">
-                  💡 PromptPay QR is generated dynamically per order with the exact amount baked in.
-                  No image upload needed.
+                  {t('pages.payment.methods.promptpayInfo')}
                 </p>
               </>
             )}
@@ -363,9 +363,9 @@ const PaymentMethodsPage: React.FC = () => {
             {form.kind === "static_qr" && (
               <>
                 <Field
-                  label="QR image URL"
+                  label={t('pages.payment.methods.formQrImageUrl')}
                   required
-                  hint="Upload to R2/Cloudinary first, then paste the URL here"
+                  hint={t('pages.payment.methods.formQrHint')}
                 >
                   <input
                     required
@@ -385,7 +385,7 @@ const PaymentMethodsPage: React.FC = () => {
                     />
                   </div>
                 )}
-                <Field label="Wallet name">
+                <Field label={t('pages.payment.methods.formWalletName')}>
                   <input
                     className={inputCls}
                     value={form.accountName}
@@ -396,7 +396,7 @@ const PaymentMethodsPage: React.FC = () => {
               </>
             )}
 
-            <Field label="Notes for customer (optional)">
+            <Field label={t('pages.payment.methods.formNotes')}>
               <textarea
                 className={`${inputCls} resize-none`}
                 rows={2}
@@ -407,7 +407,7 @@ const PaymentMethodsPage: React.FC = () => {
             </Field>
 
             <div className="grid grid-cols-2 gap-3">
-              <Field label="Display order">
+              <Field label={t('pages.payment.methods.formDisplayOrder')}>
                 <input
                   type="number"
                   className={inputCls}
@@ -417,14 +417,14 @@ const PaymentMethodsPage: React.FC = () => {
                   }
                 />
               </Field>
-              <Field label="Status">
+              <Field label={t('pages.payment.methods.formStatus')}>
                 <label className="flex items-center gap-2 mt-1.5">
                   <input
                     type="checkbox"
                     checked={form.isActive}
                     onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
                   />
-                  <span className="text-xs text-gray-700">Active (visible at checkout)</span>
+                  <span className="text-xs text-gray-700">{t('pages.payment.methods.formActiveLabel')}</span>
                 </label>
               </Field>
             </div>
@@ -436,7 +436,7 @@ const PaymentMethodsPage: React.FC = () => {
                 disabled={saving}
                 className="px-3 py-1.5 rounded border text-xs font-bold text-gray-700 hover:bg-gray-50 disabled:opacity-50"
               >
-                Cancel
+                {t('pages.payment.methods.formCancel')}
               </button>
               <button
                 type="submit"
@@ -444,7 +444,7 @@ const PaymentMethodsPage: React.FC = () => {
                 className="px-4 py-1.5 rounded bg-[#00aeff] text-white text-xs font-bold hover:bg-[#0096db] disabled:opacity-50 inline-flex items-center gap-1.5"
               >
                 {saving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                {saving ? "Saving…" : editingId ? "Save changes" : "Create method"}
+                {saving ? t('pages.payment.methods.formSaving') : editingId ? t('pages.payment.methods.formSaveChanges') : t('pages.payment.methods.formCreateMethod')}
               </button>
             </div>
           </form>

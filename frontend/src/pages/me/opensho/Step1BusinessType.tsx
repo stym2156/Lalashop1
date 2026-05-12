@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { Check, ChevronRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface Props {
     businessType: string | null;
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export default function Step1BusinessType({ businessType, setBusinessType, error }: Props) {
+    const { t } = useTranslation("common");
     const types = [
         {
             id: 'individual',
@@ -60,14 +62,14 @@ export default function Step1BusinessType({ businessType, setBusinessType, error
     };
 
     const currentRequirements = requirementsData[businessType || 'individual'];
-    const currentTitle = types.find(t => t.id === businessType)?.title || 'Individual';
+    const currentTitle = types.find((bt) => bt.id === businessType)?.title || 'Individual';
 
     return (
         <div className="w-full space-y-10 animate-in fade-in duration-500 font-sans text-dark">
 
             {/* 1. Question Header */}
             <h2 className="text-[20px] font-bold text-dark">
-                What type of business do you operate?
+                {t("pages.openshopStep1.questionHeader")}
             </h2>
 
             {/* 2. Business Type Selection */}
@@ -128,7 +130,7 @@ export default function Step1BusinessType({ businessType, setBusinessType, error
 
             {/* 4. What to Expect Section */}
             <div className="space-y-3">
-                <h3 className="text-[16px] font-bold text-dark">What to Expect</h3>
+                <h3 className="text-[16px] font-bold text-dark">{t("pages.openshopStep1.whatToExpect")}</h3>
                 <p className="text-[14px] text-gray-600 leading-relaxed font-medium">
                     We will collect your information in the next few steps. Once you submit your application, we will review it within a few business days. If we need anything else, we will email you.
                 </p>

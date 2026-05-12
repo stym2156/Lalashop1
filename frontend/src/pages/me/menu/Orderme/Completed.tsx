@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 
 interface Order {
@@ -16,6 +17,7 @@ const formatMoney = (n: number): string =>
   Number(n || 0).toLocaleString("en-US", { maximumFractionDigits: 2 });
 
 export default function Completed() {
+  const { t } = useTranslation("common");
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,10 +42,10 @@ export default function Completed() {
     };
   }, []);
 
-  if (loading) return <div className="p-6 text-center text-gray-400 text-[13px]">Loading...</div>;
+  if (loading) return <div className="p-6 text-center text-gray-400 text-[13px]">{t("pages.ordermeCompleted.loading")}</div>;
   if (error) return <div className="p-6 text-center text-red-500 text-[13px]">{error}</div>;
   if (orders.length === 0)
-    return <div className="p-6 text-center text-gray-400 text-[13px]">No completed orders</div>;
+    return <div className="p-6 text-center text-gray-400 text-[13px]">{t("pages.ordermeCompleted.noOrders")}</div>;
 
   return (
     <div className="flex flex-col gap-2">
@@ -55,7 +57,7 @@ export default function Completed() {
               <span className="text-[13px] font-bold text-gray-500 italic">
                 #{o._id.slice(-8).toUpperCase()}
               </span>
-              <span className="text-[13px] font-medium text-[#00aeff]">Completed</span>
+              <span className="text-[13px] font-medium text-[#00aeff]">{t("pages.ordermeCompleted.label")}</span>
             </div>
             {first && (
               <div className="flex gap-3">

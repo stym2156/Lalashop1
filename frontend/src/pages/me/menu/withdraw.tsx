@@ -145,29 +145,24 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
 
   const initiateWithdrawal = () => {
     if (!hasWithdrawPin) {
-      alert("Please set your 6-digit withdrawal PIN in Security Settings before withdrawing.");
+      alert(t("pages.creatorWithdraw2.setPinAlert"));
       return;
     }
-    // Block only when the bank account number is missing — bankName is
-    // optional (legacy KYCs predate the Bank Name field but still have a
-    // valid account number, and we don't want to lock those out).
     if (!shopInfo?.shopAccount) {
-      alert(
-        "No shop bank account on file. Open your shop / complete KYC to add a payout account."
-      );
+      alert(t("pages.withdrawShop.noShopAccount"));
       return;
     }
     const amount = parseFloat(withdrawAmount);
     if (isNaN(amount) || amount <= 0) {
-      alert("Please enter a valid amount");
+      alert(t("pages.creatorWithdraw2.validAmount"));
       return;
     }
     if (rules && amount < rules.minAmount) {
-      alert(`Minimum withdrawal is ${rules.minAmount} ${rules.currency}`);
+      alert(t("pages.creatorWithdraw2.minWithdraw", { amount: rules.minAmount, currency: rules.currency }));
       return;
     }
     if (amount > balance) {
-      alert("Insufficient balance");
+      alert(t("pages.creatorWithdraw2.insufficientBalance"));
       return;
     }
     setShowPinModal(true);
@@ -175,7 +170,7 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
 
   const handleWithdraw = async () => {
     if (pinInput.length !== 6) {
-      alert("Please enter 6-digit PIN");
+      alert(t("pages.creatorWithdraw2.enter6Pin"));
       return;
     }
     setLoading(true);
@@ -191,14 +186,14 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
       });
 
       if (response.success) {
-        alert("Withdrawal request submitted successfully!");
+        alert(t("pages.creatorWithdraw2.withdrawSuccess"));
         setWithdrawAmount("");
         setPinInput("");
         setShowPinModal(false);
         await Promise.all([fetchWithdrawals(), fetchProfile()]);
       }
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Failed to withdraw. Please check your PIN.";
+      const message = error instanceof Error ? error.message : t("pages.creatorWithdraw2.failedWithdraw");
       alert(message);
     } finally {
       setLoading(false);
@@ -206,12 +201,12 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
   };
 
   const cancelTransaction = async (id: string) => {
-    if (!confirm("Cancel this withdrawal? Funds will be returned to your balance.")) return;
+    if (!confirm(t("pages.creatorWithdraw2.cancelConfirm"))) return;
     try {
       await apiClient(`/withdraw/${id}/cancel`, { method: "PUT" });
       await Promise.all([fetchWithdrawals(), fetchProfile()]);
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Failed to cancel withdrawal";
+      const message = error instanceof Error ? error.message : t("pages.creatorWithdraw2.failedCancel");
       alert(message);
     }
   };
@@ -276,7 +271,7 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
                       onClick={() => cancelTransaction(tx._id)}
                       className="text-[10px] font-bold text-[#FE2C55] active:opacity-60"
                     >
-                      Cancel
+                      {t("actions.cancel")}
                     </button>
                   )}
                 </div>
@@ -321,7 +316,7 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
             className="pointer-events-none absolute right-0 top-full mt-2 w-[300px] bg-white border border-slate-100 rounded-2xl shadow-xl p-4 text-[12px] text-slate-700 leading-relaxed opacity-0 translate-y-1 invisible group-hover:opacity-100 group-hover:translate-y-0 group-hover:visible group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:visible transition-all duration-150 z-50"
           >
             <p className="text-[11px] font-black text-slate-900 mb-2 tracking-wide">
-              Withdrawal Rules
+              {t("pages.creatorWithdraw2.withdrawalRules")}
             </p>
             {rules ? (
               <>
@@ -336,9 +331,9 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
                 </div>
                 <ul className="text-[10.5px] text-slate-500 list-disc pl-4 space-y-1 pt-2">
                   <li>Web sales only — POS revenue is non-withdrawable.</li>
-                  <li>Buyer confirms receipt before balance credits.</li>
-                  <li>Verify your bank to avoid delays.</li>
-                  <li>Pending requests can be canceled before approval.</li>
+                  <li>{t("pages.withdrawShop.buyerConfirms")}</li>
+                  <li>{t("pages.withdrawShop.verifyBank")}</li>
+                  <li>{t("pages.withdrawShop.pendingCancel")}</li>
                   <li>Set a 6-digit PIN before your first withdrawal.</li>
                 </ul>
               </>
@@ -440,7 +435,7 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
                     }}
                     className="flex-1 py-4 text-xs font-black tracking-widest text-slate-400 hover:text-slate-600 transition-colors"
                   >
-                    Cancel
+                    {t("actions.cancel")}
                   </button>
                   <button
                     onClick={handleWithdraw}

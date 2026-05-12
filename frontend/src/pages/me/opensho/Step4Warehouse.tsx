@@ -3,6 +3,7 @@ import React from "react";
 import {
   Check, ClipboardCheck, MapPin, FileImage,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   agreed: boolean;
@@ -32,6 +33,7 @@ export default function Step4FinalReview({
   agreed, setAgreed, error,
   businessType, shopName, shopAccount, shopCategory, email, phone, identityData,
 }: Props) {
+  const { t } = useTranslation("common");
 
   const businessTypeMap: Record<string, string> = {
     individual: "Individual",
@@ -98,16 +100,16 @@ export default function Step4FinalReview({
   return (
     <div className="w-full space-y-8 animate-in fade-in duration-300 font-sans text-dark">
       <div className="space-y-2">
-        <h2 className="text-[28px] font-bold tracking-tight text-dark">Review and Submit Application</h2>
+        <h2 className="text-[28px] font-bold tracking-tight text-dark">{t("pages.openshopStep4.reviewAndSubmit")}</h2>
         <p className="text-[12px] text-gray-500 font-medium">
-          Please review all your information carefully before confirming submission.
+          {t("pages.openshopStep4.reviewIntro")}
         </p>
       </div>
 
       <div className="space-y-8">
         <section className="bg-white  border-gray-100 rounded-xl p-8 space-y-6 shadow-sm">
           <h3 className="text-[20px] font-bold flex items-center gap-2">
-            <ClipboardCheck size={20} className="text-primary" /> Registration Summary
+            <ClipboardCheck size={20} className="text-primary" /> {t("pages.openshopStep4.registrationSummary")}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
             {[
@@ -133,7 +135,7 @@ export default function Step4FinalReview({
             
             {uploadedDocs.length === 0 ? (
               <div className="text-[13px] text-gray-400 italic font-medium px-4 py-6 bg-gray-50 rounded-lg text-center">
-                No documents uploaded.
+                {t("pages.openshopStep4.noDocs")}
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -178,7 +180,7 @@ export default function Step4FinalReview({
         </section>
 
         <div className={`p-6  ${error ? '' : ''}`}>
-          <p className="text-[14px] font-bold text-gray-800  tracking-tight">Confirmation and Agreement</p>
+          <p className="text-[14px] font-bold text-gray-800  tracking-tight">{t("pages.openshopStep4.confirmation")}</p>
           <label className="flex items-start gap-3 cursor-pointer group">
             <div
               onClick={() => setAgreed(!agreed)}
@@ -188,13 +190,13 @@ export default function Step4FinalReview({
               {agreed && <Check size={14} className="text-white" strokeWidth={4} />}
             </div>
             <span className="text-[13px] font-medium text-gray-600 leading-relaxed">
-              I confirm that the above information is true in all respects, and I have read and accepted the <span className="text-[#00a699] underline cursor-pointer">Terms of Service</span>.
+              {t("pages.openshopStep4.termsAccept")} <span className="text-[#00a699] underline cursor-pointer">{t("pages.openshopStep4.termsOfService")}</span>.
             </span>
           </label>
         </div>
 
         <div className="space-y-3">
-          <h3 className="text-[16px] font-bold text-[#111111]">What to Expect</h3>
+          <h3 className="text-[16px] font-bold text-[#111111]">{t("pages.openshopStep1.whatToExpect")}</h3>
           <p className="text-[14px] text-gray-600 leading-relaxed font-medium">
             We will review your information within 2-3 business days. If we need more information or have questions, we will contact you via your registered email or phone number.
           </p>

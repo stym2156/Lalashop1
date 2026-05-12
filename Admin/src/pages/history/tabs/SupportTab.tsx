@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { fetchAdminTickets, type AdminTicketRow, type TicketStatus } from '@/services/adminApi';
+import { useTranslation } from 'react-i18next';
 
 const statusBadge: Record<TicketStatus, string> = {
   open: 'bg-blue-50 text-blue-700',
@@ -18,6 +19,7 @@ const formatDate = (s?: string): string => {
 };
 
 const SupportTab = () => {
+  const { t } = useTranslation();
   const [items, setItems] = useState<AdminTicketRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,19 +51,19 @@ const SupportTab = () => {
     <div className="space-y-3">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 px-4 py-3 bg-gray-50/50 text-[11px]">
         <div>
-          <p className="text-gray-500">total tickets</p>
+          <p className="text-gray-500">{t('pages.history.supportTab.totalTickets')}</p>
           <p className="text-base font-bold tabular-nums">{items.length}</p>
         </div>
         <div>
-          <p className="text-gray-500">open / in progress</p>
+          <p className="text-gray-500">{t('pages.history.supportTab.openInProgress')}</p>
           <p className="text-base font-bold tabular-nums text-amber-700">{(counts.open || 0) + (counts.in_progress || 0)}</p>
         </div>
         <div>
-          <p className="text-gray-500">resolved</p>
+          <p className="text-gray-500">{t('pages.history.supportTab.resolved')}</p>
           <p className="text-base font-bold tabular-nums text-green-700">{counts.resolved || 0}</p>
         </div>
         <div>
-          <p className="text-gray-500">closed</p>
+          <p className="text-gray-500">{t('pages.history.supportTab.closed')}</p>
           <p className="text-base font-bold tabular-nums text-gray-500">{counts.closed || 0}</p>
         </div>
       </div>
@@ -70,18 +72,18 @@ const SupportTab = () => {
         <table className="w-full text-[12px] tabular-nums">
           <thead className="text-[11px] text-gray-500 tracking-wide">
             <tr>
-              <th className="px-4 py-2 text-left font-semibold">Ticket ID</th>
-              <th className="px-4 py-2 text-left font-semibold">Subject</th>
-              <th className="px-4 py-2 text-left font-semibold">User</th>
-              <th className="px-4 py-2 text-left font-semibold">Category</th>
-              <th className="px-4 py-2 text-left font-semibold">Status</th>
-              <th className="px-4 py-2 text-left font-semibold">Created</th>
-              <th className="px-4 py-2 text-left font-semibold">Updated</th>
+              <th className="px-4 py-2 text-left font-semibold">{t('pages.history.supportTab.ticketId')}</th>
+              <th className="px-4 py-2 text-left font-semibold">{t('pages.history.supportTab.subject')}</th>
+              <th className="px-4 py-2 text-left font-semibold">{t('pages.history.supportTab.user')}</th>
+              <th className="px-4 py-2 text-left font-semibold">{t('pages.history.supportTab.category')}</th>
+              <th className="px-4 py-2 text-left font-semibold">{t('pages.history.supportTab.status')}</th>
+              <th className="px-4 py-2 text-left font-semibold">{t('pages.history.supportTab.created')}</th>
+              <th className="px-4 py-2 text-left font-semibold">{t('pages.history.supportTab.updated')}</th>
             </tr>
           </thead>
           <tbody>
             {loading && (
-              <tr><td colSpan={7} className="px-4 py-12 text-center text-gray-400 text-[12px]">Loading...</td></tr>
+              <tr><td colSpan={7} className="px-4 py-12 text-center text-gray-400 text-[12px]">{t('pages.history.supportTab.loading')}</td></tr>
             )}
             {!loading && error && (
               <tr><td colSpan={7} className="px-4 py-12 text-center text-red-500 text-[12px]">{error}</td></tr>
@@ -110,7 +112,7 @@ const SupportTab = () => {
               </tr>
             ))}
             {!loading && !error && items.length === 0 && (
-              <tr><td colSpan={7} className="px-4 py-12 text-center text-gray-400 text-[12px]">No support tickets yet</td></tr>
+              <tr><td colSpan={7} className="px-4 py-12 text-center text-gray-400 text-[12px]">{t('pages.history.supportTab.noTickets')}</td></tr>
             )}
           </tbody>
         </table>

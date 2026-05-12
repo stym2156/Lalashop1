@@ -12,6 +12,7 @@ import {
   Trash2,
   Loader2,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { categories } from "@/menu/manu";
 import { apiClient } from "@/services/apiClient";
 
@@ -57,6 +58,7 @@ const computeCommission = (p?: ProductRef): number => {
 };
 
 export default function CreatorProduct({ onBack }: CreatorProductProps) {
+  const { t } = useTranslation("common");
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -120,12 +122,12 @@ export default function CreatorProduct({ onBack }: CreatorProductProps) {
   };
 
   const removeRow = async (row: CreatorProductRow) => {
-    if (!confirm("Remove this product from your store?")) return;
+    if (!confirm(t("pages.creatorProducts2.removeConfirm"))) return;
     try {
       await apiClient(`/creator-products/${row._id}`, { method: "DELETE" });
       setRows((prev) => prev.filter((r) => r._id !== row._id));
     } catch (err: any) {
-      alert(err?.message || "Failed to remove");
+      alert(err?.message || t("pages.creatorProducts2.failedRemove"));
     }
   };
 
@@ -142,7 +144,7 @@ export default function CreatorProduct({ onBack }: CreatorProductProps) {
         <button onClick={onBack} className="p-1 hover:bg-gray-100 rounded-full transition-colors">
           <ChevronLeft size={24} className="text-slate-800" />
         </button>
-        <h1 className="text-lg font-black text-slate-900 flex-1">My Products</h1>
+        <h1 className="text-lg font-black text-slate-900 flex-1">{t("pages.creatorProducts.myProducts")}</h1>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setViewMode(viewMode === "grid" ? "list" : "grid")}
@@ -162,7 +164,7 @@ export default function CreatorProduct({ onBack }: CreatorProductProps) {
             />
             <input
               type="text"
-              placeholder="Search your products..."
+              placeholder={t("pages.creatorProducts2.searchProducts")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-gray-50 border border-gray-100 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/10 focus:border-sky-500 transition-all"
@@ -179,7 +181,7 @@ export default function CreatorProduct({ onBack }: CreatorProductProps) {
                 : "bg-white border-gray-200 text-slate-500 hover:border-slate-300"
             }`}
           >
-            All Products ({rows.length})
+            {t("pages.creatorProducts2.allProducts", { count: rows.length })}
           </button>
           {categories.map((cat) => {
             const count = rows.filter((r) => r.product?.category === cat.slug).length;
@@ -342,9 +344,9 @@ export default function CreatorProduct({ onBack }: CreatorProductProps) {
             <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center shadow-xl shadow-slate-100 mb-6">
               <Package size={40} className="text-slate-200" />
             </div>
-            <h3 className="text-lg font-black text-slate-900 mb-2">No products yet</h3>
+            <h3 className="text-lg font-black text-slate-900 mb-2">{t("pages.creatorProducts.noProductsYet")}</h3>
             <p className="text-sm text-slate-400 text-center max-w-[240px] font-medium">
-              Add products from Recommended Products or Marketplace to get your affiliate links.
+              {t("pages.creatorProducts.addHint")}
             </p>
           </div>
         )}

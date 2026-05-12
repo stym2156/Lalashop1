@@ -4,6 +4,7 @@ import {
   Loader2, Store, CreditCard, MapPin, Building2, FileText, ExternalLink,
   CheckCircle2, Clock, XCircle, AlertCircle,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 
 // Read-only mirror of the seller's KYC submission. Sellers can review what
@@ -94,8 +95,10 @@ const STATUS_BANNER: Record<
     blurb: "Your KYC submission was rejected. See the reviewer note below.",
   },
 };
+// Note: STATUS_BANNER labels above are template-only and overridden below via t() lookups.
 
 export const ShopDetailSection: React.FC = () => {
+  const { t } = useTranslation("common");
   const [kyc, setKyc] = useState<KycSubmission | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -137,9 +140,9 @@ export const ShopDetailSection: React.FC = () => {
     return (
       <div className="rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 p-8 text-center space-y-3">
         <Store className="w-8 h-8 text-gray-300 mx-auto" />
-        <p className="text-[13px] font-bold text-gray-700">No shop submission yet</p>
+        <p className="text-[13px] font-bold text-gray-700">{t("pages.shopDetailPanel.noSubmission")}</p>
         <p className="text-[11px] text-gray-500">
-          Open a shop from <a href="/me/opensho/openshop" className="text-[#00aeff] font-bold hover:underline">/me/opensho</a> to fill in your KYC.
+          {t("pages.shopDetailPanel2.openShopHint")}
         </p>
       </div>
     );
@@ -185,59 +188,59 @@ export const ShopDetailSection: React.FC = () => {
         </div>
       )}
 
-      <Section title="Shop info" icon={Store}>
-        <Row label="Account holder name" value={kyc.shopInfo?.shopName} bold />
-        <Row label="Bank name" value={kyc.shopInfo?.bankName} />
-        <Row label="Bank account number" value={kyc.shopInfo?.shopAccount} mono />
-        <Row label="Category" value={kyc.shopInfo?.shopCategory} />
-        <Row label="Business type" value={kyc.businessType} />
-        <Row label="Entity name" value={kyc.shopInfo?.entityName} />
+      <Section title={t("pages.shopDetailPanel2.shopInfo")} icon={Store}>
+        <Row label={t("pages.shopDetailPanel2.accountHolderName")} value={kyc.shopInfo?.shopName} bold />
+        <Row label={t("pages.shopDetailPanel2.bankName")} value={kyc.shopInfo?.bankName} />
+        <Row label={t("pages.shopDetailPanel2.bankAccountNumber")} value={kyc.shopInfo?.shopAccount} mono />
+        <Row label={t("pages.shopDetailPanel2.category")} value={kyc.shopInfo?.shopCategory} />
+        <Row label={t("pages.shopDetailPanel2.businessType")} value={kyc.businessType} />
+        <Row label={t("pages.shopDetailPanel2.entityName")} value={kyc.shopInfo?.entityName} />
         <Row
-          label="Shop email"
+          label={t("pages.shopDetailPanel2.shopEmail")}
           value={kyc.shopInfo?.shopEmail}
           suffix={
             kyc.shopInfo?.isEmailVerified ? (
-              <Badge tone="emerald">verified</Badge>
+              <Badge tone="emerald">{t("pages.shopDetailPanel2.verifiedTag")}</Badge>
             ) : (
-              <Badge tone="gray">unverified</Badge>
+              <Badge tone="gray">{t("pages.shopDetailPanel2.unverifiedTag")}</Badge>
             )
           }
         />
         <Row
-          label="Phone"
+          label={t("pages.shopDetailPanel2.phone")}
           value={kyc.shopInfo?.phoneNumber}
           suffix={
             kyc.shopInfo?.isPhoneVerified ? (
-              <Badge tone="emerald">verified</Badge>
+              <Badge tone="emerald">{t("pages.shopDetailPanel2.verifiedTag")}</Badge>
             ) : (
-              <Badge tone="gray">unverified</Badge>
+              <Badge tone="gray">{t("pages.shopDetailPanel2.unverifiedTag")}</Badge>
             )
           }
         />
       </Section>
 
-      <Section title="Owner identity" icon={CreditCard}>
-        <Row label="Full name" value={fullName} bold />
-        <Row label="ID type" value={kyc.identity?.idType} />
-        <Row label="ID number" value={kyc.identity?.idNumber} mono />
-        <Row label="Birth date" value={formatDate(kyc.identity?.birthDate)} />
-        <Row label="ID expiry" value={formatDate(kyc.identity?.expiryDate)} />
-        <Row label="TIN number" value={kyc.identity?.tinNumber} mono />
+      <Section title={t("pages.shopDetailPanel2.ownerIdentity")} icon={CreditCard}>
+        <Row label={t("pages.shopDetailPanel2.fullName")} value={fullName} bold />
+        <Row label={t("pages.shopDetailPanel2.idType")} value={kyc.identity?.idType} />
+        <Row label={t("pages.shopDetailPanel2.idNumber")} value={kyc.identity?.idNumber} mono />
+        <Row label={t("pages.shopDetailPanel2.birthDate")} value={formatDate(kyc.identity?.birthDate)} />
+        <Row label={t("pages.shopDetailPanel2.idExpiry")} value={formatDate(kyc.identity?.expiryDate)} />
+        <Row label={t("pages.shopDetailPanel2.tinNumber")} value={kyc.identity?.tinNumber} mono />
       </Section>
 
-      <Section title="Address" icon={MapPin}>
+      <Section title={t("pages.shopDetailPanel2.address")} icon={MapPin}>
         <p className="text-[12px] text-gray-700 leading-relaxed">{buildAddress(kyc.identity?.address)}</p>
       </Section>
 
       {kyc.warehouse?.fullAddress && (
-        <Section title="Warehouse" icon={Building2}>
+        <Section title={t("pages.shopDetailPanel2.warehouse")} icon={Building2}>
           <p className="text-[12px] text-gray-700 leading-relaxed">{kyc.warehouse.fullAddress}</p>
         </Section>
       )}
 
-      <Section title="Documents" icon={FileText}>
+      <Section title={t("pages.shopDetailPanel2.documents")} icon={FileText}>
         {docs.length === 0 ? (
-          <p className="text-[12px] text-gray-400">No documents uploaded.</p>
+          <p className="text-[12px] text-gray-400">{t("pages.shopDetailPanel.noDocs")}</p>
         ) : (
           <div className="space-y-2">
             {docs.map((d, i) => (
@@ -259,8 +262,7 @@ export const ShopDetailSection: React.FC = () => {
       <div className="rounded-md bg-gray-50 px-4 py-3 inline-flex items-start gap-2 text-[11px] text-gray-600">
         <AlertCircle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
         <p>
-          To update any of these details, please contact support — KYC information is locked
-          once submitted to keep audit trails consistent.
+          {t("pages.shopDetailPanel2.lockedInfo")}
         </p>
       </div>
     </div>

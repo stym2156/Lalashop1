@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Search, ShieldCheck, ChevronDown } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import {
   fetchAdminAuditLogs,
   fetchAdminAuditStats,
@@ -79,8 +80,8 @@ const AdminAuditPage = () => {
             onChange={(e) => setTargetType(e.target.value)}
             className="bg-gray-100 rounded text-[11px] font-semibold text-gray-700 px-3 py-1 pr-7 min-w-[110px] outline-none cursor-pointer appearance-none"
           >
-            {targetTypeOptions.map((t) => (
-              <option key={t} value={t}>{t === 'all' ? t('admins.audit.allTargets') : t}</option>
+            {targetTypeOptions.map((opt) => (
+              <option key={opt} value={opt}>{opt === 'all' ? t('pages.admins.audit.allTargets') : opt}</option>
             ))}
           </select>
           <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-500 pointer-events-none" />

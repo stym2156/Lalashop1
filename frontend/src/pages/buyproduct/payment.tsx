@@ -137,9 +137,9 @@ export default function PaymentPage() {
                           <p className="text-sm font-bold text-gray-900 truncate">{query.name}</p>
                         </Link>
                         <p className="text-xs text-gray-400 mt-0.5">
-                          Option: {query.color} · Size: {query.size}
+                          {t("pages.payment.option", { color: query.color, size: query.size })}
                         </p>
-                        <p className="text-[11px] text-gray-500 mt-1 line-clamp-1">{query.description || "Premium Product"}</p>
+                        <p className="text-[11px] text-gray-500 mt-1 line-clamp-1">{query.description || t("pages.payment.premiumProduct")}</p>
                       </div>
                       <div className="text-right shrink-0">
                         <p className="text-sm font-bold text-gray-900">
@@ -208,11 +208,11 @@ export default function PaymentPage() {
                         {address.village}, {address.district}, {address.province}
                       </p>
                       {address.shippingBranch && (
-                        <p className="text-xs text-gray-400 mt-1">Branch: {address.shippingBranch}</p>
+                        <p className="text-xs text-gray-400 mt-1">{t("pages.payment.branch", { branch: address.shippingBranch })}</p>
                       )}
                       <div className="flex items-center gap-1.5 mt-3 text-xs text-emerald-600 font-medium">
                         <Truck size={13} />
-                        Estimated delivery: 2–3 business days
+                        {t("pages.payment.estimatedDelivery")}
                       </div>
                     </div>
                   ) : (
@@ -277,18 +277,18 @@ export default function PaymentPage() {
                 <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center text-blue-500">
                   <ShieldCheck size={26} />
                 </div>
-                <h3 className="font-bold text-sm text-gray-900">Pay with Confidence</h3>
-                <p className="text-xs text-gray-500">Your information is protected with encryption.</p>
+                <h3 className="font-bold text-sm text-gray-900">{t("pages.payment.payConfidence")}</h3>
+                <p className="text-xs text-gray-500">{t("pages.payment.infoProtected")}</p>
               </div>
 
               <div className="grid grid-cols-2 gap-2 my-5">
                 <div className="flex items-center gap-2 bg-gray-50 rounded-lg p-3 border border-gray-100">
                   <Lock size={14} className="text-emerald-500 shrink-0" />
-                  <span className="text-[11px] font-semibold text-gray-600">SSL Encrypted</span>
+                  <span className="text-[11px] font-semibold text-gray-600">{t("pages.payment.sslEncrypted")}</span>
                 </div>
                 <div className="flex items-center gap-2 bg-gray-50 rounded-lg p-3 border border-gray-100">
                   <ShieldCheck size={14} className="text-emerald-500 shrink-0" />
-                  <span className="text-[11px] font-semibold text-gray-600">PCI Compliant</span>
+                  <span className="text-[11px] font-semibold text-gray-600">{t("pages.payment.pciCompliant")}</span>
                 </div>
               </div>
 

@@ -10,6 +10,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useTranslation } from "react-i18next";
 import { apiClient } from "@/services/apiClient";
 
 type Range = "today" | "7d" | "30d" | "all";
@@ -47,16 +48,17 @@ interface AnalyticsData {
   productCount: number;
 }
 
-const RANGE_OPTIONS: { id: Range; label: string }[] = [
-  { id: "today", label: "Today" },
-  { id: "7d", label: "7 Days" },
-  { id: "30d", label: "30 Days" },
-  { id: "all", label: "All" },
+const RANGE_OPTIONS: { id: Range; labelKey: string }[] = [
+  { id: "today", labelKey: "pages.creatorAttr2.today" },
+  { id: "7d", labelKey: "pages.creatorAttr2.sevenDays" },
+  { id: "30d", labelKey: "pages.creatorAttr2.thirtyDays" },
+  { id: "all", labelKey: "pages.creatorAttr2.all" },
 ];
 
 const formatCurrency = (n: number) => `฿${n.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
 
 export default function AttrView({ onBack }: { onBack: () => void }) {
+  const { t } = useTranslation("common");
   const [timeRange, setTimeRange] = useState<Range>("today");
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(false);
@@ -92,7 +94,7 @@ export default function AttrView({ onBack }: { onBack: () => void }) {
           <button onClick={onBack} className="active:opacity-50 transition-opacity -ml-1">
             <ChevronLeft size={26} strokeWidth={2.5} />
           </button>
-          <h1 className="text-[17px] font-bold tracking-tight">Data Analytics</h1>
+          <h1 className="text-[17px] font-bold tracking-tight">{t("pages.creatorAttr.dataAnalytics")}</h1>
         </div>
       </nav>
 
@@ -108,33 +110,33 @@ export default function AttrView({ onBack }: { onBack: () => void }) {
                   : "bg-white text-[#86878B] border border-[#EEEEEE]"
               }`}
             >
-              {opt.label}
+              {t(opt.labelKey)}
             </button>
           ))}
         </div>
 
         <div className="bg-white grid grid-cols-2 border-b border-[#EEEEEE]">
           <MetricItem
-            title="Revenue (GMV)"
+            title={t("pages.creatorAttr2.revenue")}
             value={formatCurrency(data?.summary.revenue || 0)}
             isFirst
           />
-          <MetricItem title="Commission" value={formatCurrency(data?.summary.commission || 0)} />
-          <MetricItem title="Orders" value={(data?.summary.orderCount || 0).toString()} isFirst />
-          <MetricItem title="Items Sold" value={(data?.summary.itemCount || 0).toString()} />
+          <MetricItem title={t("pages.creatorAttr2.commission")} value={formatCurrency(data?.summary.commission || 0)} />
+          <MetricItem title={t("pages.creatorAttr2.orders")} value={(data?.summary.orderCount || 0).toString()} isFirst />
+          <MetricItem title={t("pages.creatorAttr2.itemsSold")} value={(data?.summary.itemCount || 0).toString()} />
         </div>
 
         <div className="bg-white grid grid-cols-3 border-b border-[#EEEEEE]">
-          <SmallStat title="Pending" value={formatCurrency(data?.earnings.pending.total || 0)} accent="text-amber-600" />
-          <SmallStat title="Settled" value={formatCurrency(data?.earnings.settled.total || 0)} accent="text-emerald-600" />
-          <SmallStat title="Products" value={(data?.productCount || 0).toString()} accent="text-slate-700" />
+          <SmallStat title={t("pages.creatorAttr2.pending")} value={formatCurrency(data?.earnings.pending.total || 0)} accent="text-amber-600" />
+          <SmallStat title={t("pages.creatorAttr2.settled")} value={formatCurrency(data?.earnings.settled.total || 0)} accent="text-emerald-600" />
+          <SmallStat title={t("pages.creatorAttr2.products")} value={(data?.productCount || 0).toString()} accent="text-slate-700" />
         </div>
 
         <div className="bg-white mt-2 border-y border-[#EEEEEE] py-6 px-4">
           <div className="flex justify-between items-center mb-6 px-1">
             <div>
-              <h3 className="text-[14px] font-bold">Revenue Trend</h3>
-              <p className="text-[11px] text-[#86878B]">Range: {timeRange}</p>
+              <h3 className="text-[14px] font-bold">{t("pages.creatorAttr.revenueTrend")}</h3>
+              <p className="text-[11px] text-[#86878B]">{t("pages.creatorAttr2.rangeLabel", { range: timeRange })}</p>
             </div>
             {loading && <Loader2 size={16} className="animate-spin text-[#86878B]" />}
           </div>
@@ -161,7 +163,7 @@ export default function AttrView({ onBack }: { onBack: () => void }) {
               </ResponsiveContainer>
             ) : (
               <div className="h-full flex items-center justify-center text-[12px] text-[#C8C9CC] font-bold tracking-widest">
-                NO DATA
+                {t("pages.creatorAttr2.noData")}
               </div>
             )}
           </div>
@@ -169,7 +171,7 @@ export default function AttrView({ onBack }: { onBack: () => void }) {
 
         <div className="bg-white mt-2 border-y border-[#EEEEEE]">
           <div className="px-5 py-4 border-b border-[#F8F8F8] flex justify-between items-center">
-            <h3 className="text-[14px] font-bold tracking-tight">Best Sellers</h3>
+            <h3 className="text-[14px] font-bold tracking-tight">{t("pages.creatorAttr.bestSellers")}</h3>
             <ChevronRight size={18} className="text-[#C8C9CC]" />
           </div>
           {data?.topProducts?.length ? (
@@ -186,7 +188,7 @@ export default function AttrView({ onBack }: { onBack: () => void }) {
                     </div>
                     <div className="space-y-1 min-w-0">
                       <p className="text-[14px] font-bold line-clamp-1">{p.name}</p>
-                      <p className="text-[12px] text-[#86878B]">{p.qty} items sold</p>
+                      <p className="text-[12px] text-[#86878B]">{t("pages.creatorAttr2.itemsSoldCount", { count: p.qty })}</p>
                     </div>
                   </div>
                   <div className="text-right">
@@ -198,7 +200,7 @@ export default function AttrView({ onBack }: { onBack: () => void }) {
             </div>
           ) : (
             <div className="px-5 py-12 text-center text-[12px] font-bold tracking-widest text-[#C8C9CC]">
-              NO SALES YET
+              {t("pages.creatorAttr2.noSalesYet")}
             </div>
           )}
         </div>

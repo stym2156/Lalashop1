@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Truck, RefreshCw, Clock, MapPin, Layers, Send, Star, Tag } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { SpecRow, Stars } from "./ProductUIPrimitives";
 import { ProductTabsProps } from "./types";
 import { apiClient } from "@/services/apiClient";
@@ -68,6 +69,7 @@ export function ProductTabs({ tab, setTab, product }: ProductTabsProps) {
 
 /* ── Specs ── */
 function SpecsTab({ product }: Pick<ProductTabsProps, "product">) {
+  const { t } = useTranslation("common");
   const sellerSpecs = Array.isArray((product as any).specifications)
     ? ((product as any).specifications as Array<{ label: string; value: string }>)
     : [];
@@ -144,7 +146,7 @@ function SpecsTab({ product }: Pick<ProductTabsProps, "product">) {
   return (
     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 32 }}>
       <div>
-        <SectionLabel>Key Specifications</SectionLabel>
+        <SectionLabel>{t("pages.productTabs.keySpecifications")}</SectionLabel>
         {specsToShow.length > 0 ? (
           specsToShow.map((s, i) => (
             <SpecRow key={`${s.label}-${i}`} label={s.label} value={s.value} />
@@ -157,7 +159,7 @@ function SpecsTab({ product }: Pick<ProductTabsProps, "product">) {
       </div>
       {sellerStatRows.length > 0 && (
         <div>
-          <SectionLabel>Supplier Profile</SectionLabel>
+          <SectionLabel>{t("pages.productTabs.supplierProfile")}</SectionLabel>
           {sellerStatRows.map((s, i) => (
             <SpecRow key={i} label={s.label} value={s.value} />
           ))}

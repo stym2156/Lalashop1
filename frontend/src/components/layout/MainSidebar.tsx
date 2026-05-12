@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import { Home, ClipboardList, UserSquare2, Globe, Store } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -9,9 +10,9 @@ export default function MainSidebar() {
   const router = useRouter();
   const pathname = router.pathname;
   const { unreadTotal } = useChat();
-  const [mounted, setMounted] = React.useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setMounted(true);
   }, []);
 
@@ -57,7 +58,7 @@ export default function MainSidebar() {
                 )}
               </span>
               <span className="text-[10px] font-bold tracking-tight">
-                {mounted ? item.label : ""}
+                {item.label}
               </span>
             </Link>
           );

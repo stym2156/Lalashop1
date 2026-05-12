@@ -114,7 +114,7 @@ export default function MediaUpload({ onUpload, onCancel }: MediaUploadProps) {
       }
     } catch (err) {
       console.error("Upload failed:", err);
-      alert("Failed to share post. Please check your connection.");
+      alert(t("pages.socialUpload.failedShare"));
     } finally {
       setUploading(false);
     }
@@ -128,11 +128,11 @@ export default function MediaUpload({ onUpload, onCancel }: MediaUploadProps) {
 
   const getVisibilityLabel = () => {
     switch(visibility) {
-      case "public": return "Public";
-      case "friends": return "Followers/Following";
-      case "friends_except": return "Friends Except...";
-      case "specific_friends": return "Specific Friends";
-      default: return "Public";
+      case "public": return t("pages.socialUpload.public");
+      case "friends": return t("pages.socialUpload.followersFollowing");
+      case "friends_except": return t("pages.socialUpload.friendsExcept");
+      case "specific_friends": return t("pages.socialUpload.specificFriends");
+      default: return t("pages.socialUpload.public");
     }
   };
 
@@ -194,7 +194,7 @@ export default function MediaUpload({ onUpload, onCancel }: MediaUploadProps) {
               <div className="space-y-2">
                  <div className="flex items-center gap-2 text-slate-400 px-1">
                     <Globe size={14} />
-                    <span className="text-[10px] font-black tracking-widest">Audience</span>
+                    <span className="text-[10px] font-black tracking-widest">{t("pages.socialUpload.audience")}</span>
                  </div>
                  <button 
                     onClick={() => setShowVisibilityMenu(true)}
@@ -241,15 +241,15 @@ export default function MediaUpload({ onUpload, onCancel }: MediaUploadProps) {
            <div className="fixed inset-0 z-[120] bg-black/40 backdrop-blur-sm flex items-end md:items-center justify-center p-4">
               <div className="bg-white w-full max-w-sm rounded-[2.5rem] overflow-hidden shadow-2xl animate-in slide-in-from-bottom-10">
                  <div className="p-6 border-b border-slate-50 flex items-center justify-between">
-                    <h2 className="text-[11px] font-black tracking-widest">Audience</h2>
+                    <h2 className="text-[11px] font-black tracking-widest">{t("pages.socialUpload.audience")}</h2>
                     <button onClick={() => setShowVisibilityMenu(false)}><X size={18} /></button>
                  </div>
                  <div className="p-2">
                     {[
-                       { id: "public", label: "Public", icon: Globe },
-                       { id: "friends", label: "Followers/Following", icon: Users },
-                       { id: "friends_except", label: "Friends Except...", icon: UserMinus },
-                       { id: "specific_friends", label: "Specific Friends", icon: UserCheck },
+                       { id: "public", label: t("pages.socialUpload.public"), icon: Globe },
+                       { id: "friends", label: t("pages.socialUpload.followersFollowing"), icon: Users },
+                       { id: "friends_except", label: t("pages.socialUpload.friendsExcept"), icon: UserMinus },
+                       { id: "specific_friends", label: t("pages.socialUpload.specificFriends"), icon: UserCheck },
                     ].map((item) => (
                        <button 
                           key={item.id}
@@ -279,7 +279,7 @@ export default function MediaUpload({ onUpload, onCancel }: MediaUploadProps) {
               <div className="bg-white w-full max-w-md h-[70vh] rounded-[2.5rem] overflow-hidden flex flex-col shadow-2xl">
                  <div className="p-6 border-b border-slate-50 flex items-center justify-between">
                     <h2 className="text-[11px] font-black tracking-widest">
-                       {selectingTarget === "include" ? "Select Friends" : "Exclude Friends"}
+                       {selectingTarget === "include" ? t("pages.socialUpload.selectFriends") : t("pages.socialUpload.excludeFriends")}
                     </h2>
                     <button 
                        onClick={() => {
@@ -288,7 +288,7 @@ export default function MediaUpload({ onUpload, onCancel }: MediaUploadProps) {
                        }} 
                        className="px-6 py-2 bg-[#00aeff] text-white text-[10px] font-black tracking-widest rounded-full"
                     >
-                       Done
+                       {t("pages.socialUpload.done")}
                     </button>
                  </div>
                  <div className="flex-1 overflow-y-auto p-2">

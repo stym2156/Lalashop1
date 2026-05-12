@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ShieldCheck, Check, Save, Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import {
   fetchUsers,
   updateUserAdminRole,

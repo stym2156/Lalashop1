@@ -11,6 +11,7 @@ import {
   type ReportStatus,
   type ReportTargetType,
 } from '@/services/adminApi';
+import { useTranslation } from 'react-i18next';
 
 const reasonBadge: Record<ReportReason, string> = {
   spam: 'bg-orange-50 text-orange-700',
@@ -21,27 +22,11 @@ const reasonBadge: Record<ReportReason, string> = {
   other: 'bg-gray-100 text-gray-600',
 };
 
-const reasonLabel: Record<ReportReason, string> = {
-  spam: 'Spam',
-  abuse: 'Abuse',
-  fraud: 'Fraud',
-  counterfeit: 'Counterfeit',
-  harassment: 'Harassment',
-  other: 'Other',
-};
-
 const statusBadge: Record<ReportStatus, string> = {
   open: 'bg-red-50 text-red-700',
   reviewing: 'bg-orange-50 text-orange-700',
   actioned: 'bg-green-50 text-green-700',
   dismissed: 'bg-gray-100 text-gray-600',
-};
-
-const statusLabel: Record<ReportStatus, string> = {
-  open: 'Open',
-  reviewing: 'Reviewing',
-  actioned: 'Actioned',
-  dismissed: 'Dismissed',
 };
 
 const targetLink = (r: AdminReportRow): string => {
@@ -66,6 +51,9 @@ const formatDate = (s?: string): string => {
 };
 
 const ReportsPage = () => {
+  const { t } = useTranslation();
+  const reasonLabel = (r: ReportReason) => t(`pages.reports.reasonLabel.${r}`);
+  const statusLabel = (s: ReportStatus) => t(`pages.reports.statusLabel.${s}`);
   const [stats, setStats] = useState<AdminReportStats | null>(null);
   const [items, setItems] = useState<AdminReportRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -123,17 +111,17 @@ const ReportsPage = () => {
   return (
     <div className="space-y-4 text-sm">
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <KPI label="Total" value={stats ? stats.total.toLocaleString() : '—'} tone="text-black" />
-        <KPI label="Open" value={stats ? stats.open.toLocaleString() : '—'} tone="text-red-700" />
-        <KPI label="Reviewing" value={stats ? stats.reviewing.toLocaleString() : '—'} tone="text-orange-700" />
-        <KPI label="Actioned" value={stats ? stats.actioned.toLocaleString() : '—'} tone="text-green-700" />
-        <KPI label="Dismissed" value={stats ? stats.dismissed.toLocaleString() : '—'} tone="text-gray-500" />
+        <KPI label={t('pages.reports.kpi.total')} value={stats ? stats.total.toLocaleString() : '—'} tone="text-black" />
+        <KPI label={t('pages.reports.kpi.open')} value={stats ? stats.open.toLocaleString() : '—'} tone="text-red-700" />
+        <KPI label={t('pages.reports.kpi.reviewing')} value={stats ? stats.reviewing.toLocaleString() : '—'} tone="text-orange-700" />
+        <KPI label={t('pages.reports.kpi.actioned')} value={stats ? stats.actioned.toLocaleString() : '—'} tone="text-green-700" />
+        <KPI label={t('pages.reports.kpi.dismissed')} value={stats ? stats.dismissed.toLocaleString() : '—'} tone="text-gray-500" />
       </div>
 
       <div className="rounded-lg px-3 py-2 flex flex-wrap items-center gap-2">
-        <Dropdown label="Status" value={filter} options={tabs} onChange={(v) => setFilter(v as any)} format={(v) => (v === 'all' ? 'All' : statusLabel[v as ReportStatus])} />
-        <Dropdown label="Reason" value={reasonFilter} options={reasons} onChange={(v) => setReasonFilter(v as any)} format={(v) => (v === 'all' ? 'All' : reasonLabel[v as ReportReason])} />
-        <Dropdown label="Target" value={targetFilter} options={targets} onChange={(v) => setTargetFilter(v as any)} format={(v) => (v === 'all' ? 'All' : v.charAt(0).toUpperCase() + v.slice(1))} />
+        <Dropdown label={t('pages.reports.filterLabel.status')} value={filter} options={tabs} onChange={(v) => setFilter(v as any)} format={(v) => (v === 'all' ? t('pages.reports.filterLabel.all') : statusLabel(v as ReportStatus))} />
+        <Dropdown label={t('pages.reports.filterLabel.reason')} value={reasonFilter} options={reasons} onChange={(v) => setReasonFilter(v as any)} format={(v) => (v === 'all' ? t('pages.reports.filterLabel.all') : reasonLabel(v as ReportReason))} />
+        <Dropdown label={t('pages.reports.filterLabel.target')} value={targetFilter} options={targets} onChange={(v) => setTargetFilter(v as any)} format={(v) => (v === 'all' ? t('pages.reports.filterLabel.all') : v.charAt(0).toUpperCase() + v.slice(1))} />
 
         <div className="ml-auto relative">
           <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
@@ -141,7 +129,7 @@ const ReportsPage = () => {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             type="text"
-            placeholder="Search description, note..."
+            placeholder={t('pages.reports.searchPlaceholder')}
             className="pl-7 pr-3 py-1 rounded text-[11px] w-64 bg-gray-50 border border-gray-100 focus:border-primary outline-none"
           />
         </div>
@@ -152,21 +140,21 @@ const ReportsPage = () => {
           <table className="w-full text-[12px] tabular-nums">
             <thead className="text-[11px] text-gray-500 tracking-wide">
               <tr>
-                <th className="px-4 py-2 text-left font-semibold">Report ID</th>
-                <th className="px-4 py-2 text-left font-semibold">Reason</th>
-                <th className="px-4 py-2 text-left font-semibold">Target</th>
-                <th className="px-4 py-2 text-left font-semibold">Reported By</th>
-                <th className="px-4 py-2 text-left font-semibold">Description</th>
-                <th className="px-4 py-2 text-left font-semibold">Reported</th>
-                <th className="px-4 py-2 text-left font-semibold">Status</th>
-                <th className="px-4 py-2 text-right font-semibold">Actions</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.reports.table.reportId')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.reports.table.reason')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.reports.table.target')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.reports.table.reportedBy')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.reports.table.description')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.reports.table.reported')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.reports.table.status')}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t('pages.reports.table.actions')}</th>
               </tr>
             </thead>
             <tbody>
               {loading && (
                 <tr>
                   <td colSpan={8} className="px-4 py-12 text-center text-gray-400 text-[12px]">
-                    Loading reports...
+                    {t('pages.reports.loading')}
                   </td>
                 </tr>
               )}
@@ -184,7 +172,7 @@ const ReportsPage = () => {
                   </td>
                   <td className="px-4 py-2">
                     <span className={`text-[11px] font-medium px-2 py-0.5 rounded ${reasonBadge[r.reason]}`}>
-                      {reasonLabel[r.reason]}
+                      {reasonLabel(r.reason)}
                     </span>
                   </td>
                   <td className="px-4 py-2">
@@ -206,7 +194,7 @@ const ReportsPage = () => {
                   <td className="px-4 py-2 text-gray-500 text-[11px]">{formatDate(r.createdAt)}</td>
                   <td className="px-4 py-2">
                     <span className={`text-[11px] font-medium px-2 py-0.5 rounded ${statusBadge[r.status]}`}>
-                      {statusLabel[r.status]}
+                      {statusLabel(r.status)}
                     </span>
                   </td>
                   <td className="px-4 py-2 text-right">
@@ -251,7 +239,7 @@ const ReportsPage = () => {
               {!loading && !error && items.length === 0 && (
                 <tr>
                   <td colSpan={8} className="px-4 py-12 text-center text-gray-400 text-[12px]">
-                    No reports match your filter
+                    {t('pages.reports.noMatch')}
                   </td>
                 </tr>
               )}

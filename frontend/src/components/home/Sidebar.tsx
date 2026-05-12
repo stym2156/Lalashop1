@@ -1,4 +1,5 @@
 "use client";
+import React, { useState, useEffect } from "react";
 import { Monitor, Home, Shirt, Wrench, Car, Sparkles, Building2, Dumbbell, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { categories } from "@/menu/manu";
@@ -11,9 +12,9 @@ const iconMap: Record<string, React.ElementType> = {
 
 export default function Sidebar() {
   const { t } = useTranslation("common");
-  const [mounted, setMounted] = React.useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setMounted(true);
   }, []);
 
@@ -21,7 +22,7 @@ export default function Sidebar() {
     <aside className="w-60 flex-shrink-0 bg-white border border-gray-100 rounded-xl overflow-hidden self-start shadow-sm hidden lg:block">
       <div className="bg-slate-50 px-4 py-3 border-b border-gray-100 mb-2">
         <h3 className="text-[11px] font-extrabold text-slate-500  tracking-widest">
-          {mounted ? t("header.marketCategories") : ""}
+          {t("header.marketCategories")}
         </h3>
       </div>
       <div className="flex flex-col">
