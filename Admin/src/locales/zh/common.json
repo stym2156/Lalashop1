@@ -101,7 +101,11 @@
     "revoke": "撤销",
     "saveChanges": "保存更改",
     "saveFailed": "保存失败",
-    "toggleFailed": "切换失败"
+    "toggleFailed": "切换失败",
+    "confirmPayment": "确认付款",
+    "confirming": "确认中...",
+    "takeAction": "采取行动",
+    "viewAll": "查看全部"
   },
   "status": {
     "loading": "加载中...",
@@ -148,7 +152,8 @@
     "read": "已读",
     "saved": "已保存",
     "settled": "已结算",
-    "unread": "未读"
+    "unread": "未读",
+    "unpaid": "未付款"
   },
   "table": {
     "id": "ID",
@@ -425,7 +430,7 @@
     "noViolations": "无违规",
     "notASeller": "非卖家",
     "notLinked": "未连接",
-    "note": "备注",
+    "note": "注意",
     "orderId": "订单编号",
     "orders": "订单",
     "ownerAccount": "所有者账户",
@@ -463,7 +468,8 @@
     "username": "用户名",
     "verified": "已验证",
     "warehouse": "仓库",
-    "when": "时间"
+    "when": "时间",
+    "currencySymbol": "¥"
   },
   "pages": {
     "users": {
@@ -515,11 +521,61 @@
         "saveError": "保存失败",
         "suspendError": "暂停失败",
         "suspendModal": {
-          "reasonRequired": "原因必填"
+          "reasonRequired": "原因必填",
+          "liftDesc": "解除后将恢复该用户的登录和下单权限",
+          "liftTitle": "解除暂停",
+          "reason": "原因",
+          "reasonPlaceholder": "e.g. Suspected fraudulent activity",
+          "suspendDesc": "暂停的用户无法登录或下单。原因将向客服显示。",
+          "title": "暂停用户"
         },
         "viewAllWithdrawals": "查看所有提现",
         "viewBuyerOrders": "查看买家订单",
-        "viewSellerOrders": "查看卖家订单"
+        "viewSellerOrders": "查看卖家订单",
+        "accountSuspended": "账户已暂停",
+        "credsIssued": "已发放卖家凭证",
+        "credsIssuedDesc": "用户将在应用内通知中看到这些凭证...",
+        "editModal": {
+          "bankHeader": "银行账户",
+          "credsHeader": "重置凭证（留空保持当前值）",
+          "newPassword": "新密码",
+          "newPin": "新 PIN (6 位)",
+          "passwordPlaceholder": "至少 6 个字符",
+          "pinPlaceholder": "6 位",
+          "title": "编辑用户"
+        },
+        "editUser": "编辑用户",
+        "financial": "财务",
+        "identity": "身份",
+        "issueSellerPassword": "发放卖家密码",
+        "issuing": "发放中...",
+        "labels": {
+          "customerPassword": "客户密码",
+          "displayName": "显示名称",
+          "followers": "粉丝",
+          "following": "关注",
+          "lastKnownIp": "上次记录的 IP",
+          "lastUpdate": "最近更新",
+          "linkedAccounts": "关联账户",
+          "pendingWithdrawals": "待审提现",
+          "posRevenue": "POS 收入",
+          "sellerPassword": "卖家密码",
+          "twoFactor": "2FA",
+          "webBalance": "网站余额",
+          "withdrawalPin": "提现 PIN 码"
+        },
+        "liftSuspension": "解除暂停",
+        "loginUrl": "登录链接",
+        "moneySource": "资金来源",
+        "moneySourceDesc": "在批准提现前用于验证资金来源",
+        "orderActivity": "订单活动",
+        "security": "安全与活动",
+        "shopAndKyc": "店铺与 KYC",
+        "suspendUser": "暂停用户",
+        "systemMetadata": "系统元数据",
+        "trustScore": "信用评分",
+        "unsuspend": "解除暂停",
+        "withdrawalHistory": "提现记录"
       }
     },
     "shops": {
@@ -560,7 +616,32 @@
         "rating": "评分",
         "description": "描述",
         "policies": "政策",
-        "loadingError": "加载失败"
+        "loadingError": "加载失败",
+        "analytics": "分析",
+        "balancePayout": "余额与付款",
+        "closeShop": "关闭店铺",
+        "followers": "粉丝",
+        "following": "关注",
+        "lastOrder": "最近收到的订单",
+        "lifetimeTotals": "累计总数",
+        "message": "消息",
+        "metrics": {
+          "currentBalance": "当前余额 (฿)",
+          "grossRevenue": "总收入 (฿)",
+          "lifetimeIncome": "累计收入 (฿)",
+          "pendingWithdrawals": "待处理提现",
+          "posRevenue": "POS 收入 (฿)",
+          "totalOrders": "订单总数",
+          "totalProducts": "商品总数"
+        },
+        "openProfile": "打开店铺资料",
+        "overview": "总览",
+        "shopBio": "店铺简介",
+        "suspend": "暂停",
+        "unverified": "未验证",
+        "viewOrders": "查看订单",
+        "viewProducts": "查看商品",
+        "violations": "违规"
       },
       "shopCenter": {
         "active": "运营中店铺",
@@ -705,7 +786,40 @@
         "createdAt": "创建时间",
         "status": "状态",
         "timeline": "时间线",
-        "slip": "付款回单"
+        "slip": "付款回单",
+        "actorAdmin": "管理员/系统",
+        "actorCarrier": "承运商",
+        "actorCustomer": "客户",
+        "actorSeller": "卖家",
+        "actorSystem": "系统",
+        "amountMismatch": "金额不匹配！订单",
+        "awaitingPayment": "买家尚未上传付款回单 — 等待付款",
+        "awaitingVerification": "等待验证",
+        "buyerNote": "买家备注",
+        "contactBuyer": "联系买家",
+        "escalate": "升级处理",
+        "eventCancelled": "订单已取消",
+        "eventDelivered": "送达",
+        "eventPaid": "支付已确认",
+        "eventPlaced": "订单已下达",
+        "eventShipped": "已发货",
+        "failedToLoad": "加载订单失败",
+        "failedToUpdateSlip": "更新回单失败",
+        "fromShop": "来自店铺",
+        "inTransit": "运输中 / 待处理",
+        "invoice": "发票",
+        "orderAmount": "订单金额",
+        "paidAt": "付款时间",
+        "paymentRejected": "付款已拒绝",
+        "paymentVerified": "付款已验证",
+        "placedAt": "下单时间 {{date}}",
+        "slipAwaitingReview": "回单已提交 — 待审核",
+        "to": "to",
+        "toAccount": "至账户",
+        "transferred": "已转账",
+        "transferredAmount": "已转账",
+        "transferredAt": "转账时间",
+        "verifiedBy": "审核人"
       }
     },
     "kyc": {
@@ -731,7 +845,41 @@
         "rejectSuccess": "KYC 已拒绝",
         "approveFailed": "批准 KYC 失败",
         "rejectFailed": "拒绝 KYC 失败",
-        "missingReason": "拒绝必须填写原因"
+        "missingReason": "拒绝必须填写原因",
+        "additionalDocuments": "其他文件",
+        "apartment": "公寓",
+        "approveReasonPlaceholder": "e.g. Welcome! Your shop is now active.",
+        "businessInformation": "业务信息",
+        "city": "城市",
+        "country": "国家",
+        "decision": "决定",
+        "descriptionRequired": "请向用户提供说明",
+        "descriptionSentToUser": "说明 (发送给用户)",
+        "emailVerified": "邮箱已验证",
+        "entityName": "实体名称",
+        "failedToLoad": "加载提交失败",
+        "idNumber": "证件号码",
+        "idType": "证件类型",
+        "idTypes": {
+          "national_id": "身份证",
+          "passport": "护照",
+          "state_id": "州身份证"
+        },
+        "identityVerification": "身份验证",
+        "noSubmissionId": "未提供提交编号",
+        "notProvided": "未提供",
+        "openPdf": "PDF — 打开",
+        "phoneVerified": "电话已验证",
+        "reviewSubmission": "审核提交",
+        "reviewedAt": "审核于 {{date}}",
+        "sendApproval": "发送批准",
+        "sendRejection": "发送拒绝",
+        "shopInformation": "店铺信息",
+        "state": "州/省",
+        "street": "街道",
+        "tinNumber": "税号",
+        "verificationStatus": "验证状态",
+        "warehouseAddress": "仓库地址"
       }
     },
     "withdrawals": {
@@ -748,19 +896,59 @@
         "bank": "银行",
         "accountNumber": "账号",
         "accountName": "账户名",
-        "amount": "金额",
+        "amount": {
+          "fee": "手续费",
+          "net": "用户实收",
+          "title": "金额"
+        },
         "fee": "手续费",
         "netAmount": "净额",
         "status": "状态",
         "requestedAt": "申请时间",
         "processedAt": "处理时间",
         "processedBy": "处理人",
-        "notes": "备注",
+        "notes": {
+          "adminNoteLabel": "管理员备注",
+          "adminNotePlaceholder": "关于此提现的内部备注...",
+          "refLabel": "银行转账参考号",
+          "refPlaceholder": "e.g. TXN-882910",
+          "title": "管理员处理备注"
+        },
         "approve": "批准",
         "reject": "拒绝",
         "markPaid": "标记已付款",
         "markFailed": "标记失败",
-        "loadingError": "加载提现失败"
+        "loadingError": "加载提现失败",
+        "actions": {
+          "approve": "批准",
+          "markFailed": "标记失败",
+          "markPaid": "标记已付款",
+          "noFurther": "无进一步操作",
+          "reject": "拒绝"
+        },
+        "bankInfo": {
+          "accountName": "户名",
+          "name": "银行名称",
+          "notOnFile": "未记录银行账户",
+          "number": "账号",
+          "title": "银行账户",
+          "unverified": "未验证",
+          "verified": "已验证"
+        },
+        "failConfirm": "将此提现标记为失败？金额将退回。",
+        "markedAs": "标记为 {{status}}",
+        "rejectConfirm": "拒绝此提现？金额将退回到用户余额。",
+        "timeline": {
+          "processed": "已处理",
+          "requested": "申请于",
+          "title": "时间线",
+          "updated": "最近更新"
+        },
+        "useApproveToSave": "在提现待处理期间，请使用批准或拒绝按钮以保存备注",
+        "userSection": {
+          "profile": "打开用户资料",
+          "title": "用户"
+        }
       }
     },
     "payment": {
@@ -807,7 +995,11 @@
         "promptpayInfo": "💡 PromptPay 二维码按订单金额动态生成，无需上传图片。",
         "updatedSuccess": "更新成功",
         "createdSuccess": "创建成功",
-        "deleteConfirm": "删除此支付方式？现有单据仍会引用它。"
+        "deleteConfirm": "删除此支付方式？现有单据仍会引用它。",
+        "bankPlaceholder": "例如 BCEL",
+        "accountNamePlaceholder": "例如 公司名称或全名",
+        "qrPreviewAlt": "QR 预览",
+        "walletNamePlaceholder": "例如 电子钱包名称"
       }
     },
     "notifications": {
@@ -843,12 +1035,37 @@
       "history": {
         "title": "通知历史",
         "noHistory": "尚未发送通知",
-        "loading": "加载历史中…"
+        "loading": "加载历史中…",
+        "table": {
+          "titleContent": "标题 / 内容"
+        },
+        "types": {
+          "order": "订单",
+          "promo": "促销",
+          "system": "系统",
+          "withdrawal": "提现"
+        }
       },
       "reports": {
         "title": "投递报告",
         "noReports": "无投递报告",
-        "loading": "加载报告中…"
+        "loading": "加载报告中…",
+        "loadingReports": "正在加载举报...",
+        "noDescription": "无说明",
+        "noOpenReports": "暂无未处理举报",
+        "noOpenReportsDesc": "等待审核的举报将显示在这里",
+        "onTarget": "针对 {{target}}",
+        "openCount": "{{count}} 个待审核的举报",
+        "openCount_other": "{{count}} 个待审核的举报",
+        "reasons": {
+          "abuse": "滥用",
+          "counterfeit": "假冒",
+          "fraud": "欺诈",
+          "harassment": "骚扰",
+          "other": "其他",
+          "spam": "垃圾信息"
+        },
+        "reportedBy": "{{name}} 举报"
       },
       "form": {
         "messageLabel": "消息",
@@ -1308,7 +1525,42 @@
       "uniqueActions": "唯一操作",
       "uniqueAdmins": "唯一管理员",
       "uniqueIps": "唯一 IP",
-      "uniqueUsers": "唯一用户"
+      "uniqueUsers": "唯一用户",
+      "bankChanges": {
+        "lastUpdate": "最近更新",
+        "loading": "加载中...",
+        "noRecords": "暂无银行记录",
+        "statusUnverified": "未验证",
+        "statusVerified": "已验证",
+        "thAccount": "账号",
+        "thBank": "银行",
+        "thHolderName": "户名",
+        "thLastUpdated": "最近更新",
+        "thUser": "用户",
+        "thVerified": "已验证",
+        "totalRecords": "银行账户总数",
+        "unverified": "未验证",
+        "verified": "已验证"
+      },
+      "depositSources": {
+        "breakdownLabel": "资金来源细分 — 已付订单按付款方式",
+        "loading": "加载中...",
+        "noSources": "暂无存款来源",
+        "thOrders": "订单数",
+        "thPaymentMethod": "付款方式",
+        "thPctOfTotal": "占比 %",
+        "thTotalKip": "总额 (₭)",
+        "unknown": "未知"
+      },
+      "linkedAccounts": {
+        "linkedAccountsLabel": "已关联账户",
+        "loading": "加载中...",
+        "noAccounts": "暂无关联账户",
+        "none": "无",
+        "thEmail": "邮箱",
+        "thProviders": "已关联服务",
+        "thUser": "用户"
+      }
     },
     "posts": {
       "title": "帖子",

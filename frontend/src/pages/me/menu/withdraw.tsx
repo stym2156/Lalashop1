@@ -219,7 +219,7 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
           <button onClick={() => setView("main")} className="active:opacity-50 transition-opacity -ml-1">
             <ChevronLeft size={24} strokeWidth={2.5} />
           </button>
-          <h1 className="ml-3 text-[16px] font-bold tracking-tight">withdrawals</h1>
+          <h1 className="ml-3 text-[16px] font-bold tracking-tight">{t("pages.withdrawShop.withdrawals")}</h1>
         </div>
 
         <div className="bg-white border-b border-[#EEEEEE] flex">
@@ -231,7 +231,7 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
                 historyTab === tab ? "text-[#121212]" : "text-[#86878B]"
               }`}
             >
-              {tab === "pending" ? `Pending (${pendingTxs.length})` : `History (${historyTxs.length})`}
+              {tab === "pending" ? t("pages.withdrawShop.pendingCount", { count: pendingTxs.length }) : t("pages.withdrawShop.historyCount", { count: historyTxs.length })}
               {historyTab === tab && (
                 <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-0.5 bg-[#121212] rounded-full" />
               )}
@@ -250,7 +250,7 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
                   </p>
                   {tx.fee > 0 && (
                     <p className="text-[10px] text-[#86878B] mt-0.5">
-                      Fee ฿{tx.fee.toFixed(2)} → Net ฿{tx.netAmount.toLocaleString()}
+                      {t("pages.withdrawShop.feeNet", { fee: tx.fee.toFixed(2), net: tx.netAmount.toLocaleString() })}
                     </p>
                   )}
                 </div>
@@ -281,7 +281,7 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
             <div className="py-20 text-center text-[#86878B]">
               <History size={48} className="mx-auto mb-4 opacity-10" />
               <p className="text-[13px] font-bold tracking-widest">
-                {historyTab === "pending" ? "No pending withdrawals" : "No history yet"}
+                {historyTab === "pending" ? t("pages.withdrawShop.noPending") : t("pages.withdrawShop.noHistoryYet")}
               </p>
             </div>
           )}
@@ -297,7 +297,7 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
           <button onClick={onBack} className="active:opacity-50 transition-opacity -ml-1">
             <ChevronLeft size={24} strokeWidth={2.5} />
           </button>
-          <h1 className="text-[16px] font-bold tracking-tight">shop withdraw</h1>
+          <h1 className="text-[16px] font-bold tracking-tight">{t("pages.withdrawShop.title")}</h1>
         </div>
         {/* Hover-only tooltip — no click. Group exposes the inner panel on
             hover/focus; keyboard users can still tab to it. */}
@@ -305,7 +305,7 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
           <button
             type="button"
             className="text-[#121212] active:opacity-50 focus:outline-none focus:ring-2 focus:ring-[#00aeff] rounded-full"
-            aria-label="Withdrawal rules"
+            aria-label={t("pages.withdrawShop.tooltipRules")}
             aria-describedby="shop-withdraw-rules-tip"
           >
             <HelpCircle size={20} strokeWidth={2} />
@@ -321,24 +321,24 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
             {rules ? (
               <>
                 <div className="space-y-1.5 pb-2 border-b border-slate-50">
-                  <RuleRow label="Minimum" value={`฿${rules.minAmount.toLocaleString()}`} />
-                  <RuleRow label="Maximum / request" value={`฿${rules.maxAmount.toLocaleString()}`} />
+                  <RuleRow label={t("pages.creatorWithdraw2.minimum")} value={`฿${rules.minAmount.toLocaleString()}`} />
+                  <RuleRow label={t("pages.creatorWithdraw2.maxPerRequest")} value={`฿${rules.maxAmount.toLocaleString()}`} />
                   <RuleRow
-                    label="Fee"
+                    label={t("pages.creatorWithdraw2.fee")}
                     value={`${rules.feePercent}%${rules.flatFee > 0 ? ` + ฿${rules.flatFee}` : ""}`}
                   />
-                  <RuleRow label="Processing" value={`${rules.processingDays} business days`} />
+                  <RuleRow label={t("pages.creatorWithdraw2.processing")} value={t("pages.creatorWithdraw2.businessDays", { days: rules.processingDays })} />
                 </div>
                 <ul className="text-[10.5px] text-slate-500 list-disc pl-4 space-y-1 pt-2">
-                  <li>Web sales only — POS revenue is non-withdrawable.</li>
+                  <li>{t("pages.withdrawShop.webSalesOnly")}</li>
                   <li>{t("pages.withdrawShop.buyerConfirms")}</li>
                   <li>{t("pages.withdrawShop.verifyBank")}</li>
                   <li>{t("pages.withdrawShop.pendingCancel")}</li>
-                  <li>Set a 6-digit PIN before your first withdrawal.</li>
+                  <li>{t("pages.withdrawShop.setPinFirst")}</li>
                 </ul>
               </>
             ) : (
-              <p className="text-slate-400 text-[11px]">Loading rules…</p>
+              <p className="text-slate-400 text-[11px]">{t("pages.creatorWithdraw2.loadingRules")}</p>
             )}
           </div>
         </div>
@@ -357,7 +357,7 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
             <div className="mb-8 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-100">
               <Scan size={12} className="text-emerald-600" />
               <span className="text-[10px] font-bold text-emerald-700 tracking-wider">
-                POS revenue ฿{posRevenue.toLocaleString()} · in-store, not withdrawable
+                {t("pages.withdrawShop.posRevenueLabel", { amount: posRevenue.toLocaleString() })}
               </span>
             </div>
           )}
@@ -377,12 +377,12 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
                 onClick={() => setWithdrawAmount(balance.toString())}
                 className="absolute right-0 top-1/2 -translate-y-1/2 text-[11px] font-bold text-[#00aeff]"
               >
-                Max
+                {t("pages.withdrawShop.maxBtn")}
               </button>
             </div>
             {rules && (
               <p className="mt-2 text-[10px] text-[#86878B] font-medium">
-                Min ฿{rules.minAmount.toLocaleString()} • Max ฿{rules.maxAmount.toLocaleString()} • Fee {rules.feePercent}%
+                {t("pages.withdrawShop.minMaxFeeShort", { min: rules.minAmount.toLocaleString(), max: rules.maxAmount.toLocaleString(), fee: rules.feePercent })}
               </p>
             )}
           </div>
@@ -396,7 +396,7 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
                 : "bg-[#00aeff] text-white active:opacity-80"
             }`}
           >
-            {loading ? "Processing..." : "withdraw now"}
+            {loading ? t("pages.withdrawShop.processingBtn") : t("pages.withdrawShop.withdrawNowBtn")}
           </button>
         </div>
 
@@ -411,8 +411,7 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
                 <div className="space-y-2">
                   <h3 className="text-lg font-black text-slate-800">{t("actions.verify")}</h3>
                   <p className="text-xs text-slate-400 font-medium">
-                    Please enter your 6-digit PIN to confirm withdrawal of ฿
-                    {parseFloat(withdrawAmount || "0").toLocaleString()}
+                    {t("pages.withdrawShop.pinDescAmount", { amount: parseFloat(withdrawAmount || "0").toLocaleString() })}
                   </p>
                 </div>
 
@@ -442,7 +441,7 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
                     disabled={loading || pinInput.length !== 6}
                     className="flex-[2] py-4 bg-[#00aeff] text-white rounded-2xl text-xs font-black tracking-widest shadow-lg shadow-[#00aeff]/20 active:scale-95 transition-all disabled:opacity-30"
                   >
-                    {loading ? "Verifying..." : "Confirm"}
+                    {loading ? t("pages.withdrawShop.verifying") : t("actions.confirm")}
                   </button>
                 </div>
               </div>
@@ -452,7 +451,7 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
 
         <div className="mt-3 bg-white border-y border-[#EEEEEE]">
           <div className="px-6 py-4 border-b border-[#F8F8F8]">
-            <h3 className="text-[11px] font-bold text-[#121212] tracking-[0.15em]">withdrawal destination</h3>
+            <h3 className="text-[11px] font-bold text-[#121212] tracking-[0.15em]">{t("pages.withdrawShop.withdrawalDestination")}</h3>
           </div>
 
           <div className="divide-y divide-[#F8F8F8]">
@@ -460,7 +459,7 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
                 No click target, no navigation; the seller can only see where
                 the payout will land. To change the bank, they must update KYC. */}
             <div className="w-full px-6 py-6">
-              <span className="text-[14px] font-bold tracking-tight block">payment methods</span>
+              <span className="text-[14px] font-bold tracking-tight block">{t("pages.withdrawShop.paymentMethodsHdr")}</span>
               {shopInfo?.bankName && (
                 <span className="text-[10px] font-black tracking-widest text-[#86878B] block mt-1">
                   {shopInfo.bankName}
@@ -484,7 +483,7 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
               className="w-full px-6 py-6 flex items-center justify-between active:bg-[#F9F9F9]"
             >
               <span className="text-[14px] font-bold tracking-tight">
-                pending & history
+                {t("pages.withdrawShop.pendingHistoryBtn")}
                 {pendingTxs.length > 0 && (
                   <span className="ml-2 inline-flex items-center justify-center text-[10px] bg-[#FE2C55] text-white px-1.5 rounded-full font-black">
                     {pendingTxs.length}
@@ -500,10 +499,10 @@ export default function ShopWithdraw({ onBack }: WithdrawProps) {
           <div className="flex gap-3">
             <Info size={14} className="text-[#C8C9CC] mt-0.5 shrink-0" />
             <p className="text-[12px] text-[#86878B] leading-[1.8] font-medium">
-              after buyer confirms receipt, web sales will be transferred within{" "}
-              <span className="text-[#121212]">{rules?.processingDays ?? 7} business days</span>
+              {t("pages.withdrawShop.afterReceipt")}{" "}
+              <span className="text-[#121212]">{t("pages.withdrawShop.businessDaysSuffix", { days: rules?.processingDays ?? 7 })}</span>
               <br />
-              please verify bank info to avoid delays.
+              {t("pages.withdrawShop.verifyBankInfo")}
             </p>
           </div>
         </div>

@@ -71,15 +71,17 @@ const formatDateTime = (iso?: string): string => {
   });
 };
 
-const formatPaymentMethod = (key: string): string =>
-  ({
-    manual_transfer: "Manual Bank Transfer",
+const formatPaymentMethod = (key: string, t: (k: string) => string): string => {
+  const map: Record<string, string> = {
+    manual_transfer: t("pages.receipt.payMethod.manualTransfer"),
     bcel_one: "BCEL One",
     ldb_trust: "LDB Trust",
     jdb_yes: "JDB Yes",
-    visa_master: "Credit / Debit Card",
-    cod: "Cash on Delivery",
-  } as Record<string, string>)[key] || key.replace(/_/g, " ");
+    visa_master: t("pages.receipt.payMethod.visaMaster"),
+    cod: t("pages.receipt.payMethod.cod"),
+  };
+  return map[key] || key.replace(/_/g, " ");
+};
 
 export default function ReceiptPage() {
   const { t } = useTranslation("common");
@@ -106,7 +108,7 @@ export default function ReceiptPage() {
     const orderId = typeof query.orderId === "string" ? query.orderId : "";
     if (!orderId) {
       setLoading(false);
-      setError("Missing order id — open this page from a checkout completion.");
+      setError(t("pages.receipt.missingOrderIdShort"));
       return;
     }
 
@@ -121,13 +123,13 @@ export default function ReceiptPage() {
       .then(([orderRes, slipsRes]: any) => {
         if (cancelled) return;
         if (orderRes?.__err) {
-          setError(orderRes.__err.message || "Failed to load order");
+          setError(orderRes.__err.message || t("pages.receipt.failedLoadOrder"));
           return;
         }
         if (orderRes?.success && orderRes.order) {
           setOrder(orderRes.order);
         } else {
-          setError("Order not found");
+          setError(t("pages.receipt.orderNotFound"));
         }
         // The most recent slip is what's shown on the receipt. Older slips
         // (rejected re-uploads) are kept on the slip record but not surfaced
@@ -162,46 +164,45 @@ export default function ReceiptPage() {
   }>(() => {
     if (slip?.status === "rejected") {
       return {
-        label: "Slip rejected",
+        label: t("pages.receipt.slipRejected"),
         tone: "text-rose-600",
         bg: "bg-rose-50 text-rose-500",
         icon: <XCircle size={48} strokeWidth={2.5} />,
-        title: "Slip was rejected",
+        title: t("pages.receipt.slipWasRejected"),
         blurb:
           slip.rejectionReason ||
-          "Our team couldn't verify the transfer. Please re-upload a clear slip from the checkout page.",
+          t("pages.receipt.slipRejectedDesc"),
       };
     }
     if (slip?.status === "verified" || order?.isPaid) {
       return {
-        label: "Verified",
+        label: t("pages.receipt.verified"),
         tone: "text-emerald-600",
         bg: "bg-emerald-50 text-emerald-500",
         icon: <CheckCircle2 size={48} strokeWidth={2.5} />,
-        title: "Payment confirmed",
-        blurb: "Thank you for your purchase. Your order is now being processed.",
+        title: t("pages.receipt.paymentConfirmed"),
+        blurb: t("pages.receipt.paymentConfirmedDesc"),
       };
     }
     if (slip?.status === "pending" || queryStatus === "awaiting_verification") {
       return {
-        label: "Awaiting verification",
+        label: t("pages.receipt.awaitingVerification"),
         tone: "text-amber-600",
         bg: "bg-amber-50 text-amber-500",
         icon: <Clock size={44} strokeWidth={2.5} />,
-        title: "Slip submitted — awaiting verification",
-        blurb:
-          "Our team will review your transfer slip within a few hours. You'll get a notification once the order is confirmed.",
+        title: t("pages.receipt.slipSubmittedAwait"),
+        blurb: t("pages.receipt.slipAwaitDesc"),
       };
     }
     return {
-      label: "Pending payment",
+      label: t("pages.receipt.pendingPayment"),
       tone: "text-slate-600",
       bg: "bg-slate-100 text-slate-500",
       icon: <AlertCircle size={44} strokeWidth={2.5} />,
-      title: "Order placed",
-      blurb: "Complete the payment from the checkout page to confirm your order.",
+      title: t("pages.receipt.orderPlaced"),
+      blurb: t("pages.receipt.completePaymentDesc"),
     };
-  }, [slip, order, queryStatus]);
+  }, [slip, order, queryStatus, t]);
 
   const handleDownloadPDF = async () => {
     if (!receiptRef.current) return;
@@ -352,7 +353,7 @@ export default function ReceiptPage() {
                 <div>
                   <p className="text-[14px] font-bold">{t("pages.checkout.total")}</p>
                   <p className="text-[10px] text-slate-400 font-medium tracking-widest inline-flex items-center gap-1">
-                    <Hash size={10} /> Order ID: {displayId}
+                    <Hash size={10} /> {t("pages.receipt.orderIdLabel")}: {displayId}
                   </p>
                 </div>
                 <span className="text-[28px] font-bold text-primary tracking-tighter tabular-nums">
@@ -384,7 +385,7 @@ export default function ReceiptPage() {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <div className="rounded-xl overflow-hidden border border-slate-200 shadow-md sm:w-[180px] flex-shrink-0 bg-slate-50">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={slip.slipImageUrl} alt="Transfer Slip" className="w-full h-auto" />
+                    <img src={slip.slipImageUrl} alt={t("pages.receipt.transferSlipAlt")} className="w-full h-auto" />
                   </div>
                   <div className="flex-1 text-[12px] space-y-1.5">
                     <Row label={t("pages.receipt.transferred")} value={`฿${formatMoney(slip.transferAmount)}`} bold />
@@ -432,7 +433,7 @@ export default function ReceiptPage() {
                   <CreditCard size={12} className="text-primary" /> {t("pages.receipt.paymentMethod")}
                 </div>
                 <div className="text-[13px] text-slate-600 font-medium">
-                  <p className="text-slate-900">{formatPaymentMethod(order.paymentMethod)}</p>
+                  <p className="text-slate-900">{formatPaymentMethod(order.paymentMethod, t)}</p>
                   <p className={`text-[11px] font-bold mt-1 flex items-center gap-1 ${slipState.tone}`}>
                     {slip?.status === "verified" || order.isPaid ? (
                       <CheckCircle2 size={10} />

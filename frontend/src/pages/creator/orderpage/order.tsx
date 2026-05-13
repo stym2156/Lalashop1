@@ -33,11 +33,11 @@ interface OrderCreatorProps {
 }
 
 const STATUS_TABS = [
-  { id: "all", label: "All" },
-  { id: "pending", label: "Pending" },
-  { id: "shipped", label: "Shipped" },
-  { id: "delivered", label: "Completed" },
-  { id: "canceled", label: "Canceled" },
+  { id: "all", labelKey: "pages.creatorOrder.statusAll" },
+  { id: "pending", labelKey: "pages.creatorOrder.statusPending" },
+  { id: "shipped", labelKey: "pages.creatorOrder.statusShipped" },
+  { id: "delivered", labelKey: "pages.creatorOrder.statusCompleted" },
+  { id: "canceled", labelKey: "pages.creatorOrder.statusCanceled" },
 ] as const;
 
 const statusBadge = (status: CreatorOrder["status"]): string => {
@@ -137,7 +137,7 @@ export default function CreatorOrders({ onBack }: OrderCreatorProps) {
                   activeStatus === tab.id ? "text-[#161823]" : "text-[#8A8B91]"
                 }`}
               >
-                {tab.label}
+                {t(tab.labelKey)}
                 {activeStatus === tab.id && (
                   <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-[#FE2C55] rounded-full" />
                 )}
@@ -186,9 +186,9 @@ export default function CreatorOrders({ onBack }: OrderCreatorProps) {
                           {item.name}
                         </h4>
                         <div className="flex justify-between items-end mt-2">
-                          <p className="text-[13px] font-medium text-[#8A8B91]">Qty: {item.qty}</p>
+                          <p className="text-[13px] font-medium text-[#8A8B91]">{t("pages.creatorOrder.qtyLabel", { qty: item.qty })}</p>
                           <div className="text-right">
-                            <p className="text-[10px] font-bold text-[#8A8B91] leading-none mb-1">Price</p>
+                            <p className="text-[10px] font-bold text-[#8A8B91] leading-none mb-1">{t("pages.creatorOrder.priceLabel")}</p>
                             <p className="text-[15px] font-bold text-[#161823]">
                               ฿{(item.price * item.qty).toLocaleString()}
                             </p>
@@ -223,7 +223,7 @@ export default function CreatorOrders({ onBack }: OrderCreatorProps) {
 
         <div className="p-8 text-center">
           <p className="text-[12px] text-[#8A8B91] font-bold tracking-widest opacity-60">
-            Total commission tracked: ฿{summary.totalCommission.toFixed(2)}
+            {t("pages.creatorOrder.totalCommissionTracked", { amount: summary.totalCommission.toFixed(2) })}
           </p>
         </div>
       </main>

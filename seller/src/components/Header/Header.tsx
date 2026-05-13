@@ -29,8 +29,8 @@ const Header = () => {
     router.push('/login');
   };
 
-  const shopName = seller?.name || seller?.username || seller?.email || 'My Shop';
-  const sellerType = seller?.seller_type || 'Seller';
+  const shopName = seller?.name || seller?.username || seller?.email || t('components.sellerHeader.myShop');
+  const sellerType = seller?.seller_type || t('pages.dashboard.seller');
 
   return (
     <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-8">

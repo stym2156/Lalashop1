@@ -183,7 +183,8 @@
     "noMatches": "无匹配项",
     "noDescription": "无描述",
     "optional": "(可选)",
-    "characters": "字符"
+    "characters": "字符",
+    "currencySymbol": "¥"
   },
   "sidebar": {
     "dashboard": "仪表盘",
@@ -1285,6 +1286,149 @@
       "verification": {
         "failedToLoad": "加载 KYC 失败"
       }
+    },
+    "productCategories": {
+      "fashion": "时尚配饰",
+      "electronics": "电子产品",
+      "beauty": "美妆个护",
+      "food": "食品饮料",
+      "home": "家居生活",
+      "mother_baby": "母婴",
+      "toys": "玩具与爱好",
+      "sports": "运动户外",
+      "automotive": "汽车配件",
+      "health": "健康养生",
+      "pet": "宠物用品",
+      "office": "办公文具",
+      "tools": "工具与家居改造",
+      "jewelry": "珠宝手表",
+      "digital": "数字产品",
+      "others": "其他"
+    },
+    "categoryConfig": {
+      "fashion": {
+        "label": "时尚配饰",
+        "description": "服装、鞋子、包包、配饰。买家在下单前选择尺码和颜色。"
+      },
+      "electronics": {
+        "label": "电子产品",
+        "description": "科技产品。规格通常包括颜色、存储和连接方式。"
+      },
+      "beauty": {
+        "label": "美妆个护",
+        "description": "护肤、彩妆、香水。规格描述色调和净重。"
+      },
+      "food": {
+        "label": "食品饮料",
+        "description": "食品。需记录包装规格和保质期——合规必填。"
+      },
+      "home": {
+        "label": "家居生活",
+        "description": "家具、装饰、厨具。需记录材质和尺寸。"
+      },
+      "mother_baby": {
+        "label": "母婴",
+        "description": "婴儿用品。按年龄段分类,记录安全信息。"
+      },
+      "toys": {
+        "label": "玩具与爱好",
+        "description": "玩具、模型、爱好。按颜色分类,记录适用年龄。"
+      },
+      "sports": {
+        "label": "运动户外",
+        "description": "运动装备。按尺码和颜色分类,记录运动类型。"
+      },
+      "automotive": {
+        "label": "汽车配件",
+        "description": "汽车与摩托车配件。需记录兼容信息。"
+      },
+      "health": {
+        "label": "健康养生",
+        "description": "维生素、补充剂、医疗用品。按包装数量分类。"
+      },
+      "pet": {
+        "label": "宠物用品",
+        "description": "宠物食品、配件。按尺寸分类,记录宠物类型。"
+      },
+      "office": {
+        "label": "办公文具",
+        "description": "文具、办公用品。按颜色和包装数量分类。"
+      },
+      "tools": {
+        "label": "工具与家居改造",
+        "description": "手工具、电动工具、五金。需记录电源类型。"
+      },
+      "jewelry": {
+        "label": "珠宝手表",
+        "description": "珠宝与手表。按金属、宝石、戒指尺寸分类。"
+      },
+      "digital": {
+        "label": "数字产品",
+        "description": "软件、电子书、许可证。无需实物规格。"
+      },
+      "others": {
+        "label": "其他",
+        "description": "上述未涵盖的其他商品。"
+      }
+    },
+    "variantNames": {
+      "size": "尺码",
+      "color": "颜色",
+      "storage": "存储",
+      "connectivity": "连接",
+      "volume": "容量",
+      "shade": "色号",
+      "pack_size": "包装规格",
+      "flavor": "口味",
+      "age_range": "年龄段",
+      "pet_size": "宠物尺寸",
+      "pack": "包装",
+      "voltage": "电压",
+      "metal": "金属",
+      "ring_size": "戒指尺寸",
+      "license": "许可证"
+    },
+    "attributeLabels": {
+      "material": "材质",
+      "fit": "版型",
+      "gender": "性别",
+      "care_instructions": "护理说明",
+      "brand": "品牌",
+      "model_number": "型号",
+      "warranty_period": "保修期",
+      "power_source": "电源类型",
+      "key_specifications": "主要规格",
+      "skin_type": "肤质",
+      "key_ingredients": "主要成分",
+      "expiry___pao": "保质期 / PAO",
+      "cruelty_free": "无动物实验?",
+      "ingredients": "成分",
+      "expiry_date": "保质期",
+      "storage_instructions": "存储说明",
+      "dietary": "饮食要求",
+      "allergen_warnings": "过敏原警告",
+      "suitable_room": "适用房间",
+      "assembly_required": "需要组装?",
+      "recommended_age": "推荐年龄",
+      "safety_certification": "安全认证",
+      "battery_required": "需要电池?",
+      "sport___activity": "运动 / 活动",
+      "vehicle_compatibility": "车辆兼容性",
+      "part_number___oem": "零件号 / OEM",
+      "active_ingredients": "活性成分",
+      "recommended_dosage": "推荐用量",
+      "fda___regulatory_certification": "FDA / 监管认证",
+      "pet_type": "宠物类型",
+      "use_case": "使用场景",
+      "warranty": "保修",
+      "metal_purity": "金属纯度",
+      "gemstone": "宝石",
+      "weight_g": "重量 (g)",
+      "warranty___certificate": "保修 / 证书",
+      "file_type": "文件类型",
+      "delivery_method": "交付方式",
+      "license_duration": "许可时长",
+      "additional_details": "其他详情"
     }
   },
   "components": {
@@ -1430,7 +1574,18 @@
       "tierAll": "所有已审核的创作者",
       "tierBronze": "铜牌及以上",
       "tierSilver": "银牌及以上",
-      "tierGold": "仅金牌"
+      "tierGold": "仅金牌",
+      "specMaterial": "材质",
+      "specWarranty": "保修",
+      "commissionPercentTab": "百分比 (%)",
+      "commissionFixedTab": "固定金额 (฿)",
+      "daysUnit": "天",
+      "optionNamePlaceholder": "例如：尺寸",
+      "charCount70": "{{count}}/70 个字符",
+      "charCount160": "{{count}}/160 个字符"
+    },
+    "sellerHeader": {
+      "myShop": "我的店铺"
     }
   }
 }

@@ -1,22 +1,24 @@
 "use client";
 import Header from "@/components/layout/Header";
 import Link from "next/link";
-import { 
+import {
   Truck, ArrowRight, ShieldCheck, Clock, Archive, Globe, ChevronLeft,
-  MapPin, CheckCircle2, TrendingUp, Hand 
+  MapPin, CheckCircle2, TrendingUp, Hand
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function DistPage() {
+  const { t } = useTranslation("common");
   const hubs = [
-    { label: "European Hub", country: "Germany", id: "DE" },
-    { label: "ASEAN Hub", country: "Thailand", id: "TH" },
-    { label: "NA Hub", country: "USA", id: "US" },
+    { label: t("components.truck.europeanHub"), country: t("components.truck.countryGermany"), id: "DE" },
+    { label: t("components.truck.aseanHub"), country: t("components.truck.countryThailand"), id: "TH" },
+    { label: t("components.truck.naHub"), country: t("components.truck.countryUsa"), id: "US" },
   ];
 
   const steps = [
-    { icon: Archive, label: "Warehouse Sourcing", sub: "Stock at any of our global warehouses" },
-    { icon: Hand, label: "Pick & Pack", sub: "Standardized packing and labeling" },
-    { icon: Truck, label: "Local Delivery", sub: "Last-mile delivery partners integrated" },
+    { icon: Archive, label: t("components.truck.warehouseSourcing"), sub: t("components.truck.warehouseSourcingDesc") },
+    { icon: Hand, label: t("components.truck.pickPack"), sub: t("components.truck.pickPackDesc") },
+    { icon: Truck, label: t("components.truck.localDelivery"), sub: t("components.truck.localDeliveryDesc") },
   ];
 
   return (
@@ -27,19 +29,19 @@ export default function DistPage() {
         {/* Back to Home Button */}
         <Link href="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-[#00a699] transition-all mb-8 group font-bold">
           <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-          <span className="text-sm tracking-widest">Back to Home</span>
+          <span className="text-sm tracking-widest">{t("components.truck.backToHome")}</span>
         </Link>
 
         {/* Hero Section */}
         <div className="text-center mb-16 space-y-4">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#00a699]/10 text-[#00a699] text-xs font-black tracking-widest">
-            <Globe size={14} /> Global Logistics Network
+            <Globe size={14} /> {t("components.truck.globalLogisticsNetwork")}
           </div>
           <h1 className="text-4xl md:text-6xl font-display font-black text-[#111111] leading-tight">
-            Fast. Secure. <br className="hidden md:block" /><span className="text-[#00a699]">Reliable</span> Distribution.
+            {t("components.truck.heroTitlePart1")} <br className="hidden md:block" /><span className="text-[#00a699]">{t("components.truck.heroTitleReliable")}</span> {t("components.truck.heroTitlePart2")}
           </h1>
           <p className="text-slate-500 max-w-2xl mx-auto text-lg font-medium">
-            Connect your business to the world through our high-performance fulfillment centers.
+            {t("components.truck.heroSubtitle")}
           </p>
         </div>
 
@@ -58,7 +60,7 @@ export default function DistPage() {
                    </div>
                    <div className="mt-auto">
                     <button className="px-6 py-3 rounded-full bg-slate-50 text-[#111111] text-[11px] font-black group-hover:bg-[#111111] group-hover:text-white transition-all tracking-widest flex items-center gap-2">
-                      Explore Hub <ArrowRight size={14} />
+                      {t("components.truck.exploreHub")} <ArrowRight size={14} />
                     </button>
                    </div>
                 </div>
@@ -94,20 +96,20 @@ export default function DistPage() {
                    <ShieldCheck size={32} />
                 </div>
                 <div>
-                  <h3 className="text-[10px] font-black text-[#00a699] tracking-[0.2em]">Protection</h3>
-                  <h2 className="text-2xl font-black text-[#111111] leading-tight">Trade Assurance</h2>
+                  <h3 className="text-[10px] font-black text-[#00a699] tracking-[0.2em]">{t("components.truck.protection")}</h3>
+                  <h2 className="text-2xl font-black text-[#111111] leading-tight">{t("components.truck.tradeAssurance")}</h2>
                 </div>
               </div>
-              
+
               <p className="text-slate-400 text-sm font-medium mb-8 leading-relaxed">
-                Every order distributed through our network is covered by our proprietary shield, protecting your global trade interests.
+                {t("components.truck.tradeAssuranceDesc")}
               </p>
 
               <div className="grid grid-cols-1 gap-4">
                  {[
-                   "100% Payment Protection",
-                   "Product Quality Safeguard",
-                   "On-time Shipment Guarantee"
+                   t("components.truck.paymentProtection"),
+                   t("components.truck.qualitySafeguard"),
+                   t("components.truck.onTimeShipment")
                  ].map(item => (
                    <div key={item} className="flex items-center gap-3 text-xs font-black text-[#111111] bg-slate-50 p-4 rounded-xl border border-slate-100/50">
                       <CheckCircle2 size={18} className="text-emerald-500" strokeWidth={2.5} />
@@ -119,18 +121,18 @@ export default function DistPage() {
 
            <div className="bg-white rounded-[2.5rem] p-12 border border-slate-100 shadow-sm flex flex-col group overflow-hidden relative">
               <div className="flex items-center justify-between mb-10 relative z-10">
-                 <h3 className="text-xs font-black text-slate-400 tracking-widest">Live Network Status</h3>
+                 <h3 className="text-xs font-black text-slate-400 tracking-widest">{t("components.truck.liveNetworkStatus")}</h3>
                  <div className="flex items-center gap-2 text-emerald-500 text-[10px] font-black tracking-widest bg-emerald-50 px-3 py-1 rounded-full">
                     <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                    Operational
+                    {t("components.truck.operational")}
                  </div>
               </div>
               
               <div className="space-y-4 relative z-10">
                  {[
-                   { label: "Bangkok Hub", sub: "Processing Time: 2h Avg", icon: Clock },
-                   { label: "Network Load", sub: "92% Delivery Success", icon: TrendingUp },
-                   { label: "Transit Status", sub: "All Routes Normal", icon: Truck }
+                   { label: t("components.truck.bangkokHub"), sub: t("components.truck.bangkokHubSub"), icon: Clock },
+                   { label: t("components.truck.networkLoad"), sub: t("components.truck.networkLoadSub"), icon: TrendingUp },
+                   { label: t("components.truck.transitStatus"), sub: t("components.truck.transitStatusSub"), icon: Truck }
                  ].map((stat, i) => (
                   <div key={i} className="flex items-center justify-between p-6 bg-slate-50 rounded-2xl hover:bg-white hover:shadow-xl hover:shadow-[#111111]/5 transition-all duration-300 border border-transparent hover:border-slate-100 group/item cursor-pointer">
                     <div className="flex items-center gap-4">

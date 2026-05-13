@@ -34,7 +34,7 @@ const PerformancePage: React.FC = () => {
     return <div className="py-12 text-center"><Loader2 className="w-5 h-5 mx-auto animate-spin text-gray-400" /></div>;
   }
   if (error || !data) {
-    return <div className="rounded-md bg-red-50 px-3 py-2 text-[12px] text-red-700">{error || "No data"}</div>;
+    return <div className="rounded-md bg-red-50 px-3 py-2 text-[12px] text-red-700">{error || t("status.empty")}</div>;
   }
 
   const conversion =
@@ -60,26 +60,26 @@ const PerformancePage: React.FC = () => {
 
       <div className="rounded-lg overflow-hidden border border-gray-100">
         <div className="px-4 py-3 border-b border-gray-100">
-          <h3 className="text-[13px] font-bold text-gray-900">Top creators by revenue contribution</h3>
+          <h3 className="text-[13px] font-bold text-gray-900">{t("pages.performance.topCreators")}</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-[12px] tabular-nums">
             <thead className="text-[11px] text-gray-500 tracking-wide bg-gray-50/50">
               <tr>
                 <th className="px-4 py-2 text-left font-semibold">#</th>
-                <th className="px-4 py-2 text-left font-semibold">Creator</th>
-                <th className="px-4 py-2 text-right font-semibold">Clicks</th>
-                <th className="px-4 py-2 text-right font-semibold">Orders</th>
-                <th className="px-4 py-2 text-right font-semibold">Conv.</th>
-                <th className="px-4 py-2 text-right font-semibold">Revenue</th>
-                <th className="px-4 py-2 text-right font-semibold">You paid</th>
+                <th className="px-4 py-2 text-left font-semibold">{t("pages.performance.tableCreator")}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t("pages.performance.tableClicks")}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t("pages.performance.tableOrders")}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t("pages.performance.tableConv")}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t("pages.performance.tableRevenue")}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t("pages.performance.tableYouPaid")}</th>
               </tr>
             </thead>
             <tbody>
               {data.creators.length === 0 && (
                 <tr>
                   <td colSpan={7} className="px-4 py-12 text-center text-gray-400 text-[12px]">
-                    No affiliate activity yet.
+                    {t("pages.performance.noActivity")}
                   </td>
                 </tr>
               )}

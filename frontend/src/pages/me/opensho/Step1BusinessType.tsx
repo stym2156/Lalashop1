@@ -14,23 +14,23 @@ export default function Step1BusinessType({ businessType, setBusinessType, error
     const types = [
         {
             id: 'individual',
-            title: 'Individual',
-            desc: 'Use your ID card or passport. You are selling as a private individual and not a registered business.'
+            title: t("pages.openshopStep1.businessTypeIndividual"),
+            desc: t("pages.openshopStep1.businessTypeIndividualDesc")
         },
         {
             id: 'sole_proprietor',
-            title: 'Sole Proprietor',
-            desc: 'Requires a business registration certificate. You are the sole owner of a legally registered business.'
+            title: t("pages.openshopStep1.businessTypeSoleProprietor"),
+            desc: t("pages.openshopStep1.businessTypeSoleProprietorDesc")
         },
         {
             id: 'corporate',
-            title: 'Corporate',
-            desc: 'A legal entity in the form of a company, clearly separated from its owners.'
+            title: t("pages.openshopStep1.businessTypeCorporate"),
+            desc: t("pages.openshopStep1.businessTypeCorporateDesc")
         },
         {
             id: 'partnership',
-            title: 'Partnership',
-            desc: 'A business operated jointly by two or more individuals.'
+            title: t("pages.openshopStep1.businessTypePartnership"),
+            desc: t("pages.openshopStep1.businessTypePartnershipDesc")
         }
     ];
 
@@ -62,7 +62,7 @@ export default function Step1BusinessType({ businessType, setBusinessType, error
     };
 
     const currentRequirements = requirementsData[businessType || 'individual'];
-    const currentTitle = types.find((bt) => bt.id === businessType)?.title || 'Individual';
+    const currentTitle = types.find((bt) => bt.id === businessType)?.title || t("pages.openshopStep1.businessTypeIndividual");
 
     return (
         <div className="w-full space-y-10 animate-in fade-in duration-500 font-sans text-dark">
@@ -100,7 +100,7 @@ export default function Step1BusinessType({ businessType, setBusinessType, error
             {/* 3. Preparation Checklist */}
             <div className="pt-6 space-y-6">
                 <h3 className="text-[16px] font-bold text-dark ">
-                    As a <span className="text-primary underline">{currentTitle}</span> seller, you will need:
+                    {t("pages.openshopStep1.asXSeller")} <span className="text-primary underline">{currentTitle}</span> {t("pages.openshopStep1.youWillNeed")}
                 </h3>
 
                 <div className="flex flex-col md:flex-row justify-between items-start gap-8">
@@ -132,7 +132,7 @@ export default function Step1BusinessType({ businessType, setBusinessType, error
             <div className="space-y-3">
                 <h3 className="text-[16px] font-bold text-dark">{t("pages.openshopStep1.whatToExpect")}</h3>
                 <p className="text-[14px] text-gray-600 leading-relaxed font-medium">
-                    We will collect your information in the next few steps. Once you submit your application, we will review it within a few business days. If we need anything else, we will email you.
+                    {t("pages.openshopStep1.expectNote")}
                 </p>
             </div>
         </div>

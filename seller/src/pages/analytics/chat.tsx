@@ -6,11 +6,6 @@ import {
 import { fetchChatAnalytics, type ChatAnalytics } from "@/services/sellerApi";
 
 type RangeKey = "7d" | "30d" | "90d";
-const RANGES: { key: RangeKey; label: string; days: number }[] = [
-  { key: "7d", label: "7 Days", days: 7 },
-  { key: "30d", label: "30 Days", days: 30 },
-  { key: "90d", label: "90 Days", days: 90 },
-];
 
 const formatDuration = (seconds: number): string => {
   if (!seconds) return "—";
@@ -24,6 +19,11 @@ const formatDuration = (seconds: number): string => {
 
 const ChatAnalyticsPage: React.FC = () => {
   const { t } = useTranslation("common");
+  const RANGES: { key: RangeKey; label: string; days: number }[] = [
+    { key: "7d", label: t("ranges.days7"), days: 7 },
+    { key: "30d", label: t("ranges.days30"), days: 30 },
+    { key: "90d", label: t("ranges.days90"), days: 90 },
+  ];
   const [data, setData] = useState<ChatAnalytics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -92,7 +92,7 @@ const ChatAnalyticsPage: React.FC = () => {
       ) : !data ? (
         <div className="py-16 text-center text-gray-400">
           <MessageCircle className="w-7 h-7 mx-auto mb-3 text-gray-300" />
-          <p className="text-[12px]">No chat data yet</p>
+          <p className="text-[12px]">{t("pages.chatAnalytics.noData")}</p>
         </div>
       ) : (
         <>
@@ -100,29 +100,29 @@ const ChatAnalyticsPage: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <KPI
               icon={MessageCircle}
-              label="Conversations"
+              label={t("pages.chatAnalytics.conversations")}
               value={data.totalConversations.toLocaleString()}
               tone="text-[#00aeff]"
             />
             <KPI
               icon={Inbox}
-              label="Unread inbound"
+              label={t("pages.chatAnalytics.unreadInbound")}
               value={data.unreadInbound.toLocaleString()}
               tone="text-rose-700"
             />
             <KPI
               icon={Clock}
-              label="Avg response"
+              label={t("pages.chatAnalytics.avgResponse")}
               value={formatDuration(data.avgResponseSec)}
               tone="text-amber-700"
-              hint={`from ${data.responseSampleSize} replies`}
+              hint={t("pages.chatAnalytics.fromReplies", { count: data.responseSampleSize })}
             />
             <KPI
               icon={TrendingUp}
-              label="Chat → order"
+              label={t("pages.chatAnalytics.chatToOrder")}
               value={`${data.chatConversionRate}%`}
               tone="text-emerald-700"
-              hint={`${data.buyersWhoOrdered}/${data.buyersWhoChat} chatters bought`}
+              hint={t("pages.chatAnalytics.buyersBought", { ordered: data.buyersWhoOrdered, chatted: data.buyersWhoChat })}
             />
           </div>
 
@@ -130,13 +130,13 @@ const ChatAnalyticsPage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
             <div className="lg:col-span-2 rounded-lg border border-gray-100 p-4 bg-white">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-[13px] font-bold text-gray-900">Daily message volume</h3>
+                <h3 className="text-[13px] font-bold text-gray-900">{t("pages.chatAnalytics.dailyVolume")}</h3>
                 <div className="flex items-center gap-3 text-[10px]">
                   <span className="inline-flex items-center gap-1">
-                    <span className="w-2 h-2 bg-[#00aeff] rounded-sm" /> Outbound (you)
+                    <span className="w-2 h-2 bg-[#00aeff] rounded-sm" /> {t("pages.chatAnalytics.outboundLegend")}
                   </span>
                   <span className="inline-flex items-center gap-1">
-                    <span className="w-2 h-2 bg-amber-400 rounded-sm" /> Inbound (buyers)
+                    <span className="w-2 h-2 bg-amber-400 rounded-sm" /> {t("pages.chatAnalytics.inboundLegend")}
                   </span>
                 </div>
               </div>
@@ -173,34 +173,34 @@ const ChatAnalyticsPage: React.FC = () => {
             <div className="space-y-3">
               <DetailCard
                 icon={ArrowDownCircle}
-                label="Inbound messages"
+                label={t("pages.chatAnalytics.inboundMessages")}
                 value={data.inboundMessages.toLocaleString()}
                 tone="text-amber-700"
               />
               <DetailCard
                 icon={ArrowUpCircle}
-                label="Outbound messages"
+                label={t("pages.chatAnalytics.outboundMessages")}
                 value={data.outboundMessages.toLocaleString()}
                 tone="text-[#00aeff]"
               />
               <div className="rounded-lg border border-gray-100 p-4 bg-white space-y-2">
                 <h4 className="text-[10px] font-bold text-gray-500 tracking-wide">
-                  Response time distribution
+                  {t("pages.chatAnalytics.responseDistribution")}
                 </h4>
                 <div className="flex items-center justify-between text-[12px]">
-                  <span className="text-gray-500">Median (p50)</span>
+                  <span className="text-gray-500">{t("pages.chatAnalytics.median")}</span>
                   <span className="font-bold tabular-nums">
                     {formatDuration(data.p50ResponseSec)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-[12px]">
-                  <span className="text-gray-500">95th percentile</span>
+                  <span className="text-gray-500">{t("pages.chatAnalytics.p95")}</span>
                   <span className="font-bold tabular-nums">
                     {formatDuration(data.p95ResponseSec)}
                   </span>
                 </div>
                 <p className="text-[10px] text-gray-400 pt-1 border-t">
-                  Sample size: {data.responseSampleSize} replies
+                  {t("pages.chatAnalytics.sampleSize", { count: data.responseSampleSize })}
                 </p>
               </div>
             </div>

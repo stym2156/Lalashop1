@@ -189,7 +189,7 @@
     "inStock": "有货",
     "soldBy": "卖家",
     "shopName": "店铺名称",
-    "shipping": "运输",
+    "shipping": "物流",
     "rating": "评分",
     "sold": "已售",
     "freeShipping": "包邮",
@@ -213,7 +213,16 @@
     "addedToCart": "已加入购物车",
     "buyNow": "立即购买",
     "viewShop": "查看店铺",
-    "stockLeft": "库存：{{count}}"
+    "stockLeft": "库存：{{count}}",
+    "returns": "退货",
+    "leadTime": "备货时间",
+    "free": "免费",
+    "shipsFrom": "发货地 {{location}}",
+    "selected": "已选择",
+    "specs": "规格",
+    "origin": "产地",
+    "vendor": "供应商",
+    "sku": "SKU"
   },
   "cart": {
     "title": "购物车",
@@ -392,7 +401,9 @@
       "noFollowing": "暂未关注任何人",
       "follow": "关注",
       "unfollow": "已关注",
-      "loginToFollow": "登录以关注"
+      "loginToFollow": "登录以关注",
+      "likeOne": "点赞",
+      "likeMany": "赞"
     },
     "checkout": {
       "title": "结算",
@@ -563,7 +574,7 @@
       "subtitle": "管理您的店铺、商品和订单",
       "products": "商品",
       "orders": "订单",
-      "sales": "销售",
+      "sales": "销售额",
       "analytics": "分析",
       "addProduct": "添加商品",
       "editProduct": "编辑商品",
@@ -584,12 +595,15 @@
       "saving": "保存中...",
       "savedSuccess": "商品已保存",
       "saveFailed": "保存商品失败",
-      "withdraw": "提现收益",
+      "withdraw": "提现",
       "addBank": "添加银行账户",
       "balance": "余额",
       "totalSales": "总销售额",
       "ordersToday": "今日订单",
-      "viewProductCenter": "打开商品中心"
+      "viewProductCenter": "打开商品中心",
+      "todaysData": "今日数据",
+      "productCreator": "产品创作者",
+      "productDetail": "产品详情"
     },
     "posts": {
       "createTitle": "创建帖子",
@@ -628,7 +642,17 @@
       "title": "分类",
       "noProducts": "此分类暂无商品",
       "subcategories": "子分类",
-      "loadFailed": "加载分类失败"
+      "loadFailed": "加载分类失败",
+      "name": {
+        "apparel": "服装配饰",
+        "automotive": "汽车配件",
+        "beauty": "美妆个护",
+        "construction": "建筑材料",
+        "electronics": "电子产品",
+        "home": "家居厨房",
+        "industrial": "工业与工具",
+        "sports": "运动户外"
+      }
     },
     "topFactories": {
       "title": "热门工厂",
@@ -655,7 +679,8 @@
     },
     "promo": {
       "title": "促销",
-      "noPromo": "暂无促销活动"
+      "noPromo": "暂无促销活动",
+      "fetchingCoupons": "正在获取您的优惠券..."
     },
     "myshop": {
       "title": "我的店铺",
@@ -709,11 +734,23 @@
       "title": "编辑商品",
       "viewPublic": "查看公开页",
       "delete": "删除",
-      "loading": "加载中…"
+      "loading": "加载中…",
+      "failedToLoad": "加载产品失败"
     },
     "openshopStep1": {
       "whatToExpect": "您可以期待什么",
-      "questionHeader": "您经营的是什么类型的业务?"
+      "questionHeader": "您经营的是什么类型的业务?",
+      "expectNote": "我们的团队通常会在 2-3 个工作日内审核您的申请。请确保您的文件清晰准确，以加快审批速度。",
+      "businessTypeIndividual": "个人",
+      "businessTypeIndividualDesc": "使用您的身份证或护照。您以个人身份销售，而非注册企业。",
+      "businessTypeSoleProprietor": "独资经营者",
+      "businessTypeSoleProprietorDesc": "需要营业执照。您是合法注册企业的唯一所有者。",
+      "businessTypeCorporate": "法人企业",
+      "businessTypeCorporateDesc": "以公司形式存在的法律实体，与其所有者明确分开。",
+      "businessTypePartnership": "合伙企业",
+      "businessTypePartnershipDesc": "由两个或多个个人共同经营的企业。",
+      "asXSeller": "作为",
+      "youWillNeed": "销售商，您需要："
     },
     "openshopStep2": {
       "businessEntity": "企业主体信息",
@@ -753,7 +790,18 @@
       "termsOfService": "服务条款",
       "termsAccept": "我确认以上信息属实，并已阅读并接受",
       "noDocs": "尚未上传任何文件。",
-      "registrationSummary": "注册摘要"
+      "registrationSummary": "注册摘要",
+      "fieldBusinessType": "业务类型",
+      "fieldName": "名称",
+      "fieldCategory": "类别",
+      "fieldEmail": "邮箱",
+      "fieldPhone": "电话",
+      "fieldTinTax": "税号 (TIN)",
+      "fieldIdPassport": "身份证 / 护照",
+      "fieldRepresentative": "代表人",
+      "fieldAddress": "地址",
+      "viewDoc": "查看",
+      "reviewWithin23Days": "我们将在 2-3 个工作日内审核您的信息。如果需要更多信息或有疑问，我们将通过您注册的邮箱或电话联系您。"
     },
     "securityPanel": {
       "password": "密码",
@@ -779,7 +827,9 @@
       "title": "支付账户",
       "noBankAccounts": "暂无绑定的银行账户",
       "clickToLink": "点击绑定您的第一个账户",
-      "addAccount": "添加账户"
+      "addAccount": "添加账户",
+      "verified": "已验证",
+      "pendingApproval": "待批准"
     },
     "addressForm": {
       "recipientName": "收件人姓名",
@@ -817,7 +867,15 @@
       "earned": "已获得",
       "pending": "待结算",
       "noOrders": "暂无订单",
-      "refresh": "刷新"
+      "refresh": "刷新",
+      "statusAll": "全部",
+      "statusPending": "待处理",
+      "statusShipped": "已发货",
+      "statusCompleted": "已完成",
+      "statusCanceled": "已取消",
+      "qtyLabel": "数量：{{qty}}",
+      "priceLabel": "价格",
+      "totalCommissionTracked": "已跟踪佣金总额：฿{{amount}}"
     },
     "creatorAttr": {
       "dataAnalytics": "数据分析",
@@ -858,11 +916,52 @@
     },
     "productTabs": {
       "keySpecifications": "主要规格",
-      "supplierProfile": "供应商资料"
+      "supplierProfile": "供应商资料",
+      "dimensions": "尺寸",
+      "weight": "重量",
+      "thisMonth": "本月",
+      "monthSuffix": "{{count}} 个月",
+      "monthsSuffix": "{{count}} 个月",
+      "yearSuffix": "{{count}} 年",
+      "yearsSuffix": "{{count}} 年",
+      "activeOn": "在 Lalashop 活跃",
+      "productsListed": "已上架产品",
+      "ordersFulfilled": "已完成订单",
+      "followersCount": "关注者",
+      "noSpecsYet": "卖家尚未添加详细规格。",
+      "noDescYet": "卖家尚未为此产品添加描述。",
+      "freeShippingFeature": "免运费",
+      "dayReturns": "{{days}} 天可退",
+      "shipsInSingle": "{{min}} {{unit}}内发货",
+      "shipsInRange": "{{min}}–{{max}} {{unit}}内发货",
+      "unitHours": "小时",
+      "unitDays": "天",
+      "unitWeeks": "周",
+      "madeIn": "产自 {{country}}",
+      "bulkPricingAvail": "提供批发价",
+      "pleaseLogin": "请登录后再评价。",
+      "pickRatingFirst": "请先选择星级。",
+      "failedSubmitReview": "提交评价失败",
+      "shareExperience": "分享您的体验",
+      "rateProduct": "评价产品",
+      "rateShop": "评价店铺",
+      "rateNStars": "评 {{n}} 星",
+      "reviewTextarea": "告诉其他买家您喜欢什么、尺寸、质量、包装…",
+      "posting": "发布中…",
+      "postReview": "评价",
+      "loadingReviews": "加载评价中…",
+      "noReviewsYet": "暂无评价 — 成为第一个评价此产品的人。",
+      "anonymousUser": "匿名用户",
+      "noCommentText": "（无评论）",
+      "userPlaceholder": "用户"
     },
     "followersPage": {
       "title": "粉丝",
-      "noFollowers": "暂无粉丝"
+      "noFollowers": "暂无粉丝",
+      "searchPlaceholder": "搜索关注者...",
+      "failedToLoad": "加载关注者失败",
+      "appearHere": "当有人关注 @{{username}} 时，他们会出现在这里",
+      "titleSuffix": "@{{username}} 的关注者 | SupplyNet"
     },
     "productsAdd2": {
       "general": "概要",
@@ -1003,7 +1102,14 @@
       "tapSuggestions": "点击建议以添加。",
       "addOption": "添加选项",
       "pricingStock": "定价和库存",
-      "stockLabel": "库存"
+      "stockLabel": "库存",
+      "materialDefault": "材质",
+      "warrantyDefault": "保修",
+      "tierAll": "所有已批准的创作者",
+      "tierBronze": "青铜及以上",
+      "tierSilver": "白银及以上",
+      "tierGold": "仅黄金",
+      "premiumProductTitle": "高级商品标题"
     },
     "productsEdit2": {
       "categoryTemplate": "分类模板：{{label}}",
@@ -1040,7 +1146,12 @@
       "missingSeller": "此商品链接缺少卖家信息。请重新打开商品并点击购买。",
       "noItemsOrder": "没有可订购的商品。请先添加到购物车。",
       "failedCreateOrder": "创建订单失败",
-      "qrFixedWarning": "⚠ 此 QR 为固定金额 — 请按上方显示的金额准确转账。"
+      "qrFixedWarning": "⚠ 此 QR 为固定金额 — 请按上方显示的金额准确转账。",
+      "walletQrFallback": "钱包二维码",
+      "slipPreviewAlt": "凭证预览",
+      "promptPayQrAlt": "PromptPay 二维码",
+      "qrAlt": "二维码",
+      "guestName": "访客"
     },
     "receipt": {
       "orderDate": "订单日期",
@@ -1072,7 +1183,16 @@
       "orderPlaced": "订单已下达",
       "completePaymentDesc": "请从结账页面完成支付以确认订单。",
       "qtyUnit": "数量：{{qty}} · 单价：฿{{price}}",
-      "free": "免费"
+      "free": "免费",
+      "subtitle": "收据",
+      "orderIdLabel": "订单编号",
+      "transferSlipAlt": "转账凭证",
+      "missingOrderIdShort": "缺少订单ID — 请从结账完成页面打开此页面。",
+      "payMethod": {
+        "manualTransfer": "银行手动转账",
+        "visaMaster": "信用卡 / 借记卡",
+        "cod": "货到付款"
+      }
     },
     "payment": {
       "branch": "分店：{{branch}}",
@@ -1082,7 +1202,13 @@
       "sslEncrypted": "SSL 加密",
       "pciCompliant": "PCI 合规",
       "option": "选项：{{color}} · 尺码：{{size}}",
-      "premiumProduct": "优质产品"
+      "premiumProduct": "优质产品",
+      "method": {
+        "visaMasterTitle": "信用卡 / 借记卡",
+        "visaMasterDesc": "使用 Visa、Mastercard 或 UnionPay 付款",
+        "codTitle": "货到付款",
+        "codDesc": "收到订单时支付现金"
+      }
     },
     "buy": {
       "noVariants": "此产品没有可选变体。",
@@ -1118,7 +1244,8 @@
       "enterAppCode": "输入 6 位应用验证码",
       "disable2FA": "禁用双重身份验证",
       "settingsUpdated": "安全设置已成功更新！",
-      "failedSetPin": "设置提现 PIN 失败"
+      "failedSetPin": "设置提现 PIN 失败",
+      "qrCodeAlt": "二维码"
     },
     "creatorWithdraw2": {
       "withdrawalRules": "提现规则",
@@ -1205,7 +1332,7 @@
       "postalCode": "邮政编码",
       "addressOptionsQ": "您输入的地址适用以下哪个选项？",
       "businessOnlyAddress": "这仅是营业地址。我理解我的地址将显示在商品详情页面。",
-      "alsoResidence": "这也是我的住所。我证明我没有专门的营业地址。"
+      "alsoResidence": "这也是我的住所。我确认我没有专门的营业地址。"
     },
     "addressForm2": {
       "fullName": "全名",
@@ -1260,7 +1387,11 @@
       "warehouse": "仓库",
       "documents": "文件",
       "lockedInfo": "如需更新这些详细信息，请联系客服 — KYC 信息一旦提交即被锁定，以保持审计跟踪一致。",
-      "openShopHint": "从 /me/opensho 开店以填写您的 KYC。"
+      "openShopHint": "从 /me/opensho 开店以填写您的 KYC。",
+      "idDocLabel": "{{idType}} 文件",
+      "idDocFallback": "身份证",
+      "businessLicense": "营业执照",
+      "supportingDoc": "支持文件"
     },
     "myshopPanel2": {
       "openShopNow": "立即开店",
@@ -1284,7 +1415,11 @@
       "reportUser": "举报用户",
       "reportShop": "举报店铺",
       "free": "免费",
-      "failedFollow": "更新关注失败"
+      "failedFollow": "更新关注失败",
+      "postsTab": "帖子",
+      "shopTab": "商店",
+      "userFallback": "用户",
+      "profileOptions": "个人资料选项"
     },
     "profile2": {
       "message": "消息",
@@ -1305,9 +1440,19 @@
       "instagram": "Instagram",
       "twitter": "Twitter",
       "telegram": "Telegram",
-      "socialCommerce": "lala Social Commerce"
+      "socialCommerce": "lala Social Commerce",
+      "privacyTitle": "隐私",
+      "visEveryoneLabel": "所有人",
+      "visEveryoneDesc": "公开可见",
+      "visFriendsLabel": "朋友",
+      "visFriendsDesc": "互相关注的关注者",
+      "visSelectedLabel": "选定的人",
+      "visSelectedDesc": "选择特定的人"
     },
     "productPage2": {
+      "bangkokLocation": "泰国曼谷",
+      "businessDays37": "3–7 个工作日",
+      "promoAlt": "{{name}} 推广 {{index}}",
       "pickOptionFirst": "请先选择所有选项",
       "outOfStock": "缺货",
       "stockLeft": "现货 — {{count}} 件",
@@ -1348,7 +1493,11 @@
       "stickerPartner": "Lala Shop Partner",
       "factoryDirect": "factory_direct",
       "shopBioFallback": "可靠的高品质批发工厂合作伙伴。",
-      "noSimilarProducts": "未找到类似商品"
+      "noSimilarProducts": "未找到类似产品。",
+      "returnsLabel": "退货",
+      "specs": "规格",
+      "description": "描述",
+      "selected": "已选择"
     },
     "socialPage2": {
       "whatsOnMind": "在想什么？{{name}}",
@@ -1369,7 +1518,8 @@
       "selectFriends": "选择好友",
       "excludeFriends": "排除好友",
       "done": "完成",
-      "failedShare": "分享帖子失败。请检查您的连接。"
+      "failedShare": "分享帖子失败。请检查您的连接。",
+      "uploadFailed": "上传失败"
     },
     "topFactories2": {
       "eliteTier": "精英级制造商",
@@ -1400,7 +1550,8 @@
       "warehouse": "仓库",
       "submittingApplication": "提交中…",
       "submitApplication": "提交申请",
-      "nextBtn": "下一步"
+      "nextBtn": "下一步",
+      "failedSubmit": "提交申请失败"
     },
     "generalPanel": {
       "storeNameLabel": "店铺名称 / 名字",
@@ -1433,7 +1584,8 @@
       "done": "完成",
       "link": "链接",
       "removeConfirm": "从您的店铺中移除此商品？",
-      "failedRemove": "移除失败"
+      "failedRemove": "移除失败",
+      "checkThis": "看看这个"
     },
     "creatorAttr2": {
       "today": "今天",
@@ -1478,7 +1630,29 @@
       "posRevenue": "POS 收入 ฿{{amount}} · 店内销售，不可提现",
       "withdrawNow": "立即提现",
       "afterReceiptWeb": "买家确认收货后，网络销售将在 {{days}} 个工作日内转账。请验证银行信息以避免延迟。",
-      "noShopAccount": "无店铺银行账户。开店 / 完成 KYC 以添加收款账户。"
+      "noShopAccount": "无店铺银行账户。开店 / 完成 KYC 以添加收款账户。",
+      "title": "店铺提现",
+      "withdrawals": "提现",
+      "pendingCount": "待处理 ({{count}})",
+      "historyCount": "历史 ({{count}})",
+      "feeNet": "手续费 ฿{{fee}} → 净额 ฿{{net}}",
+      "noPending": "没有待处理的提现",
+      "noHistoryYet": "暂无历史",
+      "tooltipRules": "提现规则",
+      "posRevenueLabel": "POS 收入 ฿{{amount}} · 店内不可提现",
+      "maxBtn": "最高",
+      "minMaxFeeShort": "最低 ฿{{min}} • 最高 ฿{{max}} • 手续费 {{fee}}%",
+      "processingBtn": "处理中...",
+      "withdrawNowBtn": "立即提现",
+      "pinDescAmount": "请输入 6 位 PIN 码以确认提现 ฿{{amount}}",
+      "verifying": "正在验证...",
+      "withdrawalDestination": "提现目的地",
+      "paymentMethodsHdr": "付款方式",
+      "pendingHistoryBtn": "待处理与历史",
+      "afterReceipt": "买家确认收货后，网店销售款将在以下时间内转账",
+      "businessDaysSuffix": "{{days}} 个工作日",
+      "verifyBankInfo": "请核实银行信息以避免延误。",
+      "setPinFirst": "首次提现前请先设置 6 位 PIN 码。"
     },
     "notifications2": {
       "secondsAgo": "刚刚",
@@ -1499,6 +1673,174 @@
       "noContent": "（无内容）",
       "copyShort": "复制",
       "copiedShort": "已复制"
+    },
+    "gallery": {
+      "previousImage": "上一张",
+      "nextImage": "下一张",
+      "showImage": "显示图 {{index}}"
+    },
+    "addBank": {
+      "title": "添加银行账户",
+      "nameMatchWarning": "银行账户姓名必须与注册姓名一致，以防转账错误",
+      "fullNameEnglish": "全名 (英文)",
+      "accountNamePlaceholder": "银行账户名称",
+      "bank": "银行",
+      "selectBank": "选择银行",
+      "bankAccountNumber": "银行账号",
+      "accountNumberPlaceholder": "输入 12 位账号",
+      "submitAndSave": "提交并保存",
+      "consentBefore": "确认即表示您同意",
+      "transferTerms": "转账条款",
+      "consentAfter": "并允许系统存储银行信息用于支付",
+      "fillAll": "请填写所有信息",
+      "cannotConnect": "无法连接服务器"
+    },
+    "productCategories": {
+      "fashion": "时尚配饰",
+      "electronics": "电子产品",
+      "beauty": "美妆个护",
+      "food": "食品饮料",
+      "home": "家居生活",
+      "mother_baby": "母婴",
+      "toys": "玩具与爱好",
+      "sports": "运动户外",
+      "automotive": "汽车配件",
+      "health": "健康养生",
+      "pet": "宠物用品",
+      "office": "办公文具",
+      "tools": "工具与家居改造",
+      "jewelry": "珠宝手表",
+      "digital": "数字产品",
+      "others": "其他"
+    },
+    "categoryConfig": {
+      "fashion": {
+        "label": "时尚配饰",
+        "description": "服装、鞋子、包包、配饰。买家在下单前选择尺码和颜色。"
+      },
+      "electronics": {
+        "label": "电子产品",
+        "description": "科技产品。规格通常包括颜色、存储和连接方式。"
+      },
+      "beauty": {
+        "label": "美妆个护",
+        "description": "护肤、彩妆、香水。规格描述色调和净重。"
+      },
+      "food": {
+        "label": "食品饮料",
+        "description": "食品。需记录包装规格和保质期——合规必填。"
+      },
+      "home": {
+        "label": "家居生活",
+        "description": "家具、装饰、厨具。需记录材质和尺寸。"
+      },
+      "mother_baby": {
+        "label": "母婴",
+        "description": "婴儿用品。按年龄段分类,记录安全信息。"
+      },
+      "toys": {
+        "label": "玩具与爱好",
+        "description": "玩具、模型、爱好。按颜色分类,记录适用年龄。"
+      },
+      "sports": {
+        "label": "运动户外",
+        "description": "运动装备。按尺码和颜色分类,记录运动类型。"
+      },
+      "automotive": {
+        "label": "汽车配件",
+        "description": "汽车与摩托车配件。需记录兼容信息。"
+      },
+      "health": {
+        "label": "健康养生",
+        "description": "维生素、补充剂、医疗用品。按包装数量分类。"
+      },
+      "pet": {
+        "label": "宠物用品",
+        "description": "宠物食品、配件。按尺寸分类,记录宠物类型。"
+      },
+      "office": {
+        "label": "办公文具",
+        "description": "文具、办公用品。按颜色和包装数量分类。"
+      },
+      "tools": {
+        "label": "工具与家居改造",
+        "description": "手工具、电动工具、五金。需记录电源类型。"
+      },
+      "jewelry": {
+        "label": "珠宝手表",
+        "description": "珠宝与手表。按金属、宝石、戒指尺寸分类。"
+      },
+      "digital": {
+        "label": "数字产品",
+        "description": "软件、电子书、许可证。无需实物规格。"
+      },
+      "others": {
+        "label": "其他",
+        "description": "上述未涵盖的其他商品。"
+      }
+    },
+    "variantNames": {
+      "size": "尺码",
+      "color": "颜色",
+      "storage": "存储",
+      "connectivity": "连接",
+      "volume": "容量",
+      "shade": "色号",
+      "pack_size": "包装规格",
+      "flavor": "口味",
+      "age_range": "年龄段",
+      "pet_size": "宠物尺寸",
+      "pack": "包装",
+      "voltage": "电压",
+      "metal": "金属",
+      "ring_size": "戒指尺寸",
+      "license": "许可证"
+    },
+    "attributeLabels": {
+      "material": "材质",
+      "fit": "版型",
+      "gender": "性别",
+      "care_instructions": "护理说明",
+      "brand": "品牌",
+      "model_number": "型号",
+      "warranty_period": "保修期",
+      "power_source": "电源类型",
+      "key_specifications": "主要规格",
+      "skin_type": "肤质",
+      "key_ingredients": "主要成分",
+      "expiry___pao": "保质期 / PAO",
+      "cruelty_free": "无动物实验?",
+      "ingredients": "成分",
+      "expiry_date": "保质期",
+      "storage_instructions": "存储说明",
+      "dietary": "饮食要求",
+      "allergen_warnings": "过敏原警告",
+      "suitable_room": "适用房间",
+      "assembly_required": "需要组装?",
+      "recommended_age": "推荐年龄",
+      "safety_certification": "安全认证",
+      "battery_required": "需要电池?",
+      "sport___activity": "运动 / 活动",
+      "vehicle_compatibility": "车辆兼容性",
+      "part_number___oem": "零件号 / OEM",
+      "active_ingredients": "活性成分",
+      "recommended_dosage": "推荐用量",
+      "fda___regulatory_certification": "FDA / 监管认证",
+      "pet_type": "宠物类型",
+      "use_case": "使用场景",
+      "warranty": "保修",
+      "metal_purity": "金属纯度",
+      "gemstone": "宝石",
+      "weight_g": "重量 (g)",
+      "warranty___certificate": "保修 / 证书",
+      "file_type": "文件类型",
+      "delivery_method": "交付方式",
+      "license_duration": "许可时长",
+      "additional_details": "其他详情"
+    },
+    "categoryPage": {
+      "noProductsInCategory": "在 {{name}} 中未找到商品",
+      "checkBackLater": "稍后再来,或浏览其他分类"
     }
   },
   "components": {
@@ -1524,7 +1866,13 @@
       "deleteChatConfirm": "删除此对话？",
       "blockUser": "屏蔽用户",
       "viewProfile": "查看资料",
-      "openChat": "打开聊天"
+      "openChat": "打开聊天",
+      "askingAbout": "咨询",
+      "seen": "已读",
+      "sent": "已发送",
+      "userFallback": "用户",
+      "messagesAriaLabel": "消息",
+      "viewProfileAria": "查看 {{name}} 的个人资料"
     },
     "userList": {
       "loading": "加载中...",
@@ -1541,6 +1889,170 @@
     "empty": {
       "noData": "暂无数据",
       "tryAgain": "重试"
+    },
+    "truck": {
+      "backToHome": "返回首页",
+      "globalLogisticsNetwork": "全球物流网络",
+      "heroTitlePart1": "快速。安全。",
+      "heroTitleReliable": "可靠",
+      "heroTitlePart2": "分销。",
+      "heroSubtitle": "通过我们的高性能履约中心，将您的业务连接到世界。",
+      "exploreHub": "探索枢纽",
+      "protection": "保护",
+      "tradeAssurance": "贸易保障",
+      "tradeAssuranceDesc": "通过我们网络分销的每一个订单都受到我们专有屏障的保护，守护您的全球贸易利益。",
+      "paymentProtection": "100% 付款保护",
+      "qualitySafeguard": "产品质量保障",
+      "onTimeShipment": "准时发货保障",
+      "liveNetworkStatus": "实时网络状态",
+      "operational": "运行中",
+      "europeanHub": "欧洲枢纽",
+      "aseanHub": "东盟枢纽",
+      "naHub": "北美枢纽",
+      "countryGermany": "德国",
+      "countryThailand": "泰国",
+      "countryUsa": "美国",
+      "warehouseSourcing": "仓储采购",
+      "warehouseSourcingDesc": "在我们的全球仓库中存储",
+      "pickPack": "拣货与包装",
+      "pickPackDesc": "标准化包装和贴标",
+      "localDelivery": "本地配送",
+      "localDeliveryDesc": "集成最后一公里配送合作伙伴",
+      "bangkokHub": "曼谷枢纽",
+      "bangkokHubSub": "处理时间：平均 2 小时",
+      "networkLoad": "网络负载",
+      "networkLoadSub": "92% 配送成功率",
+      "transitStatus": "运输状态",
+      "transitStatusSub": "所有路线正常"
+    }
+  },
+  "category": {
+    "noProducts": "在 {{category}} 中未找到产品"
+  },
+  "time": {
+    "justNow": "刚刚",
+    "minutesAgo": "{{count}} 分钟前",
+    "hoursAgo": "{{count}} 小时前",
+    "daysAgo": "{{count}} 天前",
+    "now": "刚刚",
+    "m": "{{count}}分",
+    "h": "{{count}}时",
+    "d": "{{count}}天"
+  },
+  "social": {
+    "followers": "粉丝",
+    "following": "关注"
+  },
+  "openshopStep1": {
+    "businessTypes": {
+      "individual": {
+        "title": "个人",
+        "desc": "使用身份证或护照。您以个人身份销售，而非注册企业。"
+      },
+      "sole_proprietor": {
+        "title": "个体工商户",
+        "desc": "需要营业执照。您是合法注册企业的唯一所有者。"
+      },
+      "corporate": {
+        "title": "企业",
+        "desc": "以公司形式存在的法人实体，与所有者明确分离。"
+      },
+      "partnership": {
+        "title": "合伙企业",
+        "desc": "由两个或更多个人共同经营的企业。"
+      }
+    },
+    "requirements": {
+      "individual": [
+        "11位身份证或护照",
+        "真实姓名",
+        "11位身份证号码",
+        "现居住址"
+      ],
+      "sole_proprietor": [
+        "营业执照",
+        "税务登记号 (TIN)",
+        "所有者身份证",
+        "经营地点"
+      ],
+      "corporate": [
+        "企业注册证明",
+        "经营许可证",
+        "代表身份证",
+        "12位企业银行账号"
+      ],
+      "partnership": [
+        "合伙协议",
+        "合资注册证明",
+        "所有合伙人身份证",
+        "商业税号"
+      ]
+    }
+  },
+  "openshopStep2More": {
+    "partnershipName": "合伙企业名称",
+    "companyName": "公司名称",
+    "entityPlaceholder": "按照注册输入实体名称",
+    "entityNote": "请确保名称与您的商业注册文件一致。",
+    "invalidEmail": "电子邮件格式无效"
+  },
+  "openshopStep3More": {
+    "businessRegCert": "营业执照",
+    "companyBusinessLicense": "公司经营许可证",
+    "partnershipAgreement": "合伙协议",
+    "identityDocument": "身份证明文件",
+    "months": [
+      "一月",
+      "二月",
+      "三月",
+      "四月",
+      "五月",
+      "六月",
+      "七月",
+      "八月",
+      "九月",
+      "十月",
+      "十一月",
+      "十二月"
+    ]
+  },
+  "openshopStep4More": {
+    "addressNotSpecified": "未指定地址",
+    "businessTypeNames": {
+      "individual": "个人",
+      "sole_proprietor": "个体工商户",
+      "corporate": "企业",
+      "partnership": "合伙企业"
+    },
+    "docLabels": {
+      "passport": "护照",
+      "nationalId": "身份证",
+      "businessRegCert": "营业执照",
+      "companyBusinessLicense": "公司经营许可证",
+      "partnershipAgreement": "合伙协议",
+      "businessLicense": "经营许可证"
+    }
+  },
+  "paymentMethods": {
+    "bcel_one": {
+      "title": "BCEL One",
+      "desc": "通过 BCEL One 应用使用 OnePay QR 支付"
+    },
+    "ldb_trust": {
+      "title": "LDB Trust",
+      "desc": "通过 LDB Trust 应用支付"
+    },
+    "jdb_yes": {
+      "title": "JDB Yes",
+      "desc": "通过 JDB Yes 应用支付"
+    },
+    "visa_master": {
+      "title": "信用卡 / 借记卡",
+      "desc": "通过 Visa, Mastercard 或 UnionPay 支付"
+    },
+    "cod": {
+      "title": "货到付款",
+      "desc": "收到商品时支付现金"
     }
   }
 }

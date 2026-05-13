@@ -41,7 +41,7 @@ const CreatorsPage: React.FC = () => {
   if (error || !data) {
     return (
       <div className="rounded-md bg-red-50 px-3 py-2 text-[12px] text-red-700">
-        {error || "No data"}
+        {error || t("status.empty")}
       </div>
     );
   }
@@ -67,12 +67,12 @@ const CreatorsPage: React.FC = () => {
           <table className="w-full text-[12px] tabular-nums">
             <thead className="text-[11px] text-gray-500 tracking-wide bg-gray-50/50">
               <tr>
-                <th className="px-4 py-2 text-left font-semibold">Creator</th>
-                <th className="px-4 py-2 text-right font-semibold">Products</th>
-                <th className="px-4 py-2 text-right font-semibold">Clicks</th>
-                <th className="px-4 py-2 text-right font-semibold">Orders</th>
-                <th className="px-4 py-2 text-right font-semibold">Revenue</th>
-                <th className="px-4 py-2 text-right font-semibold">Commission</th>
+                <th className="px-4 py-2 text-left font-semibold">{t("pages.creators.tableCreator")}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t("pages.creators.tableProducts")}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t("pages.creators.tableClicks")}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t("pages.creators.tableOrders")}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t("pages.creators.tableRevenue")}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t("pages.creators.tableCommission")}</th>
               </tr>
             </thead>
             <tbody>
@@ -80,7 +80,7 @@ const CreatorsPage: React.FC = () => {
                 <tr>
                   <td colSpan={6} className="px-4 py-12 text-center text-gray-400 text-[12px]">
                     <Users className="w-6 h-6 mx-auto mb-2 text-gray-300" />
-                    No creators have picked up your products yet.
+                    {t("pages.creators.noCreators")}
                   </td>
                 </tr>
               )}

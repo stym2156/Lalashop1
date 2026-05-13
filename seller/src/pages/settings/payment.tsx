@@ -54,7 +54,7 @@ const PaymentSettings: React.FC = () => {
       setSuccess(true);
       setTimeout(() => setSuccess(false), 2500);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Save failed");
+      setError(err instanceof Error ? err.message : t("pages.paymentSettings.saveFailed"));
     } finally {
       setSaving(false);
     }
@@ -94,36 +94,36 @@ const PaymentSettings: React.FC = () => {
       )}
       {success && (
         <div className="rounded-md bg-emerald-50 px-3 py-2 text-[12px] text-emerald-700 inline-flex items-center gap-2">
-          <CheckCircle2 className="w-3.5 h-3.5" /> Saved successfully
+          <CheckCircle2 className="w-3.5 h-3.5" /> {t("pages.paymentSettings.savedSuccessfully")}
         </div>
       )}
 
-      <Section title="Accepted payment methods">
+      <Section title={t("pages.paymentSettings.acceptedMethods")}>
         <ToggleRow
           icon={Banknote}
-          title="Cash on delivery (COD)"
-          desc="Buyer pays the courier on receipt."
+          title={t("pages.paymentSettings.cod")}
+          desc={t("pages.paymentSettings.codDesc")}
           checked={form.acceptCash}
           onChange={(v) => setForm({ ...form, acceptCash: v })}
         />
         <ToggleRow
           icon={Wallet}
-          title="Bank transfer"
-          desc="Buyer transfers to your registered bank account before delivery."
+          title={t("pages.paymentSettings.bankTransfer")}
+          desc={t("pages.paymentSettings.bankTransferDesc")}
           checked={form.acceptBankTransfer}
           onChange={(v) => setForm({ ...form, acceptBankTransfer: v })}
         />
         <ToggleRow
           icon={CreditCard}
-          title="Credit / debit card"
-          desc="Requires payment gateway integration (premium tier)."
+          title={t("pages.paymentSettings.creditCard")}
+          desc={t("pages.paymentSettings.creditCardDesc")}
           checked={form.acceptCreditCard}
           onChange={(v) => setForm({ ...form, acceptCreditCard: v })}
         />
         <ToggleRow
           icon={Smartphone}
-          title="PromptPay"
-          desc="Thai instant payment via QR code."
+          title={t("pages.paymentSettings.promptPay")}
+          desc={t("pages.paymentSettings.promptPayDesc")}
           checked={form.acceptPromptPay}
           onChange={(v) => setForm({ ...form, acceptPromptPay: v })}
         >
@@ -133,24 +133,24 @@ const PaymentSettings: React.FC = () => {
                 className={inputCls}
                 value={form.promptPayId}
                 onChange={(e) => setForm({ ...form, promptPayId: e.target.value })}
-                placeholder="PromptPay ID (phone or 13-digit)"
+                placeholder={t("pages.paymentSettings.promptPayPlaceholder")}
               />
             </div>
           )}
         </ToggleRow>
       </Section>
 
-      <Section title="Tax (VAT)" hint="If you're VAT-registered, declare it here.">
+      <Section title={t("pages.paymentSettings.vat")} hint={t("pages.paymentSettings.vatHint")}>
         <ToggleRow
           icon={CheckCircle2}
-          title="I'm VAT-registered"
-          desc="Charge VAT on web sales and include it on invoices."
+          title={t("pages.paymentSettings.vatRegistered")}
+          desc={t("pages.paymentSettings.vatRegisteredDesc")}
           checked={form.vatRegistered}
           onChange={(v) => setForm({ ...form, vatRegistered: v })}
         />
         {form.vatRegistered && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pl-9">
-            <Field label="VAT number">
+            <Field label={t("pages.paymentSettings.vatNumber")}>
               <input
                 className={`${inputCls} font-mono`}
                 value={form.vatNumber}
@@ -158,7 +158,7 @@ const PaymentSettings: React.FC = () => {
                 placeholder="0123456789012"
               />
             </Field>
-            <Field label="VAT rate (%)">
+            <Field label={t("pages.paymentSettings.vatRate")}>
               <input
                 type="number"
                 min="0"
@@ -173,7 +173,7 @@ const PaymentSettings: React.FC = () => {
         )}
       </Section>
 
-      <Section title="Payout schedule" hint="How often verified earnings are settled to your bank.">
+      <Section title={t("pages.paymentSettings.payoutSchedule")} hint={t("pages.paymentSettings.payoutScheduleHint")}>
         <div className="grid grid-cols-3 gap-2">
           {(["weekly", "biweekly", "monthly"] as const).map((s) => (
             <button
@@ -186,7 +186,7 @@ const PaymentSettings: React.FC = () => {
                   : "border-gray-200 text-gray-700 hover:border-gray-300"
               }`}
             >
-              {s.charAt(0).toUpperCase() + s.slice(1)}
+              {t(`pages.paymentSettings.${s}`)}
             </button>
           ))}
         </div>

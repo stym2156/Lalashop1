@@ -1,37 +1,27 @@
-export function formatTimeAgo(date: Date | string | number): string {
+export function formatTimeAgo(date: Date | string | number, t: any): string {
   const now = new Date();
   const past = new Date(date);
   const diffInSeconds = Math.floor((now.getTime() - past.getTime()) / 1000);
 
   if (diffInSeconds < 60) {
-    return "JUST NOW";
+    return t("time.justNow");
   }
 
   const diffInMinutes = Math.floor(diffInSeconds / 60);
   if (diffInMinutes < 60) {
-    return `${diffInMinutes} ${diffInMinutes === 1 ? "MINUTE" : "MINUTES"} AGO`;
+    return t("time.minutesAgo", { count: diffInMinutes });
   }
 
   const diffInHours = Math.floor(diffInMinutes / 60);
   if (diffInHours < 24) {
-    return `${diffInHours} ${diffInHours === 1 ? "HOUR" : "HOURS"} AGO`;
+    return t("time.hoursAgo", { count: diffInHours });
   }
 
   const diffInDays = Math.floor(diffInHours / 24);
   if (diffInDays < 7) {
-    return `${diffInDays} ${diffInDays === 1 ? "DAY" : "DAYS"} AGO`;
+    return t("time.daysAgo", { count: diffInDays });
   }
 
-  const diffInWeeks = Math.floor(diffInDays / 7);
-  if (diffInWeeks < 4) {
-    return `${diffInWeeks} ${diffInWeeks === 1 ? "WEEK" : "WEEKS"} AGO`;
-  }
-
-  const diffInMonths = Math.floor(diffInDays / 30);
-  if (diffInMonths < 12) {
-    return `${diffInMonths} ${diffInMonths === 1 ? "MONTH" : "MONTHS"} AGO`;
-  }
-
-  const diffInYears = Math.floor(diffInDays / 365);
-  return `${diffInYears} ${diffInYears === 1 ? "YEAR" : "YEARS"} AGO`;
+  // Fallback to localized date for older posts
+  return past.toLocaleDateString();
 }

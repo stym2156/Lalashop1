@@ -213,7 +213,16 @@
     "addedToCart": "เพิ่มลงตะกร้าแล้ว",
     "buyNow": "ซื้อทันที",
     "viewShop": "ดูร้านค้า",
-    "stockLeft": "เหลือ: {{count}}"
+    "stockLeft": "เหลือ: {{count}}",
+    "returns": "การคืนสินค้า",
+    "leadTime": "ระยะเวลาจัดเตรียม",
+    "free": "ฟรี",
+    "shipsFrom": "จัดส่งจาก {{location}}",
+    "selected": "เลือกแล้ว",
+    "specs": "ข้อมูลจำเพาะ",
+    "origin": "แหล่งกำเนิด",
+    "vendor": "ผู้ขาย",
+    "sku": "SKU"
   },
   "cart": {
     "title": "ตะกร้าสินค้า",
@@ -392,7 +401,9 @@
       "noFollowing": "ยังไม่ได้ติดตามใคร",
       "follow": "ติดตาม",
       "unfollow": "กำลังติดตาม",
-      "loginToFollow": "เข้าสู่ระบบเพื่อติดตาม"
+      "loginToFollow": "เข้าสู่ระบบเพื่อติดตาม",
+      "likeOne": "ถูกใจ",
+      "likeMany": "ถูกใจ"
     },
     "checkout": {
       "title": "ชำระเงิน",
@@ -584,12 +595,15 @@
       "saving": "กำลังบันทึก...",
       "savedSuccess": "บันทึกสินค้าแล้ว",
       "saveFailed": "บันทึกสินค้าไม่สำเร็จ",
-      "withdraw": "ถอนรายได้",
+      "withdraw": "ถอนเงิน",
       "addBank": "เพิ่มบัญชีธนาคาร",
       "balance": "ยอดเงิน",
       "totalSales": "ยอดขายรวม",
       "ordersToday": "คำสั่งซื้อวันนี้",
-      "viewProductCenter": "เปิดศูนย์สินค้า"
+      "viewProductCenter": "เปิดศูนย์สินค้า",
+      "todaysData": "ข้อมูลวันนี้",
+      "productCreator": "ครีเอเตอร์สินค้า",
+      "productDetail": "รายละเอียดสินค้า"
     },
     "posts": {
       "createTitle": "สร้างโพสต์",
@@ -630,11 +644,11 @@
       "subcategories": "หมวดย่อย",
       "loadFailed": "โหลดหมวดหมู่ไม่สำเร็จ",
       "name": {
-        "electronics": "อิเล็กทรอนิกส์และแกดเจ็ต",
+        "electronics": "อิเล็กทรอนิกส์",
         "home": "บ้านและครัว",
-        "apparel": "เสื้อผ้าและเครื่องประดับ",
+        "apparel": "เสื้อผ้าและเครื่องแต่งกาย",
         "industrial": "อุตสาหกรรมและเครื่องมือ",
-        "automotive": "ชิ้นส่วนยานยนต์",
+        "automotive": "อะไหล่ยานยนต์",
         "beauty": "ความงามและของใช้ส่วนตัว",
         "construction": "วัสดุก่อสร้าง",
         "sports": "กีฬาและกิจกรรมกลางแจ้ง"
@@ -648,7 +662,7 @@
     },
     "balance": {
       "title": "ยอดเงิน",
-      "current": "ยอดเงินปัจจุบัน",
+      "current": "ยอดเงินคงเหลือ",
       "topUp": "เติมเงิน",
       "withdraw": "ถอนเงิน",
       "history": "ประวัติการทำรายการ",
@@ -665,7 +679,8 @@
     },
     "promo": {
       "title": "โปรโมชัน",
-      "noPromo": "ไม่มีโปรโมชันที่ใช้งานได้"
+      "noPromo": "ไม่มีโปรโมชันที่ใช้งานได้",
+      "fetchingCoupons": "กำลังดึงคูปอง..."
     },
     "myshop": {
       "title": "ร้านของฉัน",
@@ -696,7 +711,7 @@
       "title": "เพิ่มสินค้า",
       "cannotAdd": "ไม่สามารถเพิ่มสินค้าได้",
       "pleaseLogin": "กรุณาเข้าสู่ระบบเพื่อเพิ่มสินค้า",
-      "notApproved": "ร้านค้าของคุณยังไม่ได้รับการอนุมัติ เมื่อ KYC ได้รับอนุมัติแล้ว คุณจึงจะสามารถเพิ่มสินค้าได้",
+      "notApproved": "ร้านค้าของคุณยังไม่ได้รับการอนุมัติ เมื่อ KYC ได้รับการอนุมัติแล้ว คุณจึงจะสามารถเพิ่มสินค้าได้",
       "backToProfile": "กลับไปที่โปรไฟล์",
       "savedTitle": "บันทึกสินค้าแล้ว",
       "savedAs": "สินค้าของคุณอยู่ในร้านในสถานะ <strong>{{status}}</strong>",
@@ -719,11 +734,23 @@
       "title": "แก้ไขสินค้า",
       "viewPublic": "ดูหน้าสาธารณะ",
       "delete": "ลบ",
-      "loading": "กำลังโหลด…"
+      "loading": "กำลังโหลด…",
+      "failedToLoad": "โหลดสินค้าไม่สำเร็จ"
     },
     "openshopStep1": {
       "whatToExpect": "สิ่งที่คาดหวัง",
-      "questionHeader": "ธุรกิจของคุณเป็นประเภทใด?"
+      "questionHeader": "ธุรกิจของคุณเป็นประเภทใด?",
+      "expectNote": "ทีมงานจะตรวจสอบใบสมัครภายใน 2-3 วันทำการ กรุณาเตรียมเอกสารให้ชัดเจนและถูกต้องเพื่อความรวดเร็ว",
+      "businessTypeIndividual": "บุคคลธรรมดา",
+      "businessTypeIndividualDesc": "ใช้บัตรประชาชนหรือหนังสือเดินทาง คุณขายในนามบุคคลธรรมดา ไม่ใช่ธุรกิจจดทะเบียน",
+      "businessTypeSoleProprietor": "เจ้าของกิจการคนเดียว",
+      "businessTypeSoleProprietorDesc": "ต้องมีใบทะเบียนพาณิชย์ คุณเป็นเจ้าของกิจการที่จดทะเบียนถูกต้องตามกฎหมาย",
+      "businessTypeCorporate": "บริษัท",
+      "businessTypeCorporateDesc": "นิติบุคคลในรูปแบบบริษัท แยกจากเจ้าของอย่างชัดเจน",
+      "businessTypePartnership": "หุ้นส่วน",
+      "businessTypePartnershipDesc": "ธุรกิจที่ดำเนินการร่วมกันโดยบุคคลตั้งแต่สองคนขึ้นไป",
+      "asXSeller": "ในฐานะผู้ขายประเภท",
+      "youWillNeed": "คุณจะต้องมี:"
     },
     "openshopStep2": {
       "businessEntity": "รายละเอียดนิติบุคคล",
@@ -743,7 +770,7 @@
       "clickToUpload": "คลิกเพื่ออัปโหลดเอกสาร",
       "primaryRepresentative": "ผู้แทนหลัก",
       "legalEntityInformation": "ข้อมูลนิติบุคคล",
-      "identityInfo": "ข้อมูลนี้จะถูกใช้และเก็บไว้เพื่อการยืนยันตัวตน การตรวจสอบ และการป้องกันการฉ้อโกง",
+      "identityInfo": "ข้อมูลนี้จะใช้และเก็บไว้เพื่อการยืนยันตัวตน การตรวจสอบ และการป้องกันการฉ้อโกง",
       "identityDocuments": "เอกสารยืนยันตัวตน",
       "representativeIdentity": "ตัวตนของผู้แทน",
       "idType": "ประเภทบัตร:",
@@ -763,7 +790,18 @@
       "termsOfService": "ข้อตกลงการใช้บริการ",
       "termsAccept": "ฉันยืนยันว่าข้อมูลข้างต้นเป็นความจริงทุกประการ และได้อ่านและยอมรับ",
       "noDocs": "ยังไม่มีการอัปโหลดเอกสาร",
-      "registrationSummary": "สรุปการสมัคร"
+      "registrationSummary": "สรุปการสมัคร",
+      "fieldBusinessType": "ประเภทธุรกิจ",
+      "fieldName": "ชื่อ",
+      "fieldCategory": "หมวดหมู่",
+      "fieldEmail": "อีเมล",
+      "fieldPhone": "โทรศัพท์",
+      "fieldTinTax": "หมายเลขประจำตัวผู้เสียภาษี (TIN)",
+      "fieldIdPassport": "บัตรประชาชน / หนังสือเดินทาง",
+      "fieldRepresentative": "ผู้แทน",
+      "fieldAddress": "ที่อยู่",
+      "viewDoc": "ดู",
+      "reviewWithin23Days": "เราจะตรวจสอบข้อมูลของคุณภายใน 2-3 วันทำการ หากต้องการข้อมูลเพิ่มเติมหรือมีคำถาม เราจะติดต่อคุณผ่านอีเมลหรือเบอร์โทรที่ลงทะเบียนไว้"
     },
     "securityPanel": {
       "password": "รหัสผ่าน",
@@ -789,7 +827,9 @@
       "title": "บัญชีชำระเงิน",
       "noBankAccounts": "ยังไม่ได้เชื่อมต่อบัญชีธนาคาร",
       "clickToLink": "คลิกเพื่อเชื่อมต่อบัญชีแรกของคุณ",
-      "addAccount": "เพิ่มบัญชี"
+      "addAccount": "เพิ่มบัญชี",
+      "verified": "ยืนยันแล้ว",
+      "pendingApproval": "รอการอนุมัติ"
     },
     "addressForm": {
       "recipientName": "ชื่อผู้รับ",
@@ -827,7 +867,15 @@
       "earned": "ได้รับ",
       "pending": "รอดำเนินการ",
       "noOrders": "ไม่มีคำสั่งซื้อ",
-      "refresh": "รีเฟรช"
+      "refresh": "รีเฟรช",
+      "statusAll": "ทั้งหมด",
+      "statusPending": "รอดำเนินการ",
+      "statusShipped": "จัดส่งแล้ว",
+      "statusCompleted": "เสร็จสิ้น",
+      "statusCanceled": "ยกเลิก",
+      "qtyLabel": "จำนวน: {{qty}}",
+      "priceLabel": "ราคา",
+      "totalCommissionTracked": "ค่าคอมมิชชั่นที่ติดตาม: ฿{{amount}}"
     },
     "creatorAttr": {
       "dataAnalytics": "วิเคราะห์ข้อมูล",
@@ -868,11 +916,52 @@
     },
     "productTabs": {
       "keySpecifications": "ข้อมูลจำเพาะหลัก",
-      "supplierProfile": "ข้อมูลผู้ขาย"
+      "supplierProfile": "ข้อมูลผู้ขาย",
+      "dimensions": "ขนาด",
+      "weight": "น้ำหนัก",
+      "thisMonth": "เดือนนี้",
+      "monthSuffix": "{{count}} เดือน",
+      "monthsSuffix": "{{count}} เดือน",
+      "yearSuffix": "{{count}} ปี",
+      "yearsSuffix": "{{count}} ปี",
+      "activeOn": "ใช้งานบน Lalashop",
+      "productsListed": "รายการสินค้า",
+      "ordersFulfilled": "คำสั่งซื้อที่ส่งเสร็จ",
+      "followersCount": "ผู้ติดตาม",
+      "noSpecsYet": "ผู้ขายยังไม่ได้เพิ่มข้อมูลจำเพาะโดยละเอียด",
+      "noDescYet": "ผู้ขายยังไม่ได้เพิ่มคำอธิบายสำหรับสินค้านี้",
+      "freeShippingFeature": "จัดส่งฟรี",
+      "dayReturns": "คืนสินค้าได้ {{days}} วัน",
+      "shipsInSingle": "จัดส่งใน {{min}} {{unit}}",
+      "shipsInRange": "จัดส่งใน {{min}}–{{max}} {{unit}}",
+      "unitHours": "ชม.",
+      "unitDays": "วัน",
+      "unitWeeks": "สัปดาห์",
+      "madeIn": "ผลิตใน {{country}}",
+      "bulkPricingAvail": "มีราคาขายส่ง",
+      "pleaseLogin": "กรุณาเข้าสู่ระบบเพื่อเขียนรีวิว",
+      "pickRatingFirst": "เลือกจำนวนดาวก่อน",
+      "failedSubmitReview": "ส่งรีวิวไม่สำเร็จ",
+      "shareExperience": "แบ่งปันประสบการณ์",
+      "rateProduct": "รีวิวสินค้า",
+      "rateShop": "รีวิวร้านค้า",
+      "rateNStars": "ให้ {{n}} ดาว",
+      "reviewTextarea": "บอกผู้ซื้อคนอื่นว่าคุณชอบอะไร ขนาด คุณภาพ บรรจุภัณฑ์…",
+      "posting": "กำลังโพสต์…",
+      "postReview": "รีวิว",
+      "loadingReviews": "กำลังโหลดรีวิว…",
+      "noReviewsYet": "ยังไม่มีรีวิว — เป็นคนแรกที่รีวิวสินค้านี้",
+      "anonymousUser": "ไม่ระบุชื่อ",
+      "noCommentText": "(ไม่มีความคิดเห็น)",
+      "userPlaceholder": "ผู้ใช้"
     },
     "followersPage": {
       "title": "ผู้ติดตาม",
-      "noFollowers": "ยังไม่มีผู้ติดตาม"
+      "noFollowers": "ยังไม่มีผู้ติดตาม",
+      "searchPlaceholder": "ค้นหาผู้ติดตาม...",
+      "failedToLoad": "โหลดผู้ติดตามไม่สำเร็จ",
+      "appearHere": "เมื่อมีคนติดตาม @{{username}} พวกเขาจะปรากฏที่นี่",
+      "titleSuffix": "ผู้ติดตามของ @{{username}} | SupplyNet"
     },
     "productsAdd2": {
       "general": "ทั่วไป",
@@ -955,7 +1044,7 @@
       "effectiveRate": "อัตราที่แท้จริง",
       "shipping": "การจัดส่ง",
       "offerFreeShipping": "ส่งฟรี",
-      "freeShippingDesc": "ป้าย \"ส่งฟรี\" สีเขียวจะแสดงในหน้าสินค้า",
+      "freeShippingDesc": "ป้าย \"ส่งฟรี\" สีเขียวจะปรากฏในหน้าสินค้า",
       "weight": "น้ำหนัก",
       "packageDimensions": "ขนาดบรรจุภัณฑ์",
       "originCountry": "ประเทศ/ภูมิภาคต้นทาง",
@@ -1013,7 +1102,14 @@
       "tapSuggestions": "แตะคำแนะนำเพื่อเพิ่ม",
       "addOption": "เพิ่มตัวเลือก",
       "pricingStock": "ราคาและสต็อก",
-      "stockLabel": "สต็อก"
+      "stockLabel": "สต็อก",
+      "materialDefault": "วัสดุ",
+      "warrantyDefault": "การรับประกัน",
+      "tierAll": "ครีเอเตอร์ที่ได้รับอนุมัติทั้งหมด",
+      "tierBronze": "บรอนซ์ขึ้นไป",
+      "tierSilver": "ซิลเวอร์ขึ้นไป",
+      "tierGold": "โกลด์เท่านั้น",
+      "premiumProductTitle": "ชื่อสินค้าระดับพรีเมียม"
     },
     "productsEdit2": {
       "categoryTemplate": "เทมเพลตหมวดหมู่: {{label}}",
@@ -1043,14 +1139,19 @@
       "qrUnavailable": "QR ไม่พร้อมใช้",
       "scanInstruction": "สแกนด้วยแอปธนาคาร · ยอด {{amount}} รวมแล้ว",
       "qrNotUploaded": "ยังไม่ได้อัปโหลด QR",
-      "qrFixedWarn": "⚠ QR นี้เป็นแบบคงที่ — โปรดโอนยอดให้ตรงกับยอดด้านบน",
+      "qrFixedWarn": "⚠ QR นี้เป็นแบบคงที่ — กรุณาโอนยอดให้ตรงกับยอดด้านบน",
       "pickImage": "กรุณาเลือกไฟล์รูปภาพ",
       "attachSlipFirst": "กรุณาแนบสลิปการโอนก่อน",
       "slipFailed": "ส่งสลิปไม่สำเร็จ",
       "missingSeller": "ลิงก์สินค้านี้ไม่มีข้อมูลผู้ขาย กรุณาเปิดสินค้าใหม่และกด ซื้อ",
       "noItemsOrder": "ไม่มีรายการสั่งซื้อ กรุณาเพิ่มสินค้าในตะกร้าก่อน",
       "failedCreateOrder": "สร้างคำสั่งซื้อไม่สำเร็จ",
-      "qrFixedWarning": "⚠ QR นี้เป็นแบบคงที่ — กรุณาโอนยอดที่แสดงด้านบนให้ถูกต้อง"
+      "qrFixedWarning": "⚠ QR นี้เป็นแบบคงที่ — กรุณาโอนยอดที่แสดงด้านบนให้ถูกต้อง",
+      "walletQrFallback": "QR วอลเล็ต",
+      "slipPreviewAlt": "ตัวอย่างสลิป",
+      "promptPayQrAlt": "QR พร้อมเพย์",
+      "qrAlt": "QR",
+      "guestName": "แขก"
     },
     "receipt": {
       "orderDate": "วันที่สั่งซื้อ",
@@ -1082,7 +1183,16 @@
       "orderPlaced": "สั่งซื้อสำเร็จ",
       "completePaymentDesc": "ชำระเงินจากหน้าเช็คเอาท์เพื่อยืนยันคำสั่งซื้อ",
       "qtyUnit": "จำนวน: {{qty}} · หน่วย: ฿{{price}}",
-      "free": "ฟรี"
+      "free": "ฟรี",
+      "subtitle": "ใบเสร็จ",
+      "orderIdLabel": "หมายเลขคำสั่งซื้อ",
+      "transferSlipAlt": "สลิปโอนเงิน",
+      "missingOrderIdShort": "ไม่มีหมายเลขคำสั่งซื้อ — กรุณาเปิดหน้านี้หลังชำระเงินเสร็จสิ้น",
+      "payMethod": {
+        "manualTransfer": "โอนเงินด้วยตนเอง",
+        "visaMaster": "บัตรเครดิต / เดบิต",
+        "cod": "เก็บเงินปลายทาง"
+      }
     },
     "payment": {
       "branch": "สาขา: {{branch}}",
@@ -1092,7 +1202,13 @@
       "sslEncrypted": "เข้ารหัส SSL",
       "pciCompliant": "ผ่านมาตรฐาน PCI",
       "option": "ตัวเลือก: {{color}} · ขนาด: {{size}}",
-      "premiumProduct": "สินค้าพรีเมียม"
+      "premiumProduct": "สินค้าพรีเมียม",
+      "method": {
+        "visaMasterTitle": "บัตรเครดิต / เดบิต",
+        "visaMasterDesc": "ชำระด้วยบัตร Visa, Mastercard หรือ UnionPay",
+        "codTitle": "เก็บเงินปลายทาง",
+        "codDesc": "ชำระเงินสดเมื่อได้รับสินค้า"
+      }
     },
     "buy": {
       "noVariants": "สินค้านี้ไม่มีตัวเลือกให้เลือก",
@@ -1128,7 +1244,8 @@
       "enterAppCode": "ใส่รหัสจากแอป 6 หลัก",
       "disable2FA": "ปิดการยืนยันตัวตนสองชั้น",
       "settingsUpdated": "อัปเดตการตั้งค่าความปลอดภัยเรียบร้อย!",
-      "failedSetPin": "ตั้ง PIN ถอนเงินไม่สำเร็จ"
+      "failedSetPin": "ตั้ง PIN ถอนเงินไม่สำเร็จ",
+      "qrCodeAlt": "คิวอาร์โค้ด"
     },
     "creatorWithdraw2": {
       "withdrawalRules": "กฎการถอนเงิน",
@@ -1156,7 +1273,7 @@
       "withdrawals": "การถอนเงิน",
       "pendingCount": "รอดำเนินการ ({{count}})",
       "historyCount": "ประวัติ ({{count}})",
-      "feeNet": "ค่าธรรมเนียม ฿{{fee}} → สุทธิ ฿{{net}}",
+      "feeNet": "ค่าธรรมเนียม ฿{{fee}} • สุทธิ ฿{{net}}",
       "noPending": "ไม่มีการถอนที่รอดำเนินการ",
       "noHistory": "ยังไม่มีประวัติ",
       "setPinAlert": "กรุณาตั้ง PIN ถอนเงิน 6 หลักในการตั้งค่าความปลอดภัยก่อนถอนเงิน",
@@ -1175,7 +1292,7 @@
       "partnershipName": "ชื่อหุ้นส่วน",
       "companyName": "ชื่อบริษัทจดทะเบียน",
       "entityPlaceholder": "ใส่ตามที่ปรากฏในใบอนุญาต",
-      "entityNote": "* ต้องตรงกับเอกสารการจดทะเบียนของคุณ",
+      "entityNote": "* ต้องตรงกับเอกสารจดทะเบียนของคุณ",
       "bankInfoDesc": "ใส่ข้อมูลบัญชีธนาคารของร้านเพื่อรับการชำระเงิน กรุณาตรวจสอบให้แน่ใจว่าชื่อบัญชีและเลขที่บัญชีถูกต้อง ข้อมูลนี้จะใช้ในการถอนและชำระบัญชี",
       "mainProductsDesc": "เลือกหมวดที่อธิบายสินค้าที่คุณขายได้ดีที่สุด สิ่งนี้จะไม่ส่งผลกระทบต่อธุรกิจในอนาคต และจะใช้เพื่อวัตถุประสงค์การลงทะเบียนเท่านั้น",
       "secureDesc": "เพื่อความปลอดภัยของบัญชี เราต้องการอีเมลและเบอร์โทรเพื่อการยืนยัน ข้อมูลนี้จะใช้สำหรับการตรวจสอบ แนะนำให้ใช้อีเมลธุรกิจเพื่อการยืนยันที่ดีกว่า",
@@ -1193,7 +1310,7 @@
       "businessRegCert": "ใบรับรองการจดทะเบียนธุรกิจ",
       "companyBusinessLicense": "ใบอนุญาตประกอบธุรกิจ",
       "partnershipAgreement": "ข้อตกลงหุ้นส่วน",
-      "identityDocument": "เอกสารแสดงตัวตน",
+      "identityDocument": "เอกสารยืนยันตัวตน",
       "sampleImage": "ภาพตัวอย่าง",
       "sample": "ตัวอย่าง",
       "legalName": "ชื่อตามกฎหมาย",
@@ -1270,7 +1387,11 @@
       "warehouse": "คลังสินค้า",
       "documents": "เอกสาร",
       "lockedInfo": "หากต้องการเปลี่ยนรายละเอียดเหล่านี้ กรุณาติดต่อฝ่ายสนับสนุน — ข้อมูล KYC ถูกล็อกเมื่อส่งแล้ว",
-      "openShopHint": "เปิดร้านจาก /me/opensho เพื่อกรอก KYC"
+      "openShopHint": "เปิดร้านจาก /me/opensho เพื่อกรอก KYC",
+      "idDocLabel": "เอกสาร {{idType}}",
+      "idDocFallback": "บัตรประจำตัว",
+      "businessLicense": "ใบอนุญาตประกอบธุรกิจ",
+      "supportingDoc": "เอกสารประกอบ"
     },
     "myshopPanel2": {
       "openShopNow": "เปิดร้านเลย",
@@ -1294,7 +1415,11 @@
       "reportUser": "รายงานผู้ใช้",
       "reportShop": "รายงานร้าน",
       "free": "ฟรี",
-      "failedFollow": "อัปเดตการติดตามไม่สำเร็จ"
+      "failedFollow": "อัปเดตการติดตามไม่สำเร็จ",
+      "postsTab": "โพสต์",
+      "shopTab": "ร้านค้า",
+      "userFallback": "ผู้ใช้",
+      "profileOptions": "ตัวเลือกโปรไฟล์"
     },
     "profile2": {
       "message": "ส่งข้อความ",
@@ -1315,9 +1440,19 @@
       "instagram": "Instagram",
       "twitter": "Twitter",
       "telegram": "Telegram",
-      "socialCommerce": "lala Social Commerce"
+      "socialCommerce": "Lala Social Commerce",
+      "privacyTitle": "ความเป็นส่วนตัว",
+      "visEveryoneLabel": "ทุกคน",
+      "visEveryoneDesc": "มองเห็นได้สาธารณะ",
+      "visFriendsLabel": "เพื่อน",
+      "visFriendsDesc": "ผู้ติดตามที่คุณติดตามกลับ",
+      "visSelectedLabel": "ที่เลือก",
+      "visSelectedDesc": "เลือกบุคคลที่ระบุ"
     },
     "productPage2": {
+      "bangkokLocation": "กรุงเทพฯ ประเทศไทย",
+      "businessDays37": "3–7 วันทำการ",
+      "promoAlt": "{{name}} โปร {{index}}",
       "pickOptionFirst": "เลือกตัวเลือกทุกอย่างก่อน",
       "outOfStock": "สินค้าหมด",
       "stockLeft": "มีสินค้า — {{count}} ชิ้น",
@@ -1358,7 +1493,11 @@
       "stickerPartner": "Lala Shop Partner",
       "factoryDirect": "factory_direct",
       "shopBioFallback": "พันธมิตรโรงงานขายส่งคุณภาพสูง น่าเชื่อถือ",
-      "noSimilarProducts": "ไม่พบสินค้าใกล้เคียง"
+      "noSimilarProducts": "ไม่พบสินค้าใกล้เคียง",
+      "returnsLabel": "การคืนสินค้า",
+      "specs": "ข้อมูลจำเพาะ",
+      "description": "รายละเอียด",
+      "selected": "เลือกแล้ว"
     },
     "socialPage2": {
       "whatsOnMind": "คุณคิดอะไรอยู่ {{name}}?",
@@ -1379,7 +1518,8 @@
       "selectFriends": "เลือกเพื่อน",
       "excludeFriends": "ยกเว้นเพื่อน",
       "done": "เสร็จ",
-      "failedShare": "แชร์โพสต์ไม่สำเร็จ กรุณาตรวจสอบการเชื่อมต่อ"
+      "failedShare": "แชร์โพสต์ไม่สำเร็จ กรุณาตรวจสอบการเชื่อมต่อ",
+      "uploadFailed": "อัปโหลดไม่สำเร็จ"
     },
     "topFactories2": {
       "eliteTier": "ผู้ผลิตระดับสูง",
@@ -1410,7 +1550,8 @@
       "warehouse": "คลังสินค้า",
       "submittingApplication": "กำลังส่ง…",
       "submitApplication": "ส่งใบสมัคร",
-      "nextBtn": "ถัดไป"
+      "nextBtn": "ถัดไป",
+      "failedSubmit": "ส่งใบสมัครไม่สำเร็จ"
     },
     "generalPanel": {
       "storeNameLabel": "ชื่อร้าน / ชื่อ",
@@ -1443,7 +1584,8 @@
       "done": "เสร็จ",
       "link": "ลิงก์",
       "removeConfirm": "ลบสินค้านี้ออกจากร้านของคุณ?",
-      "failedRemove": "ลบไม่สำเร็จ"
+      "failedRemove": "ลบไม่สำเร็จ",
+      "checkThis": "ดูอันนี้สิ"
     },
     "creatorAttr2": {
       "today": "วันนี้",
@@ -1480,15 +1622,37 @@
     },
     "withdrawShop": {
       "shopWithdraw": "ถอนเงินร้าน",
-      "webSalesOnly": "ยอดขายเว็บเท่านั้น — POS ไม่สามารถถอนได้",
+      "webSalesOnly": "ยอดขายเว็บเท่านั้น — POS ถอนไม่ได้",
       "buyerConfirms": "ผู้ซื้อยืนยันรับสินค้าก่อนเงินเข้ายอด",
       "verifyBank": "ยืนยันธนาคารเพื่อหลีกเลี่ยงความล่าช้า",
       "pendingCancel": "คำขอที่รอสามารถยกเลิกได้ก่อนอนุมัติ",
       "setPin": "ตั้ง PIN 6 หลักก่อนถอนเงินครั้งแรก",
-      "posRevenue": "รายได้ POS ฿{{amount}} · ในร้าน ถอนไม่ได้",
+      "posRevenue": "รายได้ POS ฿{{amount}} • ในร้าน ถอนไม่ได้",
       "withdrawNow": "ถอนเงินเลย",
       "afterReceiptWeb": "หลังจากผู้ซื้อยืนยันรับสินค้า ยอดขายเว็บจะถูกโอนภายใน {{days}} วันทำการ กรุณายืนยันข้อมูลธนาคารเพื่อหลีกเลี่ยงความล่าช้า",
-      "noShopAccount": "ไม่มีบัญชีธนาคารร้าน เปิดร้าน / กรอก KYC เพื่อเพิ่มบัญชีรับเงิน"
+      "noShopAccount": "ไม่มีบัญชีธนาคารร้าน เปิดร้าน / กรอก KYC เพื่อเพิ่มบัญชีรับเงิน",
+      "title": "ถอนเงินร้านค้า",
+      "withdrawals": "การถอนเงิน",
+      "pendingCount": "รอดำเนินการ ({{count}})",
+      "historyCount": "ประวัติ ({{count}})",
+      "feeNet": "ค่าธรรมเนียม ฿{{fee}} → สุทธิ ฿{{net}}",
+      "noPending": "ไม่มีคำขอถอนเงินที่รอดำเนินการ",
+      "noHistoryYet": "ยังไม่มีประวัติ",
+      "tooltipRules": "กฎการถอนเงิน",
+      "posRevenueLabel": "รายได้ POS ฿{{amount}} · ในร้าน ถอนไม่ได้",
+      "maxBtn": "สูงสุด",
+      "minMaxFeeShort": "ขั้นต่ำ ฿{{min}} • สูงสุด ฿{{max}} • ค่าธรรมเนียม {{fee}}%",
+      "processingBtn": "กำลังดำเนินการ...",
+      "withdrawNowBtn": "ถอนเงินทันที",
+      "pinDescAmount": "กรุณาป้อน PIN 6 หลักเพื่อยืนยันการถอนเงิน ฿{{amount}}",
+      "verifying": "กำลังตรวจสอบ...",
+      "withdrawalDestination": "ปลายทางการถอนเงิน",
+      "paymentMethodsHdr": "วิธีการชำระเงิน",
+      "pendingHistoryBtn": "รอดำเนินการ & ประวัติ",
+      "afterReceipt": "หลังจากผู้ซื้อยืนยันการรับสินค้า ยอดขายออนไลน์จะถูกโอนภายใน",
+      "businessDaysSuffix": "{{days}} วันทำการ",
+      "verifyBankInfo": "กรุณาตรวจสอบข้อมูลธนาคารเพื่อหลีกเลี่ยงความล่าช้า",
+      "setPinFirst": "ตั้ง PIN 6 หลักก่อนการถอนเงินครั้งแรก"
     },
     "notifications2": {
       "secondsAgo": "เมื่อสักครู่",
@@ -1509,6 +1673,174 @@
       "noContent": "(ไม่มีเนื้อหา)",
       "copyShort": "คัดลอก",
       "copiedShort": "คัดลอกแล้ว"
+    },
+    "gallery": {
+      "previousImage": "ภาพก่อนหน้า",
+      "nextImage": "ภาพถัดไป",
+      "showImage": "แสดงภาพที่ {{index}}"
+    },
+    "addBank": {
+      "title": "เพิ่มบัญชีธนาคาร",
+      "nameMatchWarning": "ชื่อบัญชีต้องตรงกับชื่อที่ลงทะเบียน เพื่อป้องกันการโอนผิดพลาด",
+      "fullNameEnglish": "ชื่อเต็ม (ภาษาอังกฤษ)",
+      "accountNamePlaceholder": "ชื่อบัญชีธนาคาร",
+      "bank": "ธนาคาร",
+      "selectBank": "เลือกธนาคาร",
+      "bankAccountNumber": "เลขที่บัญชีธนาคาร",
+      "accountNumberPlaceholder": "ป้อนเลขบัญชี 12 หลัก",
+      "submitAndSave": "ส่งและบันทึก",
+      "consentBefore": "การยืนยันถือว่าคุณยอมรับ",
+      "transferTerms": "เงื่อนไขการโอน",
+      "consentAfter": "และอนุญาตให้ระบบเก็บข้อมูลธนาคารเพื่อใช้ในการชำระเงิน",
+      "fillAll": "กรุณากรอกข้อมูลให้ครบ",
+      "cannotConnect": "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้"
+    },
+    "productCategories": {
+      "fashion": "แฟชั่นและเครื่องประดับ",
+      "electronics": "อิเล็กทรอนิกส์",
+      "beauty": "ความงามและของใช้ส่วนตัว",
+      "food": "อาหารและเครื่องดื่ม",
+      "home": "บ้านและของใช้ในบ้าน",
+      "mother_baby": "แม่และเด็ก",
+      "toys": "ของเล่นและงานอดิเรก",
+      "sports": "กีฬาและกิจกรรมกลางแจ้ง",
+      "automotive": "ยานยนต์",
+      "health": "สุขภาพและความเป็นอยู่ดี",
+      "pet": "สัตว์เลี้ยง",
+      "office": "สำนักงานและเครื่องเขียน",
+      "tools": "เครื่องมือและของใช้ในบ้าน",
+      "jewelry": "เครื่องประดับและนาฬิกา",
+      "digital": "สินค้าดิจิทัล",
+      "others": "อื่นๆ"
+    },
+    "categoryConfig": {
+      "fashion": {
+        "label": "แฟชั่นและเครื่องประดับ",
+        "description": "เสื้อผ้า รองเท้า กระเป๋า เครื่องประดับ ผู้ซื้อเลือกไซส์และสีก่อนสั่งซื้อ"
+      },
+      "electronics": {
+        "label": "อิเล็กทรอนิกส์",
+        "description": "สินค้าเทคโนโลยี ตัวเลือกมักเป็นสี ความจุ และการเชื่อมต่อ"
+      },
+      "beauty": {
+        "label": "ความงามและของใช้ส่วนตัว",
+        "description": "ผลิตภัณฑ์ความงาม เครื่องสำอาง น้ำหอม ตัวเลือกบรรยายเฉดสีและขนาด"
+      },
+      "food": {
+        "label": "อาหารและเครื่องดื่ม",
+        "description": "อาหารและเครื่องดื่ม ระบุขนาดแพ็คและวันหมดอายุ — จำเป็นต่อการปฏิบัติตามข้อกำหนด"
+      },
+      "home": {
+        "label": "บ้านและของใช้ในบ้าน",
+        "description": "เฟอร์นิเจอร์ ของตกแต่ง เครื่องครัว ระบุวัสดุและขนาด"
+      },
+      "mother_baby": {
+        "label": "แม่และเด็ก",
+        "description": "ผลิตภัณฑ์เด็ก ตัวเลือกตามช่วงอายุ ระบุข้อมูลด้านความปลอดภัย"
+      },
+      "toys": {
+        "label": "ของเล่นและงานอดิเรก",
+        "description": "ของเล่น โมเดล งานอดิเรก ตัวเลือกตามสี ระบุช่วงอายุ"
+      },
+      "sports": {
+        "label": "กีฬาและกิจกรรมกลางแจ้ง",
+        "description": "อุปกรณ์กีฬา ตัวเลือกตามขนาดและสี ระบุประเภทกีฬา"
+      },
+      "automotive": {
+        "label": "ยานยนต์",
+        "description": "อะไหล่รถยนต์และมอเตอร์ไซค์ ระบุข้อมูลความเข้ากันได้"
+      },
+      "health": {
+        "label": "สุขภาพและความเป็นอยู่ดี",
+        "description": "วิตามิน อาหารเสริม อุปกรณ์การแพทย์ ตัวเลือกตามจำนวนแพ็ค"
+      },
+      "pet": {
+        "label": "สัตว์เลี้ยง",
+        "description": "อาหารและของใช้สัตว์เลี้ยง ตัวเลือกตามขนาด ระบุประเภทสัตว์"
+      },
+      "office": {
+        "label": "สำนักงานและเครื่องเขียน",
+        "description": "เครื่องเขียนและของใช้สำนักงาน ตัวเลือกตามสีและจำนวนแพ็ค"
+      },
+      "tools": {
+        "label": "เครื่องมือและของใช้ในบ้าน",
+        "description": "เครื่องมือช่าง เครื่องมือไฟฟ้า อุปกรณ์ฮาร์ดแวร์ ระบุแหล่งพลังงาน"
+      },
+      "jewelry": {
+        "label": "เครื่องประดับและนาฬิกา",
+        "description": "เครื่องประดับและนาฬิกา ตัวเลือกตามโลหะ อัญมณี และไซส์แหวน"
+      },
+      "digital": {
+        "label": "สินค้าดิจิทัล",
+        "description": "ซอฟต์แวร์ อีบุ๊ก ไลเซนส์ ไม่ต้องระบุตัวเลือกทางกายภาพ"
+      },
+      "others": {
+        "label": "อื่นๆ",
+        "description": "หมวดสำหรับสินค้าอื่นๆ ที่ไม่อยู่ในรายการข้างบน"
+      }
+    },
+    "variantNames": {
+      "size": "ขนาด",
+      "color": "สี",
+      "storage": "ความจุ",
+      "connectivity": "การเชื่อมต่อ",
+      "volume": "ปริมาณ",
+      "shade": "เฉดสี",
+      "pack_size": "ขนาดแพ็ค",
+      "flavor": "รสชาติ",
+      "age_range": "ช่วงอายุ",
+      "pet_size": "ขนาดสัตว์เลี้ยง",
+      "pack": "แพ็ค",
+      "voltage": "แรงดันไฟ",
+      "metal": "โลหะ",
+      "ring_size": "ไซส์แหวน",
+      "license": "ไลเซนส์"
+    },
+    "attributeLabels": {
+      "material": "วัสดุ",
+      "fit": "ทรง",
+      "gender": "เพศ",
+      "care_instructions": "วิธีดูแล",
+      "brand": "แบรนด์",
+      "model_number": "หมายเลขรุ่น",
+      "warranty_period": "ระยะเวลารับประกัน",
+      "power_source": "แหล่งพลังงาน",
+      "key_specifications": "ข้อมูลจำเพาะหลัก",
+      "skin_type": "ประเภทผิว",
+      "key_ingredients": "ส่วนผสมหลัก",
+      "expiry___pao": "วันหมดอายุ / PAO",
+      "cruelty_free": "ไม่ทดลองในสัตว์?",
+      "ingredients": "ส่วนผสม",
+      "expiry_date": "วันหมดอายุ",
+      "storage_instructions": "วิธีเก็บรักษา",
+      "dietary": "ข้อมูลโภชนาการ",
+      "allergen_warnings": "คำเตือนสารก่อภูมิแพ้",
+      "suitable_room": "ห้องที่เหมาะ",
+      "assembly_required": "ต้องประกอบ?",
+      "recommended_age": "อายุที่แนะนำ",
+      "safety_certification": "การรับรองความปลอดภัย",
+      "battery_required": "ใช้แบตเตอรี่?",
+      "sport___activity": "กีฬา / กิจกรรม",
+      "vehicle_compatibility": "ความเข้ากันได้ของรถ",
+      "part_number___oem": "เลขชิ้นส่วน / OEM",
+      "active_ingredients": "ส่วนประกอบสำคัญ",
+      "recommended_dosage": "ขนาดยาที่แนะนำ",
+      "fda___regulatory_certification": "อย. / การรับรอง",
+      "pet_type": "ประเภทสัตว์เลี้ยง",
+      "use_case": "การใช้งาน",
+      "warranty": "การรับประกัน",
+      "metal_purity": "ความบริสุทธิ์โลหะ",
+      "gemstone": "อัญมณี",
+      "weight_g": "น้ำหนัก (กรัม)",
+      "warranty___certificate": "ใบรับประกัน",
+      "file_type": "ประเภทไฟล์",
+      "delivery_method": "วิธีการส่งมอบ",
+      "license_duration": "ระยะเวลาไลเซนส์",
+      "additional_details": "รายละเอียดเพิ่มเติม"
+    },
+    "categoryPage": {
+      "noProductsInCategory": "ไม่พบสินค้าใน {{name}}",
+      "checkBackLater": "กลับมาดูใหม่ภายหลัง หรือสำรวจหมวดอื่น"
     }
   },
   "components": {
@@ -1534,7 +1866,13 @@
       "deleteChatConfirm": "ลบการสนทนานี้?",
       "blockUser": "บล็อกผู้ใช้",
       "viewProfile": "ดูโปรไฟล์",
-      "openChat": "เปิดแชท"
+      "openChat": "เปิดแชท",
+      "askingAbout": "กำลังถามเกี่ยวกับ",
+      "seen": "อ่านแล้ว",
+      "sent": "ส่งแล้ว",
+      "userFallback": "ผู้ใช้",
+      "messagesAriaLabel": "ข้อความ",
+      "viewProfileAria": "ดูโปรไฟล์ของ {{name}}"
     },
     "userList": {
       "loading": "กำลังโหลด...",
@@ -1551,6 +1889,166 @@
     "empty": {
       "noData": "ยังไม่มีข้อมูล",
       "tryAgain": "ลองอีกครั้ง"
+    },
+    "truck": {
+      "backToHome": "กลับสู่หน้าหลัก",
+      "globalLogisticsNetwork": "เครือข่ายโลจิสติกส์ระดับโลก",
+      "heroTitlePart1": "รวดเร็ว ปลอดภัย",
+      "heroTitleReliable": "น่าเชื่อถือ",
+      "heroTitlePart2": "การกระจายสินค้า",
+      "heroSubtitle": "เชื่อมต่อธุรกิจของคุณสู่ระดับโลกผ่านศูนย์กระจายสินค้าประสิทธิภาพสูง",
+      "exploreHub": "สำรวจฮับ",
+      "protection": "การปกป้อง",
+      "tradeAssurance": "การรับประกันการค้า",
+      "tradeAssuranceDesc": "ทุกคำสั่งซื้อที่กระจายผ่านเครือข่ายของเรามีโล่ป้องกัน ปกป้องผลประโยชน์การค้าทั่วโลกของคุณ",
+      "paymentProtection": "รับประกันการชำระเงิน 100%",
+      "qualitySafeguard": "รับประกันคุณภาพสินค้า",
+      "onTimeShipment": "รับประกันการจัดส่งตรงเวลา",
+      "liveNetworkStatus": "สถานะเครือข่ายแบบเรียลไทม์",
+      "operational": "ใช้งานได้",
+      "europeanHub": "ฮับยุโรป",
+      "aseanHub": "ฮับอาเซียน",
+      "naHub": "ฮับอเมริกาเหนือ",
+      "countryGermany": "เยอรมนี",
+      "countryThailand": "ไทย",
+      "countryUsa": "สหรัฐอเมริกา",
+      "warehouseSourcing": "การจัดหาคลังสินค้า",
+      "warehouseSourcingDesc": "สต็อกที่คลังสินค้าทั่วโลกของเรา",
+      "pickPack": "หยิบและบรรจุ",
+      "pickPackDesc": "การบรรจุและติดฉลากตามมาตรฐาน",
+      "localDelivery": "การจัดส่งในพื้นที่",
+      "localDeliveryDesc": "พันธมิตรจัดส่งระยะสุดท้ายแบบบูรณาการ",
+      "bangkokHub": "ฮับกรุงเทพ",
+      "bangkokHubSub": "เวลาดำเนินการ: เฉลี่ย 2 ชม.",
+      "networkLoad": "โหลดเครือข่าย",
+      "networkLoadSub": "อัตราการจัดส่งสำเร็จ 92%",
+      "transitStatus": "สถานะการขนส่ง",
+      "transitStatusSub": "เส้นทางทั้งหมดปกติ"
+    }
+  },
+  "category": {
+    "noProducts": "ไม่พบสินค้าใน {{category}}"
+  },
+  "time": {
+    "now": "ตอนนี้",
+    "m": "{{count}}น.",
+    "h": "{{count}}ชม.",
+    "d": "{{count}}ว."
+  },
+  "social": {
+    "followers": "ผู้ติดตาม",
+    "following": "กำลังติดตาม"
+  },
+  "openshopStep1": {
+    "businessTypes": {
+      "individual": {
+        "title": "บุคคลธรรมดา",
+        "desc": "ใช้บัตรประชาชนหรือพาสปอร์ต คุณขายในฐานะส่วนตัวไม่ใช่ธุรกิจที่จดทะเบียน"
+      },
+      "sole_proprietor": {
+        "title": "กิจการเจ้าของคนเดียว",
+        "desc": "ต้องใช้ใบทะเบียนวิสาหกิจ คุณเป็นเจ้าของเพียงผู้เดียวของธุรกิจที่จดทะเบียนถูกต้อง"
+      },
+      "corporate": {
+        "title": "นิติบุคคล",
+        "desc": "นิติบุคคลในรูปแบบบริษัท แยกส่วนจากเจ้าของอย่างชัดเจน"
+      },
+      "partnership": {
+        "title": "ห้างหุ้นส่วน",
+        "desc": "ธุรกิจที่ดำเนินการร่วมกันโดยบุคคลตั้งแต่สองคนขึ้นไป"
+      }
+    },
+    "requirements": {
+      "individual": [
+        "บัตรประชาชน 11 หลัก หรือพาสปอร์ต",
+        "ชื่อและนามสกุลจริง",
+        "เลขบัตรประชาชน 11 หลัก",
+        "ที่อยู่ปัจจุบัน"
+      ],
+      "sole_proprietor": [
+        "ใบทะเบียนวิสาหกิจ",
+        "เลขประจำตัวผู้เสียภาษี (TIN)",
+        "บัตรประชาชนเจ้าของวิสาหกิจ",
+        "ที่ตั้งธุรกิจ"
+      ],
+      "corporate": [
+        "ใบทะเบียนวิสาหกิจนิติบุคคล",
+        "ใบอนุญาตดำเนินธุรกิจ",
+        "บัตรประชาชนผู้แทนบริษัท",
+        "เลขบัญชีธนาคนาคารบริษัท 12 หลัก"
+      ],
+      "partnership": [
+        "สัญญาหุ้นส่วน",
+        "ใบทะเบียนวิสาหกิจร่วมหุ้น",
+        "บัตรประชาชนหุ้นส่วนทั้งหมด",
+        "เลขประจำตัวผู้เสียภาษีกิจการ"
+      ]
+    }
+  },
+  "openshopStep2More": {
+    "partnershipName": "ชื่อห้างหุ้นส่วน",
+    "companyName": "ชื่อบริษัท",
+    "entityPlaceholder": "ใส่ชื่อนิติบุคคลตามใบจดทะเบียน",
+    "entityNote": "กรุณาระบุชื่อให้ตรงกับเอกสารจดทะเบียนธุรกิจ",
+    "invalidEmail": "รูปแบบอีเมลไม่ถูกต้อง"
+  },
+  "openshopStep3More": {
+    "businessRegCert": "ใบทะเบียนวิสาหกิจ",
+    "companyBusinessLicense": "ใบอนุญาตดำเนินธุรกิจบริษัท",
+    "partnershipAgreement": "สัญญาหุ้นส่วน",
+    "identityDocument": "เอกสารยืนยันตัวตน",
+    "months": [
+      "มกราคม",
+      "กุมภาพันธ์",
+      "มีนาคม",
+      "เมษายน",
+      "พฤษภาคม",
+      "มิถุนายน",
+      "กรกฎาคม",
+      "สิงหาคม",
+      "กันยายน",
+      "ตุลาคม",
+      "พฤศจิกายน",
+      "ธันวาคม"
+    ]
+  },
+  "openshopStep4More": {
+    "addressNotSpecified": "ไม่ได้ระบุที่อยู่",
+    "businessTypeNames": {
+      "individual": "บุคคลธรรมดา",
+      "sole_proprietor": "กิจการเจ้าของคนเดียว",
+      "corporate": "นิติบุคคล",
+      "partnership": "ห้างหุ้นส่วน"
+    },
+    "docLabels": {
+      "passport": "พาสปอร์ต",
+      "nationalId": "บัตรประชาชน",
+      "businessRegCert": "ใบทะเบียนวิสาหกิจ",
+      "companyBusinessLicense": "ใบอนุญาตดำเนินธุรกิจบริษัท",
+      "partnershipAgreement": "สัญญาหุ้นส่วน",
+      "businessLicense": "ใบอนุญาตธุรกิจ"
+    }
+  },
+  "paymentMethods": {
+    "bcel_one": {
+      "title": "BCEL One",
+      "desc": "ชำระผ่านแอป BCEL One ด้วย OnePay QR"
+    },
+    "ldb_trust": {
+      "title": "LDB Trust",
+      "desc": "ชำระผ่านแอป LDB Trust"
+    },
+    "jdb_yes": {
+      "title": "JDB Yes",
+      "desc": "ชำระผ่านแอป JDB Yes"
+    },
+    "visa_master": {
+      "title": "บัตรเครดิต / เดบิต",
+      "desc": "ชำระผ่านบัตร Visa, Mastercard หรือ UnionPay"
+    },
+    "cod": {
+      "title": "เก็บเงินปลายทาง",
+      "desc": "ชำระเงินสดปลายทางเมื่อได้รับสินค้า"
     }
   }
 }

@@ -64,7 +64,7 @@ const ShippingSettings: React.FC = () => {
       setSuccess(true);
       setTimeout(() => setSuccess(false), 2500);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Save failed");
+      setError(err instanceof Error ? err.message : t("pages.shippingSettings.saveFailed"));
     } finally {
       setSaving(false);
     }
@@ -119,28 +119,28 @@ const ShippingSettings: React.FC = () => {
       )}
       {success && (
         <div className="rounded-md bg-emerald-50 px-3 py-2 text-[12px] text-emerald-700 inline-flex items-center gap-2">
-          <CheckCircle2 className="w-3.5 h-3.5" /> Saved successfully
+          <CheckCircle2 className="w-3.5 h-3.5" /> {t("pages.shippingSettings.savedSuccessfully")}
         </div>
       )}
 
-      <Section title="Defaults" hint="Used when a product doesn't override shipping.">
+      <Section title={t("pages.shippingSettings.defaults")} hint={t("pages.shippingSettings.defaultsHint")}>
         <ToggleRow
           icon={Truck}
-          title="Enable shipping"
-          desc="Disable to mark all products as digital / pickup-only."
+          title={t("pages.shippingSettings.enableShipping")}
+          desc={t("pages.shippingSettings.enableShippingDesc")}
           checked={form.enabled}
           onChange={(v) => setForm({ ...form, enabled: v })}
         />
         <ToggleRow
           icon={CheckCircle2}
-          title="Free shipping by default"
-          desc="Override per-product. New products inherit this setting."
+          title={t("pages.shippingSettings.freeShipDefault")}
+          desc={t("pages.shippingSettings.freeShipDefaultDesc")}
           checked={form.freeShippingDefault}
           onChange={(v) => setForm({ ...form, freeShippingDefault: v })}
         />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pl-7">
-          <Field label="Default rate (฿)">
+          <Field label={t("pages.shippingSettings.defaultRate")}>
             <input
               type="number"
               min="0"
@@ -149,7 +149,7 @@ const ShippingSettings: React.FC = () => {
               onChange={(e) => setForm({ ...form, defaultRate: Number(e.target.value) })}
             />
           </Field>
-          <Field label="Lead time (days)">
+          <Field label={t("pages.shippingSettings.leadTimeDays")}>
             <div className="flex items-center gap-2">
               <input
                 type="number"
@@ -178,7 +178,7 @@ const ShippingSettings: React.FC = () => {
               />
             </div>
           </Field>
-          <Field label="Default package weight">
+          <Field label={t("pages.shippingSettings.defaultPackageWeight")}>
             <div className="flex items-center gap-2">
               <input
                 type="number"
@@ -205,13 +205,13 @@ const ShippingSettings: React.FC = () => {
       </Section>
 
       <Section
-        title="Shipping zones"
-        hint="Override defaults per region. Buyers in matching countries get the zone rate."
+        title={t("pages.shippingSettings.shippingZones")}
+        hint={t("pages.shippingSettings.shippingZonesHint")}
       >
         {form.zones.length === 0 ? (
           <div className="text-center py-8 text-gray-400">
             <MapPin className="w-7 h-7 mx-auto mb-2 text-gray-300" />
-            <p className="text-[12px]">No zones yet — defaults apply to all destinations.</p>
+            <p className="text-[12px]">{t("pages.shippingSettings.noZones")}</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -222,7 +222,7 @@ const ShippingSettings: React.FC = () => {
                     className={`${inputCls} flex-1 mr-2`}
                     value={z.name}
                     onChange={(e) => updateZone(z.id, { name: e.target.value })}
-                    placeholder="Zone name (e.g. Bangkok metro)"
+                    placeholder={t("pages.shippingSettings.zoneName")}
                   />
                   <button
                     type="button"
@@ -232,7 +232,7 @@ const ShippingSettings: React.FC = () => {
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
-                <Field label="Countries (comma-separated ISO codes)">
+                <Field label={t("pages.shippingSettings.countriesLabel")}>
                   <input
                     className={`${inputCls} font-mono`}
                     value={z.countries.join(", ")}
@@ -244,11 +244,11 @@ const ShippingSettings: React.FC = () => {
                           .filter(Boolean),
                       })
                     }
-                    placeholder="TH, LA, KH"
+                    placeholder={t("pages.shippingSettings.countriesPlaceholder")}
                   />
                 </Field>
                 <div className="grid grid-cols-3 gap-2">
-                  <Field label="Rate (฿)">
+                  <Field label={t("pages.shippingSettings.rate")}>
                     <input
                       type="number"
                       min="0"
@@ -257,7 +257,7 @@ const ShippingSettings: React.FC = () => {
                       onChange={(e) => updateZone(z.id, { rate: Number(e.target.value) })}
                     />
                   </Field>
-                  <Field label="Free over (฿)">
+                  <Field label={t("pages.shippingSettings.freeOver")}>
                     <input
                       type="number"
                       min="0"
@@ -268,7 +268,7 @@ const ShippingSettings: React.FC = () => {
                       }
                     />
                   </Field>
-                  <Field label="Days (min–max)">
+                  <Field label={t("pages.shippingSettings.daysMinMax")}>
                     <div className="flex items-center gap-1">
                       <input
                         type="number"
@@ -305,7 +305,7 @@ const ShippingSettings: React.FC = () => {
           onClick={addZone}
           className="mt-2 inline-flex items-center text-[12px] font-bold text-[#00aeff] hover:underline"
         >
-          <Plus className="w-3.5 h-3.5 mr-1" /> Add zone
+          <Plus className="w-3.5 h-3.5 mr-1" /> {t("pages.shippingSettings.addZone")}
         </button>
       </Section>
     </div>

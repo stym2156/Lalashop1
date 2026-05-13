@@ -57,7 +57,7 @@ export default function FollowersPage() {
         }
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Failed to load followers");
+          setError(err instanceof Error ? err.message : t("pages.followersPage.failedToLoad"));
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -82,7 +82,7 @@ export default function FollowersPage() {
   return (
     <div className="min-h-screen bg-white font-sans pb-20">
       <Head>
-        <title>Followers of @{username} | SupplyNet</title>
+        <title>{t("pages.followersPage.titleSuffix", { username })}</title>
       </Head>
 
       <header className="sticky top-0 z-50 bg-white border-b border-gray-border px-4 py-3 flex items-center justify-between max-w-2xl mx-auto w-full">
@@ -106,7 +106,7 @@ export default function FollowersPage() {
             <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="text"
-              placeholder="Search followers..."
+              placeholder={t("pages.followersPage.searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-gray-light border-none rounded-xl py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/20 transition-all text-dark"
@@ -170,7 +170,7 @@ export default function FollowersPage() {
                 <Search size={32} strokeWidth={1.5} className="opacity-40" />
               </div>
               <p className="text-base font-bold text-dark mb-1">{t("pages.followersPage.noFollowers")}</p>
-              <p className="text-sm">Once people follow @{username}, they'll appear here</p>
+              <p className="text-sm">{t("pages.followersPage.appearHere", { username })}</p>
             </div>
           )}
         </div>

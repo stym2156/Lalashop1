@@ -8,15 +8,6 @@ import {
   type CustomerSegment,
 } from "@/services/sellerApi";
 
-const SEGMENT_OPTIONS: Array<{ value: CustomerSegment; label: string }> = [
-  { value: "", label: "None" },
-  { value: "vip", label: "VIP" },
-  { value: "regular", label: "Regular" },
-  { value: "new", label: "New" },
-  { value: "inactive", label: "Inactive" },
-  { value: "blocked", label: "Blocked" },
-];
-
 const SEGMENT_BADGE: Record<CustomerSegment, string> = {
   vip: "bg-amber-100 text-amber-700",
   regular: "bg-blue-100 text-blue-700",
@@ -31,6 +22,14 @@ const initial = (name?: string): string =>
 
 const LabelsPage: React.FC = () => {
   const { t } = useTranslation("common");
+  const SEGMENT_OPTIONS: Array<{ value: CustomerSegment; label: string }> = [
+    { value: "", label: t("pages.labels.segNone") },
+    { value: "vip", label: t("pages.labels.segVip") },
+    { value: "regular", label: t("pages.labels.segRegular") },
+    { value: "new", label: t("pages.labels.segNew") },
+    { value: "inactive", label: t("pages.labels.segInactive") },
+    { value: "blocked", label: t("pages.labels.segBlocked") },
+  ];
   const [items, setItems] = useState<SellerCustomer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +42,7 @@ const LabelsPage: React.FC = () => {
       const list = await fetchCustomers();
       setItems(list);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Load failed");
+      setError(err instanceof Error ? err.message : t("status.failed"));
     } finally {
       setLoading(false);
     }
@@ -129,14 +128,14 @@ const LabelsPage: React.FC = () => {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search customers…"
+            placeholder={t("pages.labels.searchPlaceholder")}
             className="bg-gray-50 border border-gray-100 focus:bg-white focus:border-gray-200 outline-none rounded-md pl-8 pr-3 py-1.5 text-xs w-64"
           />
         </div>
         {allTags.length > 0 && (
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="text-[10px] font-bold text-gray-500 tracking-wide">
-              All tags:
+              {t("pages.labels.allTags")}
             </span>
             {allTags.map((t) => (
               <span
@@ -162,7 +161,7 @@ const LabelsPage: React.FC = () => {
         <div className="py-16 text-center">
           <Tag className="w-8 h-8 mx-auto mb-3 text-gray-300" />
           <p className="text-[13px] font-bold text-gray-700">
-            {items.length === 0 ? "No customers yet" : "No matches"}
+            {items.length === 0 ? t("pages.labels.noCustomers") : t("common.noMatches")}
           </p>
         </div>
       ) : (
@@ -198,6 +197,15 @@ const CustomerRow: React.FC<CustomerRowProps> = ({
   onRemoveTag,
   onSegmentChange,
 }) => {
+  const { t } = useTranslation("common");
+  const SEGMENT_OPTIONS: Array<{ value: CustomerSegment; label: string }> = [
+    { value: "", label: t("pages.labels.segNone") },
+    { value: "vip", label: t("pages.labels.segVip") },
+    { value: "regular", label: t("pages.labels.segRegular") },
+    { value: "new", label: t("pages.labels.segNew") },
+    { value: "inactive", label: t("pages.labels.segInactive") },
+    { value: "blocked", label: t("pages.labels.segBlocked") },
+  ];
   const [tagInput, setTagInput] = useState("");
 
   const submitTag = (e: React.FormEvent) => {
@@ -223,7 +231,7 @@ const CustomerRow: React.FC<CustomerRowProps> = ({
       )}
       <div className="flex-1 min-w-0">
         <p className="text-xs font-bold text-gray-900 truncate">
-          {customer.name || customer.username || "Customer"}
+          {customer.name || customer.username || t("common.user")}
         </p>
         <div className="flex items-center gap-1.5 mt-1 flex-wrap">
           {customer.tags.map((t) => (
@@ -244,7 +252,7 @@ const CustomerRow: React.FC<CustomerRowProps> = ({
             <input
               value={tagInput}
               onChange={(e) => setTagInput(e.target.value)}
-              placeholder="+ tag"
+              placeholder={t("pages.labels.addTag")}
               className="text-[10px] bg-gray-50 border border-transparent focus:border-gray-200 focus:bg-white outline-none rounded px-1.5 py-0.5 w-20"
             />
           </form>

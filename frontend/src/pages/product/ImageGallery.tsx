@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface ImageGalleryProps {
   /** Backwards-compat single image (cover). */
@@ -12,6 +13,7 @@ interface ImageGalleryProps {
 }
 
 export function ImageGallery({ image, images, name }: ImageGalleryProps) {
+  const { t } = useTranslation("common");
   const gallery = useMemo<string[]>(() => {
     if (Array.isArray(images) && images.length) return images;
     if (Array.isArray(image)) return image as unknown as string[];
@@ -60,7 +62,7 @@ export function ImageGallery({ image, images, name }: ImageGalleryProps) {
             fontWeight: 700,
           }}
         >
-          No image
+          {t("status.noImage")}
         </div>
       </div>
     );
@@ -109,14 +111,14 @@ export function ImageGallery({ image, images, name }: ImageGalleryProps) {
           <>
             <button
               onClick={() => scrollTo(activeIdx - 1)}
-              aria-label="Previous image"
+              aria-label={t("pages.gallery.previousImage")}
               style={arrowStyle("left")}
             >
               <ChevronLeft size={18} />
             </button>
             <button
               onClick={() => scrollTo(activeIdx + 1)}
-              aria-label="Next image"
+              aria-label={t("pages.gallery.nextImage")}
               style={arrowStyle("right")}
             >
               <ChevronRight size={18} />
@@ -176,7 +178,7 @@ export function ImageGallery({ image, images, name }: ImageGalleryProps) {
               <button
                 key={`thumb-${src}-${i}`}
                 onClick={() => scrollTo(i)}
-                aria-label={`Show image ${i + 1}`}
+                aria-label={t("pages.gallery.showImage", { index: i + 1 })}
                 aria-current={active}
                 style={{
                   flex: "0 0 auto",

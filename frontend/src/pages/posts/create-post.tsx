@@ -213,12 +213,12 @@ export default function CreatePostPage() {
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowVisibilityMenu(false)} className="absolute inset-0 bg-dark/40 backdrop-blur-sm" />
             <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} className="relative bg-white w-full rounded-t-[2.5rem] p-6 pb-12">
               <div className="w-12 h-1 bg-slate-200 rounded-full mx-auto mb-6" />
-              <h3 className="text-center font-display font-black  mb-6 tracking-widest">{t("pages.settings.security")}</h3>
+              <h3 className="text-center font-display font-black  mb-6 tracking-widest">{t("pages.posts2.privacyTitle")}</h3>
               <div className="grid grid-cols-1 gap-2">
                 {[
-                  { id: "public", label: "Everyone", icon: Globe, desc: "Public visibility" },
-                  { id: "friends", label: "Friends", icon: Users, desc: "Followers you follow back" },
-                  { id: "specific_friends", label: "Selected", icon: UserCheck, desc: "Choose specific people" }
+                  { id: "public", label: t("pages.posts2.visEveryoneLabel"), icon: Globe, desc: t("pages.posts2.visEveryoneDesc") },
+                  { id: "friends", label: t("pages.posts2.visFriendsLabel"), icon: Users, desc: t("pages.posts2.visFriendsDesc") },
+                  { id: "specific_friends", label: t("pages.posts2.visSelectedLabel"), icon: UserCheck, desc: t("pages.posts2.visSelectedDesc") }
                 ].map(item => (
                   <button
                     key={item.id}

@@ -14,16 +14,15 @@ interface AdminMe {
   adminRole?: string;
 }
 
-const roleLabel: Record<string, string> = {
-  super: 'Super Admin',
-  finance: 'Finance Admin',
-  support: 'Support Admin',
-  content: 'Content Admin',
-};
-
 const Header = () => {
   const router = useRouter();
   const { t } = useTranslation('common');
+  const roleLabel: Record<string, string> = {
+    super: t('roles.super'),
+    finance: t('roles.finance'),
+    support: t('roles.support'),
+    content: t('roles.content'),
+  };
   const [me, setMe] = useState<AdminMe | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -82,7 +81,7 @@ const Header = () => {
   };
 
   const displayName = me?.name || me?.email || 'Admin';
-  const role = me?.adminRole ? roleLabel[me.adminRole] : me ? 'Admin' : '—';
+  const role = me?.adminRole ? roleLabel[me.adminRole] : me ? t('common.admin') : '—';
   const initial = (displayName || 'A').slice(0, 1).toUpperCase();
 
   return (

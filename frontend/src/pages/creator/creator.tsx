@@ -10,12 +10,12 @@ import AddTostore from "./AddTostore";
 import CreatorProduct from "./creator_prodcut/creator_prodcut";
 import Header from "@/components/layout/Header";
 import Earnings from "./pagescreator/window/withdraw";
-
-
+import { useTranslation } from "react-i18next";
 
 type SubView = "none" | "gmv" | "items" | "commission" | "promote" | "marketplace" | "showcase" | "earnings" | "samples" | "add_to_store" | "Myshop";
 
 export default function TikTokCreatorCenter() {
+  const { t } = useTranslation("common");
   const [subView, setSubView] = useState<SubView>("none");
   const [showEarnings, setShowEarnings] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -45,7 +45,7 @@ export default function TikTokCreatorCenter() {
         {/* --- Today's Data Section: Edge-to-edge layout --- */}
         <section className="bg-white border-b border-[#EEEEEE] w-full item-fade-up" style={{ animationDelay: '0s' }}>
           <div className="px-5 py-6 flex justify-between items-center">
-            <h2 className="text-[17px] font-bold tracking-tight">today's data</h2>
+            <h2 className="text-[17px] font-bold tracking-tight">{t("pages.creator.todaysData").toLowerCase()}</h2>
             <div className="flex gap-6 items-center text-[#86878B]">
               <button onClick={() => setShowEarnings(!showEarnings)} className="active:text-black">
                 {showEarnings ? <Eye size={20} /> : <EyeOff size={20} />}
@@ -62,11 +62,11 @@ export default function TikTokCreatorCenter() {
           {/* Grid data into 3 parts: Full width with subtle dividers */}
           <div className="flex w-full pb-8 border-t border-[#FBFBFB]">
             <div className="flex-1 pt-4 text-center border-r border-[#F5F5F5] cursor-pointer active:bg-gray-50" onClick={() => setSubView("gmv")}>
-              <p className="text-[11px] text-[#86878B] mb-2 tracking-wider font-medium">sales</p>
+              <p className="text-[11px] text-[#86878B] mb-2 tracking-wider font-medium">{t("pages.creator.sales").toLowerCase()}</p>
               <p className={`text-[18px] font-bold ${!showEarnings ? "blur-md opacity-20" : ""}`}>฿0.00</p>
             </div>
             <div className="flex-1 pt-4 text-center border-r border-[#F5F5F5] cursor-pointer active:bg-gray-50" onClick={() => setSubView("items")}>
-              <p className="text-[11px] text-[#86878B] mb-2 tracking-wider font-medium">orders</p>
+              <p className="text-[11px] text-[#86878B] mb-2 tracking-wider font-medium">{t("pages.creator.orders").toLowerCase()}</p>
               <p className="text-[18px] font-bold">0</p>
             </div>
           </div>
@@ -76,9 +76,9 @@ export default function TikTokCreatorCenter() {
         <section className="bg-white border-y border-[#EEEEEE] w-full mt-2 item-fade-up" style={{ animationDelay: '0.1s' }}>
           <div className="flex flex-col">
             {[
-              { label: "Product Creator", icon: Home, view: "Myshop" },
-              { label: "Product Detail", icon: ShoppingBag, view: "marketplace" },
-              { label: "Withdraw", icon: Wallet, view: "earnings" },
+              { label: t("pages.creator.productCreator"), icon: Home, view: "Myshop" },
+              { label: t("pages.creator.productDetail"), icon: ShoppingBag, view: "marketplace" },
+              { label: t("pages.creator.withdraw"), icon: Wallet, view: "earnings" },
             ].map((item, i, arr) => (
               <button
                 key={i}

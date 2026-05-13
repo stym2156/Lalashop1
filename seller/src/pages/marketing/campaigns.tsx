@@ -33,12 +33,6 @@ interface CampaignRow {
   revenue: number;
 }
 
-const TYPE_META: Record<CampaignRow["type"], { label: string; icon: typeof Tag; color: string }> = {
-  coupon: { label: "Coupon", icon: Tag, color: "from-blue-400 to-blue-600" },
-  promotion: { label: "Promotion", icon: Zap, color: "from-amber-400 to-orange-500" },
-  broadcast: { label: "Broadcast", icon: Megaphone, color: "from-purple-400 to-pink-500" },
-};
-
 const statusBadge = (status: string): string => {
   const s = status.toLowerCase();
   if (s === "active" || s === "sent") return "bg-emerald-100 text-emerald-700";
@@ -50,6 +44,17 @@ const statusBadge = (status: string): string => {
 
 const CampaignsPage: React.FC = () => {
   const { t } = useTranslation("common");
+  const TYPE_META: Record<CampaignRow["type"], { label: string; icon: typeof Tag; color: string }> = {
+    coupon: { label: t("pages.campaignsList.labelCoupon"), icon: Tag, color: "from-blue-400 to-blue-600" },
+    promotion: { label: t("pages.campaignsList.labelPromotion"), icon: Zap, color: "from-amber-400 to-orange-500" },
+    broadcast: { label: t("pages.campaignsList.labelBroadcast"), icon: Megaphone, color: "from-purple-400 to-pink-500" },
+  };
+  const FILTER_LABELS: Record<"all" | "coupon" | "promotion" | "broadcast", string> = {
+    all: t("pages.campaignsList.filterAll"),
+    coupon: t("pages.campaignsList.filterCoupons"),
+    promotion: t("pages.campaignsList.filterPromotions"),
+    broadcast: t("pages.campaignsList.filterBroadcasts"),
+  };
   const [coupons, setCoupons] = useState<SellerCoupon[]>([]);
   const [promotions, setPromotions] = useState<SellerPromotion[]>([]);
   const [broadcasts, setBroadcasts] = useState<SellerBroadcast[]>([]);
@@ -148,11 +153,11 @@ const CampaignsPage: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <Stat label="Active coupons" value={stats.activeCoupons.toString()} tone="text-blue-700" icon={Tag} />
-        <Stat label="Active promotions" value={stats.activePromos.toString()} tone="text-amber-700" icon={Zap} />
-        <Stat label="Broadcasts sent" value={stats.sentBroadcasts.toString()} tone="text-purple-700" icon={Megaphone} />
-        <Stat label="Promo revenue" value={`฿${formatMoney(stats.totalRevenue)}`} tone="text-emerald-700" icon={TrendingUp} />
-        <Stat label="Total reach" value={stats.totalReach.toLocaleString()} tone="text-[#00aeff]" icon={TrendingUp} />
+        <Stat label={t("pages.campaignsList.activeCoupons")} value={stats.activeCoupons.toString()} tone="text-blue-700" icon={Tag} />
+        <Stat label={t("pages.campaignsList.activePromotions")} value={stats.activePromos.toString()} tone="text-amber-700" icon={Zap} />
+        <Stat label={t("pages.campaignsList.broadcastsSent")} value={stats.sentBroadcasts.toString()} tone="text-purple-700" icon={Megaphone} />
+        <Stat label={t("pages.campaignsList.promoRevenue")} value={`฿${formatMoney(stats.totalRevenue)}`} tone="text-emerald-700" icon={TrendingUp} />
+        <Stat label={t("pages.campaignsList.totalReach")} value={stats.totalReach.toLocaleString()} tone="text-[#00aeff]" icon={TrendingUp} />
       </div>
 
       <div className="flex items-center justify-between flex-wrap gap-2">
@@ -161,11 +166,11 @@ const CampaignsPage: React.FC = () => {
             <button
               key={k}
               onClick={() => setFilter(k)}
-              className={`px-3 py-1 rounded text-[11px] font-bold capitalize ${
+              className={`px-3 py-1 rounded text-[11px] font-bold ${
                 filter === k ? "bg-white text-black shadow-sm" : "text-gray-500 hover:text-black"
               }`}
             >
-              {k === "all" ? "All" : k + "s"}
+              {FILTER_LABELS[k]}
             </button>
           ))}
         </div>
@@ -174,19 +179,19 @@ const CampaignsPage: React.FC = () => {
             href="/marketing/coupons"
             className="px-3 py-1.5 rounded-md text-[11px] font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 inline-flex items-center"
           >
-            <Tag className="w-3 h-3 mr-1" /> New coupon
+            <Tag className="w-3 h-3 mr-1" /> {t("pages.campaignsList.newCoupon")}
           </Link>
           <Link
             href="/marketing/promotions"
             className="px-3 py-1.5 rounded-md text-[11px] font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 inline-flex items-center"
           >
-            <Zap className="w-3 h-3 mr-1" /> New promotion
+            <Zap className="w-3 h-3 mr-1" /> {t("pages.campaignsList.newPromotion")}
           </Link>
           <Link
             href="/marketing/broadcast"
             className="px-3 py-1.5 rounded-md text-[11px] font-bold text-purple-700 bg-purple-50 hover:bg-purple-100 inline-flex items-center"
           >
-            <Megaphone className="w-3 h-3 mr-1" /> New broadcast
+            <Megaphone className="w-3 h-3 mr-1" /> {t("pages.campaignsList.newBroadcast")}
           </Link>
         </div>
       </div>
@@ -204,9 +209,9 @@ const CampaignsPage: React.FC = () => {
           <div className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center mx-auto mb-3">
             <Calendar className="w-6 h-6 text-gray-300" />
           </div>
-          <p className="text-[13px] font-bold text-gray-700">No campaigns yet</p>
+          <p className="text-[13px] font-bold text-gray-700">{t("pages.campaignsList.noCampaigns")}</p>
           <p className="text-[11px] text-gray-500 mt-1">
-            Start with a coupon, flash sale promotion, or broadcast announcement.
+            {t("pages.campaignsList.noCampaignsHint")}
           </p>
         </div>
       ) : (
@@ -247,13 +252,13 @@ const CampaignsPage: React.FC = () => {
                     {r.endsAt && (
                       <span className="inline-flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
-                        {r.type === "broadcast" ? "Sent" : "Ends"}: {formatDate(r.endsAt)}
+                        {r.type === "broadcast" ? t("pages.campaignsList.sent") : t("pages.campaignsList.ends")}: {formatDate(r.endsAt)}
                       </span>
                     )}
                     <span>
-                      {r.type === "coupon" && `${r.reach} redemptions`}
-                      {r.type === "promotion" && `${r.reach} orders`}
-                      {r.type === "broadcast" && `${r.reach.toLocaleString()} reach`}
+                      {r.type === "coupon" && t("pages.campaignsList.redemptions", { count: r.reach })}
+                      {r.type === "promotion" && t("pages.campaignsList.ordersDriven", { count: r.reach })}
+                      {r.type === "broadcast" && t("pages.campaignsList.reach", { count: r.reach })}
                     </span>
                     {r.revenue > 0 && (
                       <span className="text-emerald-700 font-bold">

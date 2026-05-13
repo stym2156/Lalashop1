@@ -938,7 +938,11 @@
         "promptpayInfo": "💡 PromptPay QR is generated dynamically per order with the exact amount baked in. No image upload needed.",
         "updatedSuccess": "Updated successfully",
         "createdSuccess": "Created successfully",
-        "deleteConfirm": "Delete this payment method? Existing slips will keep referencing it."
+        "deleteConfirm": "Delete this payment method? Existing slips will keep referencing it.",
+        "bankPlaceholder": "e.g. BCEL",
+        "accountNamePlaceholder": "e.g. Company name or full name",
+        "qrPreviewAlt": "QR preview",
+        "walletNamePlaceholder": "e.g. e-wallet name"
       }
     },
     "notifications": {

@@ -45,11 +45,11 @@ interface UploadedImage {
   uploadedUrl?: string;
 }
 
-const CREATOR_TIERS: { value: CreatorTier; label: string }[] = [
-  { value: "all", label: "All approved creators" },
-  { value: "bronze", label: "Bronze and above" },
-  { value: "silver", label: "Silver and above" },
-  { value: "gold", label: "Gold only" },
+const CREATOR_TIERS: { value: CreatorTier; labelKey: string }[] = [
+  { value: "all", labelKey: "pages.productsAdd2.tierAll" },
+  { value: "bronze", labelKey: "pages.productsAdd2.tierBronze" },
+  { value: "silver", labelKey: "pages.productsAdd2.tierSilver" },
+  { value: "gold", labelKey: "pages.productsAdd2.tierGold" },
 ];
 
 const COUNTRIES = ["Laos", "Thailand", "England", "China", "Japan", "Korea"];
@@ -140,8 +140,8 @@ export default function AddProductPage() {
 
   // Specifications (key/value pairs shown on product detail page)
   const [specifications, setSpecifications] = useState<SpecificationRow[]>([
-    { id: "spec-1", label: "Material", value: "" },
-    { id: "spec-2", label: "Warranty", value: "" },
+    { id: "spec-1", label: t("pages.productsAdd2.materialDefault"), value: "" },
+    { id: "spec-2", label: t("pages.productsAdd2.warrantyDefault"), value: "" },
   ]);
 
   // Pricing
@@ -220,6 +220,8 @@ export default function AddProductPage() {
 
   // Resolve config for the selected category
   const config: CategoryConfig = useMemo(() => getCategoryConfig(category), [category]);
+  const categoryLabel = t(`pages.categoryConfig.${category}.label`, config.label);
+  const categoryDescription = t(`pages.categoryConfig.${category}.description`, config.description);
 
   // Seed variant options + attributes whenever category changes
   useEffect(() => {
@@ -567,7 +569,7 @@ export default function AddProductPage() {
             <div className="min-w-0">
               <h1 className="text-sm font-bold truncate">{t("pages.productsAdd.title")}</h1>
               <p className="text-[11px] text-gray-400 truncate">
-                {t("pages.productsAdd.categoryTemplate", { label: config.label })}
+                {t("pages.productsAdd.categoryTemplate", { label: categoryLabel })}
               </p>
             </div>
           </div>
@@ -970,10 +972,10 @@ export default function AddProductPage() {
               <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
                 <div>
                   <h3 className="text-sm font-bold text-black flex items-center gap-2">
-                    <Tag className="w-3.5 h-3.5 text-primary" /> {t("pages.productsAdd2.variantsFor", { label: config.label })}
+                    <Tag className="w-3.5 h-3.5 text-primary" /> {t("pages.productsAdd2.variantsFor", { label: categoryLabel })}
                   </h3>
                   <p className="text-[11px] text-gray-500 mt-0.5">
-                    {config.description}
+                    {categoryDescription}
                   </p>
                 </div>
               </div>
@@ -1083,7 +1085,7 @@ export default function AddProductPage() {
             {config.attributes.length > 0 && (
               <div className="rounded-lg bg-white border border-gray-100">
                 <SectionHeader
-                  title={t("pages.productsAdd2.details", { label: config.label })}
+                  title={t("pages.productsAdd2.details", { label: categoryLabel })}
                   hint={t("pages.productsAdd2.detailsHint")}
                 />
                 <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1218,8 +1220,8 @@ export default function AddProductPage() {
                             onChange={(e) => setMinTier(e.target.value as CreatorTier)}
                             className={`${inputCls} appearance-none pr-8`}
                           >
-                            {CREATOR_TIERS.map((t) => (
-                              <option key={t.value} value={t.value}>{t.label}</option>
+                            {CREATOR_TIERS.map((tier) => (
+                              <option key={tier.value} value={tier.value}>{t(tier.labelKey)}</option>
                             ))}
                           </select>
                           <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
@@ -1474,7 +1476,7 @@ export default function AddProductPage() {
                     type="text"
                     value={seoTitle}
                     onChange={(e) => setSeoTitle(e.target.value)}
-                    placeholder={name || "Premium product title"}
+                    placeholder={name || t("pages.productsAdd2.premiumProductTitle")}
                     className={inputCls}
                   />
                   <p className="text-[10px] text-gray-400">{seoTitle.length}/70 characters</p>
@@ -1554,7 +1556,7 @@ export default function AddProductPage() {
                         const supported = !!CATEGORY_CONFIG[c.value];
                         return (
                           <option key={c.value} value={c.value}>
-                            {c.label}{supported ? "" : t("pages.productsAdd2.basicTemplate")}
+                            {t(`pages.productCategories.${c.value}`)}{supported ? "" : t("pages.productsAdd2.basicTemplate")}
                           </option>
                         );
                       })}

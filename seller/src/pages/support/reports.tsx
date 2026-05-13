@@ -88,12 +88,12 @@ const SellerReportsPage: React.FC = () => {
           <table className="w-full text-[12px] tabular-nums">
             <thead className="text-[11px] text-gray-500 tracking-wide bg-gray-50/50">
               <tr>
-                <th className="px-4 py-2 text-left font-semibold">Report</th>
-                <th className="px-4 py-2 text-left font-semibold">Target</th>
-                <th className="px-4 py-2 text-left font-semibold">Reason</th>
-                <th className="px-4 py-2 text-left font-semibold">Description</th>
-                <th className="px-4 py-2 text-left font-semibold">Status</th>
-                <th className="px-4 py-2 text-left font-semibold">Filed</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.supportReports.tableReport')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.supportReports.tableTarget')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.supportReports.tableReason')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.supportReports.tableDescription')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.supportReports.tableStatus')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.supportReports.tableFiled')}</th>
               </tr>
             </thead>
             <tbody>
@@ -108,7 +108,7 @@ const SellerReportsPage: React.FC = () => {
                 <tr>
                   <td colSpan={6} className="px-4 py-12 text-center text-gray-400 text-[12px]">
                     <Flag className="w-6 h-6 mx-auto mb-2 text-gray-300" />
-                    No reports filed against your shop. Keep it up!
+                    {t('pages.supportReports.noReports')}
                   </td>
                 </tr>
               )}
@@ -145,9 +145,9 @@ const SellerReportsPage: React.FC = () => {
       </div>
 
       <p className="text-[11px] text-gray-400">
-        If you believe a report is incorrect, file an{" "}
+        {t('pages.supportReports.footerStart')}{" "}
         <Link href="/support/tickets" className="text-[#00aeff] hover:underline font-bold">
-          appeal
+          {t('pages.supportReports.footerLink')}
         </Link>
         .
       </p>

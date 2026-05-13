@@ -83,15 +83,15 @@ export default function PaymentPage() {
     },
     {
       id: "visa_master",
-      title: "Credit / Debit Card",
+      title: t("pages.payment.method.visaMasterTitle"),
       image: "/assets/Mastercard.png",
-      desc: "ຊຳລະຜ່ານບັດ Visa, Mastercard ຫຼື UnionPay"
+      desc: t("pages.payment.method.visaMasterDesc"),
     },
     {
       id: "cod",
-      title: "Cash on Delivery",
+      title: t("pages.payment.method.codTitle"),
       image: "/assets/cod.png",
-      desc: "ຊຳລະເງິນສົດປາຍທາງເມື່ອໄດ້ຮັບສິນຄ້າ"
+      desc: t("pages.payment.method.codDesc"),
     }
   ];
 

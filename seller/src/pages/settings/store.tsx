@@ -74,7 +74,7 @@ const StoreSettings: React.FC = () => {
       const url = await uploadImage(file, "profile");
       setForm((prev) => ({ ...prev, [field]: url }));
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Upload failed");
+      setError(err instanceof Error ? err.message : t("pages.storeSettings.uploadFailed"));
     } finally {
       if (field === "logo") setUploadingLogo(false);
       else setUploadingBanner(false);
@@ -90,7 +90,7 @@ const StoreSettings: React.FC = () => {
       setSuccess(true);
       setTimeout(() => setSuccess(false), 2500);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Save failed");
+      setError(err instanceof Error ? err.message : t("pages.storeSettings.saveFailed"));
     } finally {
       setSaving(false);
     }
@@ -130,55 +130,55 @@ const StoreSettings: React.FC = () => {
       )}
       {success && (
         <div className="rounded-md bg-emerald-50 px-3 py-2 text-[12px] text-emerald-700 inline-flex items-center gap-2">
-          <CheckCircle2 className="w-3.5 h-3.5" /> Saved successfully
+          <CheckCircle2 className="w-3.5 h-3.5" /> {t("pages.storeSettings.savedSuccessfully")}
         </div>
       )}
 
-      <Section title="Brand identity" hint="Logo, banner, and how customers find your store.">
+      <Section title={t("pages.storeSettings.brandIdentity")} hint={t("pages.storeSettings.brandIdentityHint")}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Field label="Store name" required>
+          <Field label={t("pages.storeSettings.storeName")} required>
             <input
               className={inputCls}
               value={form.storeName}
               onChange={(e) => setForm({ ...form, storeName: e.target.value })}
-              placeholder="Lala Premium Co."
+              placeholder={t("pages.storeSettings.storeNamePlaceholder")}
             />
           </Field>
-          <Field label="Store URL handle" hint="lalashop.com/shop/[slug]">
+          <Field label={t("pages.storeSettings.storeUrl")} hint={t("pages.storeSettings.storeUrlHint")}>
             <input
               className={`${inputCls} font-mono`}
               value={form.storeSlug}
               onChange={(e) =>
                 setForm({ ...form, storeSlug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "") })
               }
-              placeholder="lala-premium"
+              placeholder={t("pages.storeSettings.storeUrlPlaceholder")}
             />
           </Field>
         </div>
 
-        <Field label="Tagline">
+        <Field label={t("pages.storeSettings.tagline")}>
           <input
             className={inputCls}
             value={form.tagline}
             onChange={(e) => setForm({ ...form, tagline: e.target.value })}
-            placeholder="Premium wholesale for boutique buyers"
+            placeholder={t("pages.storeSettings.taglinePlaceholder")}
           />
         </Field>
 
-        <Field label="Description">
+        <Field label={t("pages.storeSettings.description")}>
           <textarea
             className={`${inputCls} resize-y leading-relaxed`}
             rows={4}
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}
-            placeholder="Tell shoppers what makes your shop unique."
+            placeholder={t("pages.storeSettings.descriptionPlaceholder")}
           />
-          <p className="text-[10px] text-gray-400">{form.description.length} characters</p>
+          <p className="text-[10px] text-gray-400">{form.description.length} {t("common.characters")}</p>
         </Field>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <ImageField
-            label="Logo"
+            label={t("pages.storeSettings.logo")}
             url={form.logo}
             uploading={uploadingLogo}
             onUpload={(e) => handleUpload(e, "logo")}
@@ -186,7 +186,7 @@ const StoreSettings: React.FC = () => {
             aspect="aspect-square"
           />
           <ImageField
-            label="Banner"
+            label={t("pages.storeSettings.banner")}
             url={form.banner}
             uploading={uploadingBanner}
             onUpload={(e) => handleUpload(e, "banner")}
@@ -196,16 +196,16 @@ const StoreSettings: React.FC = () => {
         </div>
       </Section>
 
-      <Section title="Localization" hint="Default language and currency for new customers.">
+      <Section title={t("pages.storeSettings.localization")} hint={t("pages.storeSettings.localizationHint")}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Field label="Primary category">
+          <Field label={t("pages.storeSettings.primaryCategory")}>
             <select
               className={inputCls}
               value={form.category}
               onChange={(e) => setForm({ ...form, category: e.target.value })}
             >
               {productCategories.map((c) => (
-                <option key={c.value} value={c.value}>{c.label}</option>
+                <option key={c.value} value={c.value}>{t(`pages.productCategories.${c.value}`)}</option>
               ))}
               {/* Preserve legacy categories not in the canonical list */}
               {form.category &&
@@ -214,7 +214,7 @@ const StoreSettings: React.FC = () => {
                 )}
             </select>
           </Field>
-          <Field label="Language">
+          <Field label={t("pages.storeSettings.language")}>
             <select
               className={inputCls}
               value={form.language}
@@ -225,7 +225,7 @@ const StoreSettings: React.FC = () => {
               ))}
             </select>
           </Field>
-          <Field label="Currency">
+          <Field label={t("pages.storeSettings.currency")}>
             <select
               className={inputCls}
               value={form.currency}
@@ -286,38 +286,41 @@ interface ImageFieldProps {
   aspect: string;
 }
 
-const ImageField: React.FC<ImageFieldProps> = ({ label, url, uploading, onUpload, onClear, aspect }) => (
-  <Field label={label}>
-    <div className={`${aspect} rounded-md bg-gray-50 border border-gray-100 overflow-hidden relative group`}>
-      {url ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={url} alt={label} className="w-full h-full object-cover" />
-      ) : (
-        <div className="w-full h-full flex items-center justify-center text-gray-300">
-          <ImageIcon className="w-8 h-8" />
-        </div>
-      )}
-      <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer flex items-center justify-center text-white text-xs font-bold">
-        {uploading ? (
-          <Loader2 className="w-4 h-4 animate-spin" />
+const ImageField: React.FC<ImageFieldProps> = ({ label, url, uploading, onUpload, onClear, aspect }) => {
+  const { t } = useTranslation("common");
+  return (
+    <Field label={label}>
+      <div className={`${aspect} rounded-md bg-gray-50 border border-gray-100 overflow-hidden relative group`}>
+        {url ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={url} alt={label} className="w-full h-full object-cover" />
         ) : (
-          <span className="inline-flex items-center gap-1">
-            <Upload className="w-3.5 h-3.5" /> Upload
-          </span>
+          <div className="w-full h-full flex items-center justify-center text-gray-300">
+            <ImageIcon className="w-8 h-8" />
+          </div>
         )}
-        <input type="file" accept="image/*" className="hidden" onChange={onUpload} disabled={uploading} />
-      </label>
-    </div>
-    {url && (
-      <button
-        type="button"
-        onClick={onClear}
-        className="text-[10px] text-red-600 font-bold hover:underline mt-1"
-      >
-        Remove
-      </button>
-    )}
-  </Field>
-);
+        <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer flex items-center justify-center text-white text-xs font-bold">
+          {uploading ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <span className="inline-flex items-center gap-1">
+              <Upload className="w-3.5 h-3.5" /> {t("actions.upload")}
+            </span>
+          )}
+          <input type="file" accept="image/*" className="hidden" onChange={onUpload} disabled={uploading} />
+        </label>
+      </div>
+      {url && (
+        <button
+          type="button"
+          onClick={onClear}
+          className="text-[10px] text-red-600 font-bold hover:underline mt-1"
+        >
+          {t("actions.remove")}
+        </button>
+      )}
+    </Field>
+  );
+};
 
 export default StoreSettings;

@@ -340,7 +340,7 @@ export default function Earnings({ onBack }: ToolkitProps) {
           <button
             type="button"
             className="text-[#121212] active:opacity-50 focus:outline-none focus:ring-2 focus:ring-[#00aeff] rounded-full"
-            aria-label="Withdrawal rules"
+            aria-label={t("pages.creatorWithdraw2.withdrawalRules")}
             aria-describedby="creator-withdraw-rules-tip"
           >
             <HelpCircle size={20} strokeWidth={2} />

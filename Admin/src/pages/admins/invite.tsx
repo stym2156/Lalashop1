@@ -14,13 +14,6 @@ import {
   type InviteStatus,
 } from '@/services/adminApi';
 
-const ROLES: { id: InviteRole; name: string; description: string }[] = [
-  { id: 'super', name: 'Super Admin', description: 'Full access — manage admins, roles, and every module.' },
-  { id: 'finance', name: 'Finance Admin', description: 'Approve withdrawals, payouts, refunds, financial reports.' },
-  { id: 'support', name: 'Support Admin', description: 'Customer support, KYC review, basic account ops.' },
-  { id: 'content', name: 'Content Admin', description: 'Manage posts, banners, notifications, marketing.' },
-];
-
 const statusBadge: Record<InviteStatus, string> = {
   pending: 'bg-orange-50 text-orange-700',
   accepted: 'bg-green-50 text-green-700',

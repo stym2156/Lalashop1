@@ -62,15 +62,15 @@ const isSameDay = (a?: string, b?: string): boolean => {
   );
 };
 
-const formatDayLabel = (s?: string): string => {
+const formatDayLabel = (s: string | undefined, t: (key: string) => string): string => {
   if (!s) return "";
   const d = new Date(s);
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const that = new Date(d.getFullYear(), d.getMonth(), d.getDate());
   const diff = (today.getTime() - that.getTime()) / 86400000;
-  if (diff === 0) return "Today";
-  if (diff === 1) return "Yesterday";
+  if (diff === 0) return t("pages.inbox.today");
+  if (diff === 1) return t("pages.inbox.yesterday");
   if (diff < 7) return d.toLocaleDateString([], { weekday: "long" });
   return d.toLocaleDateString([], { year: "numeric", month: "short", day: "numeric" });
 };
@@ -435,9 +435,10 @@ interface ThreadPaneProps {
 const ThreadPane: React.FC<ThreadPaneProps> = ({
   conversation, messages, loading, meId, draft, setDraft, sending, uploading, onSend, onPickImage, inputRef, messagesEndRef,
 }) => {
+  const { t } = useTranslation("common");
   const peer = conversation.peer;
   const peerId = peer?._id;
-  const name = peer?.name || peer?.username || "User";
+  const name = peer?.name || peer?.username || t("common.user");
 
   // Last message I sent that the buyer has read → "Seen" indicator.
   const lastReadIndex = useMemo(() => {
@@ -492,7 +493,7 @@ const ThreadPane: React.FC<ThreadPaneProps> = ({
             <Loader2 className="w-5 h-5 animate-spin text-gray-300 mx-auto" />
           </div>
         ) : messages.length === 0 ? (
-          <p className="text-center text-[11px] text-gray-400 py-8">No messages in this thread.</p>
+          <p className="text-center text-[11px] text-gray-400 py-8">{t("pages.inbox.noMessagesThread")}</p>
         ) : (
           messages.map((m, i) => {
             const senderId = typeof m.sender === "string" ? m.sender : m.sender?._id;
@@ -504,7 +505,7 @@ const ThreadPane: React.FC<ThreadPaneProps> = ({
                 {showDay && (
                   <div className="flex justify-center my-2">
                     <span className="text-[10px] font-bold text-gray-400 bg-gray-200/70 px-2.5 py-0.5 rounded-full">
-                      {formatDayLabel(m.createdAt)}
+                      {formatDayLabel(m.createdAt, t)}
                     </span>
                   </div>
                 )}
@@ -531,11 +532,11 @@ const ThreadPane: React.FC<ThreadPaneProps> = ({
                     {formatClock(m.createdAt)}
                     {mine && i === lastReadIndex && (
                       <span className="text-[#00aeff] inline-flex items-center gap-0.5 font-bold">
-                        <CheckCheck className="w-3 h-3" /> Seen
+                        <CheckCheck className="w-3 h-3" /> {t("pages.inbox.seen")}
                       </span>
                     )}
                     {mine && i === lastMineIndex && i !== lastReadIndex && (
-                      <span className="text-gray-400 inline-flex items-center" title="Sent">
+                      <span className="text-gray-400 inline-flex items-center" title={t("pages.inbox.sent")}>
                         <Check className="w-3 h-3" />
                       </span>
                     )}
@@ -557,8 +558,8 @@ const ThreadPane: React.FC<ThreadPaneProps> = ({
           onClick={onPickImage}
           disabled={uploading}
           className="p-2 rounded-full text-gray-500 hover:text-[#00aeff] hover:bg-gray-100 transition-colors disabled:opacity-50"
-          aria-label="Send photo"
-          title="Send photo"
+          aria-label={t("pages.inbox.sendPhoto")}
+          title={t("pages.inbox.sendPhoto")}
         >
           {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImageIcon className="w-4 h-4" />}
         </button>
@@ -567,14 +568,14 @@ const ThreadPane: React.FC<ThreadPaneProps> = ({
           type="text"
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
-          placeholder={`Reply to ${name}…`}
+          placeholder={t("pages.inbox.replyTo", { name })}
           className="flex-1 bg-gray-50 rounded-full px-4 py-2 text-sm border border-transparent focus:bg-white focus:border-gray-200 outline-none transition-colors"
         />
         <button
           type="submit"
           disabled={!draft.trim() || sending}
           className="p-2 rounded-full bg-[#00aeff] text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#0096db] transition-colors"
-          aria-label="Send"
+          aria-label={t("pages.inbox.send")}
         >
           {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
         </button>
@@ -589,7 +590,9 @@ interface ProductInquiryCardProps {
   body?: string;
 }
 
-const ProductInquiryCard: React.FC<ProductInquiryCardProps> = ({ product, mine, body }) => (
+const ProductInquiryCard: React.FC<ProductInquiryCardProps> = ({ product, mine, body }) => {
+  const { t } = useTranslation("common");
+  return (
   <div
     className={`max-w-[80%] rounded-2xl shadow-sm overflow-hidden ${
       mine ? "rounded-br-md" : "rounded-bl-md border border-gray-100"
@@ -611,7 +614,7 @@ const ProductInquiryCard: React.FC<ProductInquiryCardProps> = ({ product, mine, 
               mine ? "text-white/80" : "text-gray-400"
             }`}
           >
-            <Package className="w-3 h-3" /> Asking about
+            <Package className="w-3 h-3" /> {t("pages.inbox.askingAbout")}
           </p>
           <p className="text-sm font-bold leading-snug line-clamp-2">{product.name}</p>
           <div className="flex items-center justify-between mt-0.5">
@@ -628,7 +631,7 @@ const ProductInquiryCard: React.FC<ProductInquiryCardProps> = ({ product, mine, 
                 mine ? "text-white/90" : "text-gray-500"
               }`}
             >
-              Open <ExternalLink className="w-2.5 h-2.5" />
+              {t("actions.open")} <ExternalLink className="w-2.5 h-2.5" />
             </Link>
           </div>
         </div>
@@ -646,7 +649,8 @@ const ProductInquiryCard: React.FC<ProductInquiryCardProps> = ({ product, mine, 
       </p>
     )}
   </div>
-);
+  );
+};
 
 interface KPIProps {
   label: string;

@@ -521,22 +521,22 @@
         "back": "กลับไปยังผู้ใช้",
         "loading": "กำลังโหลดข้อมูลผู้ใช้...",
         "notFound": "ไม่พบผู้ใช้",
-        "identity": "ข้อมูลระบุตัวตน",
+        "identity": "ตัวตน",
         "financial": "ข้อมูลการเงิน",
         "security": "ความปลอดภัยและกิจกรรม",
         "trustScore": "คะแนนความน่าเชื่อถือ",
         "accountSuspended": "บัญชีถูกระงับ",
         "liftSuspension": "ยกเลิกการระงับ",
         "suspendUser": "ระงับผู้ใช้",
-        "issueSellerPassword": "ออกรหัสผ่านร้านค้า",
-        "issuing": "กำลังดำเนินการ...",
+        "issueSellerPassword": "ออกรหัสผ่านผู้ขาย",
+        "issuing": "กำลังออก...",
         "editUser": "แก้ไขผู้ใช้",
         "unsuspend": "ยกเลิกการระงับ",
-        "credsIssued": "ออกรหัสผ่านร้านค้าเรียบร้อยแล้ว",
-        "credsIssuedDesc": "ผู้ใช้จะเห็นรหัสผ่านนี้ในกล่องข้อความแจ้งเตือนในแอป...",
+        "credsIssued": "ออกข้อมูลรับรองผู้ขายแล้ว",
+        "credsIssuedDesc": "ผู้ใช้จะเห็นข้อมูลรับรองนี้ในการแจ้งเตือนภายในแอป...",
         "loginUrl": "URL เข้าสู่ระบบ",
         "moneySource": "แหล่งที่มาของเงิน",
-        "moneySourceDesc": "ใช้ตรวจสอบแหล่งที่มาของเงินก่อนอนุมัติการถอน",
+        "moneySourceDesc": "ใช้ตรวจสอบแหล่งที่มาก่อนอนุมัติการถอน",
         "withdrawalHistory": "ประวัติการถอนเงิน",
         "orderActivity": "กิจกรรมคำสั่งซื้อ",
         "shopAndKyc": "ร้านค้าและ KYC",
@@ -551,20 +551,20 @@
         "editModal": {
           "title": "แก้ไขผู้ใช้",
           "bankHeader": "บัญชีธนาคาร",
-          "credsHeader": "รีเซ็ตรหัสผ่าน (เว้นว่างไว้หากไม่ต้องการเปลี่ยน)",
+          "credsHeader": "รีเซ็ตข้อมูลรับรอง (ปล่อยว่างเพื่อเก็บค่าเดิม)",
           "newPassword": "รหัสผ่านใหม่",
           "newPin": "PIN ใหม่ (6 หลัก)",
           "passwordPlaceholder": "อย่างน้อย 6 ตัวอักษร",
-          "pinPlaceholder": "ตัวเลข 6 หลัก"
+          "pinPlaceholder": "6 หลัก"
         },
         "suspendModal": {
           "title": "ระงับผู้ใช้",
-          "liftTitle": "ยกเลิกการระงับผู้ใช้",
+          "liftTitle": "ยกเลิกการระงับ",
           "reason": "เหตุผล",
           "reasonPlaceholder": "เช่น สงสัยว่ามีการทุจริต",
           "reasonRequired": "ต้องระบุเหตุผล",
-          "liftDesc": "การยกเลิกการระงับจะทำให้ผู้ใช้สามารถเข้าสู่ระบบและสั่งซื้อได้ตามปกติ",
-          "suspendDesc": "ผู้ใช้ที่ถูกระงับจะไม่สามารถเข้าสู่ระบบหรือสั่งซื้อได้ เหตุผลจะแสดงต่อเจ้าหน้าที่สนับสนุน"
+          "liftDesc": "การยกเลิกจะคืนสิทธิ์เข้าสู่ระบบและสั่งซื้อให้กับผู้ใช้",
+          "suspendDesc": "ผู้ใช้ที่ถูกระงับจะเข้าสู่ระบบและสั่งซื้อไม่ได้ เหตุผลจะแสดงต่อทีมสนับสนุน"
         },
         "labels": {
           "displayName": "ชื่อที่แสดง",
@@ -575,10 +575,10 @@
           "pendingWithdrawals": "รายการถอนที่รออยู่",
           "twoFactor": "2FA",
           "customerPassword": "รหัสผ่านลูกค้า",
-          "sellerPassword": "รหัสผ่านร้านค้า",
+          "sellerPassword": "รหัสผ่านผู้ขาย",
           "withdrawalPin": "PIN ถอนเงิน",
           "lastKnownIp": "IP ล่าสุด",
-          "lastUpdate": "แก้ไขล่าสุด",
+          "lastUpdate": "อัปเดตล่าสุด",
           "linkedAccounts": "บัญชีที่เชื่อมต่อ"
         },
         "loadingError": "โหลดข้อมูลไม่สำเร็จ",
@@ -603,9 +603,9 @@
         "following": "กำลังติดตาม",
         "message": "ส่งข้อความ",
         "suspend": "ระงับร้านค้า",
-        "closeShop": "ปิดร้านค้า",
+        "closeShop": "ปิดร้าน",
         "unverified": "ยังไม่ยืนยัน",
-        "openProfile": "ดูโปรไฟล์ร้านค้า",
+        "openProfile": "เปิดโปรไฟล์ร้าน",
         "viewProducts": "ดูสินค้า",
         "viewOrders": "ดูคำสั่งซื้อ",
         "overview": "ภาพรวม",
@@ -613,18 +613,18 @@
         "orders": "คำสั่งซื้อ",
         "violations": "ข้อบังคับ",
         "analytics": "การวิเคราะห์",
-        "lifetimeTotals": "ยอดรวมทั้งหมด",
-        "balancePayout": "ยอดคงเหลือและการจ่ายเงิน",
-        "lastOrder": "คำสั่งซื้อล่าสุดที่ได้รับ",
-        "shopBio": "คำอธิบายร้านค้า",
+        "lifetimeTotals": "ยอดสะสมทั้งหมด",
+        "balancePayout": "ยอดเงินและการจ่าย",
+        "lastOrder": "คำสั่งซื้อล่าสุด",
+        "shopBio": "ประวัติร้าน",
         "metrics": {
           "totalProducts": "สินค้าทั้งหมด",
           "totalOrders": "คำสั่งซื้อทั้งหมด",
           "grossRevenue": "รายได้รวม (฿)",
-          "currentBalance": "ยอดเงินปัจจุบัน (฿)",
-          "pendingWithdrawals": "การถอนที่รออยู่",
-          "posRevenue": "รายได้จาก POS (฿)",
-          "lifetimeIncome": "รายได้รวมตลอดชีพ (฿)"
+          "currentBalance": "ยอดคงเหลือปัจจุบัน (฿)",
+          "pendingWithdrawals": "การถอนรอดำเนินการ",
+          "posRevenue": "รายได้ POS (฿)",
+          "lifetimeIncome": "รายได้สะสม (฿)"
         },
         "loadingError": "โหลดข้อมูลไม่สำเร็จ",
         "notFound": "ไม่พบร้านค้า"
@@ -785,24 +785,24 @@
         "slip": "สลิปการชำระเงิน",
         "failedToLoad": "โหลดออเดอร์ไม่สำเร็จ",
         "failedToUpdateSlip": "อัปเดตสลิปไม่สำเร็จ",
-        "fromShop": "จากร้านค้า",
+        "fromShop": "จากร้าน",
         "placedAt": "สั่งซื้อเมื่อ {{date}}",
         "contactBuyer": "ติดต่อผู้ซื้อ",
-        "invoice": "ใบเสร็จ",
+        "invoice": "ใบแจ้งหนี้",
         "escalate": "ยกระดับ",
-        "paymentVerified": "ชำระเงินยืนยันแล้ว",
-        "paymentRejected": "ชำระเงินถูกปฏิเสธ",
-        "slipAwaitingReview": "สลิปส่งแล้ว — รอตรวจสอบ",
+        "paymentVerified": "ยืนยันการชำระแล้ว",
+        "paymentRejected": "ปฏิเสธการชำระ",
+        "slipAwaitingReview": "ส่งสลิปแล้ว — รอตรวจสอบ",
         "transferred": "โอนแล้ว",
         "to": "ไปยัง",
-        "amountMismatch": "จำนวนไม่ตรง! ออเดอร์",
-        "orderAmount": "ยอดสั่งซื้อ",
+        "amountMismatch": "จำนวนเงินไม่ตรง! คำสั่งซื้อ",
+        "orderAmount": "ยอดคำสั่งซื้อ",
         "transferredAmount": "ยอดโอน",
         "transferredAt": "โอนเมื่อ",
-        "toAccount": "เข้าบัญชี",
-        "buyerNote": "บันทึกจากผู้ซื้อ",
+        "toAccount": "ไปยังบัญชี",
+        "buyerNote": "หมายเหตุของผู้ซื้อ",
         "verifiedBy": "ยืนยันโดย",
-        "awaitingPayment": "ผู้ซื้อยังไม่ได้อัปโหลดสลิป — รอการชำระเงิน",
+        "awaitingPayment": "ผู้ซื้อยังไม่อัปโหลดสลิป — รอชำระเงิน",
         "eventPlaced": "สั่งซื้อแล้ว",
         "actorCustomer": "ลูกค้า",
         "eventPaid": "ยืนยันการชำระเงินแล้ว",
@@ -810,12 +810,12 @@
         "eventShipped": "ส่งสินค้าแล้ว",
         "actorSeller": "ผู้ขาย",
         "eventDelivered": "ส่งสินค้าสำเร็จ",
-        "actorCarrier": "บริษัทขนส่ง",
-        "eventCancelled": "ยกเลิกออเดอร์",
+        "actorCarrier": "ผู้ขนส่ง",
+        "eventCancelled": "ยกเลิกคำสั่งซื้อแล้ว",
         "actorAdmin": "ผู้ดูแล/ระบบ",
         "awaitingVerification": "รอการตรวจสอบ",
-        "paidAt": "จ่ายเมื่อ",
-        "inTransit": "อยู่ระหว่างจัดส่ง / รอดำเนินการ"
+        "paidAt": "ชำระเมื่อ",
+        "inTransit": "กำลังจัดส่ง / รอดำเนินการ"
       }
     },
     "kyc": {
@@ -855,7 +855,7 @@
         "rejectFailed": "ปฏิเสธ KYC ไม่สำเร็จ",
         "missingReason": "ต้องระบุเหตุผลในการปฏิเสธ",
         "decision": "คำตัดสิน",
-        "reviewSubmission": "ตรวจสอบคำขอ",
+        "reviewSubmission": "ตรวจสอบการสมัคร",
         "descriptionSentToUser": "คำอธิบาย (ส่งให้ผู้ใช้)",
         "sendApproval": "ส่งการอนุมัติ",
         "sendRejection": "ส่งการปฏิเสธ",
@@ -863,7 +863,7 @@
         "shopInformation": "ข้อมูลร้านค้า",
         "identityVerification": "การยืนยันตัวตน",
         "warehouseAddress": "ที่อยู่คลังสินค้า",
-        "verificationStatus": "สถานะการตรวจสอบ",
+        "verificationStatus": "สถานะการยืนยัน",
         "emailVerified": "ยืนยันอีเมลแล้ว",
         "phoneVerified": "ยืนยันเบอร์โทรแล้ว",
         "additionalDocuments": "เอกสารเพิ่มเติม",
@@ -879,13 +879,13 @@
         "state": "แขวง/จังหวัด",
         "country": "ประเทศ",
         "reviewedAt": "ตรวจสอบเมื่อ {{date}}",
-        "noSubmissionId": "ไม่มีไอดีคำขอ",
-        "descriptionRequired": "กรุณาระบุคำอธิบายให้ผู้ใช้ทราบ",
+        "noSubmissionId": "ไม่ระบุรหัสการสมัคร",
+        "descriptionRequired": "กรุณาระบุคำอธิบายให้ผู้ใช้",
         "failedToLoad": "โหลดคำขอไม่สำเร็จ",
         "approveReasonPlaceholder": "เช่น ยินดีด้วย! ร้านค้าของคุณเปิดใช้งานแล้ว",
         "idTypes": {
           "passport": "พาสปอร์ต",
-          "state_id": "บัตรประชาชน",
+          "state_id": "บัตรประจำตัวรัฐ",
           "national_id": "บัตรประชาชน"
         }
       }
@@ -914,7 +914,7 @@
         "amount": {
           "title": "จำนวนเงิน",
           "fee": "ค่าธรรมเนียม",
-          "net": "สุทธิเข้าบัญชีผู้ใช้"
+          "net": "ยอดสุทธิถึงผู้ใช้"
         },
         "bankInfo": {
           "title": "บัญชีธนาคาร",
@@ -923,29 +923,29 @@
           "accountName": "ชื่อบัญชี",
           "verified": "ยืนยันแล้ว",
           "unverified": "ยังไม่ยืนยัน",
-          "notOnFile": "ไม่มีข้อมูลบัญชีธนาคาร"
+          "notOnFile": "ไม่มีบัญชีธนาคารในระบบ"
         },
         "notes": {
-          "title": "บันทึกการดำเนินการ",
-          "refLabel": "เลขอ้างอิงการโอน (BANK REFERENCE)",
+          "title": "บันทึกการดำเนินการของผู้ดูแล",
+          "refLabel": "รหัสอ้างอิงโอนเงิน",
           "refPlaceholder": "เช่น TXN-882910",
           "adminNoteLabel": "บันทึกแอดมิน (ADMIN NOTE)",
-          "adminNotePlaceholder": "บันทึกภายในเกี่ยวกับการถอนเงินนี้..."
+          "adminNotePlaceholder": "หมายเหตุภายในเกี่ยวกับการถอนนี้..."
         },
         "userSection": {
           "title": "ผู้ใช้",
-          "profile": "ดูโปรไฟล์ผู้ใช้"
+          "profile": "เปิดโปรไฟล์ผู้ใช้"
         },
         "timeline": {
           "title": "ไทม์ไลน์",
           "requested": "ร้องขอเมื่อ",
           "processed": "ดำเนินการเมื่อ",
-          "updated": "แก้ไขล่าสุด"
+          "updated": "อัปเดตล่าสุด"
         },
-        "rejectConfirm": "ปฏิเสธการถอนเงินนี้? ยอดเงินจะถูกคืนเข้าบัญชีผู้ใช้",
-        "failConfirm": "ระบุว่าการถอนเงินล้มเหลว? ยอดเงินจะถูกคืนเข้าบัญชีผู้ใช้",
-        "markedAs": "ทำเครื่องหมายว่าเป็น {{status}} แล้ว",
-        "useApproveToSave": "ใช้อนุมัติหรือปฏิเสธเพื่อบันทึกข้อความขณะรอดำเนินการ",
+        "rejectConfirm": "ปฏิเสธการถอนนี้? จำนวนเงินจะถูกคืนเข้ายอดของผู้ใช้",
+        "failConfirm": "ทำเครื่องหมายการถอนนี้ว่าล้มเหลว? จำนวนเงินจะถูกคืน",
+        "markedAs": "ทำเครื่องหมายเป็น {{status}}",
+        "useApproveToSave": "ใช้ปุ่มอนุมัติหรือปฏิเสธเพื่อบันทึกหมายเหตุระหว่างที่การถอนยังรอดำเนินการ",
         "loadingError": "โหลดการถอนไม่สำเร็จ"
       }
     },
@@ -993,7 +993,11 @@
         "promptpayInfo": "💡 QR PromptPay สร้างอัตโนมัติตามยอดสั่งซื้อ ไม่ต้องอัปโหลดรูป",
         "updatedSuccess": "อัปเดตสำเร็จ",
         "createdSuccess": "สร้างสำเร็จ",
-        "deleteConfirm": "ลบวิธีการชำระเงินนี้? สลิปที่มีอยู่จะยังอ้างอิงถึงวิธีนี้อยู่"
+        "deleteConfirm": "ลบวิธีการชำระเงินนี้? สลิปที่มีอยู่จะยังอ้างอิงถึงวิธีนี้อยู่",
+        "bankPlaceholder": "เช่น BCEL",
+        "accountNamePlaceholder": "เช่น ชื่อบริษัทหรือชื่อเต็ม",
+        "qrPreviewAlt": "ตัวอย่าง QR",
+        "walletNamePlaceholder": "เช่น ชื่อกระเป๋าเงิน"
       }
     },
     "notifications": {
@@ -1029,12 +1033,37 @@
       "history": {
         "title": "ประวัติการแจ้งเตือน",
         "noHistory": "ยังไม่มีการแจ้งเตือน",
-        "loading": "กำลังโหลดประวัติ…"
+        "loading": "กำลังโหลดประวัติ…",
+        "table": {
+          "titleContent": "หัวข้อ / เนื้อหา"
+        },
+        "types": {
+          "order": "คำสั่งซื้อ",
+          "promo": "โปรโมชัน",
+          "system": "ระบบ",
+          "withdrawal": "การถอนเงิน"
+        }
       },
       "reports": {
         "title": "รายงานการส่ง",
         "noReports": "ไม่มีรายงานการส่ง",
-        "loading": "กำลังโหลดรายงาน…"
+        "loading": "กำลังโหลดรายงาน…",
+        "loadingReports": "กำลังโหลดรายงาน...",
+        "noDescription": "ไม่มีคำอธิบาย",
+        "noOpenReports": "ไม่มีรายงานที่เปิด",
+        "noOpenReportsDesc": "รายงานที่รอการตรวจจะแสดงที่นี่",
+        "onTarget": "บน {{target}}",
+        "openCount": "{{count}} รายงานรอการตรวจสอบ",
+        "openCount_other": "{{count}} รายงานรอการตรวจสอบ",
+        "reasons": {
+          "abuse": "ใช้ในทางที่ผิด",
+          "counterfeit": "ของปลอม",
+          "fraud": "ฉ้อโกง",
+          "harassment": "การคุกคาม",
+          "other": "อื่นๆ",
+          "spam": "สแปม"
+        },
+        "reportedBy": "รายงานโดย {{name}}"
       },
       "form": {
         "messageLabel": "ข้อความ",
@@ -1272,7 +1301,10 @@
           "supportDesc": "ฝ่ายสนับสนุนลูกค้า, ตรวจสอบ KYC, และการจัดการบัญชีพื้นฐาน",
           "contentDesc": "จัดการโพสต์, แบนเนอร์, การแจ้งเตือน และการตลาด"
         },
-        "emailPlaceholder": "name@lala.shop"
+        "emailPlaceholder": "name@lala.shop",
+        "emailLabel": "อีเมล",
+        "roleLabel": "บทบาท",
+        "success": "ส่งคำเชิญแล้ว"
       },
       "roles": {
         "title": "บทบาทและสิทธิ์",

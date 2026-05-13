@@ -81,7 +81,7 @@ const ReportsPage = () => {
       setItems(listRes.data ?? []);
       if (statsRes) setStats(statsRes.data ?? null);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load reports');
+      setError(err instanceof Error ? err.message : t('pages.reports.loading'));
     } finally {
       setLoading(false);
     }
@@ -98,7 +98,7 @@ const ReportsPage = () => {
       await updateAdminReport(id, { status, ...(actionTaken ? { actionTaken } : {}) });
       await load();
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Action failed');
+      alert(err instanceof Error ? err.message : t('actions.takeAction'));
     } finally {
       setBusyId(null);
     }
@@ -206,7 +206,7 @@ const ReportsPage = () => {
                         <button
                           disabled={busyId === r._id}
                           onClick={() => onAction(r._id, 'reviewing')}
-                          title="Start reviewing"
+                          title={t('pages.reports.detail.startReviewing')}
                           className="text-gray-500 hover:text-orange-600 hover:bg-gray-100 rounded p-1 disabled:opacity-50"
                         >
                           <AlertCircle className="w-3.5 h-3.5" />
@@ -217,7 +217,7 @@ const ReportsPage = () => {
                           <button
                             disabled={busyId === r._id}
                             onClick={() => onAction(r._id, 'actioned', 'remove')}
-                            title="Action"
+                            title={t('actions.takeAction')}
                             className="text-gray-500 hover:text-green-700 hover:bg-gray-100 rounded p-1 disabled:opacity-50"
                           >
                             <Check className="w-3.5 h-3.5" />
@@ -225,7 +225,7 @@ const ReportsPage = () => {
                           <button
                             disabled={busyId === r._id}
                             onClick={() => onAction(r._id, 'dismissed', 'none')}
-                            title="Dismiss"
+                            title={t('pages.reports.detail.dismiss')}
                             className="text-gray-500 hover:text-red-600 hover:bg-gray-100 rounded p-1 disabled:opacity-50"
                           >
                             <X className="w-3.5 h-3.5" />

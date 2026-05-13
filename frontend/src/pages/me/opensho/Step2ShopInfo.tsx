@@ -179,7 +179,7 @@ export default function Step2ShopInfo({
                         >
                             <option value="">{t("pages.openshopStep2.selectMainCategory")}</option>
                             {productCategories.map(cat => (
-                                <option key={cat.value} value={cat.value}>{cat.label}</option>
+                                <option key={cat.value} value={cat.value}>{t(`pages.productCategories.${cat.value}`)}</option>
                             ))}
                         </select>
                         <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400" />

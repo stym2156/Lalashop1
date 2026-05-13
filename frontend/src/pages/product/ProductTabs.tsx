@@ -5,21 +5,15 @@ import { SpecRow, Stars } from "./ProductUIPrimitives";
 import { ProductTabsProps } from "./types";
 import { apiClient } from "@/services/apiClient";
 
-const TAB_LIST = [
-  { id: "specs", label: "Specifications" },
-  { id: "desc", label: "Description" },
-  { id: "reviews", label: "Reviews" },
-];
-
-interface ReviewDoc {
-  _id: string;
-  rating: number;
-  comment: string;
-  createdAt: string;
-  user?: { _id?: string; name?: string; username?: string; profileImage?: string };
-}
-
 export function ProductTabs({ tab, setTab, product }: ProductTabsProps) {
+  const { t } = useTranslation("common");
+
+  const TAB_LIST = [
+    { id: "specs", label: t("product.specs") },
+    { id: "desc", label: t("product.description") },
+    { id: "reviews", label: t("product.reviews") },
+  ];
+
   return (
     <div
       style={{
@@ -80,36 +74,36 @@ function SpecsTab({ product }: Pick<ProductTabsProps, "product">) {
   const lt: any = (product as any).leadTime;
   if (lt && (lt.min || lt.max)) {
     const unitLabel =
-      lt.unit === "hours" ? "Hours" : lt.unit === "weeks" ? "Weeks" : "Days";
+      lt.unit === "hours" ? t("productsAdd2.hours") : lt.unit === "weeks" ? t("productsAdd2.weeks") : t("productsAdd2.businessDays");
     const min = Number(lt.min) || 0;
     const max = Number(lt.max) || min;
     fallbackSpecs.push({
-      label: "Lead Time",
+      label: t("product.leadTime"),
       value: min === max ? `${min} ${unitLabel}` : `${min}–${max} ${unitLabel}`,
     });
   }
   if ((product as any).originCountry) {
-    fallbackSpecs.push({ label: "Origin", value: (product as any).originCountry });
+    fallbackSpecs.push({ label: t("product.origin"), value: (product as any).originCountry });
   } else if ((product as any).location) {
-    fallbackSpecs.push({ label: "Origin", value: (product as any).location });
+    fallbackSpecs.push({ label: t("product.origin"), value: (product as any).location });
   }
   if ((product as any).vendor) {
-    fallbackSpecs.push({ label: "Vendor", value: (product as any).vendor });
+    fallbackSpecs.push({ label: t("product.vendor"), value: (product as any).vendor });
   }
   if ((product as any).sku) {
-    fallbackSpecs.push({ label: "SKU", value: (product as any).sku });
+    fallbackSpecs.push({ label: t("product.sku"), value: (product as any).sku });
   }
   const dim: any = (product as any).dimensions;
   if (dim && (dim.length || dim.width || dim.height)) {
     const unit = dim.unit || "cm";
     fallbackSpecs.push({
-      label: "Dimensions",
+      label: t("pages.productTabs.dimensions"),
       value: `${dim.length || "?"} × ${dim.width || "?"} × ${dim.height || "?"} ${unit}`,
     });
   }
   if ((product as any).weight) {
     fallbackSpecs.push({
-      label: "Weight",
+      label: t("pages.productTabs.weight"),
       value: `${(product as any).weight} ${(product as any).weightUnit || "g"}`,
     });
   }
@@ -125,10 +119,10 @@ function SpecsTab({ product }: Pick<ProductTabsProps, "product">) {
     const now = new Date();
     const months =
       (now.getFullYear() - d.getFullYear()) * 12 + (now.getMonth() - d.getMonth());
-    if (months < 1) return "This month";
-    if (months < 12) return `${months} month${months === 1 ? "" : "s"}`;
+    if (months < 1) return t("pages.productTabs.thisMonth");
+    if (months < 12) return t(months === 1 ? "pages.productTabs.monthSuffix" : "pages.productTabs.monthsSuffix", { count: months });
     const years = Math.floor(months / 12);
-    return `${years} year${years === 1 ? "" : "s"}`;
+    return t(years === 1 ? "pages.productTabs.yearSuffix" : "pages.productTabs.yearsSuffix", { count: years });
   };
   const formatCount = (n: number): string => {
     if (n >= 1000) return `${(n / 1000).toFixed(n >= 10000 ? 0 : 1)}K+`;
@@ -136,10 +130,10 @@ function SpecsTab({ product }: Pick<ProductTabsProps, "product">) {
   };
   const sellerStatRows: Array<{ label: string; value: string }> = stats
     ? [
-        { label: "Active On Lalashop", value: formatJoinedAt(stats.joinedAt) },
-        { label: "Products Listed", value: formatCount(Number(stats.productsCount) || 0) },
-        { label: "Orders Fulfilled", value: formatCount(Number(stats.ordersCount) || 0) },
-        { label: "Followers", value: formatCount(Number(stats.followersCount) || 0) },
+        { label: t("pages.productTabs.activeOn"), value: formatJoinedAt(stats.joinedAt) },
+        { label: t("pages.productTabs.productsListed"), value: formatCount(Number(stats.productsCount) || 0) },
+        { label: t("pages.productTabs.ordersFulfilled"), value: formatCount(Number(stats.ordersCount) || 0) },
+        { label: t("pages.productTabs.followersCount"), value: formatCount(Number(stats.followersCount) || 0) },
       ]
     : [];
 
@@ -153,7 +147,7 @@ function SpecsTab({ product }: Pick<ProductTabsProps, "product">) {
           ))
         ) : (
           <p style={{ fontSize: 12, color: "#94a3b8" }}>
-            The seller hasn&apos;t added detailed specifications yet.
+            {t("pages.productTabs.noSpecsYet")}
           </p>
         )}
       </div>
@@ -173,36 +167,37 @@ function SpecsTab({ product }: Pick<ProductTabsProps, "product">) {
 // Build feature pills from real product fields. Each pill is conditional so we
 // only render facts that are actually true for this product (no marketing copy).
 function DescTab({ product }: Pick<ProductTabsProps, "product">) {
+  const { t } = useTranslation("common");
   const p: any = product;
   const features: Array<{ icon: typeof Truck; text: string }> = [];
 
   if (p.freeShipping) {
-    features.push({ icon: Truck, text: "Free shipping" });
+    features.push({ icon: Truck, text: t("pages.productTabs.freeShippingFeature") });
   }
   const rp = p.returnPolicy;
   if (rp?.accepts !== false) {
     const days = Number(rp?.days) || 7;
-    features.push({ icon: RefreshCw, text: `${days}-day returns` });
+    features.push({ icon: RefreshCw, text: t("pages.productTabs.dayReturns", { days }) });
   }
   const lt = p.leadTime;
   if (lt && (lt.min || lt.max)) {
-    const unitLabel = lt.unit === "hours" ? "h" : lt.unit === "weeks" ? "wks" : "days";
+    const unitLabel = lt.unit === "hours" ? t("pages.productTabs.unitHours") : lt.unit === "weeks" ? t("pages.productTabs.unitWeeks") : t("pages.productTabs.unitDays");
     const min = Number(lt.min) || 0;
     const max = Number(lt.max) || min;
     features.push({
       icon: Clock,
-      text: min === max ? `Ships in ${min} ${unitLabel}` : `Ships in ${min}–${max} ${unitLabel}`,
+      text: min === max ? t("pages.productTabs.shipsInSingle", { min, unit: unitLabel }) : t("pages.productTabs.shipsInRange", { min, max, unit: unitLabel }),
     });
   }
   if (p.originCountry) {
-    features.push({ icon: MapPin, text: `Made in ${p.originCountry}` });
+    features.push({ icon: MapPin, text: t("pages.productTabs.madeIn", { country: p.originCountry }) });
   }
   if (Array.isArray(p.tiers) && p.tiers.length > 0) {
-    features.push({ icon: Layers, text: "Bulk pricing available" });
+    features.push({ icon: Layers, text: t("pages.productTabs.bulkPricingAvail") });
   }
   if (Array.isArray(p.tags) && p.tags.length > 0) {
-    p.tags.slice(0, 3).forEach((t: string) => {
-      features.push({ icon: Tag, text: t });
+    p.tags.slice(0, 3).forEach((tag: string) => {
+      features.push({ icon: Tag, text: tag });
     });
   }
 
@@ -216,7 +211,7 @@ function DescTab({ product }: Pick<ProductTabsProps, "product">) {
         </p>
       ) : (
         <p style={{ fontSize: 13, color: "#94a3b8", fontStyle: "italic", marginBottom: 20 }}>
-          The seller hasn&apos;t added a description for this product yet.
+          {t("pages.productTabs.noDescYet")}
         </p>
       )}
       {features.length > 0 && (
@@ -248,7 +243,17 @@ function DescTab({ product }: Pick<ProductTabsProps, "product">) {
 }
 
 /* ── Reviews ── */
+interface ReviewDoc {
+  _id: string;
+  rating: number;
+  comment?: string;
+  createdAt: string;
+  user?: { _id?: string; name?: string; profileImage?: string };
+  readBy?: string[];
+}
+
 function ReviewsTab({ product }: Pick<ProductTabsProps, "product">) {
+  const { t } = useTranslation("common");
   const productId = (product as any)?._id || (product as any)?.id;
 
   const [reviews, setReviews] = useState<ReviewDoc[]>([]);
@@ -315,8 +320,8 @@ function ReviewsTab({ product }: Pick<ProductTabsProps, "product">) {
 
   const handleSubmit = async () => {
     setErr(null);
-    if (!me?._id) return setErr("Please log in to leave a review.");
-    if (rating < 1) return setErr("Pick a star rating first.");
+    if (!me?._id) return setErr(t("pages.productTabs.pleaseLogin"));
+    if (rating < 1) return setErr(t("pages.productTabs.pickRatingFirst"));
     setSubmitting(true);
     try {
       const res = await apiClient(`/products/${productId}/reviews`, {
@@ -329,7 +334,7 @@ function ReviewsTab({ product }: Pick<ProductTabsProps, "product">) {
         setComment("");
       }
     } catch (e: any) {
-      setErr(e?.message || "Failed to submit review");
+      setErr(e?.message || t("pages.productTabs.failedSubmitReview"));
     } finally {
       setSubmitting(false);
     }
@@ -381,26 +386,26 @@ function ReviewsTab({ product }: Pick<ProductTabsProps, "product">) {
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
             <p style={{ fontSize: 12, fontWeight: 800, color: "#0077b6", letterSpacing: "0.1em" }}>
-              SHARE YOUR EXPERIENCE
+              {t("pages.productTabs.shareExperience")}
             </p>
             <div style={{ display: "inline-flex", gap: 4, padding: 4, background: "#fff", borderRadius: 999, border: "1px solid #e2e8f0" }}>
-              {(["product", "shop"] as const).map((t) => (
+              {(["product", "shop"] as const).map((kind) => (
                 <button
-                  key={t}
-                  onClick={() => setTarget(t)}
+                  key={kind}
+                  onClick={() => setTarget(kind)}
                   style={{
                     padding: "4px 12px",
                     borderRadius: 999,
                     border: "none",
-                    background: target === t ? "#0077b6" : "transparent",
-                    color: target === t ? "#fff" : "#64748b",
+                    background: target === kind ? "#0077b6" : "transparent",
+                    color: target === kind ? "#fff" : "#64748b",
                     fontSize: 11,
                     fontWeight: 700,
                     cursor: "pointer",
                     textTransform: "capitalize",
                   }}
                 >
-                  Rate {t}
+                  {kind === "product" ? t("pages.productTabs.rateProduct") : t("pages.productTabs.rateShop")}
                 </button>
               ))}
             </div>
@@ -417,7 +422,7 @@ function ReviewsTab({ product }: Pick<ProductTabsProps, "product">) {
                   onMouseLeave={() => setHover(0)}
                   onClick={() => setRating(n)}
                   style={{ background: "none", border: "none", cursor: "pointer", padding: 2 }}
-                  aria-label={`Rate ${n} stars`}
+                  aria-label={t("pages.productTabs.rateNStars", { n })}
                 >
                   <Star
                     size={28}
@@ -432,7 +437,7 @@ function ReviewsTab({ product }: Pick<ProductTabsProps, "product">) {
           <textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            placeholder="Tell other buyers what you liked, fit, quality, packaging…"
+            placeholder={t("pages.productTabs.reviewTextarea")}
             rows={3}
             style={{
               width: "100%",
@@ -470,7 +475,7 @@ function ReviewsTab({ product }: Pick<ProductTabsProps, "product">) {
                 opacity: submitting ? 0.6 : 1,
               }}
             >
-              <Send size={14} /> {submitting ? "Posting…" : "review"}
+              <Send size={14} /> {submitting ? t("pages.productTabs.posting") : t("pages.productTabs.postReview")}
             </button>
           </div>
         </div>
@@ -478,10 +483,10 @@ function ReviewsTab({ product }: Pick<ProductTabsProps, "product">) {
 
       {/* Review list */}
       {loading ? (
-        <p style={{ fontSize: 13, color: "#94a3b8" }}>Loading reviews…</p>
+        <p style={{ fontSize: 13, color: "#94a3b8" }}>{t("pages.productTabs.loadingReviews")}</p>
       ) : reviews.length === 0 ? (
         <p style={{ fontSize: 13, color: "#94a3b8" }}>
-          No reviews yet — be the first to review this product.
+          {t("pages.productTabs.noReviewsYet")}
         </p>
       ) : (
         reviews.map((r) => (
@@ -509,17 +514,17 @@ function ReviewsTab({ product }: Pick<ProductTabsProps, "product">) {
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={r.user.profileImage}
-                  alt={r.user.name || "User"}
+                  alt={r.user.name || t("pages.productTabs.userPlaceholder")}
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
               ) : (
-                (r.user?.name || "U")[0]
+                (r.user?.name || t("pages.productTabs.userPlaceholder"))[0]
               )}
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
                 <span style={{ fontWeight: 800, fontSize: 14, color: "#0f172a" }}>
-                  {r.user?.name || "Anonymous"}
+                  {r.user?.name || t("pages.productTabs.anonymousUser")}
                 </span>
                 <Stars filled={r.rating} size={12} />
                 <span style={{ fontSize: 11, color: "#94a3b8" }}>
@@ -527,7 +532,7 @@ function ReviewsTab({ product }: Pick<ProductTabsProps, "product">) {
                 </span>
               </div>
               <p style={{ fontSize: 14, color: "#6b7280", fontWeight: 500, margin: 0 }}>
-                {r.comment || "(no comment)"}
+                {r.comment || t("pages.productTabs.noCommentText")}
               </p>
             </div>
           </div>

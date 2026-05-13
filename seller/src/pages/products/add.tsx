@@ -118,7 +118,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ images, setImages, max = 
             className="aspect-square rounded-lg border-2 border-dashed border-gray-200 flex flex-col items-center justify-center gap-1 text-gray-400 hover:border-emerald-500 hover:text-emerald-600 transition-colors"
           >
             <ImagePlus className="w-5 h-5" />
-            <span className="text-[10px] font-bold tracking-wide">{t("pages.addProduct.imageSection") === "Image" ? "Add image" : t("components.webProductForm.addImage")}</span>
+            <span className="text-[10px] font-bold tracking-wide">{t("components.webProductForm.addImage")}</span>
           </button>
         )}
       </div>
@@ -400,7 +400,7 @@ const AddProductPage: React.FC = () => {
                       onChange={(e) => setPosCategory(e.target.value)}
                     >
                       {productCategories.map((c) => (
-                        <option key={c.value} value={c.value}>{c.label}</option>
+                        <option key={c.value} value={c.value}>{t(`pages.productCategories.${c.value}`)}</option>
                       ))}
                     </select>
                   </Field>

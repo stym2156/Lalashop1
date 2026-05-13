@@ -36,10 +36,10 @@ export default function Step4FinalReview({
   const { t } = useTranslation("common");
 
   const businessTypeMap: Record<string, string> = {
-    individual: "Individual",
-    sole_proprietor: "Sole Proprietor",
-    corporate: "Corporate",
-    partnership: "Partnership",
+    individual: t("openshopStep4More.businessTypeNames.individual"),
+    sole_proprietor: t("openshopStep4More.businessTypeNames.sole_proprietor"),
+    corporate: t("openshopStep4More.businessTypeNames.corporate"),
+    partnership: t("openshopStep4More.businessTypeNames.partnership"),
   };
 
   const fullAddress = [
@@ -56,7 +56,7 @@ export default function Step4FinalReview({
   const isIndividual = businessType === 'individual';
 
   const summaryData = {
-    businessType: businessType ? businessTypeMap[businessType] : "-",
+    businessType: businessType ? businessTypeMap[businessType] : t("openshopStep4More.addressNotSpecified"),
     shopName: shopName || "-",
     shopAccount: shopAccount || "-",
     shopCategory: shopCategory || "-",
@@ -65,18 +65,18 @@ export default function Step4FinalReview({
     idNumber: identityData.idNumber || "-",
     tin: identityData.tinNumber || "-",
     applicantName: `${identityData.firstName || ""} ${identityData.lastName || ""}`.trim() || "-",
-    address: fullAddress || "Address not specified",
+    address: fullAddress || t("openshopStep4More.addressNotSpecified"),
   };
 
   const idDocLabel =
-    identityData.idType === "passport" ? "Passport" : "National ID Card";
+    identityData.idType === "passport" ? t("openshopStep4More.docLabels.passport") : t("openshopStep4More.docLabels.nationalId");
 
   const businessDocLabel = (() => {
     switch (businessType) {
-      case "sole_proprietor": return "Business Registration Certificate";
-      case "corporate": return "Company Business License";
-      case "partnership": return "Partnership Agreement";
-      default: return "Business License";
+      case "sole_proprietor": return t("openshopStep4More.docLabels.businessRegCert");
+      case "corporate": return t("openshopStep4More.docLabels.companyBusinessLicense");
+      case "partnership": return t("openshopStep4More.docLabels.partnershipAgreement");
+      default: return t("openshopStep4More.docLabels.businessLicense");
     }
   })();
 
@@ -113,15 +113,15 @@ export default function Step4FinalReview({
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
             {[
-              { label: "Business Type", value: summaryData.businessType },
-              { label: "Name", value: summaryData.shopName },
-              { label: "Category", value: summaryData.shopCategory },
-              { label: "Email ", value: summaryData.email },
-              { label: "Phone", value: summaryData.phone },
-              ...(!isIndividual ? [{ label: "Tax ID (TIN)", value: summaryData.tin }] : []),
-              { label: "ID / Passport", value: summaryData.idNumber },
-              { label: "Representative", value: summaryData.applicantName },
-              { label: "Address", value: summaryData.address },
+              { label: t("pages.openshopStep4.fieldBusinessType"), value: summaryData.businessType },
+              { label: t("pages.openshopStep4.fieldName"), value: summaryData.shopName },
+              { label: t("pages.openshopStep4.fieldCategory"), value: summaryData.shopCategory },
+              { label: t("pages.openshopStep4.fieldEmail"), value: summaryData.email },
+              { label: t("pages.openshopStep4.fieldPhone"), value: summaryData.phone },
+              ...(!isIndividual ? [{ label: t("pages.openshopStep4.fieldTinTax"), value: summaryData.tin }] : []),
+              { label: t("pages.openshopStep4.fieldIdPassport"), value: summaryData.idNumber },
+              { label: t("pages.openshopStep4.fieldRepresentative"), value: summaryData.applicantName },
+              { label: t("pages.openshopStep4.fieldAddress"), value: summaryData.address },
             ].map((item, i) => (
               <div key={i} className="space-y-1">
                 <p className="text-[14px] font-bold text-dark">{item.label}</p>
@@ -162,7 +162,7 @@ export default function Step4FinalReview({
                             rel="noreferrer"
                             className="mt-2 text-[10px] text-primary underline font-bold"
                           >
-                            View
+                            {t("pages.openshopStep4.viewDoc")}
                           </a>
                         </div>
                       )}
@@ -198,7 +198,7 @@ export default function Step4FinalReview({
         <div className="space-y-3">
           <h3 className="text-[16px] font-bold text-[#111111]">{t("pages.openshopStep1.whatToExpect")}</h3>
           <p className="text-[14px] text-gray-600 leading-relaxed font-medium">
-            We will review your information within 2-3 business days. If we need more information or have questions, we will contact you via your registered email or phone number.
+            {t("pages.openshopStep4.reviewWithin23Days")}
           </p>
         </div>
       </div>

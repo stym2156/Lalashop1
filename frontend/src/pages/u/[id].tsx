@@ -247,7 +247,7 @@ export default function UserProfilePage() {
     );
   }
 
-  const handle = profile.username || profile.name || "user";
+  const handle = profile.username || profile.name || t("pages.publicShop.userFallback");
 
   return (
     <div className="min-h-screen bg-white pb-24">
@@ -262,7 +262,7 @@ export default function UserProfilePage() {
               <button
                 onClick={() => setMenuOpen((s) => !s)}
                 className="p-2 -mr-2 hover:bg-gray-100 rounded-full transition-colors"
-                aria-label="Profile options"
+                aria-label={t("pages.publicShop.profileOptions")}
               >
                 <MoreHorizontal size={22} className="text-dark" />
               </button>
@@ -352,21 +352,21 @@ export default function UserProfilePage() {
             <div className="flex items-center gap-6 text-sm">
               <div className="text-center">
                 <p className="font-bold text-slate-900">{posts.length}</p>
-                <p className="text-xs text-slate-500">posts</p>
+                <p className="text-xs text-slate-500">{t("pages.publicShop.posts")}</p>
               </div>
               <button
                 onClick={() => openUserList("followers")}
                 className="text-center active:scale-95 transition-transform hover:opacity-70"
               >
                 <p className="font-bold text-slate-900">{profile.followers?.length || 0}</p>
-                <p className="text-xs text-slate-500">followers</p>
+                <p className="text-xs text-slate-500">{t("pages.publicShop.followers")}</p>
               </button>
               <button
                 onClick={() => openUserList("following")}
                 className="text-center active:scale-95 transition-transform hover:opacity-70"
               >
                 <p className="font-bold text-slate-900">{profile.following?.length || 0}</p>
-                <p className="text-xs text-slate-500">following</p>
+                <p className="text-xs text-slate-500">{t("pages.publicShop.following")}</p>
               </button>
             </div>
           </div>
@@ -388,20 +388,20 @@ export default function UserProfilePage() {
         <div className="max-w-3xl mx-auto px-2 flex">
           {(
             [
-              { id: "grid" as const, label: "Posts", icon: Grid3x3 },
-              { id: "shop" as const, label: "Shop", icon: ShoppingBag },
+              { id: "grid" as const, label: t("pages.publicShop.postsTab"), icon: Grid3x3 },
+              { id: "shop" as const, label: t("pages.publicShop.shopTab"), icon: ShoppingBag },
             ]
-          ).map((t) => (
+          ).map((tabItem) => (
             <button
-              key={t.id}
-              onClick={() => setTab(t.id)}
+              key={tabItem.id}
+              onClick={() => setTab(tabItem.id)}
               className={`flex-1 py-3 flex items-center justify-center gap-2 text-xs font-bold tracking-widest relative ${
-                tab === t.id ? "text-slate-900" : "text-slate-400"
+                tab === tabItem.id ? "text-slate-900" : "text-slate-400"
               }`}
             >
-              <t.icon size={16} />
-              {t.label}
-              {tab === t.id && (
+              <tabItem.icon size={16} />
+              {tabItem.label}
+              {tab === tabItem.id && (
                 <span className="absolute top-0 left-0 right-0 h-0.5 bg-slate-900" />
               )}
             </button>

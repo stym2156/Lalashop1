@@ -53,18 +53,18 @@ interface NotificationItem {
   metadata?: NotificationMetadata;
 }
 
-const formatTimeAgo = (iso?: string): string => {
+const formatTimeAgo = (iso: string | undefined, t: any): string => {
   if (!iso) return "";
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "";
   const diffSec = Math.max(0, (Date.now() - d.getTime()) / 1000);
-  if (diffSec < 60) return "เมื่อสักครู่";
+  if (diffSec < 60) return t("time.justNow");
   const diffMin = Math.floor(diffSec / 60);
-  if (diffMin < 60) return `${diffMin} นาทีที่แล้ว`;
+  if (diffMin < 60) return t("time.minutesAgo", { count: diffMin });
   const diffHr = Math.floor(diffMin / 60);
-  if (diffHr < 24) return `${diffHr} ชั่วโมงที่แล้ว`;
+  if (diffHr < 24) return t("time.hoursAgo", { count: diffHr });
   const diffDay = Math.floor(diffHr / 24);
-  return `${diffDay} วันที่แล้ว`;
+  return t("time.daysAgo", { count: diffDay });
 };
 
 const formatFullDate = (iso?: string): string => {
@@ -365,10 +365,9 @@ export default function SystemNotifications(): JSX.Element {
                 )}
                 <div className="absolute bottom-0 right-0 bg-white/50 pl-2">
                   <p className="text-[10px] font-black text-slate-400 tracking-tight">
-                    {formatTimeAgo(n.createdAt)}
+                    {formatTimeAgo(n.createdAt, t)}
                   </p>
-                </div>
-              </div>
+                </div>              </div>
             </button>
           ))
         ) : (

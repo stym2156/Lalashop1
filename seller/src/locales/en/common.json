@@ -1286,6 +1286,149 @@
       "verification": {
         "failedToLoad": "Failed to load KYC"
       }
+    },
+    "productCategories": {
+      "fashion": "Fashion & Accessories",
+      "electronics": "Electronics & Gadgets",
+      "beauty": "Beauty & Personal Care",
+      "food": "Food & Beverages",
+      "home": "Home & Living",
+      "mother_baby": "Mother & Baby",
+      "toys": "Toys & Hobbies",
+      "sports": "Sports & Outdoors",
+      "automotive": "Automotive",
+      "health": "Health & Wellness",
+      "pet": "Pet Supplies",
+      "office": "Office & Stationery",
+      "tools": "Tools & Home Improvement",
+      "jewelry": "Jewelry & Watches",
+      "digital": "Digital Products",
+      "others": "Others"
+    },
+    "categoryConfig": {
+      "fashion": {
+        "label": "Fashion & Accessories",
+        "description": "Clothing, shoes, bags, accessories. Buyers pick a size and color before ordering."
+      },
+      "electronics": {
+        "label": "Electronics & Gadgets",
+        "description": "Tech products. Variants typically capture color, storage, and connectivity."
+      },
+      "beauty": {
+        "label": "Beauty & Personal Care",
+        "description": "Skincare, makeup, fragrance. Variants describe shade and net weight."
+      },
+      "food": {
+        "label": "Food & Beverages",
+        "description": "Edible goods. Capture pack size and expiry — required for compliance."
+      },
+      "home": {
+        "label": "Home & Living",
+        "description": "Furniture, décor, kitchenware. Capture material and dimensions."
+      },
+      "mother_baby": {
+        "label": "Mother & Baby",
+        "description": "Baby products. Variant on age range, capture safety info."
+      },
+      "toys": {
+        "label": "Toys & Hobbies",
+        "description": "Toys, models, hobbies. Variant on color, capture age range."
+      },
+      "sports": {
+        "label": "Sports & Outdoors",
+        "description": "Sports gear. Variant on size and color, capture sport."
+      },
+      "automotive": {
+        "label": "Automotive",
+        "description": "Car & moto parts. Capture compatibility info."
+      },
+      "health": {
+        "label": "Health & Wellness",
+        "description": "Vitamins, supplements, medical aids. Variant on pack count."
+      },
+      "pet": {
+        "label": "Pet Supplies",
+        "description": "Pet food, accessories. Variant on size, capture pet type."
+      },
+      "office": {
+        "label": "Office & Stationery",
+        "description": "Stationery, office supplies. Variant on color and pack quantity."
+      },
+      "tools": {
+        "label": "Tools & Home Improvement",
+        "description": "Hand tools, power tools, hardware. Capture power source."
+      },
+      "jewelry": {
+        "label": "Jewelry & Watches",
+        "description": "Jewelry & watches. Variant on metal, gemstone, ring size."
+      },
+      "digital": {
+        "label": "Digital Products",
+        "description": "Software, e-books, licenses. No physical variants needed."
+      },
+      "others": {
+        "label": "Others",
+        "description": "Catch-all for anything not covered above."
+      }
+    },
+    "variantNames": {
+      "size": "Size",
+      "color": "Color",
+      "storage": "Storage",
+      "connectivity": "Connectivity",
+      "volume": "Volume",
+      "shade": "Shade",
+      "pack_size": "Pack Size",
+      "flavor": "Flavor",
+      "age_range": "Age Range",
+      "pet_size": "Pet Size",
+      "pack": "Pack",
+      "voltage": "Voltage",
+      "metal": "Metal",
+      "ring_size": "Ring Size",
+      "license": "License"
+    },
+    "attributeLabels": {
+      "material": "Material",
+      "fit": "Fit",
+      "gender": "Gender",
+      "care_instructions": "Care instructions",
+      "brand": "Brand",
+      "model_number": "Model number",
+      "warranty_period": "Warranty period",
+      "power_source": "Power source",
+      "key_specifications": "Key specifications",
+      "skin_type": "Skin type",
+      "key_ingredients": "Key ingredients",
+      "expiry___pao": "Expiry / PAO",
+      "cruelty_free": "Cruelty-free?",
+      "ingredients": "Ingredients",
+      "expiry_date": "Expiry date",
+      "storage_instructions": "Storage instructions",
+      "dietary": "Dietary",
+      "allergen_warnings": "Allergen warnings",
+      "suitable_room": "Suitable room",
+      "assembly_required": "Assembly required?",
+      "recommended_age": "Recommended age",
+      "safety_certification": "Safety certification",
+      "battery_required": "Battery required?",
+      "sport___activity": "Sport / activity",
+      "vehicle_compatibility": "Vehicle compatibility",
+      "part_number___oem": "Part number / OEM",
+      "active_ingredients": "Active ingredients",
+      "recommended_dosage": "Recommended dosage",
+      "fda___regulatory_certification": "FDA / regulatory certification",
+      "pet_type": "Pet type",
+      "use_case": "Use case",
+      "warranty": "Warranty",
+      "metal_purity": "Metal purity",
+      "gemstone": "Gemstone",
+      "weight_g": "Weight (g)",
+      "warranty___certificate": "Warranty / certificate",
+      "file_type": "File type",
+      "delivery_method": "Delivery method",
+      "license_duration": "License duration",
+      "additional_details": "Additional details"
     }
   },
   "components": {
@@ -1431,7 +1574,18 @@
       "tierAll": "All approved creators",
       "tierBronze": "Bronze and above",
       "tierSilver": "Silver and above",
-      "tierGold": "Gold only"
+      "tierGold": "Gold only",
+      "specMaterial": "Material",
+      "specWarranty": "Warranty",
+      "commissionPercentTab": "Percentage (%)",
+      "commissionFixedTab": "Fixed (฿)",
+      "daysUnit": "days",
+      "optionNamePlaceholder": "e.g. Size",
+      "charCount70": "{{count}}/70 characters",
+      "charCount160": "{{count}}/160 characters"
+    },
+    "sellerHeader": {
+      "myShop": "My Shop"
     }
   }
 }

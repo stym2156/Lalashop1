@@ -213,7 +213,16 @@
     "addedToCart": "Added to cart",
     "buyNow": "Buy now",
     "viewShop": "View Shop",
-    "stockLeft": "Stock: {{count}}"
+    "stockLeft": "Stock: {{count}}",
+    "returns": "Returns",
+    "leadTime": "Lead Time",
+    "free": "Free",
+    "shipsFrom": "Ships from {{location}}",
+    "selected": "SELECTED",
+    "specs": "Specifications",
+    "origin": "Origin",
+    "vendor": "Vendor",
+    "sku": "SKU"
   },
   "cart": {
     "title": "Shopping cart",
@@ -331,7 +340,7 @@
       "couponsStat": "Coupons",
       "promotions": "Promotions",
       "withdraw": "Withdraw",
-      "footerTagline": "LALASHOP Social Commerce",
+      "footerTagline": "Lala Social Commerce",
       "profile": "profile",
       "cancel": "cancel",
       "save": "save",
@@ -392,7 +401,9 @@
       "noFollowing": "Not following anyone",
       "follow": "Follow",
       "unfollow": "Following",
-      "loginToFollow": "Log in to follow"
+      "loginToFollow": "Log in to follow",
+      "likeOne": "like",
+      "likeMany": "likes"
     },
     "checkout": {
       "title": "Checkout",
@@ -584,12 +595,15 @@
       "saving": "Saving...",
       "savedSuccess": "Product saved",
       "saveFailed": "Failed to save product",
-      "withdraw": "Withdraw earnings",
+      "withdraw": "Withdraw",
       "addBank": "Add bank account",
       "balance": "Balance",
       "totalSales": "Total sales",
       "ordersToday": "Orders today",
-      "viewProductCenter": "Open Product Center"
+      "viewProductCenter": "Open Product Center",
+      "todaysData": "Today's Data",
+      "productCreator": "Product Creator",
+      "productDetail": "Product Detail"
     },
     "posts": {
       "createTitle": "Create Post",
@@ -665,7 +679,8 @@
     },
     "promo": {
       "title": "Promotions",
-      "noPromo": "No active promotions"
+      "noPromo": "No active promotions",
+      "fetchingCoupons": "Fetching your coupons..."
     },
     "myshop": {
       "title": "My Shop",
@@ -719,11 +734,23 @@
       "title": "Edit product",
       "viewPublic": "View public page",
       "delete": "Delete",
-      "loading": "Loading…"
+      "loading": "Loading…",
+      "failedToLoad": "Failed to load product"
     },
     "openshopStep1": {
       "whatToExpect": "What to Expect",
-      "questionHeader": "What type of business do you operate?"
+      "questionHeader": "What type of business do you operate?",
+      "expectNote": "Our team typically reviews applications within 2-3 business days. Make sure your documents are clear and accurate to speed up approval.",
+      "businessTypeIndividual": "Individual",
+      "businessTypeIndividualDesc": "Use your ID card or passport. You are selling as a private individual and not a registered business.",
+      "businessTypeSoleProprietor": "Sole Proprietor",
+      "businessTypeSoleProprietorDesc": "Requires a business registration certificate. You are the sole owner of a legally registered business.",
+      "businessTypeCorporate": "Corporate",
+      "businessTypeCorporateDesc": "A legal entity in the form of a company, clearly separated from its owners.",
+      "businessTypePartnership": "Partnership",
+      "businessTypePartnershipDesc": "A business operated jointly by two or more individuals.",
+      "asXSeller": "As a",
+      "youWillNeed": "seller, you will need:"
     },
     "openshopStep2": {
       "businessEntity": "Business Entity Details",
@@ -763,7 +790,18 @@
       "termsOfService": "Terms of Service",
       "termsAccept": "I confirm that the above information is true in all respects, and I have read and accepted the",
       "noDocs": "No documents uploaded.",
-      "registrationSummary": "Registration Summary"
+      "registrationSummary": "Registration Summary",
+      "fieldBusinessType": "Business Type",
+      "fieldName": "Name",
+      "fieldCategory": "Category",
+      "fieldEmail": "Email",
+      "fieldPhone": "Phone",
+      "fieldTinTax": "Tax ID (TIN)",
+      "fieldIdPassport": "ID / Passport",
+      "fieldRepresentative": "Representative",
+      "fieldAddress": "Address",
+      "viewDoc": "View",
+      "reviewWithin23Days": "We will review your information within 2-3 business days. If we need more information or have questions, we will contact you via your registered email or phone number."
     },
     "securityPanel": {
       "password": "Password",
@@ -789,7 +827,9 @@
       "title": "Payment Accounts",
       "noBankAccounts": "No bank accounts linked",
       "clickToLink": "Click to link your first account",
-      "addAccount": "Add Account"
+      "addAccount": "Add Account",
+      "verified": "Verified",
+      "pendingApproval": "Pending Approval"
     },
     "addressForm": {
       "recipientName": "Recipient Name",
@@ -800,7 +840,7 @@
       "shippingBranch": "Shipping Branch",
       "noAddress": "No address found. Please add your pickup location.",
       "addAddress": "Add Address",
-      "editAddress": "Edit Address",
+      "editAddress": "Edit address",
       "saveAddress": "Save Address",
       "updateAddress": "Update Address",
       "saving": "Saving..."
@@ -827,7 +867,15 @@
       "earned": "Earned",
       "pending": "Pending",
       "noOrders": "No orders",
-      "refresh": "Refresh"
+      "refresh": "Refresh",
+      "statusAll": "All",
+      "statusPending": "Pending",
+      "statusShipped": "Shipped",
+      "statusCompleted": "Completed",
+      "statusCanceled": "Canceled",
+      "qtyLabel": "Qty: {{qty}}",
+      "priceLabel": "Price",
+      "totalCommissionTracked": "Total commission tracked: ฿{{amount}}"
     },
     "creatorAttr": {
       "dataAnalytics": "Data Analytics",
@@ -868,11 +916,52 @@
     },
     "productTabs": {
       "keySpecifications": "Key Specifications",
-      "supplierProfile": "Supplier Profile"
+      "supplierProfile": "Supplier Profile",
+      "dimensions": "Dimensions",
+      "weight": "Weight",
+      "thisMonth": "This month",
+      "monthSuffix": "{{count}} month",
+      "monthsSuffix": "{{count}} months",
+      "yearSuffix": "{{count}} year",
+      "yearsSuffix": "{{count}} years",
+      "activeOn": "Active On Lalashop",
+      "productsListed": "Products Listed",
+      "ordersFulfilled": "Orders Fulfilled",
+      "followersCount": "Followers",
+      "noSpecsYet": "The seller hasn't added detailed specifications yet.",
+      "noDescYet": "The seller hasn't added a description for this product yet.",
+      "freeShippingFeature": "Free shipping",
+      "dayReturns": "{{days}}-day returns",
+      "shipsInSingle": "Ships in {{min}} {{unit}}",
+      "shipsInRange": "Ships in {{min}}–{{max}} {{unit}}",
+      "unitHours": "h",
+      "unitDays": "days",
+      "unitWeeks": "wks",
+      "madeIn": "Made in {{country}}",
+      "bulkPricingAvail": "Bulk pricing available",
+      "pleaseLogin": "Please log in to leave a review.",
+      "pickRatingFirst": "Pick a star rating first.",
+      "failedSubmitReview": "Failed to submit review",
+      "shareExperience": "SHARE YOUR EXPERIENCE",
+      "rateProduct": "Rate product",
+      "rateShop": "Rate shop",
+      "rateNStars": "Rate {{n}} stars",
+      "reviewTextarea": "Tell other buyers what you liked, fit, quality, packaging…",
+      "posting": "Posting…",
+      "postReview": "review",
+      "loadingReviews": "Loading reviews…",
+      "noReviewsYet": "No reviews yet — be the first to review this product.",
+      "anonymousUser": "Anonymous",
+      "noCommentText": "(no comment)",
+      "userPlaceholder": "User"
     },
     "followersPage": {
       "title": "Followers",
-      "noFollowers": "No followers yet"
+      "noFollowers": "No followers yet",
+      "searchPlaceholder": "Search followers...",
+      "failedToLoad": "Failed to load followers",
+      "appearHere": "Once people follow @{{username}}, they'll appear here",
+      "titleSuffix": "Followers of @{{username}} | SupplyNet"
     },
     "productsAdd2": {
       "general": "General",
@@ -1013,7 +1102,14 @@
       "tapSuggestions": "Tap suggestions to add.",
       "addOption": "Add option",
       "pricingStock": "Pricing & stock",
-      "stockLabel": "Stock"
+      "stockLabel": "Stock",
+      "materialDefault": "Material",
+      "warrantyDefault": "Warranty",
+      "tierAll": "All approved creators",
+      "tierBronze": "Bronze and above",
+      "tierSilver": "Silver and above",
+      "tierGold": "Gold only",
+      "premiumProductTitle": "Premium product title"
     },
     "productsEdit2": {
       "categoryTemplate": "Category template: {{label}}",
@@ -1050,7 +1146,12 @@
       "missingSeller": "This product link is missing the seller. Open the product again and click Buy.",
       "noItemsOrder": "No items to order. Add something to your cart first.",
       "failedCreateOrder": "Failed to create order",
-      "qrFixedWarning": "⚠ This QR is fixed — make sure you transfer the exact total above."
+      "qrFixedWarning": "⚠ This QR is fixed — make sure you transfer the exact total above.",
+      "walletQrFallback": "Wallet QR",
+      "slipPreviewAlt": "Slip preview",
+      "promptPayQrAlt": "PromptPay QR",
+      "qrAlt": "QR",
+      "guestName": "Guest"
     },
     "receipt": {
       "orderDate": "Order Date",
@@ -1082,7 +1183,16 @@
       "orderPlaced": "Order placed",
       "completePaymentDesc": "Complete the payment from the checkout page to confirm your order.",
       "qtyUnit": "Qty: {{qty}} · Unit: ฿{{price}}",
-      "free": "Free"
+      "free": "Free",
+      "subtitle": "Receipt",
+      "orderIdLabel": "Order ID",
+      "transferSlipAlt": "Transfer Slip",
+      "missingOrderIdShort": "Missing order id — open this page from a checkout completion.",
+      "payMethod": {
+        "manualTransfer": "Manual Bank Transfer",
+        "visaMaster": "Credit / Debit Card",
+        "cod": "Cash on Delivery"
+      }
     },
     "payment": {
       "branch": "Branch: {{branch}}",
@@ -1092,7 +1202,13 @@
       "sslEncrypted": "SSL Encrypted",
       "pciCompliant": "PCI Compliant",
       "option": "Option: {{color}} · Size: {{size}}",
-      "premiumProduct": "Premium Product"
+      "premiumProduct": "Premium Product",
+      "method": {
+        "visaMasterTitle": "Credit / Debit Card",
+        "visaMasterDesc": "Pay with Visa, Mastercard or UnionPay",
+        "codTitle": "Cash on Delivery",
+        "codDesc": "Pay in cash when the order arrives"
+      }
     },
     "buy": {
       "noVariants": "This product has no selectable variants.",
@@ -1128,7 +1244,8 @@
       "enterAppCode": "Enter 6-digit App Code",
       "disable2FA": "Disable Two-Factor Authentication",
       "settingsUpdated": "Security settings updated successfully!",
-      "failedSetPin": "Failed to set withdrawal PIN"
+      "failedSetPin": "Failed to set withdrawal PIN",
+      "qrCodeAlt": "QR code"
     },
     "creatorWithdraw2": {
       "withdrawalRules": "Withdrawal Rules",
@@ -1270,7 +1387,11 @@
       "warehouse": "Warehouse",
       "documents": "Documents",
       "lockedInfo": "To update any of these details, please contact support — KYC information is locked once submitted to keep audit trails consistent.",
-      "openShopHint": "Open a shop from /me/opensho to fill in your KYC."
+      "openShopHint": "Open a shop from /me/opensho to fill in your KYC.",
+      "idDocLabel": "{{idType}} document",
+      "idDocFallback": "ID",
+      "businessLicense": "Business license",
+      "supportingDoc": "Supporting document"
     },
     "myshopPanel2": {
       "openShopNow": "OPEN SHOP NOW",
@@ -1294,7 +1415,11 @@
       "reportUser": "Report user",
       "reportShop": "Report shop",
       "free": "Free",
-      "failedFollow": "Failed to update follow"
+      "failedFollow": "Failed to update follow",
+      "postsTab": "Posts",
+      "shopTab": "Shop",
+      "userFallback": "user",
+      "profileOptions": "Profile options"
     },
     "profile2": {
       "message": "Message",
@@ -1315,9 +1440,19 @@
       "instagram": "Instagram",
       "twitter": "Twitter",
       "telegram": "Telegram",
-      "socialCommerce": "lala Social Commerce"
+      "socialCommerce": "Lala Social Commerce",
+      "privacyTitle": "Privacy",
+      "visEveryoneLabel": "Everyone",
+      "visEveryoneDesc": "Public visibility",
+      "visFriendsLabel": "Friends",
+      "visFriendsDesc": "Followers you follow back",
+      "visSelectedLabel": "Selected",
+      "visSelectedDesc": "Choose specific people"
     },
     "productPage2": {
+      "bangkokLocation": "Bangkok, Thailand",
+      "businessDays37": "3–7 Business Days",
+      "promoAlt": "{{name}} promo {{index}}",
       "pickOptionFirst": "Pick every option first",
       "outOfStock": "Out of stock",
       "stockLeft": "In stock — {{count}} available",
@@ -1358,7 +1493,11 @@
       "stickerPartner": "Lala Shop Partner",
       "factoryDirect": "factory_direct",
       "shopBioFallback": "Reliable high-quality wholesale factory partner.",
-      "noSimilarProducts": "No similar products found."
+      "noSimilarProducts": "No similar products found.",
+      "returnsLabel": "Returns",
+      "specs": "Specifications",
+      "description": "Description",
+      "selected": "SELECTED"
     },
     "socialPage2": {
       "whatsOnMind": "What's on your mind, {{name}}?",
@@ -1379,7 +1518,8 @@
       "selectFriends": "Select Friends",
       "excludeFriends": "Exclude Friends",
       "done": "Done",
-      "failedShare": "Failed to share post. Please check your connection."
+      "failedShare": "Failed to share post. Please check your connection.",
+      "uploadFailed": "Upload failed"
     },
     "topFactories2": {
       "eliteTier": "Elite Tier Manufacturers",
@@ -1410,7 +1550,8 @@
       "warehouse": "Warehouse",
       "submittingApplication": "Submitting…",
       "submitApplication": "Submit Application",
-      "nextBtn": "Next"
+      "nextBtn": "Next",
+      "failedSubmit": "Failed to submit application"
     },
     "generalPanel": {
       "storeNameLabel": "Store Name / Name",
@@ -1443,7 +1584,8 @@
       "done": "Done",
       "link": "Link",
       "removeConfirm": "Remove this product from your store?",
-      "failedRemove": "Failed to remove"
+      "failedRemove": "Failed to remove",
+      "checkThis": "Check this out"
     },
     "creatorAttr2": {
       "today": "Today",
@@ -1488,7 +1630,29 @@
       "posRevenue": "POS revenue ฿{{amount}} · in-store, not withdrawable",
       "withdrawNow": "withdraw now",
       "afterReceiptWeb": "after buyer confirms receipt, web sales will be transferred within {{days}} business days. please verify bank info to avoid delays.",
-      "noShopAccount": "No shop bank account on file. Open your shop / complete KYC to add a payout account."
+      "noShopAccount": "No shop bank account on file. Open your shop / complete KYC to add a payout account.",
+      "title": "shop withdraw",
+      "withdrawals": "withdrawals",
+      "pendingCount": "Pending ({{count}})",
+      "historyCount": "History ({{count}})",
+      "feeNet": "Fee ฿{{fee}} → Net ฿{{net}}",
+      "noPending": "No pending withdrawals",
+      "noHistoryYet": "No history yet",
+      "tooltipRules": "Withdrawal rules",
+      "posRevenueLabel": "POS revenue ฿{{amount}} · in-store, not withdrawable",
+      "maxBtn": "Max",
+      "minMaxFeeShort": "Min ฿{{min}} • Max ฿{{max}} • Fee {{fee}}%",
+      "processingBtn": "Processing...",
+      "withdrawNowBtn": "withdraw now",
+      "pinDescAmount": "Please enter your 6-digit PIN to confirm withdrawal of ฿{{amount}}",
+      "verifying": "Verifying...",
+      "withdrawalDestination": "withdrawal destination",
+      "paymentMethodsHdr": "payment methods",
+      "pendingHistoryBtn": "pending & history",
+      "afterReceipt": "after buyer confirms receipt, web sales will be transferred within",
+      "businessDaysSuffix": "{{days}} business days",
+      "verifyBankInfo": "please verify bank info to avoid delays.",
+      "setPinFirst": "Set a 6-digit PIN before your first withdrawal."
     },
     "notifications2": {
       "secondsAgo": "a few seconds ago",
@@ -1509,6 +1673,174 @@
       "noContent": "(no content)",
       "copyShort": "Copy",
       "copiedShort": "Copied"
+    },
+    "gallery": {
+      "previousImage": "Previous image",
+      "nextImage": "Next image",
+      "showImage": "Show image {{index}}"
+    },
+    "addBank": {
+      "title": "Add bank account",
+      "nameMatchWarning": "Bank account name must match registered name to prevent transfer errors.",
+      "fullNameEnglish": "Full name (English)",
+      "accountNamePlaceholder": "Bank account name",
+      "bank": "Bank",
+      "selectBank": "Select bank",
+      "bankAccountNumber": "Bank account number",
+      "accountNumberPlaceholder": "Enter 12-digit account number",
+      "submitAndSave": "Submit and save",
+      "consentBefore": "By confirming, you agree to the",
+      "transferTerms": "transfer terms",
+      "consentAfter": "and allow the system to store bank info for payments.",
+      "fillAll": "Please fill in all information",
+      "cannotConnect": "Cannot connect to server"
+    },
+    "productCategories": {
+      "fashion": "Fashion & Accessories",
+      "electronics": "Electronics & Gadgets",
+      "beauty": "Beauty & Personal Care",
+      "food": "Food & Beverages",
+      "home": "Home & Living",
+      "mother_baby": "Mother & Baby",
+      "toys": "Toys & Hobbies",
+      "sports": "Sports & Outdoors",
+      "automotive": "Automotive",
+      "health": "Health & Wellness",
+      "pet": "Pet Supplies",
+      "office": "Office & Stationery",
+      "tools": "Tools & Home Improvement",
+      "jewelry": "Jewelry & Watches",
+      "digital": "Digital Products",
+      "others": "Others"
+    },
+    "categoryConfig": {
+      "fashion": {
+        "label": "Fashion & Accessories",
+        "description": "Clothing, shoes, bags, accessories. Buyers pick a size and color before ordering."
+      },
+      "electronics": {
+        "label": "Electronics & Gadgets",
+        "description": "Tech products. Variants typically capture color, storage, and connectivity."
+      },
+      "beauty": {
+        "label": "Beauty & Personal Care",
+        "description": "Skincare, makeup, fragrance. Variants describe shade and net weight."
+      },
+      "food": {
+        "label": "Food & Beverages",
+        "description": "Edible goods. Capture pack size and expiry — required for compliance."
+      },
+      "home": {
+        "label": "Home & Living",
+        "description": "Furniture, décor, kitchenware. Capture material and dimensions."
+      },
+      "mother_baby": {
+        "label": "Mother & Baby",
+        "description": "Baby products. Variant on age range, capture safety info."
+      },
+      "toys": {
+        "label": "Toys & Hobbies",
+        "description": "Toys, models, hobbies. Variant on color, capture age range."
+      },
+      "sports": {
+        "label": "Sports & Outdoors",
+        "description": "Sports gear. Variant on size and color, capture sport."
+      },
+      "automotive": {
+        "label": "Automotive",
+        "description": "Car & moto parts. Capture compatibility info."
+      },
+      "health": {
+        "label": "Health & Wellness",
+        "description": "Vitamins, supplements, medical aids. Variant on pack count."
+      },
+      "pet": {
+        "label": "Pet Supplies",
+        "description": "Pet food, accessories. Variant on size, capture pet type."
+      },
+      "office": {
+        "label": "Office & Stationery",
+        "description": "Stationery, office supplies. Variant on color and pack quantity."
+      },
+      "tools": {
+        "label": "Tools & Home Improvement",
+        "description": "Hand tools, power tools, hardware. Capture power source."
+      },
+      "jewelry": {
+        "label": "Jewelry & Watches",
+        "description": "Jewelry & watches. Variant on metal, gemstone, ring size."
+      },
+      "digital": {
+        "label": "Digital Products",
+        "description": "Software, e-books, licenses. No physical variants needed."
+      },
+      "others": {
+        "label": "Others",
+        "description": "Catch-all for anything not covered above."
+      }
+    },
+    "variantNames": {
+      "size": "Size",
+      "color": "Color",
+      "storage": "Storage",
+      "connectivity": "Connectivity",
+      "volume": "Volume",
+      "shade": "Shade",
+      "pack_size": "Pack Size",
+      "flavor": "Flavor",
+      "age_range": "Age Range",
+      "pet_size": "Pet Size",
+      "pack": "Pack",
+      "voltage": "Voltage",
+      "metal": "Metal",
+      "ring_size": "Ring Size",
+      "license": "License"
+    },
+    "attributeLabels": {
+      "material": "Material",
+      "fit": "Fit",
+      "gender": "Gender",
+      "care_instructions": "Care instructions",
+      "brand": "Brand",
+      "model_number": "Model number",
+      "warranty_period": "Warranty period",
+      "power_source": "Power source",
+      "key_specifications": "Key specifications",
+      "skin_type": "Skin type",
+      "key_ingredients": "Key ingredients",
+      "expiry___pao": "Expiry / PAO",
+      "cruelty_free": "Cruelty-free?",
+      "ingredients": "Ingredients",
+      "expiry_date": "Expiry date",
+      "storage_instructions": "Storage instructions",
+      "dietary": "Dietary",
+      "allergen_warnings": "Allergen warnings",
+      "suitable_room": "Suitable room",
+      "assembly_required": "Assembly required?",
+      "recommended_age": "Recommended age",
+      "safety_certification": "Safety certification",
+      "battery_required": "Battery required?",
+      "sport___activity": "Sport / activity",
+      "vehicle_compatibility": "Vehicle compatibility",
+      "part_number___oem": "Part number / OEM",
+      "active_ingredients": "Active ingredients",
+      "recommended_dosage": "Recommended dosage",
+      "fda___regulatory_certification": "FDA / regulatory certification",
+      "pet_type": "Pet type",
+      "use_case": "Use case",
+      "warranty": "Warranty",
+      "metal_purity": "Metal purity",
+      "gemstone": "Gemstone",
+      "weight_g": "Weight (g)",
+      "warranty___certificate": "Warranty / certificate",
+      "file_type": "File type",
+      "delivery_method": "Delivery method",
+      "license_duration": "License duration",
+      "additional_details": "Additional details"
+    },
+    "categoryPage": {
+      "noProductsInCategory": "No products in {{name}}",
+      "checkBackLater": "Check back later or explore other categories"
     }
   },
   "components": {
@@ -1534,7 +1866,13 @@
       "deleteChatConfirm": "Delete this conversation?",
       "blockUser": "Block user",
       "viewProfile": "View profile",
-      "openChat": "Open chat"
+      "openChat": "Open chat",
+      "askingAbout": "Asking about",
+      "seen": "Seen",
+      "sent": "Sent",
+      "userFallback": "User",
+      "messagesAriaLabel": "Messages",
+      "viewProfileAria": "View {{name}}'s profile"
     },
     "userList": {
       "loading": "Loading...",
@@ -1551,6 +1889,166 @@
     "empty": {
       "noData": "Nothing here yet",
       "tryAgain": "Try again"
+    },
+    "truck": {
+      "backToHome": "Back to Home",
+      "globalLogisticsNetwork": "Global Logistics Network",
+      "heroTitlePart1": "Fast. Secure.",
+      "heroTitleReliable": "Reliable",
+      "heroTitlePart2": "Distribution.",
+      "heroSubtitle": "Connect your business to the world through our high-performance fulfillment centers.",
+      "exploreHub": "Explore Hub",
+      "protection": "Protection",
+      "tradeAssurance": "Trade Assurance",
+      "tradeAssuranceDesc": "Every order distributed through our network is covered by our proprietary shield, protecting your global trade interests.",
+      "paymentProtection": "100% Payment Protection",
+      "qualitySafeguard": "Product Quality Safeguard",
+      "onTimeShipment": "On-time Shipment Guarantee",
+      "liveNetworkStatus": "Live Network Status",
+      "operational": "Operational",
+      "europeanHub": "European Hub",
+      "aseanHub": "ASEAN Hub",
+      "naHub": "NA Hub",
+      "countryGermany": "Germany",
+      "countryThailand": "Thailand",
+      "countryUsa": "USA",
+      "warehouseSourcing": "Warehouse Sourcing",
+      "warehouseSourcingDesc": "Stock at any of our global warehouses",
+      "pickPack": "Pick & Pack",
+      "pickPackDesc": "Standardized packing and labeling",
+      "localDelivery": "Local Delivery",
+      "localDeliveryDesc": "Last-mile delivery partners integrated",
+      "bangkokHub": "Bangkok Hub",
+      "bangkokHubSub": "Processing Time: 2h Avg",
+      "networkLoad": "Network Load",
+      "networkLoadSub": "92% Delivery Success",
+      "transitStatus": "Transit Status",
+      "transitStatusSub": "All Routes Normal"
+    }
+  },
+  "category": {
+    "noProducts": "No products found in {{category}}"
+  },
+  "time": {
+    "now": "now",
+    "m": "{{count}}m",
+    "h": "{{count}}h",
+    "d": "{{count}}d"
+  },
+  "social": {
+    "followers": "Followers",
+    "following": "Following"
+  },
+  "openshopStep1": {
+    "businessTypes": {
+      "individual": {
+        "title": "Individual",
+        "desc": "Use your ID card or passport. You are selling as a private individual and not a registered business."
+      },
+      "sole_proprietor": {
+        "title": "Sole Proprietor",
+        "desc": "Requires a business registration certificate. You are the sole owner of a legally registered business."
+      },
+      "corporate": {
+        "title": "Corporate",
+        "desc": "A legal entity in the form of a company, clearly separated from its owners."
+      },
+      "partnership": {
+        "title": "Partnership",
+        "desc": "A business operated jointly by two or more individuals."
+      }
+    },
+    "requirements": {
+      "individual": [
+        "11-digit ID Card or Passport",
+        "Real Name and Surname",
+        "11-digit ID Number",
+        "Current Address"
+      ],
+      "sole_proprietor": [
+        "Business Registration Certificate",
+        "Tax Identification Number (TIN)",
+        "Owner's ID Card",
+        "Business Location"
+      ],
+      "corporate": [
+        "Corporate Registration Certificate",
+        "Business License",
+        "Representative's ID Card",
+        "12-digit Corporate Bank Account"
+      ],
+      "partnership": [
+        "Partnership Agreement",
+        "Joint Venture Registration",
+        "All Partners' ID Cards",
+        "Business Tax ID"
+      ]
+    }
+  },
+  "openshopStep2More": {
+    "partnershipName": "Partnership Name",
+    "companyName": "Company Name",
+    "entityPlaceholder": "Enter entity name as per registration",
+    "entityNote": "Please ensure the name matches your business registration documents.",
+    "invalidEmail": "Invalid email format"
+  },
+  "openshopStep3More": {
+    "businessRegCert": "Business Registration Certificate",
+    "companyBusinessLicense": "Company Business License",
+    "partnershipAgreement": "Partnership Agreement",
+    "identityDocument": "Identity Document",
+    "months": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ]
+  },
+  "openshopStep4More": {
+    "addressNotSpecified": "Address not specified",
+    "businessTypeNames": {
+      "individual": "Individual",
+      "sole_proprietor": "Sole Proprietor",
+      "corporate": "Corporate",
+      "partnership": "Partnership"
+    },
+    "docLabels": {
+      "passport": "Passport",
+      "nationalId": "National ID Card",
+      "businessRegCert": "Business Registration Certificate",
+      "companyBusinessLicense": "Company Business License",
+      "partnershipAgreement": "Partnership Agreement",
+      "businessLicense": "Business License"
+    }
+  },
+  "paymentMethods": {
+    "bcel_one": {
+      "title": "BCEL One",
+      "desc": "Pay via BCEL One app with OnePay QR"
+    },
+    "ldb_trust": {
+      "title": "LDB Trust",
+      "desc": "Pay via LDB Trust app"
+    },
+    "jdb_yes": {
+      "title": "JDB Yes",
+      "desc": "Pay via JDB Yes app"
+    },
+    "visa_master": {
+      "title": "Credit / Debit Card",
+      "desc": "Pay via Visa, Mastercard, or UnionPay"
+    },
+    "cod": {
+      "title": "Cash on Delivery",
+      "desc": "Pay cash on delivery when receiving goods"
     }
   }
 }

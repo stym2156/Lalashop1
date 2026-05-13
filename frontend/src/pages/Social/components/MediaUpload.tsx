@@ -91,7 +91,7 @@ export default function MediaUpload({ onUpload, onCancel }: MediaUploadProps) {
         mediaUrl = await handleUploadMedia(file);
       }
 
-      if (!mediaUrl) throw new Error("Upload failed");
+      if (!mediaUrl) throw new Error(t("pages.socialUpload.uploadFailed"));
 
       // 2. Save to Backend
       const body: any = {

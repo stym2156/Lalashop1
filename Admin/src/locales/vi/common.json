@@ -101,7 +101,11 @@
     "revoke": "Thu hồi",
     "saveChanges": "Lưu thay đổi",
     "saveFailed": "Lưu thất bại",
-    "toggleFailed": "Chuyển đổi thất bại"
+    "toggleFailed": "Chuyển đổi thất bại",
+    "confirmPayment": "Xác nhận thanh toán",
+    "confirming": "Đang xác nhận...",
+    "takeAction": "Hành động",
+    "viewAll": "Xem tất cả"
   },
   "status": {
     "loading": "Đang tải...",
@@ -148,7 +152,8 @@
     "read": "Đã đọc",
     "saved": "Đã lưu",
     "settled": "Đã thanh toán",
-    "unread": "Chưa đọc"
+    "unread": "Chưa đọc",
+    "unpaid": "Chưa thanh toán"
   },
   "table": {
     "id": "ID",
@@ -463,7 +468,8 @@
     "username": "Tên đăng nhập",
     "verified": "Đã xác minh",
     "warehouse": "Kho hàng",
-    "when": "Khi nào"
+    "when": "Khi nào",
+    "currencySymbol": "₫"
   },
   "pages": {
     "users": {
@@ -515,11 +521,61 @@
         "saveError": "Lưu thất bại",
         "suspendError": "Tạm khóa thất bại",
         "suspendModal": {
-          "reasonRequired": "Lý do bắt buộc"
+          "reasonRequired": "Lý do bắt buộc",
+          "liftDesc": "Gỡ tạm khóa sẽ khôi phục quyền đăng nhập và đặt hàng",
+          "liftTitle": "Gỡ tạm khóa",
+          "reason": "Lý do",
+          "reasonPlaceholder": "e.g. Suspected fraudulent activity",
+          "suspendDesc": "Người dùng bị tạm khóa không thể đăng nhập hoặc đặt hàng. Lý do hiển thị cho nhân viên hỗ trợ.",
+          "title": "Tạm khóa người dùng"
         },
         "viewAllWithdrawals": "Xem tất cả rút tiền",
         "viewBuyerOrders": "Xem đơn (người mua)",
-        "viewSellerOrders": "Xem đơn (người bán)"
+        "viewSellerOrders": "Xem đơn (người bán)",
+        "accountSuspended": "Tài khoản bị tạm khóa",
+        "credsIssued": "Đã cấp thông tin người bán",
+        "credsIssuedDesc": "Người dùng sẽ thấy thông tin này trong thông báo trong ứng dụng...",
+        "editModal": {
+          "bankHeader": "Tài khoản ngân hàng",
+          "credsHeader": "Đặt lại thông tin (để trống để giữ nguyên)",
+          "newPassword": "Mật khẩu mới",
+          "newPin": "PIN mới (6 chữ số)",
+          "passwordPlaceholder": "Tối thiểu 6 ký tự",
+          "pinPlaceholder": "6 chữ số",
+          "title": "Sửa người dùng"
+        },
+        "editUser": "Sửa người dùng",
+        "financial": "Tài chính",
+        "identity": "Danh tính",
+        "issueSellerPassword": "Cấp mật khẩu người bán",
+        "issuing": "Đang cấp...",
+        "labels": {
+          "customerPassword": "Mật khẩu khách hàng",
+          "displayName": "Tên hiển thị",
+          "followers": "Người theo dõi",
+          "following": "Đang theo dõi",
+          "lastKnownIp": "IP gần nhất đã ghi",
+          "lastUpdate": "Cập nhật gần nhất",
+          "linkedAccounts": "Tài khoản liên kết",
+          "pendingWithdrawals": "Rút tiền chờ duyệt",
+          "posRevenue": "Doanh thu POS",
+          "sellerPassword": "Mật khẩu người bán",
+          "twoFactor": "2FA",
+          "webBalance": "Số dư web",
+          "withdrawalPin": "PIN rút tiền"
+        },
+        "liftSuspension": "Gỡ tạm khóa",
+        "loginUrl": "URL đăng nhập",
+        "moneySource": "Nguồn tiền",
+        "moneySourceDesc": "Dùng để xác minh nguồn gốc trước khi duyệt rút tiền",
+        "orderActivity": "Hoạt động đơn hàng",
+        "security": "Bảo mật & Hoạt động",
+        "shopAndKyc": "Cửa hàng & KYC",
+        "suspendUser": "Tạm khóa người dùng",
+        "systemMetadata": "Siêu dữ liệu hệ thống",
+        "trustScore": "Điểm tin cậy",
+        "unsuspend": "Gỡ khóa",
+        "withdrawalHistory": "Lịch sử rút"
       }
     },
     "shops": {
@@ -560,7 +616,32 @@
         "rating": "Đánh giá",
         "description": "Mô tả",
         "policies": "Chính sách",
-        "loadingError": "Tải dữ liệu thất bại"
+        "loadingError": "Tải dữ liệu thất bại",
+        "analytics": "Phân tích",
+        "balancePayout": "Số dư & Thanh toán",
+        "closeShop": "Đóng cửa hàng",
+        "followers": "Người theo dõi",
+        "following": "Đang theo dõi",
+        "lastOrder": "Đơn hàng gần nhất",
+        "lifetimeTotals": "Tổng tích lũy",
+        "message": "Nội dung",
+        "metrics": {
+          "currentBalance": "Số dư hiện tại (฿)",
+          "grossRevenue": "Tổng doanh thu (฿)",
+          "lifetimeIncome": "Thu nhập tích lũy (฿)",
+          "pendingWithdrawals": "Rút tiền đang chờ",
+          "posRevenue": "Doanh thu POS (฿)",
+          "totalOrders": "Tổng đơn hàng",
+          "totalProducts": "Tổng sản phẩm"
+        },
+        "openProfile": "Mở hồ sơ cửa hàng",
+        "overview": "Tổng quan",
+        "shopBio": "Giới thiệu cửa hàng",
+        "suspend": "Tạm dừng",
+        "unverified": "Chưa xác minh",
+        "viewOrders": "Xem đơn hàng",
+        "viewProducts": "Xem sản phẩm",
+        "violations": "Vi phạm"
       },
       "shopCenter": {
         "active": "Cửa hàng hoạt động",
@@ -705,7 +786,40 @@
         "createdAt": "Đã tạo lúc",
         "status": "Trạng thái",
         "timeline": "Lịch trình",
-        "slip": "Biên lai thanh toán"
+        "slip": "Biên lai thanh toán",
+        "actorAdmin": "Quản trị/Hệ thống",
+        "actorCarrier": "Đơn vị vận chuyển",
+        "actorCustomer": "Khách hàng",
+        "actorSeller": "Người bán",
+        "actorSystem": "Hệ thống",
+        "amountMismatch": "Số tiền không khớp! Đơn",
+        "awaitingPayment": "Người mua chưa tải biên lai — chờ thanh toán",
+        "awaitingVerification": "Chờ xác minh",
+        "buyerNote": "Ghi chú người mua",
+        "contactBuyer": "Liên hệ người mua",
+        "escalate": "Chuyển cấp",
+        "eventCancelled": "Đã hủy đơn",
+        "eventDelivered": "Đã giao",
+        "eventPaid": "Thanh toán đã xác nhận",
+        "eventPlaced": "Đặt hàng thành công",
+        "eventShipped": "Đã gửi",
+        "failedToLoad": "Tải đơn hàng thất bại",
+        "failedToUpdateSlip": "Cập nhật biên lai thất bại",
+        "fromShop": "Từ cửa hàng",
+        "inTransit": "Đang giao / Đang chờ",
+        "invoice": "Hóa đơn",
+        "orderAmount": "Số tiền đơn",
+        "paidAt": "Thanh toán lúc",
+        "paymentRejected": "Từ chối thanh toán",
+        "paymentVerified": "Đã xác minh thanh toán",
+        "placedAt": "Đặt lúc {{date}}",
+        "slipAwaitingReview": "Đã gửi biên lai — chờ xem xét",
+        "to": "to",
+        "toAccount": "Đến tài khoản",
+        "transferred": "đã chuyển",
+        "transferredAmount": "Đã chuyển",
+        "transferredAt": "Thời gian chuyển",
+        "verifiedBy": "Xác minh bởi"
       }
     },
     "kyc": {
@@ -731,7 +845,41 @@
         "rejectSuccess": "Đã từ chối KYC",
         "approveFailed": "Không thể duyệt KYC",
         "rejectFailed": "Không thể từ chối KYC",
-        "missingReason": "Cần lý do để từ chối"
+        "missingReason": "Cần lý do để từ chối",
+        "additionalDocuments": "Tài liệu bổ sung",
+        "apartment": "Căn hộ",
+        "approveReasonPlaceholder": "e.g. Welcome! Your shop is now active.",
+        "businessInformation": "Thông tin kinh doanh",
+        "city": "Thành phố",
+        "country": "Quốc gia",
+        "decision": "Quyết định",
+        "descriptionRequired": "Vui lòng cung cấp mô tả cho người dùng",
+        "descriptionSentToUser": "Mô tả (gửi cho người dùng)",
+        "emailVerified": "Email đã xác minh",
+        "entityName": "Tên pháp nhân",
+        "failedToLoad": "Tải nộp đơn thất bại",
+        "idNumber": "Số giấy tờ",
+        "idType": "Loại giấy tờ",
+        "idTypes": {
+          "national_id": "CMND/CCCD",
+          "passport": "Hộ chiếu",
+          "state_id": "Thẻ căn cước nhà nước"
+        },
+        "identityVerification": "Xác minh danh tính",
+        "noSubmissionId": "Không có mã đơn",
+        "notProvided": "Chưa cung cấp",
+        "openPdf": "PDF — Mở",
+        "phoneVerified": "Điện thoại đã xác minh",
+        "reviewSubmission": "Xem xét đơn",
+        "reviewedAt": "Đã xem xét {{date}}",
+        "sendApproval": "Gửi chấp thuận",
+        "sendRejection": "Gửi từ chối",
+        "shopInformation": "Thông tin cửa hàng",
+        "state": "Tỉnh/Bang",
+        "street": "Đường",
+        "tinNumber": "Mã số thuế",
+        "verificationStatus": "Trạng thái xác minh",
+        "warehouseAddress": "Địa chỉ kho"
       }
     },
     "withdrawals": {
@@ -748,19 +896,59 @@
         "bank": "Ngân hàng",
         "accountNumber": "Số tài khoản",
         "accountName": "Tên tài khoản",
-        "amount": "Số tiền",
+        "amount": {
+          "fee": "Phí",
+          "net": "Thực nhận của người dùng",
+          "title": "Số tiền"
+        },
         "fee": "Phí",
         "netAmount": "Số tiền ròng",
         "status": "Trạng thái",
         "requestedAt": "Yêu cầu lúc",
         "processedAt": "Xử lý lúc",
         "processedBy": "Xử lý bởi",
-        "notes": "Ghi chú",
+        "notes": {
+          "adminNoteLabel": "GHI CHÚ QUẢN TRỊ",
+          "adminNotePlaceholder": "Ghi chú nội bộ về giao dịch rút này...",
+          "refLabel": "Mã tham chiếu chuyển khoản",
+          "refPlaceholder": "e.g. TXN-882910",
+          "title": "Ghi chú xử lý của quản trị"
+        },
         "approve": "Duyệt",
         "reject": "Từ chối",
         "markPaid": "Đánh dấu đã thanh toán",
         "markFailed": "Đánh dấu thất bại",
-        "loadingError": "Tải rút tiền thất bại"
+        "loadingError": "Tải rút tiền thất bại",
+        "actions": {
+          "approve": "Duyệt",
+          "markFailed": "Đánh dấu thất bại",
+          "markPaid": "Đánh dấu đã thanh toán",
+          "noFurther": "Không có hành động thêm",
+          "reject": "Từ chối"
+        },
+        "bankInfo": {
+          "accountName": "Tên tài khoản",
+          "name": "Tên ngân hàng",
+          "notOnFile": "Không có thông tin tài khoản ngân hàng",
+          "number": "Số tài khoản",
+          "title": "Tài khoản ngân hàng",
+          "unverified": "Chưa xác minh",
+          "verified": "Đã xác minh"
+        },
+        "failConfirm": "Đánh dấu rút này là thất bại? Số tiền sẽ được hoàn.",
+        "markedAs": "Đã đánh dấu {{status}}",
+        "rejectConfirm": "Từ chối rút này? Số tiền sẽ được hoàn lại số dư người dùng.",
+        "timeline": {
+          "processed": "Đã xử lý",
+          "requested": "Yêu cầu",
+          "title": "Lịch trình",
+          "updated": "Cập nhật gần nhất"
+        },
+        "useApproveToSave": "Dùng nút Duyệt hoặc Từ chối để lưu ghi chú khi rút tiền đang chờ",
+        "userSection": {
+          "profile": "Mở hồ sơ người dùng",
+          "title": "Người dùng"
+        }
       }
     },
     "payment": {
@@ -807,7 +995,11 @@
         "promptpayInfo": "💡 QR PromptPay được tạo tự động theo từng đơn hàng, không cần tải ảnh.",
         "updatedSuccess": "Cập nhật thành công",
         "createdSuccess": "Tạo thành công",
-        "deleteConfirm": "Xóa phương thức này? Các biên lai hiện tại vẫn tham chiếu đến nó."
+        "deleteConfirm": "Xóa phương thức này? Các biên lai hiện tại vẫn tham chiếu đến nó.",
+        "bankPlaceholder": "Ví dụ BCEL",
+        "accountNamePlaceholder": "Ví dụ Tên công ty hoặc họ tên",
+        "qrPreviewAlt": "Xem trước QR",
+        "walletNamePlaceholder": "Ví dụ Tên ví điện tử"
       }
     },
     "notifications": {
@@ -843,12 +1035,37 @@
       "history": {
         "title": "Lịch sử thông báo",
         "noHistory": "Chưa gửi thông báo nào",
-        "loading": "Đang tải lịch sử…"
+        "loading": "Đang tải lịch sử…",
+        "table": {
+          "titleContent": "Tiêu đề / Nội dung"
+        },
+        "types": {
+          "order": "Đơn hàng",
+          "promo": "Khuyến mãi",
+          "system": "Hệ thống",
+          "withdrawal": "Rút tiền"
+        }
       },
       "reports": {
         "title": "Báo cáo gửi",
         "noReports": "Không có báo cáo gửi",
-        "loading": "Đang tải báo cáo…"
+        "loading": "Đang tải báo cáo…",
+        "loadingReports": "Đang tải báo cáo...",
+        "noDescription": "Không có mô tả",
+        "noOpenReports": "Không có báo cáo mở",
+        "noOpenReportsDesc": "Báo cáo chờ xem xét sẽ hiển thị ở đây",
+        "onTarget": "trên {{target}}",
+        "openCount": "{{count}} báo cáo chờ xem xét",
+        "openCount_other": "{{count}} báo cáo chờ xem xét",
+        "reasons": {
+          "abuse": "Lạm dụng",
+          "counterfeit": "Hàng giả",
+          "fraud": "Gian lận",
+          "harassment": "Quấy rối",
+          "other": "Khác",
+          "spam": "Spam"
+        },
+        "reportedBy": "Báo cáo bởi {{name}}"
       },
       "form": {
         "messageLabel": "Tin nhắn",
@@ -1308,7 +1525,42 @@
       "uniqueActions": "Thao tác khác nhau",
       "uniqueAdmins": "Quản trị viên khác nhau",
       "uniqueIps": "IP khác nhau",
-      "uniqueUsers": "Người dùng khác nhau"
+      "uniqueUsers": "Người dùng khác nhau",
+      "bankChanges": {
+        "lastUpdate": "Cập nhật gần nhất",
+        "loading": "Đang tải...",
+        "noRecords": "Không có bản ghi ngân hàng",
+        "statusUnverified": "Chưa xác minh",
+        "statusVerified": "Đã xác minh",
+        "thAccount": "Số tài khoản",
+        "thBank": "Ngân hàng",
+        "thHolderName": "Tên chủ tài khoản",
+        "thLastUpdated": "Cập nhật gần nhất",
+        "thUser": "Người dùng",
+        "thVerified": "Đã xác minh",
+        "totalRecords": "Tổng tài khoản ngân hàng",
+        "unverified": "Chưa xác minh",
+        "verified": "Đã xác minh"
+      },
+      "depositSources": {
+        "breakdownLabel": "Phân tích nguồn tiền — đơn hàng đã thanh toán theo phương thức",
+        "loading": "Đang tải...",
+        "noSources": "Chưa có nguồn nạp",
+        "thOrders": "Đơn hàng",
+        "thPaymentMethod": "Phương thức",
+        "thPctOfTotal": "% tổng",
+        "thTotalKip": "Tổng (₭)",
+        "unknown": "Không rõ"
+      },
+      "linkedAccounts": {
+        "linkedAccountsLabel": "Tài khoản liên kết",
+        "loading": "Đang tải...",
+        "noAccounts": "Chưa có tài khoản liên kết",
+        "none": "Không có",
+        "thEmail": "Email",
+        "thProviders": "Nhà cung cấp đã liên kết",
+        "thUser": "Người dùng"
+      }
     },
     "posts": {
       "title": "Bài đăng",

@@ -15,7 +15,7 @@ const CouponsPage = ({ onBack }: CouponsPageProps) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      showLoading('Fetching your coupons...');
+      showLoading(t('pages.promo.fetchingCoupons'));
       // Simulate data loading
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setCoupons([

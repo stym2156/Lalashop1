@@ -9,33 +9,6 @@ import {
   type AdminRole,
 } from '@/services/adminApi';
 
-const ROLES: { id: AdminRole; name: string; description: string; permissions: string[] }[] = [
-  {
-    id: 'super',
-    name: 'Super Admin',
-    description: 'Full access — can manage admins, roles, and every module.',
-    permissions: ['Manage admins', 'Manage roles', 'View audit log', 'All admin permissions'],
-  },
-  {
-    id: 'finance',
-    name: 'Finance Admin',
-    description: 'Approve withdrawals, payouts, refunds and financial reports.',
-    permissions: ['Approve withdrawals', 'Process payouts', 'View financial reports', 'Refund orders'],
-  },
-  {
-    id: 'support',
-    name: 'Support Admin',
-    description: 'Customer support, KYC review, basic account operations.',
-    permissions: ['View users', 'Reply tickets', 'View orders', 'Verify KYC'],
-  },
-  {
-    id: 'content',
-    name: 'Content Admin',
-    description: 'Manage posts, banners, notifications, and marketing content.',
-    permissions: ['Manage posts', 'Manage banners', 'Send notifications', 'Edit categories'],
-  },
-];
-
 const RolesPage = () => {
   const { t } = useTranslation('common');
   const [admins, setAdmins] = useState<AdminUser[]>([]);

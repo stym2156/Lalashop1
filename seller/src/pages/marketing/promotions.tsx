@@ -31,13 +31,6 @@ const STATUS_BADGE: Record<PromotionStatus, string> = {
   ended: "bg-red-100 text-red-700",
 };
 
-const TYPE_LABEL: Record<PromotionType, string> = {
-  flash_sale: "Flash sale",
-  bundle: "Bundle",
-  bogo: "Buy-1-Get-1",
-  discount: "Discount",
-};
-
 const initialForm: PromotionInput = {
   name: "",
   type: "discount",
@@ -54,6 +47,12 @@ const initialForm: PromotionInput = {
 
 const PromotionsPage: React.FC = () => {
   const { t } = useTranslation("common");
+  const TYPE_LABEL: Record<PromotionType, string> = {
+    flash_sale: t("pages.promotions.typeFlashSale"),
+    bundle: t("pages.promotions.typeBundle"),
+    bogo: t("pages.promotions.typeBogo"),
+    discount: t("pages.promotions.typeDiscount"),
+  };
   const [items, setItems] = useState<SellerPromotion[]>([]);
   const [products, setProducts] = useState<SellerProductRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -71,7 +70,7 @@ const PromotionsPage: React.FC = () => {
       setItems(promos);
       setProducts(prods);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load");
+      setError(err instanceof Error ? err.message : t("pages.promotions.errLoad"));
     } finally {
       setLoading(false);
     }
@@ -126,14 +125,14 @@ const PromotionsPage: React.FC = () => {
       setShowForm(false);
       await reload();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Save failed");
+      setError(err instanceof Error ? err.message : t("pages.promotions.errSave"));
     } finally {
       setSaving(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm("Delete this promotion?")) return;
+    if (!window.confirm(t("pages.promotions.deleteConfirm"))) return;
     await deletePromotion(id);
     await reload();
   };
@@ -163,10 +162,10 @@ const PromotionsPage: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-4 gap-3">
-        <Stat label="Promotions" value={stats.total.toString()} />
-        <Stat label="Active now" value={stats.active.toString()} tone="text-emerald-700" />
-        <Stat label="Orders driven" value={stats.orders.toString()} tone="text-[#00aeff]" />
-        <Stat label="Revenue" value={`฿${formatMoney(stats.revenue)}`} tone="text-purple-700" />
+        <Stat label={t("pages.promotions.promotions")} value={stats.total.toString()} />
+        <Stat label={t("pages.promotions.activeNow")} value={stats.active.toString()} tone="text-emerald-700" />
+        <Stat label={t("pages.promotions.ordersDriven")} value={stats.orders.toString()} tone="text-[#00aeff]" />
+        <Stat label={t("pages.promotions.revenue")} value={`฿${formatMoney(stats.revenue)}`} tone="text-purple-700" />
       </div>
 
       {error && (
@@ -180,8 +179,8 @@ const PromotionsPage: React.FC = () => {
       ) : items.length === 0 ? (
         <div className="py-16 text-center">
           <Zap className="w-8 h-8 mx-auto mb-3 text-gray-300" />
-          <p className="text-[13px] font-bold text-gray-700">No promotions yet</p>
-          <p className="text-[11px] text-gray-500 mt-1">Launch a flash sale or bundle to boost sales.</p>
+          <p className="text-[13px] font-bold text-gray-700">{t("pages.promotions.noPromotions")}</p>
+          <p className="text-[11px] text-gray-500 mt-1">{t("pages.promotions.noPromotionsHint")}</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -246,7 +245,7 @@ const PromotionsPage: React.FC = () => {
             <form onSubmit={handleSubmit} className="p-5 space-y-3">
               <div className="flex items-center justify-between">
                 <h2 className="text-[14px] font-bold text-gray-900">
-                  {editingId ? "Edit promotion" : "New promotion"}
+                  {editingId ? t("pages.promotions.editPromotion") : t("pages.promotions.newPromotionForm")}
                 </h2>
                 <button
                   type="button"
@@ -258,7 +257,7 @@ const PromotionsPage: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <Field label="Name">
+                <Field label={t("pages.promotions.fieldName")}>
                   <input
                     required
                     className="w-full border rounded px-2 py-1.5 text-xs"
@@ -266,21 +265,21 @@ const PromotionsPage: React.FC = () => {
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                   />
                 </Field>
-                <Field label="Type">
+                <Field label={t("pages.promotions.fieldType")}>
                   <select
                     className="w-full border rounded px-2 py-1.5 text-xs"
                     value={form.type}
                     onChange={(e) => setForm({ ...form, type: e.target.value as PromotionType })}
                   >
-                    <option value="discount">Discount</option>
-                    <option value="flash_sale">Flash sale</option>
-                    <option value="bundle">Bundle</option>
-                    <option value="bogo">Buy-1-Get-1</option>
+                    <option value="discount">{t("pages.promotions.typeDiscount")}</option>
+                    <option value="flash_sale">{t("pages.promotions.typeFlashSale")}</option>
+                    <option value="bundle">{t("pages.promotions.typeBundle")}</option>
+                    <option value="bogo">{t("pages.promotions.typeBogo")}</option>
                   </select>
                 </Field>
               </div>
 
-              <Field label="Description">
+              <Field label={t("pages.promotions.fieldDescription")}>
                 <textarea
                   className="w-full border rounded px-2 py-1.5 text-xs"
                   rows={2}
@@ -290,7 +289,7 @@ const PromotionsPage: React.FC = () => {
               </Field>
 
               {(form.type === "discount" || form.type === "flash_sale") && (
-                <Field label="Discount %">
+                <Field label={t("pages.promotions.fieldDiscountPercent")}>
                   <input
                     type="number"
                     min={0}
@@ -302,7 +301,7 @@ const PromotionsPage: React.FC = () => {
                 </Field>
               )}
               {form.type === "bundle" && (
-                <Field label="Bundle qty (buy N for discount)">
+                <Field label={t("pages.promotions.fieldBundleQty")}>
                   <input
                     type="number"
                     min={2}
@@ -314,7 +313,7 @@ const PromotionsPage: React.FC = () => {
               )}
               {form.type === "bogo" && (
                 <div className="grid grid-cols-2 gap-3">
-                  <Field label="Buy (qty)">
+                  <Field label={t("pages.promotions.fieldBuyQty")}>
                     <input
                       type="number"
                       min={1}
@@ -323,7 +322,7 @@ const PromotionsPage: React.FC = () => {
                       onChange={(e) => setForm({ ...form, bogoBuy: Number(e.target.value) })}
                     />
                   </Field>
-                  <Field label="Get (qty free)">
+                  <Field label={t("pages.promotions.fieldGetQty")}>
                     <input
                       type="number"
                       min={1}
@@ -336,7 +335,7 @@ const PromotionsPage: React.FC = () => {
               )}
 
               <div className="grid grid-cols-2 gap-3">
-                <Field label="Starts at">
+                <Field label={t("pages.promotions.fieldStartsAt")}>
                   <input
                     type="datetime-local"
                     required
@@ -347,7 +346,7 @@ const PromotionsPage: React.FC = () => {
                     }
                   />
                 </Field>
-                <Field label="Ends at">
+                <Field label={t("pages.promotions.fieldEndsAt")}>
                   <input
                     type="datetime-local"
                     required
@@ -360,26 +359,26 @@ const PromotionsPage: React.FC = () => {
                 </Field>
               </div>
 
-              <Field label="Status">
+              <Field label={t("pages.promotions.fieldStatus")}>
                 <select
                   className="w-full border rounded px-2 py-1.5 text-xs"
                   value={form.status}
                   onChange={(e) => setForm({ ...form, status: e.target.value as PromotionStatus })}
                 >
-                  <option value="draft">Draft</option>
-                  <option value="scheduled">Scheduled</option>
-                  <option value="active">Active</option>
-                  <option value="ended">Ended</option>
+                  <option value="draft">{t("pages.promotions.statusDraft")}</option>
+                  <option value="scheduled">{t("pages.promotions.statusScheduled")}</option>
+                  <option value="active">{t("pages.promotions.statusActive")}</option>
+                  <option value="ended">{t("pages.promotions.statusEnded")}</option>
                 </select>
               </Field>
 
               <div>
                 <p className="text-[10px] font-semibold text-gray-500 tracking-wide mb-1">
-                  Products ({form.productIds?.length || 0} selected)
+                  {t("pages.promotions.productsLabel", { count: form.productIds?.length || 0 })}
                 </p>
                 <div className="max-h-40 overflow-y-auto border rounded p-2 space-y-1">
                   {products.length === 0 ? (
-                    <p className="text-[11px] text-gray-400 text-center py-2">No products yet</p>
+                    <p className="text-[11px] text-gray-400 text-center py-2">{t("pages.promotions.noProductsYet")}</p>
                   ) : (
                     products.map((pr) => (
                       <label
@@ -405,14 +404,14 @@ const PromotionsPage: React.FC = () => {
                   onClick={() => setShowForm(false)}
                   className="px-3 py-1.5 rounded border text-xs font-bold text-gray-700 hover:bg-gray-50"
                 >
-                  Cancel
+                  {t("actions.cancel")}
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
                   className="px-4 py-1.5 rounded bg-[#00aeff] text-white text-xs font-bold hover:bg-[#0096db] disabled:opacity-50"
                 >
-                  {saving ? "Saving…" : editingId ? "Save changes" : "Launch promotion"}
+                  {saving ? t("actions.saving") : editingId ? t("actions.saveChanges") : t("pages.promotions.launchPromotion")}
                 </button>
               </div>
             </form>

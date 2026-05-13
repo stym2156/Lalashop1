@@ -137,9 +137,7 @@ export default function TransferPage() {
           // and surface a clear error instead.
           const sellerStr = String(query.seller || "").trim();
           if (!sellerStr || sellerStr === "[object Object]" || sellerStr === "undefined") {
-            setOrderInitError(
-              "This product link is missing the seller. Open the product again and click Buy."
-            );
+            setOrderInitError(t("pages.transfer.missingSeller"));
             return;
           }
           orderItems = [
@@ -175,12 +173,12 @@ export default function TransferPage() {
         }
 
         if (orderItems.length === 0) {
-          setOrderInitError("No items to order. Add something to your cart first.");
+          setOrderInitError(t("pages.transfer.noItemsOrder"));
           return;
         }
 
         let shippingAddress: { fullName: string; phone: string; address: string } = {
-          fullName: "Guest",
+          fullName: t("pages.transfer.guestName"),
           phone: "—",
           address: "—",
         };
@@ -218,10 +216,10 @@ export default function TransferPage() {
             await apiClient("/cart", { method: "DELETE" }).catch(() => {});
           }
         } else {
-          setOrderInitError(response?.message || "Failed to create order");
+          setOrderInitError(response?.message || t("pages.transfer.failedCreateOrder"));
         }
       } catch (err) {
-        setOrderInitError(err instanceof Error ? err.message : "Failed to create order");
+        setOrderInitError(err instanceof Error ? err.message : t("pages.transfer.failedCreateOrder"));
       } finally {
         isCreatingOrderRef.current = false;
       }
@@ -303,7 +301,7 @@ export default function TransferPage() {
         }),
       });
       if (!res?.success) {
-        throw new Error(res?.message || "Slip submission failed");
+        throw new Error(res?.message || t("pages.transfer.slipFailed"));
       }
 
       // 3. Redirect to receipt with awaiting status
@@ -312,7 +310,7 @@ export default function TransferPage() {
       params.set("status", "awaiting_verification");
       void router.push(`/buyproduct/receipt?${params.toString()}`);
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : "Slip submission failed");
+      setSubmitError(err instanceof Error ? err.message : t("pages.transfer.slipFailed"));
     } finally {
       setSubmitting(false);
       setSlipUploading(false);
@@ -427,7 +425,7 @@ export default function TransferPage() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={slipPreview}
-                    alt="Slip preview"
+                    alt={t("pages.transfer.slipPreviewAlt")}
                     className="w-48 max-h-64 rounded-md border border-gray-200 object-contain bg-gray-50"
                   />
                   <button
@@ -517,13 +515,14 @@ interface MethodTileProps {
 }
 
 const MethodTile: React.FC<MethodTileProps> = ({ method, selected, onSelect }) => {
+  const { t } = useTranslation("common");
   const Icon = method.kind === "bank" ? Building2 : method.kind === "promptpay" ? Smartphone : QrCode;
   const subtitle =
     method.kind === "bank"
       ? `${method.bankName} · ····${(method.accountNumber || "").slice(-4)}`
       : method.kind === "promptpay"
       ? `PromptPay · ${method.accountName || "—"}`
-      : method.accountName || "Wallet QR";
+      : method.accountName || t("pages.transfer.walletQrFallback");
 
   return (
     <button
@@ -554,11 +553,13 @@ const BankDetails: React.FC<{
   method: PaymentMethod;
   onCopy: (text: string, key: string) => void;
   copied: string | null;
-}> = ({ method, onCopy, copied }) => (
+}> = ({ method, onCopy, copied }) => {
+  const { t } = useTranslation("common");
+  return (
   <div className="space-y-2">
-    <CopyRow label="Bank" value={method.bankName || ""} keyName="bank" onCopy={onCopy} copied={copied} />
+    <CopyRow label={t("pages.transfer.bank")} value={method.bankName || ""} keyName="bank" onCopy={onCopy} copied={copied} />
     <CopyRow
-      label="Account number"
+      label={t("pages.transfer.accountNumber")}
       value={method.accountNumber || ""}
       keyName="account"
       onCopy={onCopy}
@@ -566,14 +567,15 @@ const BankDetails: React.FC<{
       mono
     />
     <CopyRow
-      label="Account name"
+      label={t("pages.transfer.accountName")}
       value={method.accountName || ""}
       keyName="name"
       onCopy={onCopy}
       copied={copied}
     />
   </div>
-);
+  );
+};
 
 const PromptPayDetails: React.FC<{
   method: PaymentMethod;
@@ -590,14 +592,14 @@ const PromptPayDetails: React.FC<{
       </div>
     ) : qrDataUrl ? (
       // eslint-disable-next-line @next/next/no-img-element
-      <img src={qrDataUrl} alt="PromptPay QR" className="w-56 h-56 rounded-md border border-gray-200 bg-white p-2" />
+      <img src={qrDataUrl} alt={t("pages.transfer.promptPayQrAlt")} className="w-56 h-56 rounded-md border border-gray-200 bg-white p-2" />
     ) : (
       <div className="w-56 h-56 rounded-md bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
         {t("pages.transfer.qrUnavailable")}
       </div>
     )}
     <p className="text-[11px] text-gray-500 text-center">
-      Scan with any bank app · amount <strong>฿{formatMoney(amount)}</strong> baked in
+      {t("pages.transfer.scanInstruction", { amount: `฿${formatMoney(amount)}` })}
     </p>
     {method.accountName && (
       <p className="text-[12px] font-bold text-gray-900 text-center">{method.accountName}</p>
@@ -617,7 +619,7 @@ const StaticQrDetails: React.FC<{ method: PaymentMethod }> = ({ method }) => {
       // eslint-disable-next-line @next/next/no-img-element
       <img
         src={method.qrImageUrl}
-        alt="QR"
+        alt={t("pages.transfer.qrAlt")}
         className="w-56 h-56 rounded-md border border-gray-200 object-contain bg-white p-2"
       />
     ) : (

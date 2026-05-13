@@ -36,13 +36,6 @@ const STATUS_BADGE: Record<BroadcastStatus, string> = {
   failed: "bg-red-100 text-red-700",
 };
 
-const AUDIENCE_LABEL: Record<BroadcastAudience, string> = {
-  all_customers: "All customers",
-  all_followers: "All followers",
-  vip: "VIP customers",
-  inactive: "Inactive customers",
-};
-
 const CHANNEL_ICONS: Record<BroadcastChannel, typeof Mail> = {
   in_app: Smartphone,
   email: Mail,
@@ -73,7 +66,7 @@ const BroadcastPage: React.FC = () => {
       const data = await fetchMyBroadcasts();
       setItems(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load broadcasts");
+      setError(err instanceof Error ? err.message : t('pages.broadcast.errLoad'));
     } finally {
       setLoading(false);
     }
@@ -96,8 +89,8 @@ const BroadcastPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    if (!form.title.trim()) return setError("Title is required");
-    if (!form.body.trim()) return setError("Message body is required");
+    if (!form.title.trim()) return setError(t('pages.broadcast.errTitle'));
+    if (!form.body.trim()) return setError(t('pages.broadcast.errBody'));
     setSaving(true);
     try {
       await createBroadcast(form);
@@ -105,32 +98,32 @@ const BroadcastPage: React.FC = () => {
       setForm(initialForm);
       await reload();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to create broadcast");
+      setError(err instanceof Error ? err.message : t('pages.broadcast.errCreate'));
     } finally {
       setSaving(false);
     }
   };
 
   const handleSend = async (id: string) => {
-    if (!window.confirm("Send this broadcast now? This cannot be undone.")) return;
+    if (!window.confirm(t('pages.broadcast.sendConfirm'))) return;
     setSendingId(id);
     try {
       await sendBroadcast(id);
       await reload();
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Send failed");
+      alert(err instanceof Error ? err.message : t('pages.broadcast.errSend'));
     } finally {
       setSendingId(null);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm("Delete this broadcast?")) return;
+    if (!window.confirm(t('pages.broadcast.deleteConfirm'))) return;
     try {
       await deleteBroadcast(id);
       await reload();
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Delete failed");
+      alert(err instanceof Error ? err.message : t('pages.broadcast.errDelete'));
     }
   };
 
@@ -155,11 +148,11 @@ const BroadcastPage: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-4 gap-3">
-        <Stat label="Total broadcasts" value={stats.total.toString()} />
-        <Stat label="Sent" value={stats.sent.toString()} tone="text-emerald-700" />
-        <Stat label="Drafts" value={stats.drafts.toString()} tone="text-gray-700" />
+        <Stat label={t('pages.broadcast.totalBroadcasts')} value={stats.total.toString()} />
+        <Stat label={t('pages.broadcast.sent')} value={stats.sent.toString()} tone="text-emerald-700" />
+        <Stat label={t('pages.broadcast.drafts')} value={stats.drafts.toString()} tone="text-gray-700" />
         <Stat
-          label="Total reach"
+          label={t('pages.broadcast.totalReach')}
           value={stats.totalReach.toLocaleString()}
           tone="text-[#00aeff]"
         />
@@ -176,9 +169,9 @@ const BroadcastPage: React.FC = () => {
       ) : items.length === 0 ? (
         <div className="py-16 text-center">
           <Megaphone className="w-8 h-8 mx-auto mb-3 text-gray-300" />
-          <p className="text-[13px] font-bold text-gray-700">No broadcasts yet</p>
+          <p className="text-[13px] font-bold text-gray-700">{t('pages.broadcast.noBroadcasts')}</p>
           <p className="text-[11px] text-gray-500 mt-1">
-            Send your first announcement to engage customers.
+            {t('pages.broadcast.noBroadcastsHint')}
           </p>
         </div>
       ) : (
@@ -206,43 +199,43 @@ const BroadcastPage: React.FC = () => {
                   <div className="flex items-center gap-3 text-[10px] text-gray-500 mt-2 flex-wrap">
                     <span className="inline-flex items-center gap-1">
                       <ChannelIcon className="w-3 h-3" />
-                      {b.channel === "in_app" ? "In-app" : "Email"}
+                      {b.channel === "in_app" ? t('pages.broadcast.inApp') : t('pages.broadcast.email')}
                     </span>
                     <span className="inline-flex items-center gap-1">
-                      <Users className="w-3 h-3" /> {AUDIENCE_LABEL[b.audience]}
+                      <Users className="w-3 h-3" /> {t(`pages.broadcast.audience${b.audience === 'all_customers' ? 'AllCustomers' : b.audience === 'all_followers' ? 'AllFollowers' : b.audience === 'vip' ? 'Vip' : 'Inactive'}`)}
                     </span>
                     {b.audienceCount > 0 && (
                       <span className="text-gray-700 font-bold">
-                        {b.audienceCount.toLocaleString()} recipients
+                        {t('pages.broadcast.recipients', { count: b.audienceCount })}
                       </span>
                     )}
                     {b.sentAt ? (
                       <span className="inline-flex items-center gap-1">
                         <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                        Sent {formatDate(b.sentAt)}
+                        {t('pages.broadcast.sentAt', { date: formatDate(b.sentAt) })}
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1">
-                        <Clock className="w-3 h-3" /> Created {formatDate(b.createdAt)}
+                        <Clock className="w-3 h-3" /> {t('pages.broadcast.createdAt', { date: formatDate(b.createdAt) })}
                       </span>
                     )}
                   </div>
                   {b.status === "sent" && (
                     <div className="grid grid-cols-3 gap-2 mt-3 text-[11px]">
                       <div className="bg-gray-50 rounded px-2 py-1">
-                        <p className="text-gray-400 text-[10px]">Delivered</p>
+                        <p className="text-gray-400 text-[10px]">{t('pages.broadcast.delivered')}</p>
                         <p className="font-bold tabular-nums">
                           {b.metrics?.delivered?.toLocaleString() || 0}
                         </p>
                       </div>
                       <div className="bg-gray-50 rounded px-2 py-1">
-                        <p className="text-gray-400 text-[10px]">Opened</p>
+                        <p className="text-gray-400 text-[10px]">{t('pages.broadcast.opened')}</p>
                         <p className="font-bold tabular-nums">
                           {b.metrics?.opened?.toLocaleString() || 0}
                         </p>
                       </div>
                       <div className="bg-gray-50 rounded px-2 py-1">
-                        <p className="text-gray-400 text-[10px]">Clicked</p>
+                        <p className="text-gray-400 text-[10px]">{t('pages.broadcast.clicked')}</p>
                         <p className="font-bold tabular-nums">
                           {b.metrics?.clicked?.toLocaleString() || 0}
                         </p>
@@ -261,7 +254,7 @@ const BroadcastPage: React.FC = () => {
                         <Loader2 className="w-3 h-3 animate-spin" />
                       ) : (
                         <>
-                          <Send className="w-3 h-3 mr-1" /> Send now
+                          <Send className="w-3 h-3 mr-1" /> {t('pages.broadcast.sendNow')}
                         </>
                       )}
                     </button>
@@ -269,7 +262,7 @@ const BroadcastPage: React.FC = () => {
                   <button
                     onClick={() => handleDelete(b._id)}
                     className="p-1.5 rounded hover:bg-red-50 text-gray-400 hover:text-red-600"
-                    title="Delete"
+                    title={t('actions.delete')}
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -285,7 +278,7 @@ const BroadcastPage: React.FC = () => {
           <div className="bg-white rounded-lg w-full max-w-lg max-h-[90vh] overflow-auto">
             <form onSubmit={handleSubmit} className="p-5 space-y-3">
               <div className="flex items-center justify-between">
-                <h2 className="text-[14px] font-bold text-gray-900">New broadcast</h2>
+                <h2 className="text-[14px] font-bold text-gray-900">{t('pages.broadcast.newBroadcastForm')}</h2>
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
@@ -301,29 +294,29 @@ const BroadcastPage: React.FC = () => {
                 </div>
               )}
 
-              <Field label="Title">
+              <Field label={t('pages.broadcast.fieldTitle')}>
                 <input
                   required
                   className="w-full border rounded px-2 py-1.5 text-xs"
                   value={form.title}
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  placeholder="e.g. Summer Sale Starts Tomorrow!"
+                  placeholder={t('pages.broadcast.titlePlaceholder')}
                 />
               </Field>
 
-              <Field label="Message">
+              <Field label={t('pages.broadcast.fieldMessage')}>
                 <textarea
                   required
                   className="w-full border rounded px-2 py-1.5 text-xs"
                   rows={4}
                   value={form.body}
                   onChange={(e) => setForm({ ...form, body: e.target.value })}
-                  placeholder="What do you want to tell them?"
+                  placeholder={t('pages.broadcast.messagePlaceholder')}
                 />
               </Field>
 
               <div className="grid grid-cols-2 gap-3">
-                <Field label="Channel">
+                <Field label={t('pages.broadcast.fieldChannel')}>
                   <select
                     className="w-full border rounded px-2 py-1.5 text-xs"
                     value={form.channel}
@@ -331,11 +324,11 @@ const BroadcastPage: React.FC = () => {
                       setForm({ ...form, channel: e.target.value as BroadcastChannel })
                     }
                   >
-                    <option value="in_app">In-app notification</option>
-                    <option value="email">Email</option>
+                    <option value="in_app">{t('pages.broadcast.channelInApp')}</option>
+                    <option value="email">{t('pages.broadcast.channelEmail')}</option>
                   </select>
                 </Field>
-                <Field label="Audience">
+                <Field label={t('pages.broadcast.fieldAudience')}>
                   <select
                     className="w-full border rounded px-2 py-1.5 text-xs"
                     value={form.audience}
@@ -343,20 +336,20 @@ const BroadcastPage: React.FC = () => {
                       setForm({ ...form, audience: e.target.value as BroadcastAudience })
                     }
                   >
-                    <option value="all_customers">All customers</option>
-                    <option value="all_followers">All followers</option>
-                    <option value="vip">VIP customers</option>
-                    <option value="inactive">Inactive customers</option>
+                    <option value="all_customers">{t('pages.broadcast.audienceAllCustomers')}</option>
+                    <option value="all_followers">{t('pages.broadcast.audienceAllFollowers')}</option>
+                    <option value="vip">{t('pages.broadcast.audienceVip')}</option>
+                    <option value="inactive">{t('pages.broadcast.audienceInactive')}</option>
                   </select>
                 </Field>
               </div>
 
-              <Field label="Link (optional)">
+              <Field label={t('pages.broadcast.fieldLink')}>
                 <input
                   className="w-full border rounded px-2 py-1.5 text-xs"
                   value={form.link || ""}
                   onChange={(e) => setForm({ ...form, link: e.target.value })}
-                  placeholder="e.g. /products/promo or https://…"
+                  placeholder={t('pages.broadcast.linkPlaceholder')}
                 />
               </Field>
 
@@ -366,18 +359,18 @@ const BroadcastPage: React.FC = () => {
                   onClick={() => setShowForm(false)}
                   className="px-3 py-1.5 rounded border text-xs font-bold text-gray-700 hover:bg-gray-50"
                 >
-                  Cancel
+                  {t('actions.cancel')}
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
                   className="px-4 py-1.5 rounded bg-[#00aeff] text-white text-xs font-bold hover:bg-[#0096db] disabled:opacity-50"
                 >
-                  {saving ? "Saving…" : "Save as draft"}
+                  {saving ? t('actions.saving') : t('pages.broadcast.saveAsDraft')}
                 </button>
               </div>
               <p className="text-[10px] text-gray-400 text-center">
-                Saved as a draft — review and click <strong>Send now</strong> on the list to deliver.
+                {t('pages.broadcast.draftHint')}
               </p>
             </form>
           </div>

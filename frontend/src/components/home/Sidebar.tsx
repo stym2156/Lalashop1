@@ -39,7 +39,7 @@ export default function Sidebar() {
                   <Icon size={16} />
                 </div>
                 <span className="text-[13px] font-bold text-slate-600 group-hover:text-primary transition-colors line-clamp-1">
-                  {mounted ? t(`category.name.${cat.slug}`, cat.name) : cat.name}
+                  {mounted ? t(`pages.category.name.${cat.slug}`, cat.name) : cat.name}
                 </span>
               </div>
               <ChevronRight size={14} className="text-gray-300 group-hover:text-primary transition-all" />

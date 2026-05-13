@@ -307,7 +307,7 @@ const PaymentMethodsPage: React.FC = () => {
                     className={inputCls}
                     value={form.bankName}
                     onChange={(e) => setForm({ ...form, bankName: e.target.value })}
-                    placeholder="Kasikornbank"
+                    placeholder={t('pages.payment.methods.bankPlaceholder')}
                   />
                 </Field>
                 <Field label={t('pages.payment.methods.formAccountNumber')} required>
@@ -325,7 +325,7 @@ const PaymentMethodsPage: React.FC = () => {
                     className={inputCls}
                     value={form.accountName}
                     onChange={(e) => setForm({ ...form, accountName: e.target.value })}
-                    placeholder="Lalashop Co., Ltd."
+                    placeholder={t('pages.payment.methods.accountNamePlaceholder')}
                   />
                 </Field>
               </>
@@ -351,7 +351,7 @@ const PaymentMethodsPage: React.FC = () => {
                     className={inputCls}
                     value={form.accountName}
                     onChange={(e) => setForm({ ...form, accountName: e.target.value })}
-                    placeholder="Lalashop Co., Ltd."
+                    placeholder={t('pages.payment.methods.accountNamePlaceholder')}
                   />
                 </Field>
                 <p className="text-[10px] text-gray-500 bg-gray-50 px-2 py-1.5 rounded">
@@ -380,7 +380,7 @@ const PaymentMethodsPage: React.FC = () => {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={form.qrImageUrl}
-                      alt="QR preview"
+                      alt={t('pages.payment.methods.qrPreviewAlt')}
                       className="w-32 h-32 rounded object-contain bg-gray-50"
                     />
                   </div>
@@ -390,7 +390,7 @@ const PaymentMethodsPage: React.FC = () => {
                     className={inputCls}
                     value={form.accountName}
                     onChange={(e) => setForm({ ...form, accountName: e.target.value })}
-                    placeholder="TrueMoney / Rabbit LinePay"
+                    placeholder={t('pages.payment.methods.walletNamePlaceholder')}
                   />
                 </Field>
               </>

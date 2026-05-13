@@ -110,7 +110,7 @@ export default function SocialPost({ post, currentUserId }: SocialPostProps) {
               <h3 className="text-sm font-bold leading-none hover:text-dark/80 transition-colors text-dark">
                 {username}
               </h3>
-              <p className="text-[10px] text-gray-500 mt-1">{formatTimeAgo(post.createdAt)}</p>
+              <p className="text-[10px] text-gray-500 mt-1">{formatTimeAgo(post.createdAt, t)}</p>
             </div>
           </Link>
           <div className="relative" ref={menuRef}>
@@ -200,7 +200,7 @@ export default function SocialPost({ post, currentUserId }: SocialPostProps) {
           </div>
 
           <div className="space-y-1">
-            <p className="text-sm font-bold text-dark">{likes.length.toLocaleString()} {t("pages.profile.likes").toLowerCase()}</p>
+            <p className="text-sm font-bold text-dark">{likes.length.toLocaleString()} {likes.length === 1 ? t("pages.social.likeOne") : t("pages.social.likeMany")}</p>
             {comments.length > 0 && (
               <button
                 className="text-sm text-gray-500"

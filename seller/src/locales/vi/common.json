@@ -183,7 +183,8 @@
     "noMatches": "Không có kết quả phù hợp",
     "noDescription": "Không có mô tả",
     "optional": "(tùy chọn)",
-    "characters": "ký tự"
+    "characters": "ký tự",
+    "currencySymbol": "₫"
   },
   "sidebar": {
     "dashboard": "Bảng điều khiển",
@@ -1285,6 +1286,149 @@
       "verification": {
         "failedToLoad": "Tải KYC thất bại"
       }
+    },
+    "productCategories": {
+      "fashion": "Thời trang & Phụ kiện",
+      "electronics": "Điện tử",
+      "beauty": "Làm đẹp & Chăm sóc cá nhân",
+      "food": "Thực phẩm & Đồ uống",
+      "home": "Nhà cửa & Đời sống",
+      "mother_baby": "Mẹ & Bé",
+      "toys": "Đồ chơi & Sở thích",
+      "sports": "Thể thao & Ngoài trời",
+      "automotive": "Ô tô",
+      "health": "Sức khỏe & Chăm sóc",
+      "pet": "Vật nuôi",
+      "office": "Văn phòng & Văn phòng phẩm",
+      "tools": "Dụng cụ & Cải tạo nhà",
+      "jewelry": "Trang sức & Đồng hồ",
+      "digital": "Sản phẩm số",
+      "others": "Khác"
+    },
+    "categoryConfig": {
+      "fashion": {
+        "label": "Thời trang & Phụ kiện",
+        "description": "Quần áo, giày, túi, phụ kiện. Người mua chọn size và màu trước khi đặt."
+      },
+      "electronics": {
+        "label": "Điện tử",
+        "description": "Sản phẩm công nghệ. Biến thể thường gồm màu, bộ nhớ, kết nối."
+      },
+      "beauty": {
+        "label": "Làm đẹp & Chăm sóc cá nhân",
+        "description": "Chăm sóc da, trang điểm, nước hoa. Biến thể mô tả màu và trọng lượng."
+      },
+      "food": {
+        "label": "Thực phẩm & Đồ uống",
+        "description": "Thực phẩm. Ghi kích cỡ gói và hạn dùng — bắt buộc tuân thủ."
+      },
+      "home": {
+        "label": "Nhà cửa & Đời sống",
+        "description": "Nội thất, trang trí, đồ bếp. Ghi vật liệu và kích thước."
+      },
+      "mother_baby": {
+        "label": "Mẹ & Bé",
+        "description": "Sản phẩm cho bé. Biến thể theo độ tuổi, ghi thông tin an toàn."
+      },
+      "toys": {
+        "label": "Đồ chơi & Sở thích",
+        "description": "Đồ chơi, mô hình, sở thích. Biến thể theo màu, ghi độ tuổi."
+      },
+      "sports": {
+        "label": "Thể thao & Ngoài trời",
+        "description": "Dụng cụ thể thao. Biến thể theo size và màu, ghi môn thể thao."
+      },
+      "automotive": {
+        "label": "Ô tô",
+        "description": "Phụ tùng ô tô & xe máy. Ghi thông tin tương thích."
+      },
+      "health": {
+        "label": "Sức khỏe & Chăm sóc",
+        "description": "Vitamin, thực phẩm bổ sung, dụng cụ y tế. Biến thể theo số lượng."
+      },
+      "pet": {
+        "label": "Vật nuôi",
+        "description": "Thức ăn, phụ kiện vật nuôi. Biến thể theo size, ghi loại vật nuôi."
+      },
+      "office": {
+        "label": "Văn phòng & Văn phòng phẩm",
+        "description": "Văn phòng phẩm. Biến thể theo màu và số lượng gói."
+      },
+      "tools": {
+        "label": "Dụng cụ & Cải tạo nhà",
+        "description": "Dụng cụ cầm tay, máy điện, phần cứng. Ghi nguồn điện."
+      },
+      "jewelry": {
+        "label": "Trang sức & Đồng hồ",
+        "description": "Trang sức & đồng hồ. Biến thể theo kim loại, đá quý, size nhẫn."
+      },
+      "digital": {
+        "label": "Sản phẩm số",
+        "description": "Phần mềm, ebook, giấy phép. Không cần biến thể vật lý."
+      },
+      "others": {
+        "label": "Khác",
+        "description": "Danh mục cho mọi mặt hàng không thuộc danh mục trên."
+      }
+    },
+    "variantNames": {
+      "size": "Kích cỡ",
+      "color": "Màu",
+      "storage": "Bộ nhớ",
+      "connectivity": "Kết nối",
+      "volume": "Dung tích",
+      "shade": "Tông màu",
+      "pack_size": "Kích cỡ gói",
+      "flavor": "Hương vị",
+      "age_range": "Độ tuổi",
+      "pet_size": "Kích cỡ vật nuôi",
+      "pack": "Gói",
+      "voltage": "Điện áp",
+      "metal": "Kim loại",
+      "ring_size": "Size nhẫn",
+      "license": "Giấy phép"
+    },
+    "attributeLabels": {
+      "material": "Chất liệu",
+      "fit": "Phom dáng",
+      "gender": "Giới tính",
+      "care_instructions": "Hướng dẫn bảo quản",
+      "brand": "Thương hiệu",
+      "model_number": "Số model",
+      "warranty_period": "Thời hạn bảo hành",
+      "power_source": "Nguồn điện",
+      "key_specifications": "Thông số chính",
+      "skin_type": "Loại da",
+      "key_ingredients": "Thành phần chính",
+      "expiry___pao": "Hạn dùng / PAO",
+      "cruelty_free": "Không thử trên động vật?",
+      "ingredients": "Thành phần",
+      "expiry_date": "Hạn sử dụng",
+      "storage_instructions": "Hướng dẫn bảo quản",
+      "dietary": "Chế độ ăn",
+      "allergen_warnings": "Cảnh báo dị ứng",
+      "suitable_room": "Phòng phù hợp",
+      "assembly_required": "Cần lắp ráp?",
+      "recommended_age": "Tuổi khuyến nghị",
+      "safety_certification": "Chứng nhận an toàn",
+      "battery_required": "Cần pin?",
+      "sport___activity": "Môn thể thao / Hoạt động",
+      "vehicle_compatibility": "Tương thích xe",
+      "part_number___oem": "Mã số / OEM",
+      "active_ingredients": "Hoạt chất",
+      "recommended_dosage": "Liều khuyến nghị",
+      "fda___regulatory_certification": "FDA / chứng nhận pháp lý",
+      "pet_type": "Loại vật nuôi",
+      "use_case": "Trường hợp dùng",
+      "warranty": "Bảo hành",
+      "metal_purity": "Độ tinh khiết kim loại",
+      "gemstone": "Đá quý",
+      "weight_g": "Trọng lượng (g)",
+      "warranty___certificate": "Bảo hành / chứng chỉ",
+      "file_type": "Loại tệp",
+      "delivery_method": "Cách giao hàng",
+      "license_duration": "Thời hạn giấy phép",
+      "additional_details": "Chi tiết thêm"
     }
   },
   "components": {
@@ -1430,7 +1574,18 @@
       "tierAll": "Tất cả creator đã duyệt",
       "tierBronze": "Đồng trở lên",
       "tierSilver": "Bạc trở lên",
-      "tierGold": "Chỉ Vàng"
+      "tierGold": "Chỉ Vàng",
+      "specMaterial": "Chất liệu",
+      "specWarranty": "Bảo hành",
+      "commissionPercentTab": "Phần trăm (%)",
+      "commissionFixedTab": "Số tiền cố định (฿)",
+      "daysUnit": "ngày",
+      "optionNamePlaceholder": "Ví dụ: Kích cỡ",
+      "charCount70": "{{count}}/70 ký tự",
+      "charCount160": "{{count}}/160 ký tự"
+    },
+    "sellerHeader": {
+      "myShop": "Cửa hàng của tôi"
     }
   }
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 import {
   ImagePlus, Upload, X, Plus, Trash2, ChevronDown, Eye, EyeOff,
   HelpCircle, CheckCircle2, Tag,
@@ -42,12 +43,7 @@ interface UploadedImage {
   uploadedUrl?: string;
 }
 
-const CREATOR_TIERS: { value: CreatorTier; label: string }[] = [
-  { value: "all", label: "All approved creators" },
-  { value: "bronze", label: "Bronze and above" },
-  { value: "silver", label: "Silver and above" },
-  { value: "gold", label: "Gold only" },
-];
+const CREATOR_TIER_VALUES: CreatorTier[] = ["all", "bronze", "silver", "gold"];
 
 const COUNTRIES = ["Laos", "Thailand", "England", "China", "Japan", "Korea"];
 const WEIGHT_UNITS = ["g", "kg", "lb", "oz"];
@@ -72,19 +68,22 @@ const Field = ({
   children: React.ReactNode;
   optional?: boolean;
   required?: boolean;
-}) => (
-  <div className="space-y-1">
-    <div className="flex items-center justify-between">
-      <label className="text-[11px] font-semibold text-gray-700">
-        {label}
-        {required && <span className="ml-1 text-red-500">*</span>}
-        {optional && <span className="ml-1 text-gray-400 font-normal">(optional)</span>}
-      </label>
-      {hint && <span className="text-[10px] text-gray-400">{hint}</span>}
+}) => {
+  const { t } = useTranslation("common");
+  return (
+    <div className="space-y-1">
+      <div className="flex items-center justify-between">
+        <label className="text-[11px] font-semibold text-gray-700">
+          {label}
+          {required && <span className="ml-1 text-red-500">*</span>}
+          {optional && <span className="ml-1 text-gray-400 font-normal">{t("common.optional")}</span>}
+        </label>
+        {hint && <span className="text-[10px] text-gray-400">{hint}</span>}
+      </div>
+      {children}
     </div>
-    {children}
-  </div>
-);
+  );
+};
 
 const newId = (): string => `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 
@@ -94,6 +93,22 @@ interface WebProductFormProps {
 
 const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
   const router = useRouter();
+  const { t } = useTranslation("common");
+
+  const CREATOR_TIERS: { value: CreatorTier; label: string }[] = [
+    { value: "all", label: t("components.webProductForm.tierAll") },
+    { value: "bronze", label: t("components.webProductForm.tierBronze") },
+    { value: "silver", label: t("components.webProductForm.tierSilver") },
+    { value: "gold", label: t("components.webProductForm.tierGold") },
+  ];
+  // Avoid lint warning about unused constant
+  void CREATOR_TIER_VALUES;
+
+  const STATUS_LABELS: Record<ProductStatus, string> = {
+    Active: t("status.active"),
+    Draft: t("status.draft"),
+    Archived: t("status.archived"),
+  };
 
   // General
   const [name, setName] = useState("");
@@ -113,8 +128,8 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
   const [freeShipping, setFreeShipping] = useState(false);
 
   const [specifications, setSpecifications] = useState<SpecificationRow[]>([
-    { id: "spec-1", label: "Material", value: "" },
-    { id: "spec-2", label: "Warranty", value: "" },
+    { id: "spec-1", label: t("components.webProductForm.specMaterial"), value: "" },
+    { id: "spec-2", label: t("components.webProductForm.specWarranty"), value: "" },
   ]);
 
   const [price, setPrice] = useState("");
@@ -177,6 +192,8 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
   const [successId, setSuccessId] = useState<string | null>(null);
 
   const config: CategoryConfig = useMemo(() => getCategoryConfig(category), [category]);
+  const categoryLabel = t(`pages.categoryConfig.${category}.label`, config.label);
+  const categoryDescription = t(`pages.categoryConfig.${category}.description`, config.description);
 
   useEffect(() => {
     if (seededCategoryRef.current === category) return;
@@ -327,9 +344,9 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
   const handlePublish = async (statusOverride?: ProductStatus) => {
     setSubmitError(null);
 
-    if (!name.trim()) return setSubmitError("Title is required.");
-    if (!price || isNaN(Number(price))) return setSubmitError("Price is required.");
-    if (images.length === 0) return setSubmitError("Add at least one product image.");
+    if (!name.trim()) return setSubmitError(t("components.webProductForm.errTitleRequired"));
+    if (!price || isNaN(Number(price))) return setSubmitError(t("components.webProductForm.errPriceRequired"));
+    if (images.length === 0) return setSubmitError(t("components.webProductForm.errImageRequired"));
 
     const finalStatus = statusOverride || status;
 
@@ -426,12 +443,12 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
         },
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data?.message || "Failed to publish product");
+      if (!response.ok) throw new Error(data?.message || t("components.webProductForm.errPublishFailed"));
 
       setSuccessId(data?.data?._id || "ok");
       onSuccess?.(data?.data?._id || "");
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : "Failed to publish product");
+      setSubmitError(err instanceof Error ? err.message : t("components.webProductForm.errPublishFailed"));
     } finally {
       setSubmitting(false);
     }
@@ -444,16 +461,16 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
           <div className="w-14 h-14 rounded-full bg-emerald-50 text-emerald-500 mx-auto flex items-center justify-center mb-4">
             <CheckCircle2 size={28} />
           </div>
-          <h2 className="text-lg font-bold text-gray-900 mb-2">Product saved</h2>
+          <h2 className="text-lg font-bold text-gray-900 mb-2">{t("components.webProductForm.productSaved")}</h2>
           <p className="text-sm text-gray-500 mb-6">
-            Your product is now in your store as <strong>{status}</strong>.
+            {t("components.webProductForm.productSavedDesc", { status: STATUS_LABELS[status] })}
           </p>
           <div className="flex flex-col gap-2">
             <button
               onClick={() => router.push("/products/list")}
               className="px-6 py-2.5 bg-[#00aeff] text-white rounded-full text-xs font-bold tracking-widest"
             >
-              View my products
+              {t("components.webProductForm.viewMyProducts")}
             </button>
             <button
               onClick={() => {
@@ -466,7 +483,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
               }}
               className="px-6 py-2.5 border border-gray-200 text-gray-700 rounded-full text-xs font-bold tracking-widest"
             >
-              Add another
+              {t("actions.addAnother")}
             </button>
           </div>
         </div>
@@ -487,29 +504,29 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
           {/* General */}
           <div className="rounded-lg bg-white border border-gray-100">
             <SectionHeader
-              title="General"
-              hint="Basic info shown on the product page and search results."
+              title={t("components.webProductForm.general")}
+              hint={t("components.webProductForm.generalHint")}
             />
             <div className="p-4 space-y-4">
-              <Field label="Title" required>
+              <Field label={t("components.webProductForm.title")} required>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Premium Linen Oversized Shirt"
+                  placeholder={t("components.webProductForm.titlePlaceholder")}
                   className={inputCls}
                 />
               </Field>
-              <Field label="Description" optional>
+              <Field label={t("components.webProductForm.description")} optional>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={5}
-                  placeholder="Describe the product. Include materials, fit, sizing, and unique selling points."
+                  placeholder={t("components.webProductForm.descriptionPlaceholder")}
                   className={`${inputCls} resize-y leading-relaxed`}
                 />
                 <p className="text-[10px] text-gray-400">
-                  {description.length} characters · plain text supported.
+                  {t("components.webProductForm.descriptionFooter", { count: description.length })}
                 </p>
               </Field>
             </div>
@@ -518,8 +535,8 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
           {/* Media */}
           <div className="rounded-lg bg-white border border-gray-100">
             <SectionHeader
-              title="Media"
-              hint="Upload up to 8 photos. The first image is used as the cover."
+              title={t("components.webProductForm.media")}
+              hint={t("components.webProductForm.mediaHint")}
             />
             <div className="p-4">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -532,7 +549,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                     <img src={img.preview} alt="" className="w-full h-full object-cover" />
                     {i === 0 && (
                       <span className="absolute top-1 left-1 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-black/70 text-white">
-                        Cover
+                        {t("components.webProductForm.cover")}
                       </span>
                     )}
                     <button
@@ -549,7 +566,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                     className="aspect-square rounded-md bg-gray-50 border border-dashed border-gray-200 hover:border-gray-300 hover:bg-gray-100 flex flex-col items-center justify-center text-gray-500"
                   >
                     <ImagePlus className="w-5 h-5 mb-1" />
-                    <span className="text-[11px] font-medium">Add image</span>
+                    <span className="text-[11px] font-medium">{t("components.webProductForm.addImage")}</span>
                   </button>
                 )}
               </div>
@@ -568,7 +585,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                 onClick={() => fileInputRef.current?.click()}
                 className="mt-3 inline-flex items-center text-[11px] font-semibold text-gray-700 hover:text-black"
               >
-                <Upload className="w-3.5 h-3.5 mr-1.5" /> Upload from computer
+                <Upload className="w-3.5 h-3.5 mr-1.5" /> {t("components.webProductForm.uploadFromComputer")}
               </button>
             </div>
           </div>
@@ -576,8 +593,8 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
           {/* Advert images */}
           <div className="rounded-lg bg-white border border-gray-100">
             <SectionHeader
-              title="Advertising images"
-              hint="Up to 4 banner-style images shown on the home page promo strip."
+              title={t("components.webProductForm.advertImages")}
+              hint={t("components.webProductForm.advertImagesHint")}
             />
             <div className="p-4">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -602,7 +619,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                     className="aspect-[4/3] rounded-md bg-gray-50 border border-dashed border-gray-200 hover:border-gray-300 hover:bg-gray-100 flex flex-col items-center justify-center text-gray-500"
                   >
                     <ImagePlus className="w-5 h-5 mb-1" />
-                    <span className="text-[11px] font-medium">Add banner</span>
+                    <span className="text-[11px] font-medium">{t("components.webProductForm.addBanner")}</span>
                   </button>
                 )}
               </div>
@@ -622,10 +639,10 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
 
           {/* Pricing */}
           <div className="rounded-lg bg-white border border-gray-100">
-            <SectionHeader title="Pricing" />
+            <SectionHeader title={t("components.webProductForm.pricing")} />
             <div className="p-4 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <Field label="Price" required>
+                <Field label={t("components.webProductForm.price")} required>
                   <div className="relative">
                     <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-gray-400">฿</span>
                     <input
@@ -637,7 +654,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                     />
                   </div>
                 </Field>
-                <Field label="Compare-at price" hint="Strike-through" optional>
+                <Field label={t("components.webProductForm.compareAt")} hint={t("components.webProductForm.strikeThrough")} optional>
                   <div className="relative">
                     <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-gray-400">฿</span>
                     <input
@@ -649,7 +666,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                     />
                   </div>
                 </Field>
-                <Field label="Cost per item" hint="Internal" optional>
+                <Field label={t("components.webProductForm.costPerItem")} hint={t("components.webProductForm.internal")} optional>
                   <div className="relative">
                     <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs text-gray-400">฿</span>
                     <input
@@ -665,13 +682,13 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
 
               <div className="grid grid-cols-2 gap-3 px-3 py-2 rounded-md bg-gray-50 text-[11px]">
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-500">Profit</span>
+                  <span className="text-gray-500">{t("components.webProductForm.profit")}</span>
                   <span className="font-semibold text-gray-900 tabular-nums">
                     ฿{profit.toFixed(2)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-500">Margin</span>
+                  <span className="text-gray-500">{t("components.webProductForm.margin")}</span>
                   <span className="font-semibold text-gray-900 tabular-nums">
                     {margin.toFixed(1)}%
                   </span>
@@ -685,26 +702,26 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                   onChange={(e) => setChargeTax(e.target.checked)}
                   className="rounded"
                 />
-                Charge VAT on this product
+                {t("components.webProductForm.chargeVat")}
               </label>
             </div>
           </div>
 
           {/* Inventory */}
           <div className="rounded-lg bg-white border border-gray-100">
-            <SectionHeader title="Inventory" />
+            <SectionHeader title={t("components.webProductForm.inventory")} />
             <div className="p-4 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <Field label="SKU (Stock Keeping Unit)" optional>
+                <Field label={t("components.webProductForm.skuLabel")} optional>
                   <input
                     type="text"
                     value={sku}
                     onChange={(e) => setSku(e.target.value)}
-                    placeholder="e.g. LSO-LSH-238"
+                    placeholder={t("components.webProductForm.skuPlaceholder")}
                     className={`${inputCls} font-mono`}
                   />
                 </Field>
-                <Field label="Barcode" hint="UPC/EAN/ISBN" optional>
+                <Field label={t("components.webProductForm.barcodeLabel")} hint={t("components.webProductForm.barcodeHint")} optional>
                   <input
                     type="text"
                     value={barcode}
@@ -721,12 +738,12 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                   onChange={(e) => setTrackInventory(e.target.checked)}
                   className="rounded"
                 />
-                Track quantity
+                {t("components.webProductForm.trackQty")}
               </label>
 
               {trackInventory && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pl-6">
-                  <Field label="Quantity on hand">
+                  <Field label={t("components.webProductForm.qtyOnHand")}>
                     <input
                       type="number"
                       value={stock}
@@ -735,7 +752,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                       className={inputCls}
                     />
                   </Field>
-                  <Field label="Low stock threshold" hint="Triggers alert" optional>
+                  <Field label={t("components.webProductForm.lowStockThreshold")} hint={t("components.webProductForm.lowStockHint")} optional>
                     <input
                       type="number"
                       value={reorderAt}
@@ -754,7 +771,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                   onChange={(e) => setAllowOversell(e.target.checked)}
                   className="rounded"
                 />
-                Continue selling when out of stock
+                {t("components.webProductForm.continueOversell")}
               </label>
             </div>
           </div>
@@ -762,11 +779,11 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
           {/* Wholesale */}
           <div className="rounded-lg bg-white border border-gray-100">
             <SectionHeader
-              title="Wholesale pricing"
-              hint="Set MOQ and tier pricing for B2B buyers."
+              title={t("components.webProductForm.wholesale")}
+              hint={t("components.webProductForm.wholesaleHint")}
             />
             <div className="p-4 space-y-4">
-              <Field label="Minimum order quantity (MOQ)" optional>
+              <Field label={t("components.webProductForm.moq")} optional>
                 <input
                   type="number"
                   value={moq}
@@ -776,16 +793,15 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                 />
               </Field>
               <div>
-                <p className="text-[11px] font-semibold text-gray-700 mb-2">Tier pricing</p>
+                <p className="text-[11px] font-semibold text-gray-700 mb-2">{t("components.webProductForm.tierPricing")}</p>
                 <p className="text-[11px] text-gray-500 mb-2">
-                  Set bulk-buy thresholds. The tier price (or % discount off the base price) is
-                  shown to buyers as a strike-through deal on the product page.
+                  {t("components.webProductForm.tierPricingHint")}
                 </p>
                 <div className="space-y-1.5">
                   <div className="grid grid-cols-12 gap-2 text-[10px] font-semibold text-gray-500 tracking-wide px-1">
-                    <span className="col-span-3">Min qty</span>
-                    <span className="col-span-5">Unit price</span>
-                    <span className="col-span-3">Discount %</span>
+                    <span className="col-span-3">{t("components.webProductForm.minQty")}</span>
+                    <span className="col-span-5">{t("components.webProductForm.unitPrice")}</span>
+                    <span className="col-span-3">{t("components.webProductForm.discountPct")}</span>
                     <span className="col-span-1" />
                   </div>
                   {tiers.map((t) => (
@@ -835,7 +851,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                   onClick={addTier}
                   className="mt-2 inline-flex items-center text-[11px] font-semibold text-[#00aeff] hover:underline"
                 >
-                  <Plus className="w-3 h-3 mr-1" /> Add tier
+                  <Plus className="w-3 h-3 mr-1" /> {t("components.webProductForm.addTier")}
                 </button>
               </div>
             </div>
@@ -844,13 +860,13 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
           {/* Specifications */}
           <div className="rounded-lg bg-white border border-gray-100">
             <SectionHeader
-              title="Specifications"
-              hint="Key/value pairs (e.g. Material → 100% cotton). Shown on the Specifications tab of your product page."
+              title={t("components.webProductForm.specifications")}
+              hint={t("components.webProductForm.specificationsHint")}
             />
             <div className="p-4 space-y-2">
               <div className="grid grid-cols-12 gap-2 text-[10px] font-semibold text-gray-500 tracking-wide px-1">
-                <span className="col-span-4">Label</span>
-                <span className="col-span-7">Value</span>
+                <span className="col-span-4">{t("components.webProductForm.label")}</span>
+                <span className="col-span-7">{t("components.webProductForm.value")}</span>
                 <span className="col-span-1" />
               </div>
               {specifications.map((s) => (
@@ -859,14 +875,14 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                     type="text"
                     value={s.label}
                     onChange={(e) => updateSpecification(s.id, { label: e.target.value })}
-                    placeholder="e.g. Material"
+                    placeholder={t("components.webProductForm.specLabelPlaceholder")}
                     className={`${inputCls} col-span-4`}
                   />
                   <input
                     type="text"
                     value={s.value}
                     onChange={(e) => updateSpecification(s.id, { value: e.target.value })}
-                    placeholder="e.g. Premium cotton"
+                    placeholder={t("components.webProductForm.specValuePlaceholder")}
                     className={`${inputCls} col-span-7`}
                   />
                   <button
@@ -881,7 +897,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                 onClick={addSpecification}
                 className="mt-2 inline-flex items-center text-[11px] font-semibold text-[#00aeff] hover:underline"
               >
-                <Plus className="w-3 h-3 mr-1" /> Add specification
+                <Plus className="w-3 h-3 mr-1" /> {t("components.webProductForm.addSpecification")}
               </button>
             </div>
           </div>
@@ -891,15 +907,15 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
             <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-bold text-black flex items-center gap-2">
-                  <Tag className="w-3.5 h-3.5 text-[#00aeff]" /> Variants for {config.label}
+                  <Tag className="w-3.5 h-3.5 text-[#00aeff]" /> {t("components.webProductForm.variantsTitle", { category: categoryLabel })}
                 </h3>
-                <p className="text-[11px] text-gray-500 mt-0.5">{config.description}</p>
+                <p className="text-[11px] text-gray-500 mt-0.5">{categoryDescription}</p>
               </div>
             </div>
             <div className="p-4 space-y-3">
               {variantOptions.length === 0 ? (
                 <div className="rounded-md bg-gray-50 p-3 text-[11px] text-gray-500">
-                  This category does not require variants. You can still add custom options if needed.
+                  {t("components.webProductForm.noVariantsNeeded")}
                 </div>
               ) : (
                 variantOptions.map((v, idx) => {
@@ -910,24 +926,24 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                       <div className="grid grid-cols-12 gap-2 items-start">
                         <div className="col-span-3">
                           <label className="text-[10px] font-semibold text-gray-500 tracking-wide">
-                            Option name {seedAxis?.required && <span className="text-red-500">*</span>}
+                            {t("components.webProductForm.optionName")} {seedAxis?.required && <span className="text-red-500">*</span>}
                           </label>
                           <input
                             type="text"
                             value={v.name}
                             onChange={(e) => updateVariantOption(v.id, { name: e.target.value })}
-                            placeholder={seedAxis?.name || "e.g. Size"}
+                            placeholder={seedAxis?.name || t("components.webProductForm.optionNamePlaceholder")}
                             className={`${inputCls} mt-1`}
                           />
                         </div>
                         <div className="col-span-8">
                           <label className="text-[10px] font-semibold text-gray-500 tracking-wide">
-                            Selected values
+                            {t("components.webProductForm.selectedValues")}
                           </label>
                           <div className="mt-1 flex flex-wrap gap-1.5 min-h-[34px] px-2 py-1 rounded-md bg-gray-50 border border-gray-100">
                             {v.values.length === 0 && (
                               <span className="text-[11px] text-gray-400 px-1.5 py-1">
-                                Tap suggestions or type your own.
+                                {t("components.webProductForm.tapSuggestions")}
                               </span>
                             )}
                             {v.values.map((val) => (
@@ -984,7 +1000,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                 onClick={addVariantOption}
                 className="inline-flex items-center text-[11px] font-semibold text-[#00aeff] hover:underline"
               >
-                <Plus className="w-3 h-3 mr-1" /> Add custom option
+                <Plus className="w-3 h-3 mr-1" /> {t("components.webProductForm.addCustomOption")}
               </button>
             </div>
           </div>
@@ -993,8 +1009,8 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
           {config.attributes.length > 0 && (
             <div className="rounded-lg bg-white border border-gray-100">
               <SectionHeader
-                title={`${config.label} details`}
-                hint="These descriptors appear on the product page so buyers know exactly what they're getting."
+                title={t("components.webProductForm.categoryDetails", { category: categoryLabel })}
+                hint={t("components.webProductForm.categoryDetailsHint")}
               />
               <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
                 {config.attributes.map((attr) => (
@@ -1014,7 +1030,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                           onChange={(e) => updateAttribute(attr.key, e.target.value)}
                           className={`${inputCls} appearance-none pr-8`}
                         >
-                          <option value="">Select…</option>
+                          <option value="">{t("components.webProductForm.selectPlaceholder")}</option>
                           {attr.options.map((o) => (
                             <option key={o} value={o}>
                               {o}
@@ -1041,8 +1057,8 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
           {/* Creator affiliate */}
           <div className="rounded-lg bg-white border border-gray-100">
             <SectionHeader
-              title="Creator affiliate program"
-              hint="Let approved creators promote this product and earn commission on each verified sale."
+              title={t("components.webProductForm.creatorAffiliate")}
+              hint={t("components.webProductForm.creatorAffiliateHint")}
             />
             <div className="p-4 space-y-4">
               <label className="flex items-start gap-2 text-xs text-gray-700 cursor-pointer">
@@ -1053,9 +1069,9 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                   className="rounded mt-0.5"
                 />
                 <span>
-                  <span className="font-semibold">Allow creators to promote this product</span>
+                  <span className="font-semibold">{t("components.webProductForm.allowCreators")}</span>
                   <span className="block text-[11px] text-gray-500 mt-0.5">
-                    Creators add this product to their feed and you only pay commission on verified sales.
+                    {t("components.webProductForm.allowCreatorsDesc")}
                   </span>
                 </span>
               </label>
@@ -1063,7 +1079,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
               {allowCreators && (
                 <div className="space-y-4 pl-6 ml-2 border-l-2 border-gray-100 pt-1">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <Field label="Commission type">
+                    <Field label={t("components.webProductForm.commissionType")}>
                       <div className="inline-flex bg-gray-100 p-0.5 rounded-md w-full">
                         <button
                           type="button"
@@ -1074,7 +1090,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                               : "text-gray-600 hover:text-black"
                           }`}
                         >
-                          Percentage (%)
+                          {t("components.webProductForm.commissionPercentTab")}
                         </button>
                         <button
                           type="button"
@@ -1085,14 +1101,14 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                               : "text-gray-600 hover:text-black"
                           }`}
                         >
-                          Fixed (฿)
+                          {t("components.webProductForm.commissionFixedTab")}
                         </button>
                       </div>
                     </Field>
 
                     <Field
-                      label={commissionType === "percent" ? "Commission rate" : "Commission amount"}
-                      hint={commissionType === "percent" ? "Of selling price" : "Per unit sold"}
+                      label={commissionType === "percent" ? t("components.webProductForm.commissionRate") : t("components.webProductForm.commissionAmount")}
+                      hint={commissionType === "percent" ? t("components.webProductForm.commissionPercentHint") : t("components.webProductForm.commissionFixedHint")}
                     >
                       <div className="relative">
                         {commissionType === "fixed" && (
@@ -1120,16 +1136,16 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <Field label="Minimum creator tier" hint="Restricts who can promote">
+                    <Field label={t("components.webProductForm.minTier")} hint={t("components.webProductForm.minTierHint")}>
                       <div className="relative">
                         <select
                           value={minTier}
                           onChange={(e) => setMinTier(e.target.value as CreatorTier)}
                           className={`${inputCls} appearance-none pr-8`}
                         >
-                          {CREATOR_TIERS.map((t) => (
-                            <option key={t.value} value={t.value}>
-                              {t.label}
+                          {CREATOR_TIERS.map((opt) => (
+                            <option key={opt.value} value={opt.value}>
+                              {opt.label}
                             </option>
                           ))}
                         </select>
@@ -1137,7 +1153,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                       </div>
                     </Field>
 
-                    <Field label="Attribution window" hint="Days a click stays valid">
+                    <Field label={t("components.webProductForm.attributionWindow")} hint={t("components.webProductForm.attributionWindowHint")}>
                       <div className="relative">
                         <input
                           type="number"
@@ -1148,7 +1164,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                           className={`${inputCls} pr-12`}
                         />
                         <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-gray-400">
-                          days
+                          {t("components.webProductForm.daysUnit")}
                         </span>
                       </div>
                     </Field>
@@ -1156,19 +1172,19 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
 
                   <div className="rounded-md bg-gray-50 px-3 py-2.5 grid grid-cols-1 sm:grid-cols-3 gap-3 text-[11px]">
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-500">Creator earns / sale</span>
+                      <span className="text-gray-500">{t("components.webProductForm.creatorEarns")}</span>
                       <span className="font-semibold text-[#00aeff] tabular-nums">
                         ฿{commissionPerSale.toFixed(2)}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-500">Your net / sale</span>
+                      <span className="text-gray-500">{t("components.webProductForm.yourNet")}</span>
                       <span className="font-semibold text-gray-900 tabular-nums">
                         ฿{sellerNet.toFixed(2)}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-500">Effective rate</span>
+                      <span className="text-gray-500">{t("components.webProductForm.effectiveRate")}</span>
                       <span className="font-semibold text-gray-900 tabular-nums">
                         {parseFloat(price) > 0
                           ? `${((commissionPerSale / parseFloat(price)) * 100).toFixed(1)}%`
@@ -1183,7 +1199,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
 
           {/* Shipping */}
           <div className="rounded-lg bg-white border border-gray-100">
-            <SectionHeader title="Shipping" />
+            <SectionHeader title={t("components.webProductForm.shipping")} />
             <div className="p-4 space-y-4">
               <label className="flex items-start gap-2 text-xs text-gray-700 cursor-pointer">
                 <input
@@ -1193,14 +1209,14 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                   className="rounded mt-0.5"
                 />
                 <span>
-                  <span className="font-semibold">Offer free shipping</span>
+                  <span className="font-semibold">{t("components.webProductForm.offerFreeShipping")}</span>
                   <span className="block text-[11px] text-gray-500 mt-0.5">
-                    A green &quot;Free shipping&quot; badge will appear on the product page.
+                    {t("components.webProductForm.offerFreeShippingDesc")}
                   </span>
                 </span>
               </label>
 
-              <Field label="Weight" optional>
+              <Field label={t("components.webProductForm.weight")} optional>
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
@@ -1223,7 +1239,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                 </div>
               </Field>
 
-              <Field label="Package dimensions" hint="L × W × H" optional>
+              <Field label={t("components.webProductForm.packageDimensions")} hint={t("components.webProductForm.lwh")} optional>
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
@@ -1262,7 +1278,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                 </div>
               </Field>
 
-              <Field label="Country/region of origin" optional>
+              <Field label={t("components.webProductForm.originCountry")} optional>
                 <select
                   value={originCountry}
                   onChange={(e) => setOriginCountry(e.target.value)}
@@ -1281,13 +1297,13 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
           {/* Lead time */}
           <div className="rounded-lg bg-white border border-gray-100">
             <SectionHeader
-              title="Lead time"
-              hint="How long after payment until you ship. Shown as 'Lead Time' on the product page."
+              title={t("components.webProductForm.leadTime")}
+              hint={t("components.webProductForm.leadTimeHint")}
             />
             <div className="p-4 space-y-3">
               <div className="grid grid-cols-12 gap-2 items-center">
                 <div className="col-span-4">
-                  <Field label="Minimum">
+                  <Field label={t("components.webProductForm.minimum")}>
                     <input
                       type="number"
                       min="0"
@@ -1300,7 +1316,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                 </div>
                 <div className="col-span-1 text-center text-gray-400 pt-5">–</div>
                 <div className="col-span-4">
-                  <Field label="Maximum">
+                  <Field label={t("components.webProductForm.maximum")}>
                     <input
                       type="number"
                       min="0"
@@ -1312,24 +1328,28 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                   </Field>
                 </div>
                 <div className="col-span-3">
-                  <Field label="Unit">
+                  <Field label={t("components.webProductForm.unit")}>
                     <select
                       value={leadTimeUnit}
                       onChange={(e) => setLeadTimeUnit(e.target.value as "hours" | "days" | "weeks")}
                       className={inputCls}
                     >
-                      <option value="hours">Hours</option>
-                      <option value="days">Business days</option>
-                      <option value="weeks">Weeks</option>
+                      <option value="hours">{t("components.webProductForm.hours")}</option>
+                      <option value="days">{t("components.webProductForm.businessDays")}</option>
+                      <option value="weeks">{t("components.webProductForm.weeks")}</option>
                     </select>
                   </Field>
                 </div>
               </div>
               <p className="text-[11px] text-gray-500">
-                Buyers will see:{" "}
+                {t("components.webProductForm.buyersWillSee")}{" "}
                 <strong>
                   {leadTimeMin || "?"}–{leadTimeMax || "?"}{" "}
-                  {leadTimeUnit === "days" ? "Business Days" : leadTimeUnit === "hours" ? "Hours" : "Weeks"}
+                  {leadTimeUnit === "days"
+                    ? t("components.webProductForm.businessDaysLabel")
+                    : leadTimeUnit === "hours"
+                    ? t("components.webProductForm.hours")
+                    : t("components.webProductForm.weeks")}
                 </strong>
               </p>
             </div>
@@ -1338,8 +1358,8 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
           {/* Returns */}
           <div className="rounded-lg bg-white border border-gray-100">
             <SectionHeader
-              title="Returns"
-              hint="Return window shown on the product page. Disable if you don't accept returns."
+              title={t("components.webProductForm.returns")}
+              hint={t("components.webProductForm.returnsHint")}
             />
             <div className="p-4 space-y-4">
               <label className="flex items-start gap-2 text-xs text-gray-700 cursor-pointer">
@@ -1350,16 +1370,16 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                   className="rounded mt-0.5"
                 />
                 <span>
-                  <span className="font-semibold">Accept returns on this product</span>
+                  <span className="font-semibold">{t("components.webProductForm.acceptReturns")}</span>
                   <span className="block text-[11px] text-gray-500 mt-0.5">
-                    Buyers can request a return within the window below.
+                    {t("components.webProductForm.acceptReturnsDesc")}
                   </span>
                 </span>
               </label>
 
               {returnAccepts && (
                 <div className="space-y-3 pl-6 ml-2 border-l-2 border-gray-100 pt-1">
-                  <Field label="Return window (days)">
+                  <Field label={t("components.webProductForm.returnWindow")}>
                     <input
                       type="number"
                       min="1"
@@ -1369,12 +1389,12 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                       className={`${inputCls} max-w-[160px]`}
                     />
                   </Field>
-                  <Field label="Conditions / notes" optional>
+                  <Field label={t("components.webProductForm.returnConditions")} optional>
                     <textarea
                       value={returnNotes}
                       onChange={(e) => setReturnNotes(e.target.value)}
                       rows={3}
-                      placeholder="e.g. Item must be unopened and in original packaging."
+                      placeholder={t("components.webProductForm.returnConditionsPlaceholder")}
                       className={`${inputCls} resize-y`}
                     />
                   </Field>
@@ -1386,31 +1406,31 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
           {/* SEO */}
           <div className="rounded-lg bg-white border border-gray-100">
             <SectionHeader
-              title="Search engine listing"
-              hint="How this product appears in Google and social shares."
+              title={t("components.webProductForm.seoTitle")}
+              hint={t("components.webProductForm.seoTitleHint")}
             />
             <div className="p-4 space-y-4">
-              <Field label="Page title" optional>
+              <Field label={t("components.webProductForm.pageTitle")} optional>
                 <input
                   type="text"
                   value={seoTitle}
                   onChange={(e) => setSeoTitle(e.target.value)}
-                  placeholder={name || "Premium product title"}
+                  placeholder={name || t("components.webProductForm.pageTitlePlaceholder")}
                   className={inputCls}
                 />
-                <p className="text-[10px] text-gray-400">{seoTitle.length}/70 characters</p>
+                <p className="text-[10px] text-gray-400">{t("components.webProductForm.charCount70", { count: seoTitle.length })}</p>
               </Field>
-              <Field label="Meta description" optional>
+              <Field label={t("components.webProductForm.metaDesc")} optional>
                 <textarea
                   value={seoDesc}
                   onChange={(e) => setSeoDesc(e.target.value)}
                   rows={3}
-                  placeholder="Short summary that appears on search results."
+                  placeholder={t("components.webProductForm.metaDescPlaceholder")}
                   className={`${inputCls} resize-y`}
                 />
-                <p className="text-[10px] text-gray-400">{seoDesc.length}/160 characters</p>
+                <p className="text-[10px] text-gray-400">{t("components.webProductForm.charCount160", { count: seoDesc.length })}</p>
               </Field>
-              <Field label="URL handle" optional>
+              <Field label={t("components.webProductForm.urlHandle")} optional>
                 <div className="flex items-center">
                   <span className="px-3 py-2 rounded-l-md text-xs text-gray-500 font-mono bg-gray-100">
                     lalashop.com/products/
@@ -1419,7 +1439,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                     type="text"
                     value={slug}
                     onChange={(e) => setSlug(e.target.value)}
-                    placeholder="premium-linen-shirt"
+                    placeholder={t("components.webProductForm.slugPlaceholder")}
                     className={`${inputCls} rounded-l-none font-mono`}
                   />
                 </div>
@@ -1431,9 +1451,9 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
         {/* Sidebar */}
         <div className="space-y-4">
           <div className="rounded-lg bg-white border border-gray-100">
-            <SectionHeader title="Status" />
+            <SectionHeader title={t("components.webProductForm.status")} />
             <div className="p-4 space-y-3">
-              <Field label="Visibility">
+              <Field label={t("components.webProductForm.visibility")}>
                 <div className="relative">
                   <select
                     value={status}
@@ -1442,7 +1462,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                   >
                     {STATUS_OPTIONS.map((s) => (
                       <option key={s} value={s}>
-                        {s}
+                        {STATUS_LABELS[s]}
                       </option>
                     ))}
                   </select>
@@ -1452,15 +1472,15 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
               <p className="flex items-start gap-1.5 text-[11px] text-gray-500">
                 {status === "Active" ? (
                   <>
-                    <Eye className="w-3 h-3 mt-0.5 text-green-600" /> Visible on storefront after publishing.
+                    <Eye className="w-3 h-3 mt-0.5 text-green-600" /> {t("components.webProductForm.statusActive")}
                   </>
                 ) : status === "Draft" ? (
                   <>
-                    <EyeOff className="w-3 h-3 mt-0.5 text-gray-400" /> Hidden until you publish.
+                    <EyeOff className="w-3 h-3 mt-0.5 text-gray-400" /> {t("components.webProductForm.statusDraft")}
                   </>
                 ) : (
                   <>
-                    <EyeOff className="w-3 h-3 mt-0.5 text-gray-400" /> Removed from all sales channels.
+                    <EyeOff className="w-3 h-3 mt-0.5 text-gray-400" /> {t("components.webProductForm.statusArchived")}
                   </>
                 )}
               </p>
@@ -1468,9 +1488,9 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
           </div>
 
           <div className="rounded-lg bg-white border border-gray-100">
-            <SectionHeader title="Organization" />
+            <SectionHeader title={t("components.webProductForm.organization")} />
             <div className="p-4 space-y-4">
-              <Field label="Category" hint="Drives variants" required>
+              <Field label={t("components.webProductForm.categoryLabel")} hint={t("components.webProductForm.categoryHint")} required>
                 <div className="relative">
                   <select
                     value={category}
@@ -1481,8 +1501,8 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                       const supported = !!CATEGORY_CONFIG[c.value];
                       return (
                         <option key={c.value} value={c.value}>
-                          {c.label}
-                          {supported ? "" : " (basic template)"}
+                          {t(`pages.productCategories.${c.value}`)}
+                          {supported ? "" : " " + t("components.webProductForm.categoryBasic")}
                         </option>
                       );
                     })}
@@ -1490,21 +1510,21 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                   <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
                 </div>
                 <p className="text-[10px] text-gray-400 mt-1">
-                  Switching the category resets the variant template below.
+                  {t("components.webProductForm.categoryFooter")}
                 </p>
               </Field>
 
-              <Field label="Vendor / Brand" optional>
+              <Field label={t("components.webProductForm.vendor")} optional>
                 <input
                   type="text"
                   value={vendor}
                   onChange={(e) => setVendor(e.target.value)}
-                  placeholder="Lala Premium"
+                  placeholder={t("components.webProductForm.vendorPlaceholder")}
                   className={inputCls}
                 />
               </Field>
 
-              <Field label="Tags" optional>
+              <Field label={t("components.webProductForm.tags")} optional>
                 <div className="flex items-center gap-2">
                   <input
                     type="text"
@@ -1516,14 +1536,14 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
                         addTag();
                       }
                     }}
-                    placeholder="Add tag and press Enter"
+                    placeholder={t("components.webProductForm.tagsPlaceholder")}
                     className={inputCls}
                   />
                   <button
                     onClick={addTag}
                     className="px-2 py-1.5 rounded-md text-xs font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200"
                   >
-                    Add
+                    {t("actions.add")}
                   </button>
                 </div>
                 {tags.length > 0 && (
@@ -1546,14 +1566,14 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
           </div>
 
           <div className="rounded-lg bg-white border border-gray-100">
-            <SectionHeader title="Sales channels" />
+            <SectionHeader title={t("components.webProductForm.salesChannels")} />
             <div className="p-4 space-y-2">
               {(
                 [
-                  { key: "storefront", label: "Online storefront" },
-                  { key: "tiktok", label: "TikTok Shop" },
-                  { key: "facebook", label: "Facebook Shop" },
-                  { key: "instagram", label: "Instagram Shop" },
+                  { key: "storefront", label: t("components.webProductForm.channelStorefront") },
+                  { key: "tiktok", label: t("components.webProductForm.channelTiktok") },
+                  { key: "facebook", label: t("components.webProductForm.channelFacebook") },
+                  { key: "instagram", label: t("components.webProductForm.channelInstagram") },
                 ] as { key: keyof typeof channels; label: string }[]
               ).map((c) => (
                 <label key={c.key} className="flex items-center justify-between text-xs text-gray-700">
@@ -1575,9 +1595,9 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
             <div className="flex items-start gap-2">
               <HelpCircle className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-xs font-semibold text-gray-900">Need help with listings?</p>
+                <p className="text-xs font-semibold text-gray-900">{t("components.webProductForm.needHelp")}</p>
                 <p className="text-[11px] text-gray-500 mt-0.5">
-                  Read our seller guide on writing titles, pricing for wholesale, and choosing the right variants.
+                  {t("components.webProductForm.needHelpDesc")}
                 </p>
               </div>
             </div>
@@ -1590,21 +1610,21 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
           onClick={() => router.push("/products/list")}
           className="px-3 py-2 rounded-md text-xs font-medium text-gray-700"
         >
-          Cancel
+          {t("actions.cancel")}
         </button>
         <button
           onClick={() => handlePublish("Draft")}
           disabled={submitting}
           className="px-4 py-2 rounded-md text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 disabled:opacity-50"
         >
-          Save as draft
+          {t("components.webProductForm.saveAsDraft")}
         </button>
         <button
           onClick={() => handlePublish("Active")}
           disabled={submitting}
           className="bg-[#00aeff] text-white px-5 py-2 rounded-md text-xs font-semibold hover:bg-[#0096db] disabled:opacity-50"
         >
-          {submitting ? "Saving…" : "Publish product"}
+          {submitting ? t("actions.saving") : t("components.webProductForm.publishProduct")}
         </button>
       </div>
     </div>
@@ -1612,6 +1632,7 @@ const WebProductForm: React.FC<WebProductFormProps> = ({ onSuccess }) => {
 };
 
 const CustomVariantInput = ({ onAdd }: { onAdd: (value: string) => void }) => {
+  const { t } = useTranslation("common");
   const [value, setValue] = useState("");
   return (
     <div className="flex items-center gap-2">
@@ -1626,7 +1647,7 @@ const CustomVariantInput = ({ onAdd }: { onAdd: (value: string) => void }) => {
             setValue("");
           }
         }}
-        placeholder="Add custom value (press Enter)"
+        placeholder={t("components.webProductForm.addCustomValue")}
         className={`${inputCls} text-[11px]`}
       />
       <button
@@ -1637,7 +1658,7 @@ const CustomVariantInput = ({ onAdd }: { onAdd: (value: string) => void }) => {
         }}
         className="px-2 py-1.5 rounded-md text-[11px] font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 shrink-0"
       >
-        Add
+        {t("actions.add")}
       </button>
     </div>
   );

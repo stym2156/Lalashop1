@@ -176,7 +176,7 @@
   },
   "product": {
     "price": "Giá",
-    "stock": "Tồn kho",
+    "stock": "Kho hàng",
     "moq": "Đặt tối thiểu",
     "color": "Màu",
     "size": "Kích cỡ",
@@ -189,7 +189,7 @@
     "inStock": "Còn hàng",
     "soldBy": "Bán bởi",
     "shopName": "Tên cửa hàng",
-    "shipping": "Vận chuyển",
+    "shipping": "Giao hàng",
     "rating": "Đánh giá",
     "sold": "đã bán",
     "freeShipping": "Miễn phí vận chuyển",
@@ -213,7 +213,16 @@
     "addedToCart": "Đã thêm vào giỏ",
     "buyNow": "Mua ngay",
     "viewShop": "Xem cửa hàng",
-    "stockLeft": "Còn lại: {{count}}"
+    "stockLeft": "Còn lại: {{count}}",
+    "returns": "Trả hàng",
+    "leadTime": "Thời gian chuẩn bị",
+    "free": "Miễn phí",
+    "shipsFrom": "Gửi từ {{location}}",
+    "selected": "ĐÃ CHỌN",
+    "specs": "Thông số kỹ thuật",
+    "origin": "Nguồn gốc",
+    "vendor": "Nhà cung cấp",
+    "sku": "SKU"
   },
   "cart": {
     "title": "Giỏ hàng",
@@ -241,7 +250,7 @@
     "toShip": "chờ giao",
     "toReceive": "chờ nhận",
     "completed": "hoàn tất",
-    "canceled": "đã hủy",
+    "canceled": "Đã hủy",
     "noOrders": "không có đơn hàng",
     "awaitingVerification": "Chờ xác minh",
     "slipRejected": "Biên lai bị từ chối",
@@ -392,7 +401,9 @@
       "noFollowing": "Chưa theo dõi ai",
       "follow": "Theo dõi",
       "unfollow": "Đang theo dõi",
-      "loginToFollow": "Đăng nhập để theo dõi"
+      "loginToFollow": "Đăng nhập để theo dõi",
+      "likeOne": "thích",
+      "likeMany": "lượt thích"
     },
     "checkout": {
       "title": "Thanh toán",
@@ -563,7 +574,7 @@
       "subtitle": "Quản lý cửa hàng, sản phẩm và đơn hàng",
       "products": "Sản phẩm",
       "orders": "Đơn hàng",
-      "sales": "Doanh số",
+      "sales": "Doanh thu",
       "analytics": "Phân tích",
       "addProduct": "Thêm sản phẩm",
       "editProduct": "Sửa sản phẩm",
@@ -584,12 +595,15 @@
       "saving": "Đang lưu...",
       "savedSuccess": "Đã lưu sản phẩm",
       "saveFailed": "Lưu sản phẩm thất bại",
-      "withdraw": "Rút thu nhập",
+      "withdraw": "Rút tiền",
       "addBank": "Thêm tài khoản ngân hàng",
       "balance": "Số dư",
       "totalSales": "Tổng doanh số",
       "ordersToday": "Đơn hôm nay",
-      "viewProductCenter": "Mở Trung tâm Sản phẩm"
+      "viewProductCenter": "Mở Trung tâm Sản phẩm",
+      "todaysData": "Dữ liệu hôm nay",
+      "productCreator": "Người tạo sản phẩm",
+      "productDetail": "Chi tiết sản phẩm"
     },
     "posts": {
       "createTitle": "Tạo bài đăng",
@@ -628,7 +642,17 @@
       "title": "Danh mục",
       "noProducts": "Không có sản phẩm trong danh mục này",
       "subcategories": "Danh mục con",
-      "loadFailed": "Tải danh mục thất bại"
+      "loadFailed": "Tải danh mục thất bại",
+      "name": {
+        "apparel": "Thời trang",
+        "automotive": "Phụ tùng ô tô",
+        "beauty": "Làm đẹp & Chăm sóc cá nhân",
+        "construction": "Vật liệu xây dựng",
+        "electronics": "Điện tử",
+        "home": "Nhà & Bếp",
+        "industrial": "Công nghiệp & Dụng cụ",
+        "sports": "Thể thao & Ngoài trời"
+      }
     },
     "topFactories": {
       "title": "Nhà máy hàng đầu",
@@ -655,7 +679,8 @@
     },
     "promo": {
       "title": "Khuyến mãi",
-      "noPromo": "Không có khuyến mãi đang hoạt động"
+      "noPromo": "Không có khuyến mãi đang hoạt động",
+      "fetchingCoupons": "Đang tải mã giảm giá..."
     },
     "myshop": {
       "title": "Cửa hàng của tôi",
@@ -709,11 +734,23 @@
       "title": "Chỉnh sửa sản phẩm",
       "viewPublic": "Xem trang công khai",
       "delete": "Xóa",
-      "loading": "Đang tải…"
+      "loading": "Đang tải…",
+      "failedToLoad": "Tải sản phẩm thất bại"
     },
     "openshopStep1": {
       "whatToExpect": "Những gì bạn sẽ trải qua",
-      "questionHeader": "Bạn đang kinh doanh loại hình nào?"
+      "questionHeader": "Bạn đang kinh doanh loại hình nào?",
+      "expectNote": "Đội ngũ của chúng tôi thường xem xét đơn trong vòng 2-3 ngày làm việc. Vui lòng chuẩn bị giấy tờ rõ ràng và chính xác để đẩy nhanh quá trình duyệt.",
+      "businessTypeIndividual": "Cá nhân",
+      "businessTypeIndividualDesc": "Dùng CMND hoặc hộ chiếu. Bạn bán với tư cách cá nhân, không phải doanh nghiệp đã đăng ký.",
+      "businessTypeSoleProprietor": "Hộ kinh doanh",
+      "businessTypeSoleProprietorDesc": "Cần có giấy chứng nhận đăng ký kinh doanh. Bạn là chủ sở hữu duy nhất của doanh nghiệp đã đăng ký hợp pháp.",
+      "businessTypeCorporate": "Công ty",
+      "businessTypeCorporateDesc": "Pháp nhân dưới hình thức công ty, tách biệt rõ ràng với chủ sở hữu.",
+      "businessTypePartnership": "Hợp danh",
+      "businessTypePartnershipDesc": "Doanh nghiệp do hai cá nhân trở lên cùng vận hành.",
+      "asXSeller": "Là người bán",
+      "youWillNeed": ", bạn sẽ cần:"
     },
     "openshopStep2": {
       "businessEntity": "Thông tin pháp nhân",
@@ -753,7 +790,18 @@
       "termsOfService": "Điều khoản dịch vụ",
       "termsAccept": "Tôi xác nhận tất cả thông tin trên là sự thật, và đã đọc và chấp nhận",
       "noDocs": "Chưa tải lên tài liệu nào.",
-      "registrationSummary": "Tóm tắt đăng ký"
+      "registrationSummary": "Tóm tắt đăng ký",
+      "fieldBusinessType": "Loại hình kinh doanh",
+      "fieldName": "Tên",
+      "fieldCategory": "Danh mục",
+      "fieldEmail": "Email",
+      "fieldPhone": "Điện thoại",
+      "fieldTinTax": "Mã số thuế (TIN)",
+      "fieldIdPassport": "CMND / Hộ chiếu",
+      "fieldRepresentative": "Đại diện",
+      "fieldAddress": "Địa chỉ",
+      "viewDoc": "Xem",
+      "reviewWithin23Days": "Chúng tôi sẽ xem xét thông tin của bạn trong vòng 2-3 ngày làm việc. Nếu cần thêm thông tin hoặc có thắc mắc, chúng tôi sẽ liên hệ qua email hoặc số điện thoại bạn đã đăng ký."
     },
     "securityPanel": {
       "password": "Mật khẩu",
@@ -779,7 +827,9 @@
       "title": "Tài khoản thanh toán",
       "noBankAccounts": "Chưa có tài khoản ngân hàng nào",
       "clickToLink": "Bấm để liên kết tài khoản đầu tiên",
-      "addAccount": "Thêm tài khoản"
+      "addAccount": "Thêm tài khoản",
+      "verified": "Đã xác minh",
+      "pendingApproval": "Chờ phê duyệt"
     },
     "addressForm": {
       "recipientName": "Tên người nhận",
@@ -790,7 +840,7 @@
       "shippingBranch": "Chi nhánh vận chuyển",
       "noAddress": "Không tìm thấy địa chỉ. Vui lòng thêm địa chỉ lấy hàng.",
       "addAddress": "Thêm địa chỉ",
-      "editAddress": "Chỉnh sửa địa chỉ",
+      "editAddress": "Sửa địa chỉ",
       "saveAddress": "Lưu địa chỉ",
       "updateAddress": "Cập nhật địa chỉ",
       "saving": "Đang lưu..."
@@ -817,7 +867,15 @@
       "earned": "Đã kiếm",
       "pending": "Đang chờ",
       "noOrders": "Không có đơn hàng",
-      "refresh": "Làm mới"
+      "refresh": "Làm mới",
+      "statusAll": "Tất cả",
+      "statusPending": "Đang chờ",
+      "statusShipped": "Đã gửi",
+      "statusCompleted": "Đã hoàn tất",
+      "statusCanceled": "Đã hủy",
+      "qtyLabel": "SL: {{qty}}",
+      "priceLabel": "Giá",
+      "totalCommissionTracked": "Tổng hoa hồng theo dõi: ฿{{amount}}"
     },
     "creatorAttr": {
       "dataAnalytics": "Phân tích dữ liệu",
@@ -858,11 +916,52 @@
     },
     "productTabs": {
       "keySpecifications": "Thông số chính",
-      "supplierProfile": "Hồ sơ nhà cung cấp"
+      "supplierProfile": "Hồ sơ nhà cung cấp",
+      "dimensions": "Kích thước",
+      "weight": "Trọng lượng",
+      "thisMonth": "Tháng này",
+      "monthSuffix": "{{count}} tháng",
+      "monthsSuffix": "{{count}} tháng",
+      "yearSuffix": "{{count}} năm",
+      "yearsSuffix": "{{count}} năm",
+      "activeOn": "Hoạt động trên Lalashop",
+      "productsListed": "Sản phẩm đã đăng",
+      "ordersFulfilled": "Đơn hoàn tất",
+      "followersCount": "Người theo dõi",
+      "noSpecsYet": "Người bán chưa thêm thông số chi tiết.",
+      "noDescYet": "Người bán chưa thêm mô tả cho sản phẩm này.",
+      "freeShippingFeature": "Miễn phí vận chuyển",
+      "dayReturns": "Đổi trả trong {{days}} ngày",
+      "shipsInSingle": "Gửi trong {{min}} {{unit}}",
+      "shipsInRange": "Gửi trong {{min}}–{{max}} {{unit}}",
+      "unitHours": "giờ",
+      "unitDays": "ngày",
+      "unitWeeks": "tuần",
+      "madeIn": "Sản xuất tại {{country}}",
+      "bulkPricingAvail": "Có giá sỉ",
+      "pleaseLogin": "Vui lòng đăng nhập để đánh giá.",
+      "pickRatingFirst": "Hãy chọn số sao trước.",
+      "failedSubmitReview": "Gửi đánh giá thất bại",
+      "shareExperience": "CHIA SẺ TRẢI NGHIỆM",
+      "rateProduct": "Đánh giá sản phẩm",
+      "rateShop": "Đánh giá cửa hàng",
+      "rateNStars": "Đánh giá {{n}} sao",
+      "reviewTextarea": "Hãy chia sẻ với người mua khác về cảm nhận, độ vừa, chất lượng, đóng gói…",
+      "posting": "Đang đăng…",
+      "postReview": "đánh giá",
+      "loadingReviews": "Đang tải đánh giá…",
+      "noReviewsYet": "Chưa có đánh giá — hãy là người đầu tiên đánh giá sản phẩm này.",
+      "anonymousUser": "Ẩn danh",
+      "noCommentText": "(không có nhận xét)",
+      "userPlaceholder": "Người dùng"
     },
     "followersPage": {
       "title": "Người theo dõi",
-      "noFollowers": "Chưa có người theo dõi"
+      "noFollowers": "Chưa có người theo dõi",
+      "searchPlaceholder": "Tìm người theo dõi...",
+      "failedToLoad": "Tải danh sách theo dõi thất bại",
+      "appearHere": "Khi có người theo dõi @{{username}}, họ sẽ xuất hiện ở đây",
+      "titleSuffix": "Người theo dõi @{{username}} | SupplyNet"
     },
     "productsAdd2": {
       "general": "Chung",
@@ -1003,7 +1102,14 @@
       "tapSuggestions": "Chạm gợi ý để thêm.",
       "addOption": "Thêm tùy chọn",
       "pricingStock": "Định giá và tồn kho",
-      "stockLabel": "Tồn kho"
+      "stockLabel": "Tồn kho",
+      "materialDefault": "Chất liệu",
+      "warrantyDefault": "Bảo hành",
+      "tierAll": "Tất cả nhà sáng tạo được duyệt",
+      "tierBronze": "Đồng trở lên",
+      "tierSilver": "Bạc trở lên",
+      "tierGold": "Chỉ Vàng",
+      "premiumProductTitle": "Tiêu đề sản phẩm cao cấp"
     },
     "productsEdit2": {
       "categoryTemplate": "Mẫu danh mục: {{label}}",
@@ -1040,7 +1146,12 @@
       "missingSeller": "Link sản phẩm thiếu người bán.",
       "noItemsOrder": "Không có sản phẩm để đặt.",
       "failedCreateOrder": "Tạo đơn hàng thất bại",
-      "qrFixedWarning": "⚠ QR này cố định — vui lòng chuyển đúng số tiền ở trên."
+      "qrFixedWarning": "⚠ QR này cố định — vui lòng chuyển đúng số tiền ở trên.",
+      "walletQrFallback": "QR ví",
+      "slipPreviewAlt": "Xem trước biên lai",
+      "promptPayQrAlt": "QR PromptPay",
+      "qrAlt": "QR",
+      "guestName": "Khách"
     },
     "receipt": {
       "orderDate": "Ngày đặt hàng",
@@ -1072,7 +1183,16 @@
       "orderPlaced": "Đặt hàng thành công",
       "completePaymentDesc": "Hoàn tất thanh toán để xác nhận đơn hàng.",
       "qtyUnit": "SL: {{qty}} · Đơn giá: ฿{{price}}",
-      "free": "Miễn phí"
+      "free": "Miễn phí",
+      "subtitle": "Hóa đơn",
+      "orderIdLabel": "Mã đơn hàng",
+      "transferSlipAlt": "Biên lai chuyển khoản",
+      "missingOrderIdShort": "Thiếu mã đơn hàng — vui lòng mở trang này sau khi thanh toán hoàn tất.",
+      "payMethod": {
+        "manualTransfer": "Chuyển khoản ngân hàng thủ công",
+        "visaMaster": "Thẻ tín dụng / Ghi nợ",
+        "cod": "Thanh toán khi nhận"
+      }
     },
     "payment": {
       "branch": "Chi nhánh: {{branch}}",
@@ -1082,7 +1202,13 @@
       "sslEncrypted": "Mã hóa SSL",
       "pciCompliant": "Tuân thủ PCI",
       "option": "Tùy chọn: {{color}} · Kích cỡ: {{size}}",
-      "premiumProduct": "Sản phẩm cao cấp"
+      "premiumProduct": "Sản phẩm cao cấp",
+      "method": {
+        "visaMasterTitle": "Thẻ tín dụng / Ghi nợ",
+        "visaMasterDesc": "Thanh toán bằng thẻ Visa, Mastercard hoặc UnionPay",
+        "codTitle": "Thanh toán khi nhận",
+        "codDesc": "Trả tiền mặt khi nhận hàng"
+      }
     },
     "buy": {
       "noVariants": "Sản phẩm này không có biến thể.",
@@ -1118,7 +1244,8 @@
       "enterAppCode": "Nhập mã 6 số từ app",
       "disable2FA": "Tắt xác thực 2 lớp",
       "settingsUpdated": "Cập nhật cài đặt bảo mật thành công!",
-      "failedSetPin": "Đặt PIN rút tiền thất bại"
+      "failedSetPin": "Đặt PIN rút tiền thất bại",
+      "qrCodeAlt": "Mã QR"
     },
     "creatorWithdraw2": {
       "withdrawalRules": "Quy tắc rút tiền",
@@ -1162,13 +1289,13 @@
       "noHistoryYet": "Chưa có lịch sử"
     },
     "openshopStep2More": {
-      "partnershipName": "Tên hợp danh",
-      "companyName": "Tên công ty đăng ký",
-      "entityPlaceholder": "Nhập đúng như trên giấy phép",
-      "entityNote": "* Phải khớp với giấy tờ đăng ký chính thức.",
-      "bankInfoDesc": "Nhập thông tin tài khoản ngân hàng để nhận thanh toán.",
-      "mainProductsDesc": "Chọn danh mục mô tả tốt nhất sản phẩm bạn bán.",
-      "secureDesc": "Để bảo mật tài khoản, chúng tôi cần email và số điện thoại để xác minh.",
+      "partnershipName": "Tên hợp tác xã",
+      "companyName": "Tên công ty",
+      "entityPlaceholder": "Nhập tên thực thể theo đăng ký",
+      "entityNote": "Vui lòng đảm bảo tên khớp với chứng từ đăng ký kinh doanh của bạn.",
+      "bankInfoDesc": "Nhập thông tin tài khoản ngân hàng để nhận thanh toán. Đảm bảo tên tài khoản và số tài khoản chính xác. Thông tin này sẽ được sử dụng cho việc rút tiền và thanh toán.",
+      "mainProductsDesc": "Chọn danh mục mô tả tốt nhất sản phẩm bạn bán. Việc này không ảnh hưởng đến hoạt động kinh doanh sau này, chỉ dùng cho mục đích đăng ký.",
+      "secureDesc": "Để bảo mật tài khoản, chúng tôi cần email và số điện thoại để xác minh. Thông tin này sẽ được sử dụng cho mục đích xem xét. Chúng tôi khuyến nghị sử dụng email công ty để có trải nghiệm xác minh tốt nhất.",
       "emailAddress": "Địa chỉ email",
       "useCurrent": "Dùng hiện tại",
       "useOther": "Dùng khác",
@@ -1182,8 +1309,8 @@
     "openshopStep3More": {
       "businessRegCert": "Giấy chứng nhận đăng ký kinh doanh",
       "companyBusinessLicense": "Giấy phép kinh doanh công ty",
-      "partnershipAgreement": "Thỏa thuận hợp danh",
-      "identityDocument": "Tài liệu nhận dạng",
+      "partnershipAgreement": "Thỏa thuận hợp tác",
+      "identityDocument": "Giấy tờ tùy thân",
       "sampleImage": "Ảnh mẫu",
       "sample": "Mẫu",
       "legalName": "Tên hợp pháp",
@@ -1204,8 +1331,8 @@
       "state": "Tỉnh/Bang",
       "postalCode": "Mã bưu chính",
       "addressOptionsQ": "Tùy chọn nào áp dụng cho địa chỉ bạn đã nhập?",
-      "businessOnlyAddress": "Đây chỉ là địa chỉ kinh doanh.",
-      "alsoResidence": "Đây cũng là nơi cư trú của tôi."
+      "businessOnlyAddress": "Đây chỉ là địa chỉ kinh doanh. Tôi hiểu rằng địa chỉ của mình sẽ hiển thị trên trang chi tiết sản phẩm.",
+      "alsoResidence": "Đây cũng là nơi cư trú của tôi. Tôi xác nhận rằng tôi không có địa chỉ kinh doanh riêng biệt."
     },
     "addressForm2": {
       "fullName": "Họ và tên",
@@ -1213,7 +1340,7 @@
       "villagePh": "Tên xã/thôn",
       "districtPh": "Quận/Huyện",
       "provincePh": "Tỉnh",
-      "branchPh": "Chi nhánh giao hàng",
+      "branchPh": "Chi nhánh giao hàng ưu tiên",
       "setAsDefault": "Đặt làm địa chỉ mặc định",
       "cancel": "Hủy",
       "fillAllInfo": "Vui lòng điền đầy đủ thông tin",
@@ -1260,7 +1387,11 @@
       "warehouse": "Kho",
       "documents": "Tài liệu",
       "lockedInfo": "Liên hệ hỗ trợ để cập nhật chi tiết — thông tin KYC bị khóa sau khi gửi.",
-      "openShopHint": "Mở cửa hàng từ /me/opensho để điền KYC."
+      "openShopHint": "Mở cửa hàng từ /me/opensho để điền KYC.",
+      "idDocLabel": "Giấy tờ {{idType}}",
+      "idDocFallback": "CMND",
+      "businessLicense": "Giấy phép kinh doanh",
+      "supportingDoc": "Tài liệu hỗ trợ"
     },
     "myshopPanel2": {
       "openShopNow": "MỞ CỬA HÀNG NGAY",
@@ -1284,7 +1415,11 @@
       "reportUser": "Báo cáo người dùng",
       "reportShop": "Báo cáo cửa hàng",
       "free": "Miễn phí",
-      "failedFollow": "Cập nhật theo dõi thất bại"
+      "failedFollow": "Cập nhật theo dõi thất bại",
+      "postsTab": "Bài viết",
+      "shopTab": "Cửa hàng",
+      "userFallback": "người dùng",
+      "profileOptions": "Tùy chọn hồ sơ"
     },
     "profile2": {
       "message": "Nhắn tin",
@@ -1305,9 +1440,19 @@
       "instagram": "Instagram",
       "twitter": "Twitter",
       "telegram": "Telegram",
-      "socialCommerce": "lala Social Commerce"
+      "socialCommerce": "lala Social Commerce",
+      "privacyTitle": "Quyền riêng tư",
+      "visEveryoneLabel": "Mọi người",
+      "visEveryoneDesc": "Hiển thị công khai",
+      "visFriendsLabel": "Bạn bè",
+      "visFriendsDesc": "Người theo dõi mà bạn theo dõi lại",
+      "visSelectedLabel": "Đã chọn",
+      "visSelectedDesc": "Chọn người cụ thể"
     },
     "productPage2": {
+      "bangkokLocation": "Bangkok, Thái Lan",
+      "businessDays37": "3–7 ngày làm việc",
+      "promoAlt": "{{name}} khuyến mãi {{index}}",
       "pickOptionFirst": "Chọn tất cả tùy chọn trước",
       "outOfStock": "Hết hàng",
       "stockLeft": "Còn hàng — {{count}} sản phẩm",
@@ -1333,7 +1478,7 @@
       "minOrder": "Đơn tối thiểu: {{count}} sản phẩm",
       "totalLabel": "Tổng",
       "noReturns": "Không hoàn trả",
-      "easyDays": "Hoàn trả dễ dàng {{days}} ngày",
+      "easyDays": "{{days}} ngày dễ dàng hoàn trả",
       "reportProduct": "Báo cáo sản phẩm này",
       "report": "Báo cáo",
       "noReviews": "Đánh giá",
@@ -1348,7 +1493,11 @@
       "stickerPartner": "Lala Shop Partner",
       "factoryDirect": "factory_direct",
       "shopBioFallback": "Đối tác nhà máy bán sỉ chất lượng cao đáng tin cậy.",
-      "noSimilarProducts": "Không tìm thấy sản phẩm tương tự"
+      "noSimilarProducts": "Không tìm thấy sản phẩm tương tự.",
+      "returnsLabel": "Trả hàng",
+      "specs": "Thông số kỹ thuật",
+      "description": "Mô tả",
+      "selected": "ĐÃ CHỌN"
     },
     "socialPage2": {
       "whatsOnMind": "Bạn đang nghĩ gì, {{name}}?",
@@ -1369,7 +1518,8 @@
       "selectFriends": "Chọn bạn bè",
       "excludeFriends": "Loại trừ bạn bè",
       "done": "Xong",
-      "failedShare": "Chia sẻ bài viết thất bại. Kiểm tra kết nối."
+      "failedShare": "Chia sẻ bài viết thất bại. Kiểm tra kết nối.",
+      "uploadFailed": "Tải lên thất bại"
     },
     "topFactories2": {
       "eliteTier": "Nhà sản xuất hàng đầu",
@@ -1400,7 +1550,8 @@
       "warehouse": "Kho",
       "submittingApplication": "Đang gửi…",
       "submitApplication": "Gửi đơn",
-      "nextBtn": "Tiếp theo"
+      "nextBtn": "Tiếp theo",
+      "failedSubmit": "Gửi đơn không thành công"
     },
     "generalPanel": {
       "storeNameLabel": "Tên cửa hàng / Tên",
@@ -1433,7 +1584,8 @@
       "done": "Xong",
       "link": "Liên kết",
       "removeConfirm": "Xóa sản phẩm này khỏi cửa hàng?",
-      "failedRemove": "Xóa thất bại"
+      "failedRemove": "Xóa thất bại",
+      "checkThis": "Xem cái này"
     },
     "creatorAttr2": {
       "today": "Hôm nay",
@@ -1478,7 +1630,29 @@
       "posRevenue": "Doanh thu POS ฿{{amount}} · trong cửa hàng, không thể rút",
       "withdrawNow": "rút ngay",
       "afterReceiptWeb": "Sau khi người mua xác nhận, doanh thu web sẽ được chuyển trong {{days}} ngày làm việc.",
-      "noShopAccount": "Không có tài khoản ngân hàng cửa hàng."
+      "noShopAccount": "Không có tài khoản ngân hàng cửa hàng.",
+      "title": "rút tiền cửa hàng",
+      "withdrawals": "lịch sử rút tiền",
+      "pendingCount": "Đang chờ ({{count}})",
+      "historyCount": "Lịch sử ({{count}})",
+      "feeNet": "Phí ฿{{fee}} → Thực nhận ฿{{net}}",
+      "noPending": "Không có lệnh rút đang chờ",
+      "noHistoryYet": "Chưa có lịch sử",
+      "tooltipRules": "Quy tắc rút tiền",
+      "posRevenueLabel": "Doanh thu POS ฿{{amount}} · tại cửa hàng, không rút được",
+      "maxBtn": "Tối đa",
+      "minMaxFeeShort": "Tối thiểu ฿{{min}} • Tối đa ฿{{max}} • Phí {{fee}}%",
+      "processingBtn": "Đang xử lý...",
+      "withdrawNowBtn": "rút ngay",
+      "pinDescAmount": "Vui lòng nhập mã PIN 6 chữ số để xác nhận rút ฿{{amount}}",
+      "verifying": "Đang xác minh...",
+      "withdrawalDestination": "điểm đến rút tiền",
+      "paymentMethodsHdr": "phương thức thanh toán",
+      "pendingHistoryBtn": "đang chờ & lịch sử",
+      "afterReceipt": "sau khi người mua xác nhận nhận hàng, doanh thu web sẽ được chuyển trong vòng",
+      "businessDaysSuffix": "{{days}} ngày làm việc",
+      "verifyBankInfo": "vui lòng xác minh thông tin ngân hàng để tránh chậm trễ.",
+      "setPinFirst": "Đặt mã PIN 6 chữ số trước lần rút đầu tiên."
     },
     "notifications2": {
       "secondsAgo": "vừa xong",
@@ -1499,6 +1673,174 @@
       "noContent": "(không có nội dung)",
       "copyShort": "Sao chép",
       "copiedShort": "Đã sao chép"
+    },
+    "gallery": {
+      "previousImage": "Ảnh trước",
+      "nextImage": "Ảnh sau",
+      "showImage": "Hiển thị ảnh {{index}}"
+    },
+    "addBank": {
+      "title": "Thêm tài khoản ngân hàng",
+      "nameMatchWarning": "Tên tài khoản phải khớp với tên đăng ký để tránh lỗi chuyển khoản",
+      "fullNameEnglish": "Họ tên (Tiếng Anh)",
+      "accountNamePlaceholder": "Tên tài khoản",
+      "bank": "Ngân hàng",
+      "selectBank": "Chọn ngân hàng",
+      "bankAccountNumber": "Số tài khoản ngân hàng",
+      "accountNumberPlaceholder": "Nhập số tài khoản 12 chữ số",
+      "submitAndSave": "Gửi và lưu",
+      "consentBefore": "Bằng cách xác nhận, bạn đồng ý với",
+      "transferTerms": "điều khoản chuyển khoản",
+      "consentAfter": "và cho phép hệ thống lưu thông tin ngân hàng để thanh toán",
+      "fillAll": "Vui lòng điền đầy đủ thông tin",
+      "cannotConnect": "Không thể kết nối máy chủ"
+    },
+    "productCategories": {
+      "fashion": "Thời trang & Phụ kiện",
+      "electronics": "Điện tử",
+      "beauty": "Làm đẹp & Chăm sóc cá nhân",
+      "food": "Thực phẩm & Đồ uống",
+      "home": "Nhà cửa & Đời sống",
+      "mother_baby": "Mẹ & Bé",
+      "toys": "Đồ chơi & Sở thích",
+      "sports": "Thể thao & Ngoài trời",
+      "automotive": "Ô tô",
+      "health": "Sức khỏe & Chăm sóc",
+      "pet": "Vật nuôi",
+      "office": "Văn phòng & Văn phòng phẩm",
+      "tools": "Dụng cụ & Cải tạo nhà",
+      "jewelry": "Trang sức & Đồng hồ",
+      "digital": "Sản phẩm số",
+      "others": "Khác"
+    },
+    "categoryConfig": {
+      "fashion": {
+        "label": "Thời trang & Phụ kiện",
+        "description": "Quần áo, giày, túi, phụ kiện. Người mua chọn size và màu trước khi đặt."
+      },
+      "electronics": {
+        "label": "Điện tử",
+        "description": "Sản phẩm công nghệ. Biến thể thường gồm màu, bộ nhớ, kết nối."
+      },
+      "beauty": {
+        "label": "Làm đẹp & Chăm sóc cá nhân",
+        "description": "Chăm sóc da, trang điểm, nước hoa. Biến thể mô tả màu và trọng lượng."
+      },
+      "food": {
+        "label": "Thực phẩm & Đồ uống",
+        "description": "Thực phẩm. Ghi kích cỡ gói và hạn dùng — bắt buộc tuân thủ."
+      },
+      "home": {
+        "label": "Nhà cửa & Đời sống",
+        "description": "Nội thất, trang trí, đồ bếp. Ghi vật liệu và kích thước."
+      },
+      "mother_baby": {
+        "label": "Mẹ & Bé",
+        "description": "Sản phẩm cho bé. Biến thể theo độ tuổi, ghi thông tin an toàn."
+      },
+      "toys": {
+        "label": "Đồ chơi & Sở thích",
+        "description": "Đồ chơi, mô hình, sở thích. Biến thể theo màu, ghi độ tuổi."
+      },
+      "sports": {
+        "label": "Thể thao & Ngoài trời",
+        "description": "Dụng cụ thể thao. Biến thể theo size và màu, ghi môn thể thao."
+      },
+      "automotive": {
+        "label": "Ô tô",
+        "description": "Phụ tùng ô tô & xe máy. Ghi thông tin tương thích."
+      },
+      "health": {
+        "label": "Sức khỏe & Chăm sóc",
+        "description": "Vitamin, thực phẩm bổ sung, dụng cụ y tế. Biến thể theo số lượng."
+      },
+      "pet": {
+        "label": "Vật nuôi",
+        "description": "Thức ăn, phụ kiện vật nuôi. Biến thể theo size, ghi loại vật nuôi."
+      },
+      "office": {
+        "label": "Văn phòng & Văn phòng phẩm",
+        "description": "Văn phòng phẩm. Biến thể theo màu và số lượng gói."
+      },
+      "tools": {
+        "label": "Dụng cụ & Cải tạo nhà",
+        "description": "Dụng cụ cầm tay, máy điện, phần cứng. Ghi nguồn điện."
+      },
+      "jewelry": {
+        "label": "Trang sức & Đồng hồ",
+        "description": "Trang sức & đồng hồ. Biến thể theo kim loại, đá quý, size nhẫn."
+      },
+      "digital": {
+        "label": "Sản phẩm số",
+        "description": "Phần mềm, ebook, giấy phép. Không cần biến thể vật lý."
+      },
+      "others": {
+        "label": "Khác",
+        "description": "Danh mục cho mọi mặt hàng không thuộc danh mục trên."
+      }
+    },
+    "variantNames": {
+      "size": "Kích cỡ",
+      "color": "Màu",
+      "storage": "Bộ nhớ",
+      "connectivity": "Kết nối",
+      "volume": "Dung tích",
+      "shade": "Tông màu",
+      "pack_size": "Kích cỡ gói",
+      "flavor": "Hương vị",
+      "age_range": "Độ tuổi",
+      "pet_size": "Kích cỡ vật nuôi",
+      "pack": "Gói",
+      "voltage": "Điện áp",
+      "metal": "Kim loại",
+      "ring_size": "Size nhẫn",
+      "license": "Giấy phép"
+    },
+    "attributeLabels": {
+      "material": "Chất liệu",
+      "fit": "Phom dáng",
+      "gender": "Giới tính",
+      "care_instructions": "Hướng dẫn bảo quản",
+      "brand": "Thương hiệu",
+      "model_number": "Số model",
+      "warranty_period": "Thời hạn bảo hành",
+      "power_source": "Nguồn điện",
+      "key_specifications": "Thông số chính",
+      "skin_type": "Loại da",
+      "key_ingredients": "Thành phần chính",
+      "expiry___pao": "Hạn dùng / PAO",
+      "cruelty_free": "Không thử trên động vật?",
+      "ingredients": "Thành phần",
+      "expiry_date": "Hạn sử dụng",
+      "storage_instructions": "Hướng dẫn bảo quản",
+      "dietary": "Chế độ ăn",
+      "allergen_warnings": "Cảnh báo dị ứng",
+      "suitable_room": "Phòng phù hợp",
+      "assembly_required": "Cần lắp ráp?",
+      "recommended_age": "Tuổi khuyến nghị",
+      "safety_certification": "Chứng nhận an toàn",
+      "battery_required": "Cần pin?",
+      "sport___activity": "Môn thể thao / Hoạt động",
+      "vehicle_compatibility": "Tương thích xe",
+      "part_number___oem": "Mã số / OEM",
+      "active_ingredients": "Hoạt chất",
+      "recommended_dosage": "Liều khuyến nghị",
+      "fda___regulatory_certification": "FDA / chứng nhận pháp lý",
+      "pet_type": "Loại vật nuôi",
+      "use_case": "Trường hợp dùng",
+      "warranty": "Bảo hành",
+      "metal_purity": "Độ tinh khiết kim loại",
+      "gemstone": "Đá quý",
+      "weight_g": "Trọng lượng (g)",
+      "warranty___certificate": "Bảo hành / chứng chỉ",
+      "file_type": "Loại tệp",
+      "delivery_method": "Cách giao hàng",
+      "license_duration": "Thời hạn giấy phép",
+      "additional_details": "Chi tiết thêm"
+    },
+    "categoryPage": {
+      "noProductsInCategory": "Không tìm thấy sản phẩm trong {{name}}",
+      "checkBackLater": "Quay lại sau hoặc khám phá danh mục khác"
     }
   },
   "components": {
@@ -1524,7 +1866,13 @@
       "deleteChatConfirm": "Xóa cuộc trò chuyện này?",
       "blockUser": "Chặn người dùng",
       "viewProfile": "Xem hồ sơ",
-      "openChat": "Mở chat"
+      "openChat": "Mở chat",
+      "askingAbout": "Hỏi về",
+      "seen": "Đã xem",
+      "sent": "Đã gửi",
+      "userFallback": "Người dùng",
+      "messagesAriaLabel": "Tin nhắn",
+      "viewProfileAria": "Xem hồ sơ của {{name}}"
     },
     "userList": {
       "loading": "Đang tải...",
@@ -1541,6 +1889,170 @@
     "empty": {
       "noData": "Chưa có dữ liệu",
       "tryAgain": "Thử lại"
+    },
+    "truck": {
+      "backToHome": "Về trang chủ",
+      "globalLogisticsNetwork": "Mạng lưới Logistics toàn cầu",
+      "heroTitlePart1": "Nhanh. An toàn.",
+      "heroTitleReliable": "Đáng tin cậy",
+      "heroTitlePart2": "Phân phối.",
+      "heroSubtitle": "Kết nối doanh nghiệp của bạn với thế giới qua các trung tâm hoàn tất đơn hàng hiệu suất cao.",
+      "exploreHub": "Khám phá Hub",
+      "protection": "Bảo vệ",
+      "tradeAssurance": "Đảm bảo giao dịch",
+      "tradeAssuranceDesc": "Mọi đơn hàng phân phối qua mạng lưới của chúng tôi đều được bảo vệ bởi lá chắn độc quyền, bảo vệ lợi ích thương mại toàn cầu của bạn.",
+      "paymentProtection": "Bảo vệ thanh toán 100%",
+      "qualitySafeguard": "Đảm bảo chất lượng sản phẩm",
+      "onTimeShipment": "Đảm bảo giao hàng đúng hẹn",
+      "liveNetworkStatus": "Trạng thái mạng lưới trực tiếp",
+      "operational": "Đang hoạt động",
+      "europeanHub": "Trung tâm châu Âu",
+      "aseanHub": "Trung tâm ASEAN",
+      "naHub": "Trung tâm Bắc Mỹ",
+      "countryGermany": "Đức",
+      "countryThailand": "Thái Lan",
+      "countryUsa": "Mỹ",
+      "warehouseSourcing": "Tìm nguồn kho",
+      "warehouseSourcingDesc": "Lưu trữ tại các kho toàn cầu của chúng tôi",
+      "pickPack": "Chọn & Đóng gói",
+      "pickPackDesc": "Đóng gói và dán nhãn tiêu chuẩn",
+      "localDelivery": "Giao hàng địa phương",
+      "localDeliveryDesc": "Tích hợp đối tác giao hàng chặng cuối",
+      "bangkokHub": "Trung tâm Bangkok",
+      "bangkokHubSub": "Thời gian xử lý: trung bình 2 giờ",
+      "networkLoad": "Tải mạng lưới",
+      "networkLoadSub": "Tỷ lệ giao thành công 92%",
+      "transitStatus": "Trạng thái vận chuyển",
+      "transitStatusSub": "Tất cả tuyến đường bình thường"
+    }
+  },
+  "category": {
+    "noProducts": "Không tìm thấy sản phẩm trong {{category}}"
+  },
+  "time": {
+    "justNow": "Vừa xong",
+    "minutesAgo": "{{count}} phút trước",
+    "hoursAgo": "{{count}} giờ trước",
+    "daysAgo": "{{count}} ngày trước",
+    "now": "vừa xong",
+    "m": "{{count}}ph",
+    "h": "{{count}}giờ",
+    "d": "{{count}}ngày"
+  },
+  "social": {
+    "followers": "Người theo dõi",
+    "following": "Đang theo dõi"
+  },
+  "openshopStep1": {
+    "businessTypes": {
+      "individual": {
+        "title": "Cá nhân",
+        "desc": "Sử dụng CMND hoặc hộ chiếu. Bạn bán hàng với tư cách cá nhân, không phải doanh nghiệp đã đăng ký."
+      },
+      "sole_proprietor": {
+        "title": "Hộ kinh doanh cá thể",
+        "desc": "Yêu cầu giấy chứng nhận đăng ký kinh doanh. Bạn là chủ sở hữu duy nhất của một doanh nghiệp đã đăng ký hợp pháp."
+      },
+      "corporate": {
+        "title": "Doanh nghiệp",
+        "desc": "Một thực thể pháp lý dưới hình thức công ty, tách biệt rõ ràng với chủ sở hữu."
+      },
+      "partnership": {
+        "title": "Hợp tác xã",
+        "desc": "Một doanh nghiệp được điều hành chung bởi hai hoặc nhiều cá nhân."
+      }
+    },
+    "requirements": {
+      "individual": [
+        "CMND 11 số hoặc Hộ chiếu",
+        "Họ và tên thật",
+        "Số CMND 11 số",
+        "Địa chỉ hiện tại"
+      ],
+      "sole_proprietor": [
+        "Giấy chứng nhận đăng ký kinh doanh",
+        "Mã số thuế (TIN)",
+        "CMND của chủ doanh nghiệp",
+        "Địa điểm kinh doanh"
+      ],
+      "corporate": [
+        "Giấy chứng nhận đăng ký doanh nghiệp",
+        "Giấy phép kinh doanh",
+        "CMND của người đại diện",
+        "Số tài khoản ngân hàng doanh nghiệp 12 số"
+      ],
+      "partnership": [
+        "Thỏa thuận hợp tác",
+        "Đăng ký liên doanh",
+        "CMND của tất cả các đối tác",
+        "Mã số thuế kinh doanh"
+      ]
+    }
+  },
+  "openshopStep2More": {
+    "partnershipName": "Tên hợp tác xã",
+    "companyName": "Tên công ty",
+    "entityPlaceholder": "Nhập tên thực thể theo đăng ký",
+    "entityNote": "Vui lòng đảm bảo tên khớp với chứng từ đăng ký kinh doanh của bạn.",
+    "invalidEmail": "Định dạng email không hợp lệ"
+  },
+  "openshopStep3More": {
+    "businessRegCert": "Giấy chứng nhận đăng ký kinh doanh",
+    "companyBusinessLicense": "Giấy phép kinh doanh công ty",
+    "partnershipAgreement": "Thỏa thuận hợp tác",
+    "identityDocument": "Giấy tờ tùy thân",
+    "months": [
+      "Tháng 1",
+      "Tháng 2",
+      "Tháng 3",
+      "Tháng 4",
+      "Tháng 5",
+      "Tháng 6",
+      "Tháng 7",
+      "Tháng 8",
+      "Tháng 9",
+      "Tháng 10",
+      "Tháng 11",
+      "Tháng 12"
+    ]
+  },
+  "openshopStep4More": {
+    "addressNotSpecified": "Địa chỉ không xác định",
+    "businessTypeNames": {
+      "individual": "Cá nhân",
+      "sole_proprietor": "Hộ kinh doanh cá thể",
+      "corporate": "Doanh nghiệp",
+      "partnership": "Hợp tác xã"
+    },
+    "docLabels": {
+      "passport": "Hộ chiếu",
+      "nationalId": "CMND",
+      "businessRegCert": "Giấy chứng nhận đăng ký kinh doanh",
+      "companyBusinessLicense": "Giấy phép kinh doanh công ty",
+      "partnershipAgreement": "Thỏa thuận hợp tác",
+      "businessLicense": "Giấy phép kinh doanh"
+    }
+  },
+  "paymentMethods": {
+    "bcel_one": {
+      "title": "BCEL One",
+      "desc": "Thanh toán qua ứng dụng BCEL One bằng OnePay QR"
+    },
+    "ldb_trust": {
+      "title": "LDB Trust",
+      "desc": "Thanh toán qua ứng dụng LDB Trust"
+    },
+    "jdb_yes": {
+      "title": "JDB Yes",
+      "desc": "Thanh toán qua ứng dụng JDB Yes"
+    },
+    "visa_master": {
+      "title": "Thẻ tín dụng / Ghi nợ",
+      "desc": "Thanh toán qua thẻ Visa, Mastercard hoặc UnionPay"
+    },
+    "cod": {
+      "title": "Thanh toán khi nhận hàng",
+      "desc": "Thanh toán bằng tiền mặt khi nhận hàng"
     }
   }
 }

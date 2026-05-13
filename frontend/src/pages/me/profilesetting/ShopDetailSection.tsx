@@ -72,30 +72,27 @@ const buildAddress = (a?: KycIdentity["address"]): string => {
   );
 };
 
-const STATUS_BANNER: Record<
-  NonNullable<KycSubmission["status"]>,
-  { icon: React.ReactNode; tone: string; label: string; blurb: string }
-> = {
+type StatusBanner = { icon: React.ReactNode; tone: string; labelKey: string; blurbKey: string };
+const STATUS_BANNER: Record<NonNullable<KycSubmission["status"]>, StatusBanner> = {
   approved: {
     icon: <CheckCircle2 className="w-4 h-4 text-emerald-600" />,
     tone: "bg-emerald-50 border-emerald-100 text-emerald-900",
-    label: "Approved",
-    blurb: "Your shop is verified and live.",
+    labelKey: "pages.shopDetailPanel2.approved",
+    blurbKey: "pages.shopDetailPanel2.approvedDesc",
   },
   pending: {
     icon: <Clock className="w-4 h-4 text-amber-600" />,
     tone: "bg-amber-50 border-amber-100 text-amber-900",
-    label: "Pending review",
-    blurb: "Our team is reviewing your submission. You'll be notified once approved.",
+    labelKey: "pages.shopDetailPanel2.pendingReview",
+    blurbKey: "pages.shopDetailPanel2.pendingDesc",
   },
   rejected: {
     icon: <XCircle className="w-4 h-4 text-rose-600" />,
     tone: "bg-rose-50 border-rose-100 text-rose-900",
-    label: "Rejected",
-    blurb: "Your KYC submission was rejected. See the reviewer note below.",
+    labelKey: "pages.shopDetailPanel2.rejected",
+    blurbKey: "pages.shopDetailPanel2.rejectedDesc",
   },
 };
-// Note: STATUS_BANNER labels above are template-only and overridden below via t() lookups.
 
 export const ShopDetailSection: React.FC = () => {
   const { t } = useTranslation("common");
@@ -156,15 +153,15 @@ export const ShopDetailSection: React.FC = () => {
   const docs: Array<{ label: string; url?: string }> = [];
   if (kyc.identity?.idDocumentUrl) {
     docs.push({
-      label: `${kyc.identity.idType || "ID"} document`,
+      label: t("pages.shopDetailPanel2.idDocLabel", { idType: kyc.identity.idType || t("pages.shopDetailPanel2.idDocFallback") }),
       url: kyc.identity.idDocumentUrl,
     });
   }
   if (kyc.identity?.businessLicenseUrl) {
-    docs.push({ label: "Business license", url: kyc.identity.businessLicenseUrl });
+    docs.push({ label: t("pages.shopDetailPanel2.businessLicense"), url: kyc.identity.businessLicenseUrl });
   }
   (kyc.identity?.documents || []).forEach((d) => {
-    docs.push({ label: d.label || "Supporting document", url: d.url });
+    docs.push({ label: d.label || t("pages.shopDetailPanel2.supportingDoc"), url: d.url });
   });
 
   return (
@@ -174,16 +171,16 @@ export const ShopDetailSection: React.FC = () => {
           <div className="flex items-start gap-2">
             {banner.icon}
             <div>
-              <p className="text-[13px] font-bold">{banner.label}</p>
-              <p className="text-[11px] mt-0.5">{banner.blurb}</p>
+              <p className="text-[13px] font-bold">{t(banner.labelKey)}</p>
+              <p className="text-[11px] mt-0.5">{t(banner.blurbKey)}</p>
               {kyc.status === "rejected" && kyc.reviewNote && (
-                <p className="text-[11px] font-bold mt-2">Reason: {kyc.reviewNote}</p>
+                <p className="text-[11px] font-bold mt-2">{t("pages.shopDetailPanel2.reason", { note: kyc.reviewNote })}</p>
               )}
             </div>
           </div>
           <p className="text-[10px] text-gray-500 mt-2 inline-flex items-center gap-1">
-            Submitted {formatDate(kyc.submittedAt)}
-            {kyc.reviewedAt && <> · reviewed {formatDate(kyc.reviewedAt)}</>}
+            {t("pages.shopDetailPanel2.submitted", { date: formatDate(kyc.submittedAt) })}
+            {kyc.reviewedAt && <> · {t("pages.shopDetailPanel2.reviewed", { date: formatDate(kyc.reviewedAt) })}</>}
           </p>
         </div>
       )}

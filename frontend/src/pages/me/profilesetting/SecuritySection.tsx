@@ -469,7 +469,7 @@ export function SecuritySection() {
               <div className="p-4 pt-0 space-y-5 border-t border-gray-50 bg-white/50 animate-in slide-in-from-top-2 duration-300">
                 <div className="flex flex-col items-center gap-4 pt-4">
                   <div className="p-3 bg-white border border-gray-100 rounded-xl shadow-sm">
-                    <img src={totpSetup.qrCode} alt="QR Code" className="w-40 h-40" />
+                    <img src={totpSetup.qrCode} alt={t("pages.securityPanel2.qrCodeAlt")} className="w-40 h-40" />
                   </div>
                   <div className="w-full space-y-2">
                     <p className="text-[10px] font-bold text-gray-400 text-center">{t("pages.securityPanel2.secretKey")}</p>
@@ -497,7 +497,7 @@ export function SecuritySection() {
                     disabled={saving || totpToken.length < 6}
                     className="w-full py-2 bg-[#00aeff] text-white rounded-lg text-sm font-bold disabled:opacity-50"
                   >
-                    {saving ? <div className="w-4 h-4 border-2 border-white/30 border-t-white animate-spin rounded-full mx-auto" /> : "Verify"}
+                    {saving ? <div className="w-4 h-4 border-2 border-white/30 border-t-white animate-spin rounded-full mx-auto" /> : t("pages.securityPanel2.verify")}
                   </button>
                 </div>
               </div>

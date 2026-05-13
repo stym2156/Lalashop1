@@ -125,6 +125,8 @@ export default function MyProductDetailPage() {
   const [saved, setSaved] = useState(false);
 
   const config: CategoryConfig = useMemo(() => getCategoryConfig(category), [category]);
+  const categoryLabel = t(`pages.categoryConfig.${category}.label`, config.label);
+  const categoryDescription = t(`pages.categoryConfig.${category}.description`, config.description);
 
   // Load product
   useEffect(() => {
@@ -210,7 +212,7 @@ export default function MyProductDetailPage() {
         if (String(e?.message || "").toLowerCase().includes("not found")) {
           setNotFound(true);
         } else {
-          setServerError(e?.message || "Failed to load product");
+          setServerError(e?.message || t("pages.productsEdit.failedToLoad"));
         }
       } finally {
         setLoading(false);
@@ -405,7 +407,7 @@ export default function MyProductDetailPage() {
             <div className="min-w-0">
               <h1 className="text-sm font-bold truncate">{t("pages.productsEdit.title")}</h1>
               <p className="text-[11px] text-gray-400 truncate">
-                {t("pages.productsEdit2.categoryTemplate", { label: config.label })}
+                {t("pages.productsEdit2.categoryTemplate", { label: categoryLabel })}
               </p>
             </div>
           </div>
@@ -657,8 +659,8 @@ export default function MyProductDetailPage() {
             {/* Variants */}
             <div className="rounded-lg bg-white border border-gray-100">
               <SectionHeader
-                title={t("pages.productsAdd2.variantsFor", { label: config.label })}
-                hint={config.description}
+                title={t("pages.productsAdd2.variantsFor", { label: categoryLabel })}
+                hint={categoryDescription}
               />
               <div className="p-4 space-y-3">
                 {variantOptions.map((v, idx) => {
@@ -777,7 +779,7 @@ export default function MyProductDetailPage() {
                       const supported = !!CATEGORY_CONFIG[c.value];
                       return (
                         <option key={c.value} value={c.value}>
-                          {c.label}
+                          {t(`pages.productCategories.${c.value}`)}
                           {supported ? "" : t("pages.productsAdd2.basicTemplate")}
                         </option>
                       );

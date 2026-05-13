@@ -1,8 +1,10 @@
 import React from "react";
 import { Plus, Minus } from "lucide-react";
 import { PriceTierCardProps, QuantityStepperProps } from "./types";
+import { useTranslation } from "react-i18next";
 
 export function PriceTierCard({ tier, index, active, onClick }: PriceTierCardProps) {
+  const { t } = useTranslation("common");
   return (
     <button
       onClick={onClick}
@@ -22,7 +24,7 @@ export function PriceTierCard({ tier, index, active, onClick }: PriceTierCardPro
       </div>
       {active && (
         <div style={{ marginTop: 5, fontSize: 10, fontWeight: 700, color: "#ffffff", letterSpacing: "0.08em" }}>
-          ✓ SELECTED
+          ✓ {t("product.selected")}
         </div>
       )}
     </button>

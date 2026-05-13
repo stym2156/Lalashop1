@@ -235,7 +235,7 @@ const ChatPanel: React.FC = () => {
       <aside
         className="fixed top-0 right-0 z-[81] h-full w-full sm:w-[420px] bg-white shadow-2xl border-l border-slate-100 flex flex-col animate-in slide-in-from-right duration-200"
         role="dialog"
-        aria-label="Messages"
+        aria-label={t("components.chat.messagesAriaLabel")}
       >
         {!activeConversation ? (
           <ConversationList
@@ -248,7 +248,7 @@ const ChatPanel: React.FC = () => {
           />
         ) : (
           <ConversationView
-            peerName={activeConversation.peer?.name || activeConversation.peer?.username || "User"}
+            peerName={activeConversation.peer?.name || activeConversation.peer?.username || t("components.chat.userFallback")}
             peerUsername={activeConversation.peer?.username}
             peerAvatar={activeConversation.peer?.profileImage}
             peerId={activeConversation.peer?._id}
@@ -336,7 +336,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
       ) : (
         conversations.map((c) => {
           const peer = c.peer;
-          const name = peer?.name || peer?.username || t("components.chat.viewProfile");
+          const name = peer?.name || peer?.username || t("components.chat.userFallback");
           const subtitle = c.lastMessageText || t("components.chat.startChat");
           return (
             <div
@@ -349,7 +349,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
                   onPeerClick(peer?._id);
                 }}
                 className="flex-shrink-0 rounded-full ring-offset-2 hover:ring-2 hover:ring-primary/30 transition"
-                aria-label={`View ${name}'s profile`}
+                aria-label={t("components.chat.viewProfileAria", { name })}
               >
                 <Avatar
                   src={peer?.profileImage}
@@ -486,7 +486,7 @@ const ConversationView: React.FC<ConversationViewProps> = ({
       <button
         onClick={() => onPeerClick(peerId)}
         className="flex items-center gap-2 flex-1 min-w-0 hover:bg-slate-50 -mx-1 px-1 py-0.5 rounded-md transition-colors text-left"
-        aria-label={`View ${peerName}'s profile`}
+        aria-label={t("components.chat.viewProfileAria", { name: peerName })}
       >
         <Avatar
           src={peerAvatar}
@@ -554,11 +554,11 @@ const ConversationView: React.FC<ConversationViewProps> = ({
                   {formatClock(m.createdAt)}
                   {mine && i === lastReadIndex && (
                     <span className="text-primary inline-flex items-center gap-0.5 font-bold">
-                      <CheckCheck size={11} /> Seen
+                      <CheckCheck size={11} /> {t("components.chat.seen")}
                     </span>
                   )}
                   {mine && i === lastMineIndex && i !== lastReadIndex && (
-                    <span className="text-slate-400 inline-flex items-center" title="Sent">
+                    <span className="text-slate-400 inline-flex items-center" title={t("components.chat.sent")}>
                       <Check size={11} />
                     </span>
                   )}
@@ -612,7 +612,9 @@ interface ProductCardProps {
   extraText?: string;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, mine, extraText }) => (
+const ProductCard: React.FC<ProductCardProps> = ({ product, mine, extraText }) => {
+  const { t } = useTranslation("common");
+  return (
   <div
     className={`max-w-[80%] rounded-2xl shadow-sm overflow-hidden ${
       mine ? "rounded-br-md" : "rounded-bl-md border border-slate-100"
@@ -637,7 +639,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, mine, extraText }) =
               mine ? "text-white/80" : "text-slate-400"
             }`}
           >
-            Asking about
+            {t("components.chat.askingAbout")}
           </p>
           <p className="text-sm font-bold leading-snug line-clamp-2">{product.name}</p>
           <p
@@ -662,6 +664,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, mine, extraText }) =
       </p>
     )}
   </div>
-);
+  );
+};
 
 export default ChatPanel;

@@ -139,7 +139,7 @@ export default function AddToStore({ onBack: _onBack }: AddToStoreProps) {
 
                       <div className="flex items-center gap-0.5 text-[7px] text-slate-400 font-bold mb-1">
                         <span className="text-amber-500">★</span>{" "}
-                        {(p.rating || 0).toFixed(1)} | Sold {p.soldCount || 0}
+                        {(p.rating || 0).toFixed(1)} | {t("product.sold")} {p.soldCount || 0}
                       </div>
 
                       {p.freeShipping && (
@@ -151,7 +151,7 @@ export default function AddToStore({ onBack: _onBack }: AddToStoreProps) {
                       <div className="border-t border-slate-50 pt-1.5 space-y-0.5">
                         {earn > 0 && (
                           <p className="text-[8px] font-black text-rose-500 tracking-tight">
-                            Earn ฿{earn.toFixed(2)}
+                            {t("pages.creatorAddToStore2.earn", { amount: earn.toFixed(2) })}
                           </p>
                         )}
                         <p className="text-[10px] font-black text-slate-900 tracking-tighter">
@@ -181,12 +181,12 @@ export default function AddToStore({ onBack: _onBack }: AddToStoreProps) {
                     >
                       {isAdded ? (
                         <>
-                          <Check size={10} /> Added
+                          <Check size={10} /> {t("pages.creatorAddToStore2.added")}
                         </>
                       ) : isAdding ? (
                         <Loader2 size={10} className="animate-spin" />
                       ) : (
-                        "Add +"
+                        t("pages.creatorAddToStore2.addPlus")
                       )}
                     </button>
                   </div>

@@ -74,7 +74,7 @@ export function PaymentSection() {
               </div>
               <div className="mt-4 pt-4 border-t border-slate-50 flex items-center justify-between">
                 <span className={`text-[9px] font-black  tracking-widest ${account.isVerified ? "text-emerald-500" : "text-amber-500"}`}>
-                  {account.isVerified ? "Verified" : "Pending Approval"}
+                  {account.isVerified ? t("pages.paymentPanel.verified") : t("pages.paymentPanel.pendingApproval")}
                 </span>
                 <CheckCircle size={14} className={account.isVerified ? "text-emerald-500" : "text-slate-200"} />
               </div>

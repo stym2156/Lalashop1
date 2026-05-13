@@ -41,7 +41,7 @@ const CommissionPage: React.FC = () => {
     return <div className="py-12 text-center"><Loader2 className="w-5 h-5 mx-auto animate-spin text-gray-400" /></div>;
   }
   if (error || !data) {
-    return <div className="rounded-md bg-red-50 px-3 py-2 text-[12px] text-red-700">{error || "No data"}</div>;
+    return <div className="rounded-md bg-red-50 px-3 py-2 text-[12px] text-red-700">{error || t("status.empty")}</div>;
   }
 
   return (
@@ -55,7 +55,7 @@ const CommissionPage: React.FC = () => {
 
       <div className="rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-700 text-white p-6">
         <div className="flex items-center gap-2 text-white/80 text-[11px] font-bold tracking-wide">
-          <DollarSign className="w-3.5 h-3.5" /> Total commission paid
+          <DollarSign className="w-3.5 h-3.5" /> {t("pages.commission.totalCommissionPaid")}
         </div>
         <p className="text-[36px] font-black tabular-nums mt-2">
           ฿{formatMoney(data.totals.totalCommissionPaid)}
@@ -68,15 +68,15 @@ const CommissionPage: React.FC = () => {
 
       <div className="rounded-lg overflow-hidden border border-gray-100">
         <div className="px-4 py-3 border-b border-gray-100">
-          <h3 className="text-[13px] font-bold text-gray-900">Products with affiliate enabled</h3>
+          <h3 className="text-[13px] font-bold text-gray-900">{t("pages.commission.productsEnabled")}</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-[12px] tabular-nums">
             <thead className="text-[11px] text-gray-500 tracking-wide bg-gray-50/50">
               <tr>
-                <th className="px-4 py-2 text-left font-semibold">Product</th>
-                <th className="px-4 py-2 text-right font-semibold">Price</th>
-                <th className="px-4 py-2 text-left font-semibold">Commission setup</th>
+                <th className="px-4 py-2 text-left font-semibold">{t("pages.commission.tableProduct")}</th>
+                <th className="px-4 py-2 text-right font-semibold">{t("pages.commission.tablePrice")}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t("pages.commission.tableSetup")}</th>
               </tr>
             </thead>
             <tbody>
@@ -84,7 +84,7 @@ const CommissionPage: React.FC = () => {
                 <tr>
                   <td colSpan={3} className="px-4 py-12 text-center text-gray-400 text-[12px]">
                     <Package className="w-6 h-6 mx-auto mb-2 text-gray-300" />
-                    No products have affiliate enabled. Go to a product → enable "Allow creators".
+                    {t("pages.commission.noProducts")}
                   </td>
                 </tr>
               )}

@@ -62,8 +62,7 @@ const AppealsPage: React.FC = () => {
       </div>
 
       <div className="rounded-md bg-blue-50 px-4 py-2 text-[11px] text-blue-700">
-        Appeals open a support ticket with category <strong>account</strong> or <strong>shop</strong>.
-        Use the regular Tickets page to file one.
+        {t('pages.appeals.info')} <strong>{t('pages.tickets.catAccount').toLowerCase()}</strong> {t('pages.appeals.infoOr')} <strong>{t('pages.tickets.catShop').toLowerCase()}</strong>. {t('pages.appeals.infoEnd')}
       </div>
 
       {error && (
@@ -77,10 +76,10 @@ const AppealsPage: React.FC = () => {
           <table className="w-full text-[12px] tabular-nums">
             <thead className="text-[11px] text-gray-500 tracking-wide bg-gray-50/50">
               <tr>
-                <th className="px-4 py-2 text-left font-semibold">Subject</th>
-                <th className="px-4 py-2 text-left font-semibold">Category</th>
-                <th className="px-4 py-2 text-left font-semibold">Status</th>
-                <th className="px-4 py-2 text-left font-semibold">Created</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.appeals.tableSubject')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.appeals.tableCategory')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.appeals.tableStatus')}</th>
+                <th className="px-4 py-2 text-left font-semibold">{t('pages.appeals.tableCreated')}</th>
               </tr>
             </thead>
             <tbody>
@@ -94,23 +93,23 @@ const AppealsPage: React.FC = () => {
               {!loading && tickets.length === 0 && (
                 <tr>
                   <td colSpan={4} className="px-4 py-12 text-center text-gray-400 text-[12px]">
-                    No appeals filed.
+                    {t('pages.appeals.noAppeals')}
                   </td>
                 </tr>
               )}
               {!loading &&
-                tickets.map((t) => (
-                  <tr key={t._id} className="border-t border-gray-50">
-                    <td className="px-4 py-2 font-medium text-gray-900">{t.subject}</td>
-                    <td className="px-4 py-2 text-gray-700 capitalize">{t.category}</td>
+                tickets.map((ticket) => (
+                  <tr key={ticket._id} className="border-t border-gray-50">
+                    <td className="px-4 py-2 font-medium text-gray-900">{ticket.subject}</td>
+                    <td className="px-4 py-2 text-gray-700 capitalize">{ticket.category}</td>
                     <td className="px-4 py-2">
                       <span
-                        className={`text-[11px] font-medium px-2 py-0.5 rounded capitalize ${statusBadge[t.status]}`}
+                        className={`text-[11px] font-medium px-2 py-0.5 rounded capitalize ${statusBadge[ticket.status]}`}
                       >
-                        {t.status === "in_progress" ? "in progress" : t.status}
+                        {ticket.status === "in_progress" ? t("status.inProgress") : ticket.status}
                       </span>
                     </td>
-                    <td className="px-4 py-2 text-gray-500 text-[11px]">{formatDate(t.createdAt)}</td>
+                    <td className="px-4 py-2 text-gray-500 text-[11px]">{formatDate(ticket.createdAt)}</td>
                   </tr>
                 ))}
             </tbody>

@@ -159,7 +159,7 @@ export default function Home() {
                     onClick={() => setActiveCategory(cat.slug)}
                     className={`relative pb-4 text-sm font-bold transition-all ${activeCategory === cat.slug ? "border-b-2 border-primary text-primary" : "text-gray-400 hover:text-slate-700"}`}
                   >
-                    {mounted ? t(`category.name.${cat.slug}`, cat.name) : cat.name}
+                    {mounted ? t(`pages.category.name.${cat.slug}`, cat.name) : cat.name}
                   </button>
                 ))}
               </div>

@@ -6,19 +6,6 @@ import {
 import { fetchTrafficAnalytics, type TrafficAnalytics } from "@/services/sellerApi";
 
 type RangeKey = "7d" | "30d" | "90d";
-const RANGES: { key: RangeKey; label: string; days: number }[] = [
-  { key: "7d", label: "7 Days", days: 7 },
-  { key: "30d", label: "30 Days", days: 30 },
-  { key: "90d", label: "90 Days", days: 90 },
-];
-
-const SOURCE_LABELS: Record<string, { label: string; color: string }> = {
-  direct: { label: "Direct", color: "bg-gray-400" },
-  search: { label: "Search engines", color: "bg-blue-400" },
-  social: { label: "Social media", color: "bg-purple-400" },
-  referral: { label: "Other websites", color: "bg-emerald-400" },
-  internal: { label: "Internal", color: "bg-amber-400" },
-};
 
 const DEVICE_ICONS: Record<string, typeof Smartphone> = {
   mobile: Smartphone,
@@ -29,6 +16,18 @@ const DEVICE_ICONS: Record<string, typeof Smartphone> = {
 
 const TrafficPage: React.FC = () => {
   const { t } = useTranslation("common");
+  const RANGES: { key: RangeKey; label: string; days: number }[] = [
+    { key: "7d", label: t("ranges.days7"), days: 7 },
+    { key: "30d", label: t("ranges.days30"), days: 30 },
+    { key: "90d", label: t("ranges.days90"), days: 90 },
+  ];
+  const SOURCE_LABELS: Record<string, { label: string; color: string }> = {
+    direct: { label: t("pages.traffic.sources.direct"), color: "bg-gray-400" },
+    search: { label: t("pages.traffic.sources.search"), color: "bg-blue-400" },
+    social: { label: t("pages.traffic.sources.social"), color: "bg-purple-400" },
+    referral: { label: t("pages.traffic.sources.referral"), color: "bg-emerald-400" },
+    internal: { label: t("pages.traffic.sources.internal"), color: "bg-amber-400" },
+  };
   const [data, setData] = useState<TrafficAnalytics | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -99,7 +98,7 @@ const TrafficPage: React.FC = () => {
       ) : !data ? (
         <div className="py-16 text-center text-gray-400">
           <Globe className="w-7 h-7 mx-auto mb-3 text-gray-300" />
-          <p className="text-[12px]">No traffic data yet</p>
+          <p className="text-[12px]">{t("pages.traffic.noData")}</p>
         </div>
       ) : (
         <>
@@ -121,7 +120,7 @@ const TrafficPage: React.FC = () => {
 
           {/* Daily trend */}
           <div className="rounded-lg border border-gray-100 p-4 bg-white">
-            <h3 className="text-[13px] font-bold text-gray-900 mb-3">Daily traffic</h3>
+            <h3 className="text-[13px] font-bold text-gray-900 mb-3">{t("pages.traffic.dailyTraffic")}</h3>
             <div className="h-[160px] w-full flex items-end gap-px">
               {data.daily.map((d, i) => {
                 const h = (d.views / maxDayViews) * 100;
@@ -148,9 +147,9 @@ const TrafficPage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             {/* Sources */}
             <div className="rounded-lg border border-gray-100 p-4 bg-white">
-              <h3 className="text-[13px] font-bold text-gray-900 mb-3">Traffic sources</h3>
+              <h3 className="text-[13px] font-bold text-gray-900 mb-3">{t("pages.traffic.trafficSources")}</h3>
               {totalSourceCount === 0 ? (
-                <p className="text-[11px] text-gray-400 text-center py-6">No data</p>
+                <p className="text-[11px] text-gray-400 text-center py-6">{t("pages.traffic.noSourceData")}</p>
               ) : (
                 <div className="space-y-2">
                   {Object.entries(data.bySource)
@@ -182,7 +181,7 @@ const TrafficPage: React.FC = () => {
 
             {/* Devices */}
             <div className="rounded-lg border border-gray-100 p-4 bg-white">
-              <h3 className="text-[13px] font-bold text-gray-900 mb-3">Devices</h3>
+              <h3 className="text-[13px] font-bold text-gray-900 mb-3">{t("pages.traffic.devices")}</h3>
               <div className="grid grid-cols-2 gap-2">
                 {Object.entries(data.byDevice).map(([key, count]) => {
                   const Icon = DEVICE_ICONS[key] || Globe;
@@ -216,10 +215,10 @@ const TrafficPage: React.FC = () => {
             {/* Top pages */}
             <div className="rounded-lg border border-gray-100 bg-white">
               <div className="px-4 py-3 border-b border-gray-100">
-                <h3 className="text-[13px] font-bold text-gray-900">Top pages</h3>
+                <h3 className="text-[13px] font-bold text-gray-900">{t("pages.traffic.topPages")}</h3>
               </div>
               {data.topPages.length === 0 ? (
-                <p className="py-8 text-center text-[11px] text-gray-400">No pages tracked yet</p>
+                <p className="py-8 text-center text-[11px] text-gray-400">{t("pages.traffic.noPagesTracked")}</p>
               ) : (
                 <div className="divide-y divide-gray-50">
                   {data.topPages.map((p, i) => (
@@ -231,7 +230,7 @@ const TrafficPage: React.FC = () => {
                         {p.views.toLocaleString()}
                       </p>
                       <p className="text-[10px] text-gray-400 tabular-nums w-16 text-right">
-                        {p.uniqueSessions} sess
+                        {p.uniqueSessions} {t("pages.traffic.sessions")}
                       </p>
                     </div>
                   ))}
@@ -242,11 +241,11 @@ const TrafficPage: React.FC = () => {
             {/* Top referrers */}
             <div className="rounded-lg border border-gray-100 bg-white">
               <div className="px-4 py-3 border-b border-gray-100">
-                <h3 className="text-[13px] font-bold text-gray-900">Top referrers</h3>
+                <h3 className="text-[13px] font-bold text-gray-900">{t("pages.traffic.topReferrers")}</h3>
               </div>
               {data.topReferrers.length === 0 ? (
                 <p className="py-8 text-center text-[11px] text-gray-400">
-                  All traffic is direct or internal
+                  {t("pages.traffic.allDirectInternal")}
                 </p>
               ) : (
                 <div className="divide-y divide-gray-50">

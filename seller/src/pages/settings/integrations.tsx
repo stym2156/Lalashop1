@@ -21,56 +21,56 @@ interface IntegrationDef {
   fieldPlaceholder?: string;
 }
 
-const INTEGRATIONS: IntegrationDef[] = [
-  {
-    key: "tiktok",
-    name: "TikTok Shop",
-    desc: "Sync products to TikTok Shop and import orders.",
-    icon: Music2,
-    color: "from-black to-rose-600",
-    fieldLabel: "TikTok username",
-    fieldPlaceholder: "@yourshop",
-  },
-  {
-    key: "facebook",
-    name: "Facebook Shop",
-    desc: "Mirror your catalog to a Facebook Page shop.",
-    icon: Hash,
-    color: "from-blue-500 to-blue-700",
-    fieldLabel: "Page ID or URL",
-    fieldPlaceholder: "facebook.com/yourpage",
-  },
-  {
-    key: "instagram",
-    name: "Instagram Shopping",
-    desc: "Tag products in Instagram posts and reels.",
-    icon: Camera,
-    color: "from-pink-500 via-rose-500 to-amber-500",
-    fieldLabel: "Instagram handle",
-    fieldPlaceholder: "@yourshop",
-  },
-  {
-    key: "line",
-    name: "LINE Official Account",
-    desc: "Get DMs from LINE customers in your inbox.",
-    icon: MessageCircle,
-    color: "from-emerald-500 to-emerald-700",
-    fieldLabel: "LINE OA ID",
-    fieldPlaceholder: "@your-oa-id",
-  },
-  {
-    key: "shopify",
-    name: "Shopify",
-    desc: "Two-way sync with an existing Shopify store.",
-    icon: ShoppingBag,
-    color: "from-emerald-600 to-green-700",
-    fieldLabel: "Shopify domain",
-    fieldPlaceholder: "yourshop.myshopify.com",
-  },
-];
-
 const IntegrationsPage: React.FC = () => {
   const { t } = useTranslation("common");
+
+  const INTEGRATIONS: IntegrationDef[] = [
+    {
+      key: "tiktok",
+      name: t("pages.integrations.tiktokName"),
+      desc: t("pages.integrations.tiktokDesc"),
+      icon: Music2,
+      color: "from-black to-rose-600",
+      fieldLabel: t("pages.integrations.tiktokField"),
+      fieldPlaceholder: "@yourshop",
+    },
+    {
+      key: "facebook",
+      name: t("pages.integrations.facebookName"),
+      desc: t("pages.integrations.facebookDesc"),
+      icon: Hash,
+      color: "from-blue-500 to-blue-700",
+      fieldLabel: t("pages.integrations.facebookField"),
+      fieldPlaceholder: "facebook.com/yourpage",
+    },
+    {
+      key: "instagram",
+      name: t("pages.integrations.instagramName"),
+      desc: t("pages.integrations.instagramDesc"),
+      icon: Camera,
+      color: "from-pink-500 via-rose-500 to-amber-500",
+      fieldLabel: t("pages.integrations.instagramField"),
+      fieldPlaceholder: "@yourshop",
+    },
+    {
+      key: "line",
+      name: t("pages.integrations.lineName"),
+      desc: t("pages.integrations.lineDesc"),
+      icon: MessageCircle,
+      color: "from-emerald-500 to-emerald-700",
+      fieldLabel: t("pages.integrations.lineField"),
+      fieldPlaceholder: "@your-oa-id",
+    },
+    {
+      key: "shopify",
+      name: t("pages.integrations.shopifyName"),
+      desc: t("pages.integrations.shopifyDesc"),
+      icon: ShoppingBag,
+      color: "from-emerald-600 to-green-700",
+      fieldLabel: t("pages.integrations.shopifyField"),
+      fieldPlaceholder: "yourshop.myshopify.com",
+    },
+  ];
   const [items, setItems] = useState<ShopIntegration[]>([]);
   const [accounts, setAccounts] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
@@ -110,11 +110,11 @@ const IntegrationsPage: React.FC = () => {
       const updated = await toggleIntegration(key, enabled, accounts[key]);
       if (updated) {
         setItems(updated);
-        setSuccess(`${key} ${enabled ? "connected" : "disconnected"}`);
+        setSuccess(t(enabled ? "pages.integrations.successConnected" : "pages.integrations.successDisconnected", { key }));
         setTimeout(() => setSuccess(null), 2500);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Update failed");
+      setError(err instanceof Error ? err.message : t("pages.integrations.errUpdate"));
     } finally {
       setSavingKey(null);
     }
@@ -186,7 +186,7 @@ const IntegrationsPage: React.FC = () => {
                 )}
                 {item?.connectedAt && (
                   <p className="text-[10px] text-gray-400 mt-1">
-                    Connected {new Date(item.connectedAt).toLocaleDateString()}
+                    {t("pages.integrations.connectedAt", { date: new Date(item.connectedAt).toLocaleDateString() })}
                   </p>
                 )}
               </div>
@@ -213,8 +213,7 @@ const IntegrationsPage: React.FC = () => {
       </div>
 
       <div className="rounded-lg bg-gray-50 px-4 py-3 text-[11px] text-gray-500">
-        These integrations store the account identifier for now. Full OAuth handshakes
-        (TikTok Login, FB Login, etc.) are planned for a future release.
+        {t("pages.integrations.footnote")}
       </div>
     </div>
   );

@@ -109,7 +109,7 @@ export default function CreatorProduct({ onBack }: CreatorProductProps) {
 
   const shareLink = async (row: CreatorProductRow) => {
     const url = buildAffiliateLink(row.affiliateCode);
-    const title = row.product?.name || "Check this out";
+    const title = row.product?.name || t("pages.creatorProducts2.checkThis");
     if (typeof navigator !== "undefined" && (navigator as any).share) {
       try {
         await (navigator as any).share({ title, url });
@@ -276,7 +276,7 @@ export default function CreatorProduct({ onBack }: CreatorProductProps) {
                         <div className="flex flex-col md:flex-row md:items-center gap-0.5 md:gap-3 mb-1.5 md:mb-3">
                           <div className="flex flex-col">
                             <span className="text-[7px] md:text-[9px] font-bold text-slate-400 tracking-widest leading-none">
-                              Price
+                              {t("pages.creatorProducts2.price")}
                             </span>
                             <span className="text-[9px] md:text-[12px] font-black text-slate-900">
                               ฿{p.price.toLocaleString()}
@@ -285,7 +285,7 @@ export default function CreatorProduct({ onBack }: CreatorProductProps) {
                           <div className="hidden md:block w-px h-6 bg-slate-100" />
                           <div className="flex flex-col">
                             <span className="text-[7px] md:text-[9px] font-bold text-rose-400 tracking-widest leading-none">
-                              Earn
+                              {t("pages.creatorProducts2.earn")}
                             </span>
                             <span className="text-[9px] md:text-[12px] font-black text-rose-500">
                               ฿{earn.toFixed(2)}
@@ -316,19 +316,19 @@ export default function CreatorProduct({ onBack }: CreatorProductProps) {
                           className="flex-1 bg-slate-900 text-white text-[7px] md:text-[9px] font-black py-1.5 md:py-2 rounded-lg md:rounded-xl tracking-widest active:scale-95 transition-all flex items-center justify-center gap-1"
                         >
                           <Copy size={10} className="md:w-3 md:h-3" />{" "}
-                          {copiedId === row._id ? "Done" : "Link"}
+                          {copiedId === row._id ? t("pages.creatorProducts2.done") : t("pages.creatorProducts2.link")}
                         </button>
                         <button
                           onClick={() => shareLink(row)}
                           className="p-1.5 md:p-2 bg-gray-50 text-slate-400 hover:text-slate-900 rounded-lg md:rounded-xl transition-all"
-                          title="Share"
+                          title={t("pages.creatorProducts2.share")}
                         >
                           <Share2 size={10} className="md:w-3 md:h-3" />
                         </button>
                         <button
                           onClick={() => removeRow(row)}
                           className="p-1.5 md:p-2 bg-gray-50 text-slate-400 hover:text-rose-500 rounded-lg md:rounded-xl transition-all"
-                          title="Remove"
+                          title={t("pages.creatorProducts2.remove")}
                         >
                           <Trash2 size={10} className="md:w-3 md:h-3" />
                         </button>

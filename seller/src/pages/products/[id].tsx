@@ -422,7 +422,7 @@ const ProductDetailPage: React.FC = () => {
                 >
                   {productCategories.map((c) => (
                     <option key={c.value} value={c.value}>
-                      {c.label}
+                      {t(`pages.productCategories.${c.value}`)}
                     </option>
                   ))}
                   {/* Preserve legacy categories that don't match the canonical list */}

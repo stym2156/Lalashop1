@@ -126,12 +126,12 @@ const ActivityPage: React.FC = () => {
       ) : !data || !queryId ? (
         <div className="py-16 text-center">
           <Package className="w-8 h-8 mx-auto mb-3 text-gray-300" />
-          <p className="text-[13px] font-bold text-gray-700">No customer selected</p>
+          <p className="text-[13px] font-bold text-gray-700">{t("pages.customerActivity.noCustomerSelected")}</p>
           <Link
             href="/customers/list"
             className="text-[12px] text-[#00aeff] font-bold hover:underline mt-2 inline-block"
           >
-            Open customer list →
+            {t("pages.customerActivity.openCustomerList")} →
           </Link>
         </div>
       ) : (
@@ -154,7 +154,7 @@ const ActivityPage: React.FC = () => {
                 )}
                 <div className="flex-1 min-w-0">
                   <p className="text-[14px] font-bold text-gray-900 truncate">
-                    {data.profile.name || data.profile.username || "Customer"}
+                    {data.profile.name || data.profile.username || t("common.user")}
                   </p>
                   {data.profile.username && (
                     <p className="text-[11px] text-gray-500 truncate">@{data.profile.username}</p>
@@ -168,7 +168,7 @@ const ActivityPage: React.FC = () => {
               )}
               {data.profile.createdAt && (
                 <p className="text-[11px] text-gray-500 mt-1 inline-flex items-center gap-1.5">
-                  <Calendar className="w-3 h-3" /> Joined {formatDate(data.profile.createdAt)}
+                  <Calendar className="w-3 h-3" /> {t("pages.customerActivity.joined", { date: formatDate(data.profile.createdAt) })}
                 </p>
               )}
             </div>
@@ -176,17 +176,17 @@ const ActivityPage: React.FC = () => {
             {summary && (
               <div className="rounded-lg border border-gray-100 p-4 bg-white space-y-2">
                 <h3 className="text-[11px] font-bold text-gray-500 tracking-wide">
-                  Lifetime value
+                  {t("pages.customerActivity.lifetimeValue")}
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <p className="text-[10px] text-gray-400">Orders</p>
+                    <p className="text-[10px] text-gray-400">{t("pages.customerActivity.orders")}</p>
                     <p className="text-[18px] font-black text-gray-900 tabular-nums">
                       {summary.paidOrderCount}/{summary.orderCount}
                     </p>
                   </div>
                   <div>
-                    <p className="text-[10px] text-gray-400">Total spent</p>
+                    <p className="text-[10px] text-gray-400">{t("pages.customerActivity.totalSpent")}</p>
                     <p className="text-[18px] font-black text-emerald-700 tabular-nums">
                       ฿{formatMoney(summary.totalSpent)}
                     </p>
@@ -198,7 +198,7 @@ const ActivityPage: React.FC = () => {
             {data.label && (data.label.tags?.length || data.label.segment || data.label.note) && (
               <div className="rounded-lg border border-gray-100 p-4 bg-white space-y-2">
                 <h3 className="text-[11px] font-bold text-gray-500 tracking-wide">
-                  Labels
+                  {t("pages.customerActivity.labelsTitle")}
                 </h3>
                 {data.label.segment && (
                   <span
@@ -233,10 +233,10 @@ const ActivityPage: React.FC = () => {
             >
               <p className="text-[12px] font-bold text-gray-900 inline-flex items-center gap-2">
                 <MessageCircle className="w-3.5 h-3.5 text-[#00aeff]" />
-                View messages
+                {t("pages.customerActivity.viewMessages")}
               </p>
               <p className="text-[10px] text-gray-500 mt-0.5">
-                Open inbox to see chat history with this customer.
+                {t("pages.customerActivity.viewMessagesDesc")}
               </p>
             </Link>
           </div>
@@ -245,13 +245,13 @@ const ActivityPage: React.FC = () => {
           <div className="lg:col-span-2 rounded-lg border border-gray-100 bg-white">
             <div className="px-4 py-3 border-b border-gray-100">
               <h3 className="text-sm font-bold text-black">
-                Order history ({data.orders.length})
+                {t("pages.customerActivity.orderHistory", { count: data.orders.length })}
               </h3>
             </div>
             {data.orders.length === 0 ? (
               <div className="text-center py-12 text-gray-400">
                 <Package className="w-7 h-7 mx-auto mb-2 text-gray-300" />
-                <p className="text-[12px]">No orders yet</p>
+                <p className="text-[12px]">{t("pages.customerActivity.noOrdersYet")}</p>
               </div>
             ) : (
               <div className="divide-y divide-gray-50">
@@ -269,7 +269,7 @@ const ActivityPage: React.FC = () => {
                               : "bg-amber-100 text-amber-700"
                           }`}
                         >
-                          {o.isPaid ? "Paid" : "Pending"}
+                          {o.isPaid ? t("pages.customerActivity.paid") : t("pages.customerActivity.pending")}
                         </span>
                         {o.channel && (
                           <span className="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">

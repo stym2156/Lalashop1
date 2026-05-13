@@ -180,13 +180,13 @@ export default function ShopOnboarding({ onBack, onComplete }: OnboardingProps) 
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data?.message || "Failed to submit application");
+        throw new Error(data?.message || t("pages.openshopPanel.failedSubmit"));
       }
 
       setIsSubmitted(true);
       if (onComplete) onComplete();
     } catch (err: any) {
-      setSubmitError(err?.message || "Failed to submit application");
+      setSubmitError(err?.message || t("pages.openshopPanel.failedSubmit"));
     } finally {
       setSubmitting(false);
     }
@@ -239,10 +239,10 @@ export default function ShopOnboarding({ onBack, onComplete }: OnboardingProps) 
   };
 
   const steps = [
-    { id: 1, label: "Business Type" },
-    { id: 2, label: "Store Information" },
-    { id: 3, label: "Identity Verification" },
-    { id: 4, label: "Warehouse" },
+    { id: 1, label: t("pages.openshopPanel.businessType") },
+    { id: 2, label: t("pages.openshopPanel.storeInformation") },
+    { id: 3, label: t("pages.openshopPanel.identityVerification") },
+    { id: 4, label: t("pages.openshopPanel.warehouse") },
   ];
 
   if (isSubmitted) {

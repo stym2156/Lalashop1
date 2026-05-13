@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import Header from "@/components/layout/Header";
 import { categories } from "@/menu/manu";
 import { Filter, LayoutGrid, List, LucideIcon } from "lucide-react";
@@ -12,12 +13,13 @@ interface CategoryTemplateProps {
   Icon: LucideIcon;
 }
 
-export default function CategoryTemplate({ slug, Icon }: CategoryTemplateProps) {
+export default function CategoryTemplate({ slug, Icon }: CategoryTemplateProps): JSX.Element {
+  const { t } = useTranslation("common");
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   const category = categories?.find(c => c.slug === slug);
-  const categoryName = category ? category.name : "Products";
+  const categoryName = category ? t(`pages.category.name.${category.slug}`, category.name) : t("nav.products");
   
   useEffect(() => {
     const fetchProducts = async () => {
@@ -87,7 +89,7 @@ export default function CategoryTemplate({ slug, Icon }: CategoryTemplateProps) 
                           </span>
                         </div>
                         <div className="text-[10px] font-bold text-gray-400 bg-gray-50 px-2 py-1 rounded-md">
-                          Stock: {product.countInStock}
+                          {t("product.stock")}: {product.countInStock}
                         </div>
                       </div>
                     </div>
@@ -97,8 +99,8 @@ export default function CategoryTemplate({ slug, Icon }: CategoryTemplateProps) 
             ) : (
               <div className="col-span-full py-32 text-center bg-gray-50/50 rounded-3xl border-2 border-dashed border-gray-100">
                 <div className="text-4xl mb-4 opacity-20">📦</div>
-                <h3 className="text-lg font-bold text-slate-400">No products found in {categoryName}</h3>
-                <p className="text-sm text-slate-300 mt-1">Check back later or explore other categories</p>
+                <h3 className="text-lg font-bold text-slate-400">{t("category.noProducts", { category: categoryName })}</h3>
+                <p className="text-sm text-slate-300 mt-1">{t("pages.categoryPage.checkBackLater")}</p>
               </div>
             )}
           </div>

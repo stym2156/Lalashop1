@@ -304,25 +304,25 @@ export default function ProductPage() {
     if (sf && (sf.province || sf.district)) {
       return [sf.province, sf.district].filter(Boolean).join(", ");
     }
-    return product?.location || "Bangkok, Thailand";
-  }, [product]);
+    return product?.location || t("pages.productPage2.bangkokLocation");
+  }, [product, t]);
 
   const leadTimeText = useMemo(() => {
     const lt: any = (product as any)?.leadTime;
     if (lt && (lt.min || lt.max)) {
       const unitLabel =
-        lt.unit === "hours" ? "Hours" : lt.unit === "weeks" ? "Weeks" : "Business Days";
+        lt.unit === "hours" ? t("pages.productsAdd2.hours") : lt.unit === "weeks" ? t("pages.productsAdd2.weeks") : t("pages.productsAdd2.businessDays");
       const min = Number(lt.min) || 0;
       const max = Number(lt.max) || min;
       return min === max ? `${min} ${unitLabel}` : `${min}–${max} ${unitLabel}`;
     }
-    return "3–7 Business Days";
-  }, [product]);
+    return t("pages.productPage2.businessDays37");
+  }, [product, t]);
 
   const returnPolicy: any = (product as any)?.returnPolicy;
   const returnsValue = returnPolicy?.accepts === false
-    ? "No returns"
-    : `Easy ${Number(returnPolicy?.days) || 7} Days`;
+    ? t("pages.productPage2.noReturns")
+    : t("pages.productPage2.easyDays", { days: Number(returnPolicy?.days) || 7 });
 
   const ratingValue = Number((product as any)?.rating) || 0;
   const numReviews = Number((product as any)?.numReviews) || 0;
@@ -403,7 +403,7 @@ export default function ProductPage() {
           <button
             onClick={() => setReportOpen(true)}
             className="ml-auto inline-flex items-center gap-1.5 text-[10px] font-bold text-gray-400 hover:text-red-500 px-2 py-1 rounded-full transition-colors"
-            title="Report this product"
+            title={t("pages.productPage2.reportProduct")}
           >
             <Flag size={12} /> {t("actions.report")}
           </button>
@@ -446,10 +446,10 @@ export default function ProductPage() {
                 </span>
                 <div className="w-px h-4 bg-sky-600" />
                 <span className="text-xs text-gray-400 font-bold">
-                  {numReviews} Review{numReviews === 1 ? "" : "s"}
+                  {numReviews} {numReviews === 1 ? t("pages.productPage2.review") : t("pages.productPage2.reviews")}
                 </span>
                 <span className="text-xs text-gray-400 font-bold">
-                  {soldCount.toLocaleString()} Sold
+                  {soldCount.toLocaleString()} {t("pages.productPage2.soldLabel")}
                 </span>
               </div>
 
@@ -466,15 +466,15 @@ export default function ProductPage() {
                     : 0;
                 let stockTone = "text-emerald-600";
                 let stockIcon = <CheckCircle2 size={13} />;
-                let stockLabel = `In stock — ${stockLeft.toLocaleString()} available`;
+                let stockLabel = t("pages.productPage2.stockLeft", { count: stockLeft });
                 if (stockLeft <= 0) {
                   stockTone = "text-rose-600";
                   stockIcon = <XCircle size={13} />;
-                  stockLabel = "Out of stock";
+                  stockLabel = t("pages.productPage2.outOfStock");
                 } else if (stockLeft <= 10) {
                   stockTone = "text-amber-600";
                   stockIcon = <AlertCircle size={13} />;
-                  stockLabel = `Only ${stockLeft} left`;
+                  stockLabel = t("pages.productPage2.onlyLeft", { count: stockLeft });
                 }
                 return (
                   <div className="mb-5">
@@ -548,10 +548,10 @@ export default function ProductPage() {
                 <div className="flex items-center justify-between gap-3 flex-wrap">
                   <div>
                     <p className="text-[11px] font-black tracking-widest text-gray-500  mb-1.5">
-                      Quantity
+                      {t("pages.productPage2.quantity")}
                       {moqValue > 1 && (
                         <span className="ml-2 text-amber-600 normal-case tracking-normal">
-                          Min order: {moqValue} pcs
+                          {t("pages.productPage2.minOrder", { count: moqValue })}
                         </span>
                       )}
                     </p>
@@ -582,7 +582,7 @@ export default function ProductPage() {
                   </div>
                   <div className="text-right">
                     <p className="text-[11px] font-black tracking-widest text-gray-500 mb-1.5">
-                      Total
+                      {t("pages.productPage2.totalLabel")}
                     </p>
                     <p className="text-2xl font-black text-slate-900 tabular-nums">
                       ฿{(qty * selectedPrice).toLocaleString()}
@@ -593,10 +593,10 @@ export default function ProductPage() {
 
               {/* Meta rows */}
               <div className="mb-6">
-                <SpecRow label="Ships From" value={`📍 ${shipsFromText}`} />
-                <SpecRow label="Lead Time" value={leadTimeText} />
+                <SpecRow label={t("pages.productPage2.shipsFrom")} value={`📍 ${shipsFromText}`} />
+                <SpecRow label={t("pages.productPage2.leadTime")} value={leadTimeText} />
                 {(product as any).freeShipping ? (
-                  <SpecRow label="Shipping" value="🚚 Free" highlight />
+                  <SpecRow label={t("pages.productPage2.shippingLabel")} value={t("pages.productPage2.freeIcon")} highlight />
                 ) : null}
               </div>
 
@@ -604,21 +604,21 @@ export default function ProductPage() {
               {Array.isArray((product as any).tiers) && (product as any).tiers.length > 0 && (
                 <div className="mb-6 p-3 rounded-xl border border-sky-100 bg-sky-50/40">
                   <p className="text-[10px] font-black tracking-widest text-sky-700 mb-2">
-                    BULK SAVINGS
+                    {t("pages.productPage2.bulkSavings")}
                   </p>
                   <div className="space-y-1.5">
-                    {(product as any).tiers.map((t: any, i: number) => {
+                    {(product as any).tiers.map((tier: any, i: number) => {
                       const base = Number(product.price) || 0;
-                      const tierPrice = Number(t.price) || base;
+                      const tierPrice = Number(tier.price) || base;
                       const pct =
-                        Number(t.discountPercent) ||
+                        Number(tier.discountPercent) ||
                         (base > 0 ? Math.max(0, Math.round(((base - tierPrice) / base) * 100)) : 0);
                       return (
                         <div
                           key={i}
                           className="flex items-center justify-between text-xs font-semibold text-slate-700"
                         >
-                          <span>{t.minQty}+ pcs</span>
+                          <span>{t("pages.productPage2.pcsSuffix", { qty: tier.minQty })}</span>
                           <span className="flex items-center gap-2">
                             {base > 0 && tierPrice < base && (
                               <span className="line-through text-gray-400 font-medium">
@@ -690,17 +690,17 @@ export default function ProductPage() {
               <div className="flex gap-2.5 flex-wrap">
                 <TrustPill
                   icon={Truck}
-                  label="Shipping"
-                  value={(product as any).freeShipping ? "Free" : `Ships from ${shipsFromText}`}
+                  label={t("product.shipping")}
+                  value={(product as any).freeShipping ? t("product.free") : t("product.shipsFrom", { location: shipsFromText })}
                   color={(product as any).freeShipping ? "#22c55e" : "#0077b6"}
                 />
                 <TrustPill
                   icon={RefreshCw}
-                  label="Returns"
+                  label={t("product.returns")}
                   value={returnsValue}
                   color={returnPolicy?.accepts === false ? "#ef4444" : "#22c55e"}
                 />
-                <TrustPill icon={ShieldCheck} label="Lead Time" value={leadTimeText} color="#3b82f6" />
+                <TrustPill icon={ShieldCheck} label={t("product.leadTime")} value={leadTimeText} color="#3b82f6" />
               </div>
             </div>
           </div>
@@ -717,7 +717,7 @@ export default function ProductPage() {
                   <img
                     key={`${src}-${i}`}
                     src={src}
-                    alt={`${product.name} promo ${i + 1}`}
+                    alt={t("pages.productPage2.promoAlt", { name: product.name, index: i + 1 })}
                     className="w-full rounded-2xl object-cover bg-slate-100"
                   />
                 ))}
@@ -739,7 +739,7 @@ export default function ProductPage() {
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="text-lg md:text-xl font-black text-slate-900 truncate">
-                      {(product.seller as any)?.name || "Lala Shop Partner"}
+                      {(product.seller as any)?.name || t("pages.productPage2.stickerPartner")}
                     </h3>
                   </div>
                   <div className="flex items-center gap-3 text-xs font-bold text-gray-400">
@@ -747,7 +747,7 @@ export default function ProductPage() {
                     <div className="w-1 h-1 bg-gray-300 rounded-full" />
                   </div>
                   <p className="text-xs text-gray-500 mt-2 line-clamp-1 max-w-md ">
-                    {(product.seller as any)?.bio || "Reliable high-quality wholesale factory partner."}
+                    {(product.seller as any)?.bio || t("pages.productPage2.shopBioFallback")}
                   </p>
                 </div>
               </Link>
@@ -766,7 +766,7 @@ export default function ProductPage() {
                 className="flex-1 md:flex-none px-6 py-3 text-black font-bold text-sm duration-200 inline-flex items-center justify-center gap-2"
               >
                 <MessageCircle size={16} />
-                Chat
+                {t("pages.productPage2.chat")}
               </button>
             </div>
           </div>
