@@ -7,13 +7,16 @@ import {
   LayoutDashboard, Users, Store, Layers,
   ShoppingBag, Settings, LogOut, Wallet, ChevronDown, ArrowLeftRight, Bell,
   ShieldCheck, Package, FileWarning, UserCog, BadgeCheck, LifeBuoy, Banknote,
+  Image as ImageIcon,
 } from 'lucide-react';
+import { useAdminAlerts } from '@/contexts/AdminAlertsContext';
 
 const Sidebar = () => {
   const router = useRouter();
   const { t } = useTranslation('common');
   const [openStates, setOpenStates] = useState<{ [key: string]: boolean }>({});
   const [mounted, setMounted] = useState(false);
+  const { pendingKyc, pendingWithdrawals, openReports, openTickets } = useAdminAlerts();
 
   useEffect(() => {
     setMounted(true);
@@ -71,6 +74,7 @@ const Sidebar = () => {
       name: t('nav.transactions'),
       href: '/withdrawpage',
       icon: Wallet,
+      badge: pendingWithdrawals,
       subItems: [
         { key: 'sellerWithdrawals', name: t('nav.sellerWithdrawals'), href: '/withdrawpage/Seller/SellerWithdrawals' },
         { key: 'creatorWithdrawals', name: t('nav.creatorWithdrawals'), href: '/withdrawpage/creator/CreatorWithdrawals' },
@@ -84,9 +88,10 @@ const Sidebar = () => {
       icon: Banknote,
     },
     { key: 'categories', name: t('nav.categories'), href: '/categories', icon: Layers },
+    { key: 'banners', name: t('nav.banners'), href: '/banners', icon: ImageIcon },
     { key: 'history', name: t('nav.history'), href: '/history/history', icon: ArrowLeftRight },
     { key: 'notifications', name: t('nav.notifications'), href: '/notifications', icon: Bell },
-    { key: 'kyc', name: t('nav.kyc'), href: '/kyc', icon: BadgeCheck },
+    { key: 'kyc', name: t('nav.kyc'), href: '/kyc', icon: BadgeCheck, badge: pendingKyc },
     {
       key: 'admins',
       name: t('nav.admins'),
@@ -98,8 +103,8 @@ const Sidebar = () => {
         { key: 'auditLog', name: t('nav.auditLog'), href: '/admins/audit' },
       ],
     },
-    { key: 'reports', name: t('nav.reports'), href: '/reports', icon: FileWarning },
-    { key: 'support', name: t('nav.support'), href: '/support', icon: LifeBuoy },
+    { key: 'reports', name: t('nav.reports'), href: '/reports', icon: FileWarning, badge: openReports },
+    { key: 'support', name: t('nav.support'), href: '/support', icon: LifeBuoy, badge: openTickets },
     { key: 'profile', name: t('nav.profile'), href: '/profile', icon: UserCog },
     { key: 'systemSettings', name: t('nav.systemSettings'), href: '/settings', icon: Settings },
   ];
@@ -159,6 +164,12 @@ const Sidebar = () => {
 
                   <Icon className={`mr-3 h-5 w-5 ${isActive ? 'text-primary' : 'text-gray-400'}`} />
                   <span className="flex-1 text-left">{item.name}</span>
+
+                  {(item as { badge?: number }).badge && (item as { badge?: number }).badge! > 0 ? (
+                    <span className="ml-2 min-w-[20px] h-[20px] px-1.5 rounded-full bg-rose-500 text-white text-[10px] font-bold inline-flex items-center justify-center shadow-sm">
+                      {(item as { badge?: number }).badge! > 99 ? '99+' : (item as { badge?: number }).badge}
+                    </span>
+                  ) : null}
 
                   {hasSub && (
                     <ChevronDown

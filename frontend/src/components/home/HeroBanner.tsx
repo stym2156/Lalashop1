@@ -5,17 +5,29 @@ import { useTranslation } from "react-i18next";
 import { Product } from "@/types";
 import { apiClient } from "@/services/apiClient";
 
+interface Slide {
+  image: string;
+  title: string;
+  sub: string;
+  link?: string;
+}
+
 export default function HeroBanner() {
   const { t } = useTranslation("common");
   const [current, setCurrent] = useState(0);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [bannerSlides, setBannerSlides] = useState<Slide[]>([]);
 
-  const slides = [
+  // Built-in fallback used while the API call is in flight or when the admin
+  // hasn't published any banners yet. Once admin-managed banners exist, those
+  // replace the defaults entirely.
+  const fallbackSlides: Slide[] = [
     { image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070&auto=format&fit=crop", title: t("product.globalDirectSupply"), sub: t("product.globalDirectSupplyDesc") },
     { image: "https://images.unsplash.com/photo-1553413077-190dd305871c?q=80&w=2070&auto=format&fit=crop", title: t("product.smartFactorySource"), sub: t("product.smartFactorySourceDesc") },
-    { image: "https://tkacademy.com.my/wp-content/uploads/2021/09/Website-banner-1920-x-600-px-2.jpg", title: t("product.qualitySourcing"), sub: t("product.qualitySourcingDesc") },
   ];
+
+  const slides: Slide[] = bannerSlides.length > 0 ? bannerSlides : fallbackSlides;
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -31,11 +43,38 @@ export default function HeroBanner() {
         setLoading(false);
       }
     };
-    fetchProducts();
 
+    const fetchBanners = async () => {
+      try {
+        const response = await apiClient("/banners");
+        if (response.success && Array.isArray(response.data)) {
+          const mapped: Slide[] = response.data.map((b: { imageUrl: string; title?: string; subtitle?: string; linkUrl?: string }) => ({
+            image: b.imageUrl,
+            title: b.title || "",
+            sub: b.subtitle || "",
+            link: b.linkUrl || undefined,
+          }));
+          setBannerSlides(mapped);
+        }
+      } catch {
+        // Keep fallback slides — banners API is optional from the homepage's POV.
+      }
+    };
+
+    void fetchProducts();
+    void fetchBanners();
+  }, []);
+
+  useEffect(() => {
+    if (slides.length <= 1) return;
     const timer = setInterval(() => setCurrent(s => (s + 1) % slides.length), 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
+
+  // Reset index if admin removes/reorders banners while the page is open.
+  useEffect(() => {
+    if (current >= slides.length) setCurrent(0);
+  }, [slides.length, current]);
 
   const goldProducts = Array.isArray(products) ? products.slice(0, 2) : [];
   const hotProducts = Array.isArray(products) ? products.slice(2, 4) : [];
@@ -65,13 +104,30 @@ export default function HeroBanner() {
             >
               <img
                 src={s.image}
-                alt="Promotion"
+                alt={s.title || "Promotion"}
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 flex items-center p-10">
+              {(s.title || s.sub) && (
+                <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/10 to-transparent" />
+              )}
+              <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-10">
+                {(s.title || s.sub) && (
+                  <div className="max-w-md text-white drop-shadow-lg mb-4 md:mb-6">
+                    {s.title && (
+                      <h2 className="text-lg md:text-3xl font-black leading-tight">
+                        {s.title}
+                      </h2>
+                    )}
+                    {s.sub && (
+                      <p className="text-xs md:text-sm font-medium opacity-90 mt-1 md:mt-2 line-clamp-2">
+                        {s.sub}
+                      </p>
+                    )}
+                  </div>
+                )}
                 <div className="absolute right-4 bottom-4 md:right-10 md:bottom-10 z-10">
                   <Link
-                    href="/products"
+                    href={s.link || "/products"}
                     className="inline-block bg-white text-slate-900 px-6 py-3 rounded-xl font-extrabold text-sm shadow-xl hover:bg-gray-100 transition-all active:scale-95 leading-none"
                   >
                     {t("product.goToMarket")}

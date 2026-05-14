@@ -899,6 +899,49 @@ export const deleteAdminCategory = (id: string) =>
     method: "DELETE",
   });
 
+// ─── Hero Banners ─────────────────────────────────────────────────────
+
+export interface AdminBannerRow {
+  _id: string;
+  imageUrl: string;
+  title: string;
+  subtitle: string;
+  linkUrl: string;
+  displayOrder: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BannerPayload {
+  imageUrl?: string;
+  title?: string;
+  subtitle?: string;
+  linkUrl?: string;
+  displayOrder?: number;
+  isActive?: boolean;
+}
+
+export const fetchAdminBanners = () =>
+  apiClient<AdminBannerRow[]>("/admin/banners");
+
+export const createAdminBanner = (payload: BannerPayload) =>
+  apiClient<AdminBannerRow>("/admin/banners", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+export const updateAdminBanner = (id: string, payload: BannerPayload) =>
+  apiClient<AdminBannerRow>(`/admin/banners/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+
+export const deleteAdminBanner = (id: string) =>
+  apiClient<{ message: string }>(`/admin/banners/${id}`, {
+    method: "DELETE",
+  });
+
 // ─── Audit Logs ──────────────────────────────────────────────────────
 
 export interface AdminAuditLogRow {
@@ -941,6 +984,53 @@ export const fetchAdminAuditLogs = (params: ListAuditParams = {}) =>
 
 export const fetchAdminAuditStats = () =>
   apiClient<AdminAuditStats>("/admin/audit/stats");
+
+// ─── Admin Accounts (direct create — no invite tokens) ──────────────
+
+export type AdminAccountRole = "super" | "finance" | "support" | "content";
+
+export interface AdminAccountRow {
+  _id: string;
+  name?: string;
+  email: string;
+  customId?: string;
+  adminRole?: AdminAccountRole;
+  isSuspended?: boolean;
+  suspendedAt?: string;
+  suspendedReason?: string;
+  profileImage?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateAdminPayload {
+  email: string;
+  password: string;
+  name?: string;
+  adminRole: AdminAccountRole;
+}
+
+export interface CreateAdminResponse {
+  _id: string;
+  email: string;
+  name?: string;
+  adminRole?: AdminAccountRole;
+  promoted?: boolean;
+}
+
+export const fetchAdminAccounts = () =>
+  apiClient<AdminAccountRow[]>("/admin/admins");
+
+export const createAdminAccount = (payload: CreateAdminPayload) =>
+  apiClient<CreateAdminResponse>("/admin/admins", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+
+export const revokeAdminAccount = (id: string) =>
+  apiClient<{ _id: string; isAdmin: boolean }>(`/admin/admins/${id}`, {
+    method: "DELETE",
+  });
 
 // ─── Admin Invites ───────────────────────────────────────────────────
 

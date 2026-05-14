@@ -3,8 +3,7 @@ dotenv.config();
 import express, { Application, Request, Response, NextFunction } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import path from "path";
-import fs from "fs";
+import passport from "passport";
 
 import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
@@ -23,6 +22,7 @@ import affiliateRoutes from "./routes/affiliateRoutes";
 import analyticsRoutes from "./routes/analyticsRoutes";
 import reportRoutes from "./routes/reportRoutes";
 import categoryRoutes from "./routes/categoryRoutes";
+import bannerRoutes from "./routes/bannerRoutes";
 import supportRoutes from "./routes/supportRoutes";
 import inviteRoutes from "./routes/inviteRoutes";
 import marketingRoutes from "./routes/marketingRoutes";
@@ -46,16 +46,45 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-app.use(cors({ origin: true, credentials: true }));
-app.use(express.json({ limit: "20mb" }));
-app.use(express.urlencoded({ extended: true, limit: "20mb" }));
+// CORS — explicit allowlist parsed from env. In dev (no env) fall back to "*".
+// Format: ALLOWED_ORIGINS=https://app.lalashop.com,https://admin.lalashop.com
+const allowedOrigins =
+  process.env.ALLOWED_ORIGINS?.split(",").map((s) => s.trim()).filter(Boolean) ?? [];
+app.use(
+  cors({
+    origin: (origin, cb) => {
+      // Same-origin or curl/Postman/health checks → no Origin header.
+      if (!origin) return cb(null, true);
+      if (allowedOrigins.length === 0) return cb(null, true);
+      if (allowedOrigins.includes(origin)) return cb(null, true);
+      return cb(new Error(`Origin ${origin} not allowed by CORS`));
+    },
+    credentials: true,
+  })
+);
+
+// Body limit kept tight — files now upload directly to R2, the API only
+// accepts JSON. 2 MB is plenty for product/order payloads.
+app.use(express.json({ limit: "2mb" }));
+app.use(express.urlencoded({ extended: true, limit: "2mb" }));
 app.use(cookieParser);
 
-const UPLOAD_DIR = path.resolve(process.cwd(), "uploads");
-if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-app.use("/uploads", express.static(UPLOAD_DIR));
+// Required for passport.authenticate("google" | "facebook", ...) to find the
+// strategies registered in ./config/passport. Without this middleware,
+// passport throws "Unknown authentication strategy" and OAuth silently breaks.
+app.use(passport.initialize());
 
-app.get("/", (req: Request, res: Response) => {
+// Liveness/readiness probe — used by load balancers and uptime monitors.
+app.get("/healthz", (_req: Request, res: Response) => {
+  const dbReady = mongoose.connection.readyState === 1;
+  res.status(dbReady ? 200 : 503).json({
+    status: dbReady ? "ok" : "degraded",
+    db: dbReady ? "connected" : "disconnected",
+    uptime: process.uptime(),
+  });
+});
+
+app.get("/", (_req: Request, res: Response) => {
   res.send("Soshop API is running...");
 });
 
@@ -79,6 +108,7 @@ app.use("/api/affiliate", affiliateRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/banners", bannerRoutes);
 app.use("/api/support", supportRoutes);
 app.use("/api/marketing", marketingRoutes);
 app.use("/api/messages", messageRoutes);
@@ -91,7 +121,7 @@ app.use("/api/tracking", trackingRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api", inviteRoutes);
 
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   const statusCode = err.statusCode || 500;
   res.status(statusCode).json({
     success: false,

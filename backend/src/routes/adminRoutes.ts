@@ -9,6 +9,9 @@ import {
   updateUserBank,
   issueSellerCredentials,
   suspendUser,
+  createAdminAccount,
+  listAdminAccounts,
+  revokeAdminAccount,
 } from "../controllers/adminController";
 import {
   adminListKyc,
@@ -71,6 +74,12 @@ import {
   adminDeleteCategory,
 } from "../controllers/categoryController";
 import {
+  adminListBanners,
+  adminCreateBanner,
+  adminUpdateBanner,
+  adminDeleteBanner,
+} from "../controllers/heroBannerController";
+import {
   adminListAuditLogs,
   adminAuditStats,
 } from "../controllers/adminAuditController";
@@ -105,6 +114,11 @@ router.get("/dashboard/activity", getRecentActivity);
 router.get("/users", listUsers);
 router.get("/users/:id", getUserById);
 router.patch("/users/:id", updateUser);
+
+// Admin account management — direct create/list/demote (no invite tokens).
+router.get("/admins", listAdminAccounts);
+router.post("/admins", createAdminAccount);
+router.delete("/admins/:id", revokeAdminAccount);
 router.put("/users/:id/bank", updateUserBank);
 router.post("/users/:id/issue-seller-credentials", issueSellerCredentials);
 router.patch("/users/:id/suspend", suspendUser);
@@ -168,6 +182,11 @@ router.get("/categories", adminListCategories);
 router.post("/categories", adminCreateCategory);
 router.patch("/categories/:id", adminUpdateCategory);
 router.delete("/categories/:id", adminDeleteCategory);
+
+router.get("/banners", adminListBanners);
+router.post("/banners", adminCreateBanner);
+router.patch("/banners/:id", adminUpdateBanner);
+router.delete("/banners/:id", adminDeleteBanner);
 
 // Reports
 router.get("/reports/stats", adminReportStats);
