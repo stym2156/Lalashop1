@@ -5,6 +5,7 @@ import { Bell, Search, User as UserIcon, MessageSquare, ChevronDown, LogOut, Use
 import { useTranslation } from 'react-i18next';
 import { adminMe } from '@/services/authApi';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { useAdminAlerts } from '@/contexts/AdminAlertsContext';
 
 interface AdminMe {
   _id?: string;
@@ -27,6 +28,7 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const menuRef = useRef<HTMLDivElement>(null);
+  const { pendingKyc, total: alertsTotal } = useAdminAlerts();
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -101,11 +103,23 @@ const Header = () => {
         <LanguageSwitcher compact />
 
         <Link
-          href="/notifications"
+          href={pendingKyc > 0 ? '/kyc' : '/notifications'}
           className="p-2.5 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all text-gray-600 relative"
-          title={t('nav.dashboard')}
+          title={
+            pendingKyc > 0
+              ? t('alerts.pendingKyc', { count: pendingKyc, defaultValue: '{{count}} pending KYC submissions' })
+              : t('nav.notifications')
+          }
         >
           <Bell className="h-5 w-5" />
+          {alertsTotal > 0 && (
+            <>
+              <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold inline-flex items-center justify-center ring-2 ring-white shadow-sm">
+                {alertsTotal > 99 ? '99+' : alertsTotal}
+              </span>
+              <span className="absolute -top-1 -right-1 w-[18px] h-[18px] rounded-full bg-rose-500/40 animate-ping" />
+            </>
+          )}
         </Link>
 
         <Link

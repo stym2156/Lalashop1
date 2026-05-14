@@ -1,15 +1,9 @@
 import { Request, Response } from "express";
-import path from "path";
 import Product from "../models/productModel";
 import Address from "../models/addressModel";
 import Order from "../models/orderModel";
 import SearchLog from "../models/searchLogModel";
 import { IAuthRequest } from "../middlewares/authMiddleware";
-
-const fileToUrl = (file?: Express.Multer.File): string => {
-  if (!file) return "";
-  return `/uploads/${path.basename(file.path)}`;
-};
 
 const safeJsonParse = <T,>(value: unknown, fallback: T): T => {
   if (typeof value !== "string" || value.trim() === "") return fallback;
@@ -462,12 +456,7 @@ const toBool = (v: unknown, fallback = false): boolean => {
   return fallback;
 };
 
-const buildProductPayload = (
-  raw: Record<string, any>,
-  uploadedFileUrls: string[] = []
-): Record<string, any> => {
-  const isMultipartLike = uploadedFileUrls.length > 0 || typeof raw.tags === "string";
-
+const buildProductPayload = (raw: Record<string, any>): Record<string, any> => {
   const parseMaybe = <T,>(value: unknown, fallback: T): T => {
     if (value === undefined || value === null) return fallback;
     if (typeof value === "string") return safeJsonParse<T>(value, fallback);
@@ -539,9 +528,8 @@ const buildProductPayload = (
     ),
   };
 
-  // Images may arrive as JSON-string array, real array, or via uploaded files
-  const fallbackImages = parseMaybe<string[]>(raw.images, []);
-  const finalImages = uploadedFileUrls.length ? uploadedFileUrls : fallbackImages;
+  // Frontend uploads to R2 directly and sends back URLs in body.images.
+  const finalImages = parseMaybe<string[]>(raw.images, []);
   if (finalImages.length) {
     body.images = finalImages;
     body.image = finalImages[0];
@@ -568,12 +556,7 @@ export const createProduct = async (req: IAuthRequest, res: Response) => {
       });
     }
 
-    const uploadedFiles = (req.files as Express.Multer.File[]) || [];
-    const uploadedImageUrls = uploadedFiles
-      .filter((f) => f.fieldname === "images")
-      .map(fileToUrl);
-
-    const body = buildProductPayload(req.body || {}, uploadedImageUrls);
+    const body = buildProductPayload(req.body || {});
 
     if (!body.name || !body.category) {
       return res.status(400).json({
@@ -647,7 +630,7 @@ export const updateProduct = async (req: IAuthRequest, res: Response) => {
         .json({ success: false, message: "Not authorized to edit this product" });
     }
 
-    const body = buildProductPayload(req.body || {}, []);
+    const body = buildProductPayload(req.body || {});
 
     // Don't let an empty payload wipe required fields
     if (body.price !== undefined && (typeof body.price !== "number" || Number.isNaN(body.price))) {

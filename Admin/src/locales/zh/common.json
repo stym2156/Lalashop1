@@ -30,7 +30,7 @@
     "posts": "帖子",
     "categories": "分类",
     "history": "历史",
-    "banners": "横幅",
+    "banners": "轮播图",
     "notifications": "通知",
     "admins": "管理员",
     "adminAccounts": "管理员账户",
@@ -469,7 +469,8 @@
     "verified": "已验证",
     "warehouse": "仓库",
     "when": "时间",
-    "currencySymbol": "¥"
+    "currencySymbol": "¥",
+    "done": "完成"
   },
   "pages": {
     "users": {
@@ -1569,11 +1570,33 @@
       "loading": "加载帖子中…"
     },
     "banners": {
-      "title": "横幅",
-      "subtitle": "管理首页横幅",
+      "title": "首页横幅",
+      "subtitle": "管理客户首页轮播图。",
       "noBanners": "无横幅",
       "loading": "加载横幅中…",
-      "addBanner": "添加横幅"
+      "addBanner": "添加横幅",
+      "add": "添加横幅",
+      "edit": "编辑横幅",
+      "empty": "暂无横幅",
+      "emptyHint": "添加第一个横幅以开始在首页显示。",
+      "untitled": "未命名",
+      "image": "图片",
+      "imageOnly": "文件必须是图片",
+      "imageRequired": "横幅图片为必填项",
+      "uploadImage": "点击上传",
+      "uploading": "上传中...",
+      "recommend": "推荐 1920×600 像素",
+      "replace": "替换",
+      "titleField": "标题",
+      "titlePlaceholder": "可选标题",
+      "subtitleField": "副标题",
+      "subtitlePlaceholder": "可选副标题",
+      "linkField": "链接 URL",
+      "order": "显示顺序",
+      "status": "状态",
+      "moveUp": "上移",
+      "moveDown": "下移",
+      "confirmDelete": "删除此横幅？"
     },
     "login": {
       "title": "登录",
@@ -1750,7 +1773,26 @@
       },
       "revokeTitle": "撤销角色"
     },
-    "title": "管理员团队"
+    "title": "管理员团队",
+    "create": {
+      "subtitle": "通过直接设置邮箱和密码来创建管理员账号。不会发送邀请邮件 — 请自行将凭据分享给新管理员。",
+      "emailHint": "任何邮箱都可以 — 不会发送验证邮件",
+      "password": "密码",
+      "passwordPlaceholder": "至少 6 个字符",
+      "passwordHint": "自行设置密码或点击 ↻ 生成。通过您方便的渠道分享给新管理员。",
+      "passwordMin": "密码必须至少 6 个字符",
+      "generate": "生成密码",
+      "create": "创建管理员",
+      "created": "管理员账号已创建",
+      "promoted": "已将现有用户提升为管理员",
+      "shareCreds": "请将以下凭据分享给新管理员 — 不会再次显示",
+      "copyBoth": "复制两者",
+      "adminAccounts": "管理员账号",
+      "totalAdmins": "共 {{count}} 个",
+      "noAdmins": "暂无管理员账号",
+      "revokeAccess": "撤销管理员权限",
+      "confirmRevoke": "撤销 {{name}} 的管理员权限？"
+    }
   },
   "financial": {
     "asBuyer": "作为买家",

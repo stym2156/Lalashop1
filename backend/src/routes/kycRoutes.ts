@@ -1,17 +1,12 @@
 import { Router } from "express";
 import { protect } from "../middlewares/authMiddleware";
 import { submitKyc, getMyKyc } from "../controllers/kycController";
-import { uploadDocs } from "../utils/fileUpload";
 
 const router: Router = Router();
 
-const kycUpload = uploadDocs.fields([
-  { name: "licenseFile", maxCount: 1 },
-  { name: "idFile", maxCount: 1 },
-  { name: "additionalDocs", maxCount: 5 },
-]);
-
-router.post("/submit", protect, kycUpload, submitKyc);
+// KYC documents now live in R2 — the frontend uploads via the presign flow and
+// only sends the resulting public URLs here, so there is no multipart parser.
+router.post("/submit", protect, submitKyc);
 router.get("/me", protect, getMyKyc);
 
 export default router;

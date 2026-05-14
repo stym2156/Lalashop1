@@ -801,7 +801,14 @@
       "fieldRepresentative": "代表人",
       "fieldAddress": "地址",
       "viewDoc": "查看",
-      "reviewWithin23Days": "我们将在 2-3 个工作日内审核您的信息。如果需要更多信息或有疑问，我们将通过您注册的邮箱或电话联系您。"
+      "reviewWithin23Days": "我们将在 2-3 个工作日内审核您的信息。如果需要更多信息或有疑问，我们将通过您注册的邮箱或电话联系您。",
+      "fieldBankName": "银行名称",
+      "fieldAccountNumber": "账号",
+      "fieldIdType": "证件类型",
+      "fieldBirthDate": "出生日期",
+      "fieldExpiryDate": "证件有效期至",
+      "fieldCountry": "国家",
+      "uploadedDocs": "已上传文档"
     },
     "securityPanel": {
       "password": "密码",

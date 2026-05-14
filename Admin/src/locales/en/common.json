@@ -469,7 +469,8 @@
     "username": "Username",
     "verified": "Verified",
     "warehouse": "Warehouse",
-    "when": "When"
+    "when": "When",
+    "done": "Done"
   },
   "pages": {
     "users": {
@@ -1512,11 +1513,33 @@
       "loading": "Loading posts…"
     },
     "banners": {
-      "title": "Banners",
-      "subtitle": "Manage homepage banners",
+      "title": "Hero Banners",
+      "subtitle": "Manage the homepage carousel slides shown to customers.",
       "noBanners": "No banners",
       "loading": "Loading banners…",
-      "addBanner": "Add banner"
+      "addBanner": "Add banner",
+      "add": "Add banner",
+      "edit": "Edit banner",
+      "empty": "No banners yet",
+      "emptyHint": "Add the first banner to start showing it on the homepage.",
+      "untitled": "Untitled",
+      "image": "Image",
+      "imageOnly": "File must be an image",
+      "imageRequired": "Banner image is required",
+      "uploadImage": "Click to upload",
+      "uploading": "Uploading...",
+      "recommend": "Recommended 1920×600 px",
+      "replace": "Replace",
+      "titleField": "Title",
+      "titlePlaceholder": "Optional title",
+      "subtitleField": "Subtitle",
+      "subtitlePlaceholder": "Optional subtitle",
+      "linkField": "Link URL",
+      "order": "Display order",
+      "status": "Status",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "confirmDelete": "Delete this banner?"
     },
     "login": {
       "title": "Sign in",
@@ -1693,7 +1716,26 @@
       },
       "revokeTitle": "Revoke Title"
     },
-    "title": "Admin team"
+    "title": "Admin team",
+    "create": {
+      "subtitle": "Create an admin account by setting an email and password directly. No invitation email is sent — share the credentials with the new admin yourself.",
+      "emailHint": "Any email works — no verification email is sent.",
+      "password": "Password",
+      "passwordPlaceholder": "Min 6 characters",
+      "passwordHint": "Set the password yourself or click ↻ to generate one. Share it with the new admin via your preferred channel.",
+      "passwordMin": "Password must be at least 6 characters",
+      "generate": "Generate password",
+      "create": "Create admin",
+      "created": "Admin account created",
+      "promoted": "Existing user promoted to admin",
+      "shareCreds": "Share these credentials with the new admin. They won't be shown again.",
+      "copyBoth": "Copy both",
+      "adminAccounts": "Admin accounts",
+      "totalAdmins": "{{count}} total",
+      "noAdmins": "No admin accounts yet",
+      "revokeAccess": "Remove admin access",
+      "confirmRevoke": "Remove admin access for {{name}}?"
+    }
   },
   "financial": {
     "asBuyer": "As Buyer",

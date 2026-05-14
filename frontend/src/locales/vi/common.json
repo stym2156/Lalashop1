@@ -801,7 +801,14 @@
       "fieldRepresentative": "Đại diện",
       "fieldAddress": "Địa chỉ",
       "viewDoc": "Xem",
-      "reviewWithin23Days": "Chúng tôi sẽ xem xét thông tin của bạn trong vòng 2-3 ngày làm việc. Nếu cần thêm thông tin hoặc có thắc mắc, chúng tôi sẽ liên hệ qua email hoặc số điện thoại bạn đã đăng ký."
+      "reviewWithin23Days": "Chúng tôi sẽ xem xét thông tin của bạn trong vòng 2-3 ngày làm việc. Nếu cần thêm thông tin hoặc có thắc mắc, chúng tôi sẽ liên hệ qua email hoặc số điện thoại bạn đã đăng ký.",
+      "fieldBankName": "Tên ngân hàng",
+      "fieldAccountNumber": "Số tài khoản",
+      "fieldIdType": "Loại giấy tờ",
+      "fieldBirthDate": "Ngày sinh",
+      "fieldExpiryDate": "Ngày hết hạn giấy tờ",
+      "fieldCountry": "Quốc gia",
+      "uploadedDocs": "Tài liệu đã tải lên"
     },
     "securityPanel": {
       "password": "Mật khẩu",

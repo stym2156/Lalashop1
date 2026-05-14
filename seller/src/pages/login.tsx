@@ -158,7 +158,7 @@ const SellerLoginPage = () => {
           <p className="text-[11px] text-gray-400 mt-8 leading-relaxed">
             {t('pages.login.notSeller')}{' '}
             <a
-              href="http://localhost:3000/me/opensho/openshop"
+              href={`${process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000"}/me/opensho/openshop`}
               className="text-[#00aeff] font-semibold hover:underline"
             >
               {t('pages.login.openShop')} →

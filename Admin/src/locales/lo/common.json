@@ -30,7 +30,7 @@
     "posts": "ໂພສ",
     "categories": "ໝວດໝູ່",
     "history": "ປະຫວັດ",
-    "banners": "ປ້າຍແບນເນີ",
+    "banners": "ປ້າຍໂຄສະນາ",
     "notifications": "ການແຈ້ງເຕືອນ",
     "admins": "ແອັດມິນ",
     "adminAccounts": "ບັນຊີແອັດມິນ",
@@ -469,7 +469,8 @@
     "verified": "ຢືນຢັນແລ້ວ",
     "warehouse": "ຄັງສິນຄ້າ",
     "when": "ເມື່ອໃດ",
-    "currencySymbol": "₭"
+    "currencySymbol": "₭",
+    "done": "ສຳເລັດ"
   },
   "pages": {
     "users": {
@@ -1564,16 +1565,38 @@
     },
     "posts": {
       "title": "ໂພສ",
-      "subtitle": "ຈັດການໂພສໂຊໂຊ",
+      "subtitle": "ຈັດການໂພສ",
       "noPosts": "ບໍ່ມີໂພສ",
       "loading": "ກຳລັງໂຫຼດໂພສ…"
     },
     "banners": {
-      "title": "ປ້າຍແບນເນີ",
-      "subtitle": "ຈັດການປ້າຍແບນເນີໜ້າຫຼັກ",
+      "title": "ປ້າຍໜ້າຫຼັກ",
+      "subtitle": "ຈັດການແບນເນີຫນ້າຫຼັກທີ່ສະແດງໃຫ້ລູກຄ້າເຫັນ",
       "noBanners": "ບໍ່ມີປ້າຍ",
       "loading": "ກຳລັງໂຫຼດປ້າຍ…",
-      "addBanner": "ເພີ່ມປ້າຍ"
+      "addBanner": "ເພີ່ມປ້າຍ",
+      "add": "ເພີ່ມປ້າຍ",
+      "edit": "ແກ້ໄຂປ້າຍ",
+      "empty": "ຍັງບໍ່ມີປ້າຍ",
+      "emptyHint": "ເພີ່ມປ້າຍທຳອິດເພື່ອເລີ່ມສະແດງໃນຫນ້າຫຼັກ",
+      "untitled": "ບໍ່ມີຊື່",
+      "image": "ຮູບພາບ",
+      "imageOnly": "ໄຟລ໌ຕ້ອງເປັນຮູບພາບ",
+      "imageRequired": "ຕ້ອງມີຮູບປ້າຍ",
+      "uploadImage": "ຄລິກເພື່ອອັບໂຫຼດ",
+      "uploading": "ກຳລັງອັບໂຫຼດ...",
+      "recommend": "ແນະນຳຂະຫນາດ 1920×600 px",
+      "replace": "ປ່ຽນ",
+      "titleField": "ຫົວຂໍ້",
+      "titlePlaceholder": "ຫົວຂໍ້ (ບໍ່ບັງຄັບ)",
+      "subtitleField": "ຫົວຂໍ້ຍ່ອຍ",
+      "subtitlePlaceholder": "ຫົວຂໍ້ຍ່ອຍ (ບໍ່ບັງຄັບ)",
+      "linkField": "ລິ້ງ URL",
+      "order": "ລຳດັບການສະແດງ",
+      "status": "ສະຖານະ",
+      "moveUp": "ເລື່ອນຂຶ້ນ",
+      "moveDown": "ເລື່ອນລົງ",
+      "confirmDelete": "ລຶບປ້າຍນີ້?"
     },
     "login": {
       "title": "ເຂົ້າສູ່ລະບົບ",
@@ -1750,7 +1773,26 @@
       },
       "revokeTitle": "ຍົກເລີກບົດບາດ"
     },
-    "title": "ທີມຜູ້ດູແລ"
+    "title": "ທີມຜູ້ດູແລ",
+    "create": {
+      "subtitle": "ສ້າງບັນຊີ admin ໂດຍຕັ້ງອີເມວແລະລະຫັດຜ່ານໂດຍກົງ ບໍ່ມີການສົ່ງອີເມວເຊີນ — ແບ່ງປັນຂໍ້ມູນກັບ admin ໃໝ່ດ້ວຍຕົນເອງ",
+      "emailHint": "ໃສ່ອີເມວໃດກໍ່ໄດ້ — ບໍ່ມີການສົ່ງອີເມວຢືນຢັນ",
+      "password": "ລະຫັດຜ່ານ",
+      "passwordPlaceholder": "ຢ່າງໜ້ອຍ 6 ຕົວອັກສອນ",
+      "passwordHint": "ຕັ້ງລະຫັດຜ່ານເອງຫຼືຄລິກ ↻ ເພື່ອສ້າງ ແບ່ງປັນກັບ admin ໃໝ່ຜ່ານຊ່ອງທາງທີ່ທ່ານສະດວກ",
+      "passwordMin": "ລະຫັດຜ່ານຕ້ອງມີຢ່າງໜ້ອຍ 6 ຕົວອັກສອນ",
+      "generate": "ສ້າງລະຫັດຜ່ານ",
+      "create": "ສ້າງ admin",
+      "created": "ສ້າງບັນຊີ admin ສຳເລັດ",
+      "promoted": "ປະຊາສຳພັນຜູ້ໃຊ້ທີ່ມີຢູ່ໄປເປັນ admin",
+      "shareCreds": "ແບ່ງປັນຂໍ້ມູນລຸ່ມນີ້ກັບ admin ໃໝ່ — ຈະບໍ່ສະແດງອີກ",
+      "copyBoth": "ສຳເນົາທັງສອງ",
+      "adminAccounts": "ບັນຊີ admin",
+      "totalAdmins": "ທັງໝົດ {{count}}",
+      "noAdmins": "ຍັງບໍ່ມີບັນຊີ admin",
+      "revokeAccess": "ຍົກເລີກສິດ admin",
+      "confirmRevoke": "ຍົກເລີກສິດ admin ຂອງ {{name}}?"
+    }
   },
   "financial": {
     "asBuyer": "ໃນຖານະຜູ້ຊື້",

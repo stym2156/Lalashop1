@@ -18,8 +18,23 @@ import {
 } from "../controllers/twoFactorController";
 import { protect } from "../middlewares/authMiddleware";
 import passport from "passport";
+import rateLimit from "express-rate-limit";
 
 const router: Router = Router();
+
+// Brute-force guard for credential endpoints. Per-IP, 10 attempts / 15 min.
+// We don't want this on /me, /verify-reset-code, etc. — only on the routes
+// that take a password or claim a reset code.
+const authRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: "Too many attempts. Please wait a few minutes and try again.",
+  },
+});
 
 // Returns a friendly error if the requested OAuth provider hasn't been
 // configured (env vars missing). Without this guard, Passport throws
@@ -56,7 +71,8 @@ router.get(
   passport.authenticate("google", { session: false }),
   (req: any, res) => {
     const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET || "secret");
-    res.redirect(`http://localhost:3000/login?token=${token}`);
+    const base = process.env.FRONTEND_URL || "http://localhost:3000";
+    res.redirect(`${base}/login?token=${token}`);
   },
 );
 
@@ -77,19 +93,20 @@ router.get(
       process.env.JWT_SECRET || "secret",
       { expiresIn: "7d" },
     );
-    res.redirect(`http://localhost:3000/login-success?token=${token}`);
+    const base = process.env.FRONTEND_URL || "http://localhost:3000";
+    res.redirect(`${base}/login-success?token=${token}`);
   },
 );
 
 
 // Auth Routes
-router.post("/register", register);
-router.post("/login", login);
-router.post("/seller-login", sellerLogin);
+router.post("/register", authRateLimiter, register);
+router.post("/login", authRateLimiter, login);
+router.post("/seller-login", authRateLimiter, sellerLogin);
 router.get("/me", protect as any, getMe);
-router.post("/forgot-password", forgotPassword);
-router.post("/verify-reset-code", verifyResetCode);
-router.post("/reset-password", resetPassword);
+router.post("/forgot-password", authRateLimiter, forgotPassword);
+router.post("/verify-reset-code", authRateLimiter, verifyResetCode);
+router.post("/reset-password", authRateLimiter, resetPassword);
 
 // Withdrawal PIN Route
 router.post("/withdraw-pin/set", protect as any, setWithdrawPin);

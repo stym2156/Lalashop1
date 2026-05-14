@@ -1,142 +1,164 @@
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import {
-  ArrowLeft, Mail, Send, ShieldCheck, Copy, RefreshCw, X, Check, Loader2,
-} from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+  ArrowLeft, Mail, ShieldCheck, X, Loader2, KeyRound, Eye, EyeOff,
+  RefreshCw, UserPlus, Copy, Check,
+} from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
-  fetchAdminInvites,
-  createAdminInvite,
-  revokeAdminInvite,
-  resendAdminInvite,
-  type AdminInviteRow,
-  type InviteRole,
-  type InviteStatus,
-} from '@/services/adminApi';
+  fetchAdminAccounts,
+  createAdminAccount,
+  revokeAdminAccount,
+  type AdminAccountRow,
+  type AdminAccountRole,
+} from "@/services/adminApi";
 
-const statusBadge: Record<InviteStatus, string> = {
-  pending: 'bg-orange-50 text-orange-700',
-  accepted: 'bg-green-50 text-green-700',
-  revoked: 'bg-gray-100 text-gray-600',
-  expired: 'bg-red-50 text-red-700',
+const roleBadge: Record<AdminAccountRole, string> = {
+  super: "bg-purple-50 text-purple-700",
+  finance: "bg-emerald-50 text-emerald-700",
+  support: "bg-sky-50 text-sky-700",
+  content: "bg-amber-50 text-amber-700",
 };
 
 const formatDate = (s?: string): string => {
-  if (!s) return '—';
+  if (!s) return "—";
   const d = new Date(s);
-  if (Number.isNaN(d.getTime())) return '—';
-  const pad = (x: number) => String(x).padStart(2, '0');
+  if (Number.isNaN(d.getTime())) return "—";
+  const pad = (x: number) => String(x).padStart(2, "0");
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 };
 
-const buildAcceptLink = (token: string): string => {
-  if (typeof window === 'undefined') return `/accept-invite/${token}`;
-  return `${window.location.origin}/accept-invite/${token}`;
+// Generate a memorable password — 12 chars, upper+lower+digit. Used by the
+// "Generate" button so admins don't have to invent one themselves.
+const generatePassword = (): string => {
+  const upper = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+  const lower = "abcdefghijkmnpqrstuvwxyz";
+  const digits = "23456789";
+  const all = upper + lower + digits;
+  const pickRandom = (set: string) => set[Math.floor(Math.random() * set.length)];
+  let pwd = pickRandom(upper) + pickRandom(lower) + pickRandom(digits);
+  for (let i = 0; i < 9; i++) pwd += pickRandom(all);
+  return pwd
+    .split("")
+    .sort(() => Math.random() - 0.5)
+    .join("");
 };
 
-const InviteAdminPage = () => {
-  const { t } = useTranslation('common');
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [roleId, setRoleId] = useState<InviteRole>('support');
-  const [message, setMessage] = useState('');
-  const [expiry, setExpiry] = useState(7);
+const CreateAdminPage = () => {
+  const { t } = useTranslation("common");
 
-  const [items, setItems] = useState<AdminInviteRow[]>([]);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [roleId, setRoleId] = useState<AdminAccountRole>("support");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [items, setItems] = useState<AdminAccountRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
-  const [info, setInfo] = useState<string | null>(null);
-  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [success, setSuccess] = useState<{
+    email: string;
+    password: string;
+    promoted: boolean;
+  } | null>(null);
+  const [copied, setCopied] = useState<"email" | "password" | "both" | null>(null);
 
-  const ROLES: { id: InviteRole; name: string; description: string }[] = [
-    { id: 'super', name: t('roles.super'), description: t('admins.invite.roles.superDesc') },
-    { id: 'finance', name: t('roles.finance'), description: t('admins.invite.roles.financeDesc') },
-    { id: 'support', name: t('roles.support'), description: t('admins.invite.roles.supportDesc') },
-    { id: 'content', name: t('roles.content'), description: t('admins.invite.roles.contentDesc') },
+  const ROLES: { id: AdminAccountRole; name: string; description: string }[] = [
+    { id: "super", name: t("roles.super"), description: t("admins.invite.roles.superDesc") },
+    { id: "finance", name: t("roles.finance"), description: t("admins.invite.roles.financeDesc") },
+    { id: "support", name: t("roles.support"), description: t("admins.invite.roles.supportDesc") },
+    { id: "content", name: t("roles.content"), description: t("admins.invite.roles.contentDesc") },
   ];
 
   const load = async () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetchAdminInvites();
+      const res = await fetchAdminAccounts();
       setItems(res.data ?? []);
     } catch (err) {
-      setError(err instanceof Error ? err.message : t('admins.invite.failedToLoad'));
+      setError(err instanceof Error ? err.message : t("admins.invite.failedToLoad"));
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    void load();
   }, []);
 
-  const onSend = async (e: React.FormEvent) => {
+  const onCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim()) return;
+    if (!email.trim() || !password.trim()) return;
+    if (password.length < 6) {
+      alert(t("admins.create.passwordMin", "Password must be at least 6 characters"));
+      return;
+    }
     setSubmitting(true);
-    setInfo(null);
     try {
-      await createAdminInvite({
+      const res = await createAdminAccount({
         email: email.trim(),
+        password,
         name: name.trim() || undefined,
-        role: roleId,
-        message: message.trim() || undefined,
-        expiryDays: expiry,
+        adminRole: roleId,
       });
-      setInfo(t('admins.invite.sentSuccess', { email: email.trim() }));
-      setEmail('');
-      setName('');
-      setMessage('');
+      const data = res.data;
+      if (data) {
+        setSuccess({
+          email: data.email,
+          password,
+          promoted: !!data.promoted,
+        });
+      }
+      setEmail("");
+      setName("");
+      setPassword("");
       await load();
     } catch (err) {
-      alert(err instanceof Error ? err.message : t('admins.invite.failed'));
+      alert(err instanceof Error ? err.message : t("admins.invite.failed"));
     } finally {
       setSubmitting(false);
     }
   };
 
-  const onRevoke = async (id: string) => {
-    if (!window.confirm(t('admins.invite.confirmRevoke'))) return;
+  const onRevoke = async (id: string, displayName: string) => {
+    if (
+      !window.confirm(
+        t("admins.create.confirmRevoke", "Remove admin access for {{name}}?", { name: displayName })
+      )
+    )
+      return;
     setBusyId(id);
     try {
-      await revokeAdminInvite(id);
+      await revokeAdminAccount(id);
       await load();
     } catch (err) {
-      alert(err instanceof Error ? err.message : t('common.error'));
+      alert(err instanceof Error ? err.message : t("common.error"));
     } finally {
       setBusyId(null);
     }
   };
 
-  const onResend = async (id: string) => {
-    setBusyId(id);
+  const onCopyCreds = async (kind: "email" | "password" | "both") => {
+    if (!success) return;
+    const text =
+      kind === "email"
+        ? success.email
+        : kind === "password"
+          ? success.password
+          : `${success.email} / ${success.password}`;
     try {
-      await resendAdminInvite(id);
-      await load();
-    } catch (err) {
-      alert(err instanceof Error ? err.message : t('common.error'));
-    } finally {
-      setBusyId(null);
-    }
-  };
-
-  const onCopy = async (id: string, token: string) => {
-    try {
-      await navigator.clipboard.writeText(buildAcceptLink(token));
-      setCopiedId(id);
-      setTimeout(() => setCopiedId(null), 2000);
+      await navigator.clipboard.writeText(text);
+      setCopied(kind);
+      setTimeout(() => setCopied(null), 1800);
     } catch {
-      alert(t('common.copyFailed'));
+      /* clipboard blocked */
     }
   };
 
   const selectedRole = ROLES.find((r) => r.id === roleId)!;
-  const pendingCount = items.filter((i) => i.status === 'pending').length;
 
   return (
     <div className="space-y-4 text-sm">
@@ -144,20 +166,26 @@ const InviteAdminPage = () => {
         href="/admins"
         className="inline-flex items-center gap-2 text-[12px] text-gray-500 hover:text-black font-medium transition-colors"
       >
-        <ArrowLeft className="w-3.5 h-3.5" /> {t('common.backToAdmins')}
+        <ArrowLeft className="w-3.5 h-3.5" /> {t("common.backToAdmins")}
       </Link>
 
       <p className="text-[12px] text-gray-500">
-        {t('admins.invite.subtitle')}
+        {t(
+          "admins.create.subtitle",
+          "Create an admin account by setting an email and password directly. No invitation email is sent — share the credentials with the new admin yourself."
+        )}
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <form
-          onSubmit={onSend}
+          onSubmit={onCreate}
           className="lg:col-span-2 rounded-lg border border-gray-100 p-5 space-y-4"
         >
+          {/* Email */}
           <div>
-            <label className="text-[11px] font-semibold text-gray-500 tracking-wide uppercase">{t('common.email')}</label>
+            <label className="text-[11px] font-semibold text-gray-500 tracking-wide uppercase">
+              {t("common.email")}
+            </label>
             <div className="relative mt-1">
               <Mail className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
               <input
@@ -165,15 +193,68 @@ const InviteAdminPage = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 type="email"
                 required
-                placeholder="name@lalashop.com"
+                placeholder="admin@anything.com"
                 className="w-full pl-8 pr-3 py-2 rounded-md text-[12px] bg-gray-50 border border-gray-100 focus:border-primary outline-none"
               />
             </div>
+            <p className="text-[10px] text-gray-400 mt-1">
+              {t(
+                "admins.create.emailHint",
+                "Any email works — no verification email is sent."
+              )}
+            </p>
           </div>
 
+          {/* Password */}
           <div>
             <label className="text-[11px] font-semibold text-gray-500 tracking-wide uppercase">
-              {t('common.fullName')} <span className="text-gray-400 font-normal">({t('common.optional')})</span>
+              {t("admins.create.password", "Password")}
+            </label>
+            <div className="relative mt-1">
+              <KeyRound className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+              <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type={showPassword ? "text" : "password"}
+                required
+                minLength={6}
+                placeholder={t("admins.create.passwordPlaceholder", "Min 6 characters")}
+                className="w-full pl-8 pr-20 py-2 rounded-md text-[12px] bg-gray-50 border border-gray-100 focus:border-primary outline-none font-mono"
+              />
+              <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-0.5">
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((s) => !s)}
+                  className="p-1.5 rounded hover:bg-gray-100 text-gray-500"
+                  title={showPassword ? t("auth.hidePassword") : t("auth.showPassword")}
+                >
+                  {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPassword(generatePassword());
+                    setShowPassword(true);
+                  }}
+                  className="p-1.5 rounded hover:bg-gray-100 text-gray-500"
+                  title={t("admins.create.generate", "Generate password")}
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+            <p className="text-[10px] text-gray-400 mt-1">
+              {t(
+                "admins.create.passwordHint",
+                "Set the password yourself or click ↻ to generate one. Share it with the new admin via your preferred channel."
+              )}
+            </p>
+          </div>
+
+          {/* Name */}
+          <div>
+            <label className="text-[11px] font-semibold text-gray-500 tracking-wide uppercase">
+              {t("common.fullName")} <span className="text-gray-400 font-normal">({t("common.optional")})</span>
             </label>
             <input
               value={name}
@@ -184,57 +265,36 @@ const InviteAdminPage = () => {
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label className="text-[11px] font-semibold text-gray-500 tracking-wide uppercase">{t('common.role')}</label>
-              <select
-                value={roleId}
-                onChange={(e) => setRoleId(e.target.value as InviteRole)}
-                className="w-full mt-1 px-3 py-2 rounded-md text-[12px] bg-gray-50 border border-gray-100 focus:border-primary outline-none"
-              >
-                {ROLES.map((r) => (
-                  <option key={r.id} value={r.id}>{r.name}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="text-[11px] font-semibold text-gray-500 tracking-wide uppercase">{t('admins.invite.expiresIn')}</label>
-              <input
-                value={expiry}
-                onChange={(e) => setExpiry(Math.min(Math.max(Number(e.target.value), 1), 30))}
-                type="number"
-                min={1}
-                max={30}
-                className="w-full mt-1 px-3 py-2 rounded-md text-[12px] bg-gray-50 border border-gray-100 focus:border-primary outline-none"
-              />
-            </div>
-          </div>
-
+          {/* Role */}
           <div>
             <label className="text-[11px] font-semibold text-gray-500 tracking-wide uppercase">
-              {t('common.message')} <span className="text-gray-400 font-normal">({t('common.optional')})</span>
+              {t("common.role")}
             </label>
-            <textarea
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              rows={3}
-              placeholder={t('admins.invite.messagePlaceholder')}
-              className="w-full mt-1 px-3 py-2 rounded-md text-[12px] bg-gray-50 border border-gray-100 focus:border-primary outline-none resize-none"
-            />
+            <select
+              value={roleId}
+              onChange={(e) => setRoleId(e.target.value as AdminAccountRole)}
+              className="w-full mt-1 px-3 py-2 rounded-md text-[12px] bg-gray-50 border border-gray-100 focus:border-primary outline-none"
+            >
+              {ROLES.map((r) => (
+                <option key={r.id} value={r.id}>
+                  {r.name}
+                </option>
+              ))}
+            </select>
           </div>
-
-          {info && (
-            <div className="rounded-md bg-green-50 px-3 py-2 text-[12px] text-green-700">{info}</div>
-          )}
 
           <div className="flex items-center justify-end gap-2 pt-3 border-t border-gray-100">
             <button
               type="submit"
-              disabled={submitting || !email.trim()}
+              disabled={submitting || !email.trim() || password.length < 6}
               className="bg-black text-white px-4 py-2 rounded-md text-[12px] font-semibold inline-flex items-center hover:bg-gray-900 disabled:opacity-40"
             >
-              {submitting ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Send className="w-3.5 h-3.5 mr-1.5" />}
-              {submitting ? t('common.creating') : t('admins.invite.send')}
+              {submitting ? (
+                <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
+              ) : (
+                <UserPlus className="w-3.5 h-3.5 mr-1.5" />
+              )}
+              {submitting ? t("common.creating") : t("admins.create.create", "Create admin")}
             </button>
           </div>
         </form>
@@ -246,15 +306,106 @@ const InviteAdminPage = () => {
           </div>
           <p className="text-[11px] text-gray-500">{selectedRole.description}</p>
           <Link href="/admins/roles" className="text-[11px] text-primary hover:underline">
-            {t('admins.invite.viewRoleMatrix')} →
+            {t("admins.invite.viewRoleMatrix")} →
           </Link>
         </div>
       </div>
 
+      {/* Success modal — shows credentials once for copy/paste */}
+      {success && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 space-y-4">
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center">
+                <Check className="w-5 h-5 text-emerald-600" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-slate-900">
+                  {success.promoted
+                    ? t("admins.create.promoted", "Existing user promoted to admin")
+                    : t("admins.create.created", "Admin account created")}
+                </h3>
+                <p className="text-[11px] text-slate-400">
+                  {t(
+                    "admins.create.shareCreds",
+                    "Share these credentials with the new admin. They won't be shown again."
+                  )}
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between gap-2 bg-slate-50 rounded-lg px-3 py-2.5 border border-slate-100">
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">
+                    {t("common.email")}
+                  </p>
+                  <p className="text-sm font-mono text-slate-900 truncate">{success.email}</p>
+                </div>
+                <button
+                  onClick={() => onCopyCreds("email")}
+                  className="p-2 rounded-md hover:bg-white text-slate-500"
+                >
+                  {copied === "email" ? (
+                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                  ) : (
+                    <Copy className="w-3.5 h-3.5" />
+                  )}
+                </button>
+              </div>
+
+              <div className="flex items-center justify-between gap-2 bg-slate-50 rounded-lg px-3 py-2.5 border border-slate-100">
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">
+                    {t("admins.create.password", "Password")}
+                  </p>
+                  <p className="text-sm font-mono text-slate-900 truncate">{success.password}</p>
+                </div>
+                <button
+                  onClick={() => onCopyCreds("password")}
+                  className="p-2 rounded-md hover:bg-white text-slate-500"
+                >
+                  {copied === "password" ? (
+                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                  ) : (
+                    <Copy className="w-3.5 h-3.5" />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between pt-2">
+              <button
+                onClick={() => onCopyCreds("both")}
+                className="text-[12px] font-bold text-primary hover:underline inline-flex items-center gap-1"
+              >
+                {copied === "both" ? (
+                  <Check className="w-3.5 h-3.5" />
+                ) : (
+                  <Copy className="w-3.5 h-3.5" />
+                )}
+                {t("admins.create.copyBoth", "Copy both")}
+              </button>
+              <button
+                onClick={() => setSuccess(null)}
+                className="bg-black text-white px-4 py-2 rounded-md text-[12px] font-semibold hover:bg-gray-900"
+              >
+                {t("common.done")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Existing admins table */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <h2 className="text-[12px] font-bold text-black">{t('admins.invite.invitations')}</h2>
-          <span className="text-[11px] text-gray-500">{t('admins.invite.pendingCount', { count: pendingCount })}</span>
+          <h2 className="text-[12px] font-bold text-black">
+            {t("admins.create.adminAccounts", "Admin accounts")}
+          </h2>
+          <span className="text-[11px] text-gray-500">
+            {t("admins.create.totalAdmins", "{{count}} total", { count: items.length })}
+          </span>
         </div>
 
         <div className="rounded-lg border border-gray-100 overflow-hidden">
@@ -262,88 +413,77 @@ const InviteAdminPage = () => {
             <table className="w-full text-[12px] tabular-nums">
               <thead className="text-[11px] text-gray-500 tracking-wide bg-gray-50">
                 <tr>
-                  <th className="px-4 py-2 text-left font-semibold uppercase">{t('common.email')}</th>
-                  <th className="px-4 py-2 text-left font-semibold uppercase">{t('common.role')}</th>
-                  <th className="px-4 py-2 text-left font-semibold uppercase">{t('admins.invite.invitedBy')}</th>
-                  <th className="px-4 py-2 text-left font-semibold uppercase">{t('common.sent')}</th>
-                  <th className="px-4 py-2 text-left font-semibold uppercase">{t('common.expires')}</th>
-                  <th className="px-4 py-2 text-left font-semibold uppercase">{t('common.status')}</th>
-                  <th className="px-4 py-2 text-right font-semibold uppercase">{t('common.actions')}</th>
+                  <th className="px-4 py-2 text-left font-semibold uppercase">{t("common.fullName")}</th>
+                  <th className="px-4 py-2 text-left font-semibold uppercase">{t("common.email")}</th>
+                  <th className="px-4 py-2 text-left font-semibold uppercase">{t("common.role")}</th>
+                  <th className="px-4 py-2 text-left font-semibold uppercase">
+                    {t("common.created", "Created")}
+                  </th>
+                  <th className="px-4 py-2 text-right font-semibold uppercase">
+                    {t("common.actions")}
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {loading && (
                   <tr>
-                    <td colSpan={7} className="px-4 py-12 text-center text-gray-400 text-[12px]">
-                      {t('admins.invite.loading')}
+                    <td colSpan={5} className="px-4 py-12 text-center text-gray-400 text-[12px]">
+                      <Loader2 className="w-4 h-4 animate-spin mx-auto" />
                     </td>
                   </tr>
                 )}
                 {!loading && error && (
                   <tr>
-                    <td colSpan={7} className="px-4 py-12 text-center text-red-500 text-[12px]">{error}</td>
+                    <td colSpan={5} className="px-4 py-12 text-center text-red-500 text-[12px]">
+                      {error}
+                    </td>
                   </tr>
                 )}
-                {!loading && !error && items.map((inv) => {
-                  const role = ROLES.find((r) => r.id === inv.role)!;
-                  return (
-                    <tr key={inv._id} className="border-t border-gray-50">
-                      <td className="px-4 py-2 font-medium text-gray-900">{inv.email}</td>
-                      <td className="px-4 py-2 text-gray-700">{role?.name ?? inv.role}</td>
-                      <td className="px-4 py-2 text-gray-500 text-[11px]">
-                        {inv.invitedBy?.name || inv.invitedBy?.email || '—'}
-                      </td>
-                      <td className="px-4 py-2 text-gray-500 text-[11px]">{formatDate(inv.createdAt)}</td>
-                      <td className="px-4 py-2 text-gray-500 text-[11px]">{formatDate(inv.expiresAt)}</td>
-                      <td className="px-4 py-2">
-                        <span className={`text-[11px] font-medium px-2 py-0.5 rounded ${statusBadge[inv.status]}`}>
-                          {t(`status.${inv.status}`, inv.status)}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2 text-right">
-                        <div className="flex items-center justify-end gap-0.5">
-                          {inv.status === 'pending' && (
-                            <button
-                              onClick={() => onCopy(inv._id, inv.token)}
-                              title={t('admins.invite.copyLink')}
-                              className="text-gray-500 hover:text-black hover:bg-gray-100 rounded p-1"
-                            >
-                              {copiedId === inv._id ? (
-                                <Check className="w-3.5 h-3.5 text-green-600" />
-                              ) : (
-                                <Copy className="w-3.5 h-3.5" />
-                              )}
-                            </button>
+                {!loading &&
+                  !error &&
+                  items.map((admin) => {
+                    const role = admin.adminRole ? ROLES.find((r) => r.id === admin.adminRole) : null;
+                    const displayName = admin.name || admin.email;
+                    return (
+                      <tr key={admin._id} className="border-t border-gray-50">
+                        <td className="px-4 py-2 font-medium text-gray-900">
+                          {displayName}
+                          {admin.isSuspended && (
+                            <span className="ml-2 text-[10px] font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded">
+                              {t("status.suspended")}
+                            </span>
                           )}
-                          {(inv.status === 'expired' || inv.status === 'revoked') && (
-                            <button
-                              disabled={busyId === inv._id}
-                              onClick={() => onResend(inv._id)}
-                              title={t('actions.resend')}
-                              className="text-gray-500 hover:text-blue-700 hover:bg-gray-100 rounded p-1 disabled:opacity-30"
+                        </td>
+                        <td className="px-4 py-2 text-gray-700">{admin.email}</td>
+                        <td className="px-4 py-2">
+                          {admin.adminRole && (
+                            <span
+                              className={`text-[11px] font-medium px-2 py-0.5 rounded ${roleBadge[admin.adminRole]}`}
                             >
-                              <RefreshCw className="w-3.5 h-3.5" />
-                            </button>
+                              {role?.name ?? admin.adminRole}
+                            </span>
                           )}
-                          {inv.status === 'pending' && (
-                            <button
-                              disabled={busyId === inv._id}
-                              onClick={() => onRevoke(inv._id)}
-                              title={t('actions.revoke')}
-                              className="text-gray-500 hover:text-red-600 hover:bg-gray-100 rounded p-1 disabled:opacity-30"
-                            >
-                              <X className="w-3.5 h-3.5" />
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                        </td>
+                        <td className="px-4 py-2 text-gray-500 text-[11px]">
+                          {formatDate(admin.createdAt)}
+                        </td>
+                        <td className="px-4 py-2 text-right">
+                          <button
+                            disabled={busyId === admin._id}
+                            onClick={() => onRevoke(admin._id, displayName)}
+                            title={t("admins.create.revokeAccess", "Remove admin access")}
+                            className="text-gray-500 hover:text-red-600 hover:bg-gray-100 rounded p-1.5 disabled:opacity-30"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 {!loading && !error && items.length === 0 && (
                   <tr>
-                    <td colSpan={7} className="px-4 py-12 text-center text-gray-400 text-[12px]">
-                      {t('admins.invite.noInvites')}
+                    <td colSpan={5} className="px-4 py-12 text-center text-gray-400 text-[12px]">
+                      {t("admins.create.noAdmins", "No admin accounts yet")}
                     </td>
                   </tr>
                 )}
@@ -356,4 +496,4 @@ const InviteAdminPage = () => {
   );
 };
 
-export default InviteAdminPage;
+export default CreateAdminPage;

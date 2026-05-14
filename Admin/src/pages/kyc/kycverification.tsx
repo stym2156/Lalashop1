@@ -11,6 +11,7 @@ import {
   reviewKycSubmission,
   type AdminKycSubmission,
 } from '@/services/adminApi';
+import { useAdminAlerts } from '@/contexts/AdminAlertsContext';
 
 const isPdf = (url?: string, mime?: string): boolean => {
   if (mime && mime.toLowerCase().includes('pdf')) return true;
@@ -103,6 +104,7 @@ const KycVerificationDetail = () => {
   const [note, setNote] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const { refresh: refreshAlerts } = useAdminAlerts();
 
   const load = useCallback(async () => {
     if (!id) {
@@ -148,6 +150,9 @@ const KycVerificationDetail = () => {
       if (res.data) setData(res.data);
       setDecisionOpen(false);
       setNote('');
+      // Drop the badge counts on the Bell + Sidebar immediately rather than
+      // waiting up to 30 s for the next poll.
+      void refreshAlerts();
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : t('pages.kyc.verification.rejectFailed'));
     } finally {

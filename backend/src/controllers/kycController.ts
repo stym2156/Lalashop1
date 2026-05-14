@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import path from "path";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import KycSubmission from "../models/kycSubmissionModel";
@@ -43,17 +42,22 @@ interface SubmitKycBody {
   warehouse?: { fullAddress?: string };
 }
 
-const fileToUrl = (file?: Express.Multer.File): string => {
-  if (!file) return "";
-  return `/uploads/${path.basename(file.path)}`;
-};
-
-const safeJsonParse = <T,>(value: unknown, fallback: T): T => {
-  if (typeof value !== "string" || value.trim() === "") return fallback;
-  try {
-    return JSON.parse(value) as T;
-  } catch {
-    return fallback;
+const guessMimeFromUrl = (url: string): string => {
+  const ext = url.split("?")[0].split(".").pop()?.toLowerCase() || "";
+  switch (ext) {
+    case "jpg":
+    case "jpeg":
+      return "image/jpeg";
+    case "png":
+      return "image/png";
+    case "webp":
+      return "image/webp";
+    case "gif":
+      return "image/gif";
+    case "pdf":
+      return "application/pdf";
+    default:
+      return "application/octet-stream";
   }
 };
 
@@ -63,18 +67,7 @@ export const submitKyc = async (req: IAuthRequest, res: Response) => {
       return res.status(401).json({ success: false, message: "Not authenticated" });
     }
 
-    let body: SubmitKycBody = {};
-
-    if (req.is("multipart/form-data") || req.files) {
-      body = {
-        businessType: typeof req.body.businessType === "string" ? req.body.businessType : undefined,
-        shopInfo: safeJsonParse<SubmitKycBody["shopInfo"]>(req.body.shopInfo, {}),
-        identity: safeJsonParse<SubmitKycBody["identity"]>(req.body.identity, {}),
-        warehouse: safeJsonParse<SubmitKycBody["warehouse"]>(req.body.warehouse, { fullAddress: "" }),
-      };
-    } else {
-      body = req.body as SubmitKycBody;
-    }
+    const body = (req.body || {}) as SubmitKycBody;
 
     if (!body.businessType) {
       return res.status(400).json({ success: false, message: "businessType is required" });
@@ -95,34 +88,20 @@ export const submitKyc = async (req: IAuthRequest, res: Response) => {
       });
     }
 
-    const filesByField: Record<string, Express.Multer.File[]> = {};
-    const rawFiles = req.files as Express.Multer.File[] | Record<string, Express.Multer.File[]> | undefined;
-    if (Array.isArray(rawFiles)) {
-      rawFiles.forEach((f) => {
-        const key = f.fieldname;
-        filesByField[key] = filesByField[key] || [];
-        filesByField[key].push(f);
-      });
-    } else if (rawFiles && typeof rawFiles === "object") {
-      Object.assign(filesByField, rawFiles);
-    }
-
-    const licenseFile = filesByField.licenseFile?.[0];
-    const idFile = filesByField.idFile?.[0];
-    const additionalFiles = filesByField.additionalDocs || [];
+    const businessLicenseUrl = body.identity?.businessLicenseUrl || "";
+    const idDocumentUrl = body.identity?.idDocumentUrl || "";
 
     const documents = [
-      ...(licenseFile
-        ? [{ url: fileToUrl(licenseFile), label: "Business License", mimeType: licenseFile.mimetype }]
+      ...(businessLicenseUrl
+        ? [{ url: businessLicenseUrl, label: "Business License", mimeType: guessMimeFromUrl(businessLicenseUrl) }]
         : []),
-      ...(idFile
-        ? [{ url: fileToUrl(idFile), label: body.identity?.idType === "passport" ? "Passport" : "ID Card", mimeType: idFile.mimetype }]
+      ...(idDocumentUrl
+        ? [{
+            url: idDocumentUrl,
+            label: body.identity?.idType === "passport" ? "Passport" : "ID Card",
+            mimeType: guessMimeFromUrl(idDocumentUrl),
+          }]
         : []),
-      ...additionalFiles.map((f) => ({
-        url: fileToUrl(f),
-        label: "Additional Document",
-        mimeType: f.mimetype,
-      })),
     ];
 
     const submission = await KycSubmission.create({
@@ -149,8 +128,8 @@ export const submitKyc = async (req: IAuthRequest, res: Response) => {
         birthDate: body.identity?.birthDate || "",
         expiryDate: body.identity?.expiryDate || "",
         tinNumber: body.identity?.tinNumber || "",
-        businessLicenseUrl: licenseFile ? fileToUrl(licenseFile) : body.identity?.businessLicenseUrl || "",
-        idDocumentUrl: idFile ? fileToUrl(idFile) : body.identity?.idDocumentUrl || "",
+        businessLicenseUrl,
+        idDocumentUrl,
         documents,
         address: {
           street: body.identity?.address?.street || "",

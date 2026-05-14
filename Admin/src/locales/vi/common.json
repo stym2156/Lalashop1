@@ -30,7 +30,7 @@
     "posts": "Bài đăng",
     "categories": "Danh mục",
     "history": "Lịch sử",
-    "banners": "Banner",
+    "banners": "Biểu ngữ",
     "notifications": "Thông báo",
     "admins": "Quản trị viên",
     "adminAccounts": "Tài khoản quản trị",
@@ -469,7 +469,8 @@
     "verified": "Đã xác minh",
     "warehouse": "Kho hàng",
     "when": "Khi nào",
-    "currencySymbol": "₫"
+    "currencySymbol": "₫",
+    "done": "Xong"
   },
   "pages": {
     "users": {
@@ -1569,11 +1570,33 @@
       "loading": "Đang tải bài đăng…"
     },
     "banners": {
-      "title": "Banner",
-      "subtitle": "Quản lý banner trang chủ",
+      "title": "Biểu ngữ trang chủ",
+      "subtitle": "Quản lý các slide carousel hiển thị trên trang chủ.",
       "noBanners": "Không có banner",
       "loading": "Đang tải banner…",
-      "addBanner": "Thêm banner"
+      "addBanner": "Thêm banner",
+      "add": "Thêm biểu ngữ",
+      "edit": "Sửa biểu ngữ",
+      "empty": "Chưa có biểu ngữ",
+      "emptyHint": "Thêm biểu ngữ đầu tiên để bắt đầu hiển thị trên trang chủ.",
+      "untitled": "Không tiêu đề",
+      "image": "Hình ảnh",
+      "imageOnly": "Tệp phải là hình ảnh",
+      "imageRequired": "Bắt buộc phải có hình ảnh biểu ngữ",
+      "uploadImage": "Nhấp để tải lên",
+      "uploading": "Đang tải lên...",
+      "recommend": "Khuyến nghị 1920×600 px",
+      "replace": "Thay thế",
+      "titleField": "Tiêu đề",
+      "titlePlaceholder": "Tiêu đề (không bắt buộc)",
+      "subtitleField": "Phụ đề",
+      "subtitlePlaceholder": "Phụ đề (không bắt buộc)",
+      "linkField": "URL liên kết",
+      "order": "Thứ tự hiển thị",
+      "status": "Trạng thái",
+      "moveUp": "Di chuyển lên",
+      "moveDown": "Di chuyển xuống",
+      "confirmDelete": "Xóa biểu ngữ này?"
     },
     "login": {
       "title": "Đăng nhập",
@@ -1750,7 +1773,26 @@
       },
       "revokeTitle": "Thu hồi vai trò"
     },
-    "title": "Đội ngũ quản trị"
+    "title": "Đội ngũ quản trị",
+    "create": {
+      "subtitle": "Tạo tài khoản admin bằng cách đặt email và mật khẩu trực tiếp. Không gửi email mời — bạn tự chia sẻ thông tin đăng nhập với admin mới.",
+      "emailHint": "Bất kỳ email nào cũng được — không gửi email xác minh",
+      "password": "Mật khẩu",
+      "passwordPlaceholder": "Tối thiểu 6 ký tự",
+      "passwordHint": "Tự đặt mật khẩu hoặc nhấp ↻ để tạo. Chia sẻ với admin mới qua kênh bạn thích.",
+      "passwordMin": "Mật khẩu phải có ít nhất 6 ký tự",
+      "generate": "Tạo mật khẩu",
+      "create": "Tạo admin",
+      "created": "Đã tạo tài khoản admin",
+      "promoted": "Đã nâng quyền người dùng hiện có thành admin",
+      "shareCreds": "Chia sẻ thông tin bên dưới với admin mới — sẽ không hiển thị lại",
+      "copyBoth": "Sao chép cả hai",
+      "adminAccounts": "Tài khoản admin",
+      "totalAdmins": "Tổng {{count}}",
+      "noAdmins": "Chưa có tài khoản admin",
+      "revokeAccess": "Xóa quyền admin",
+      "confirmRevoke": "Xóa quyền admin của {{name}}?"
+    }
   },
   "financial": {
     "asBuyer": "Với tư cách người mua",

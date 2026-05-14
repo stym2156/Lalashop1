@@ -18,7 +18,6 @@ import {
   getMySellerReviews,
 } from "../controllers/reviewController";
 import { protect } from "../middlewares/authMiddleware";
-import { upload } from "../utils/fileUpload";
 
 const router = express.Router();
 
@@ -47,9 +46,9 @@ router.get("/my/reviews", protect, getMySellerReviews);
 // Products of a specific seller (View Shop)
 router.get("/seller/:sellerId", getProductsBySeller);
 
-// Create product — accepts JSON (Cloudinary URLs in body.images) or
-// multipart with up to 8 image fields named "images".
-router.post("/", protect, upload.array("images", 8), createProduct);
+// Create product — accepts JSON only. Frontend uploads images to R2 first
+// (via /api/upload/presign) and passes the resulting public URLs in body.images.
+router.post("/", protect, createProduct);
 
 // Update product
 router.put("/:id", protect, updateProduct);

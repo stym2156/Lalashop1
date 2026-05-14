@@ -14,13 +14,37 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // After OAuth callback the backend redirects to /login?token=...
+  // Persist BOTH the token AND the resolved user profile (matching the
+  // email/password flow) — otherwise pages that read `userInfo` from
+  // localStorage think the user is still anonymous and bounce back here.
   useEffect(() => {
+    if (!router.isReady) return;
     const { token } = router.query;
-    if (token) {
-      localStorage.setItem("token", token as string);
-      router.push("/");
-    }
-  }, [router.query, router]);
+    if (!token || typeof token !== "string") return;
+    let cancelled = false;
+    (async () => {
+      try {
+        localStorage.setItem("token", token);
+        const res = await apiClient("/auth/me");
+        const profile = res?.data || res;
+        if (cancelled) return;
+        if (profile?._id) {
+          const { token: _t, success: _s, ...userInfo } = profile;
+          localStorage.setItem("userInfo", JSON.stringify(userInfo));
+        }
+        router.replace("/");
+      } catch (err) {
+        if (!cancelled) {
+          localStorage.removeItem("token");
+          setError(t("auth.invalidCredentials"));
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [router.isReady, router.query.token, router, t]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

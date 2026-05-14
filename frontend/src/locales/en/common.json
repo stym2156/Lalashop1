@@ -801,7 +801,14 @@
       "fieldRepresentative": "Representative",
       "fieldAddress": "Address",
       "viewDoc": "View",
-      "reviewWithin23Days": "We will review your information within 2-3 business days. If we need more information or have questions, we will contact you via your registered email or phone number."
+      "reviewWithin23Days": "We will review your information within 2-3 business days. If we need more information or have questions, we will contact you via your registered email or phone number.",
+      "fieldBankName": "Bank Name",
+      "fieldAccountNumber": "Account Number",
+      "fieldIdType": "ID Type",
+      "fieldBirthDate": "Date of Birth",
+      "fieldExpiryDate": "ID Expiry Date",
+      "fieldCountry": "Country",
+      "uploadedDocs": "Uploaded Documents"
     },
     "securityPanel": {
       "password": "Password",

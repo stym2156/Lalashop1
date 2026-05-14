@@ -394,7 +394,7 @@ const MePage: React.FC = () => {
             </section>
 
             {/* FINANCIAL STATS */}
-            <section className="bg-white border-y border-gray-border grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 divide-x divide-gray-light w-full shadow-sm shadow-black/[0.02]">
+            <section className="bg-white border-y border-gray-border grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 divide-x divide-gray-light w-full shadow-sm shadow-black/[0.02]">
                {stats.map((s) => (
                   <button key={s.id} onClick={() => setSubView(s.id as SubView)} className="p-6 flex flex-col items-start active:bg-gray-light transition-colors group relative overflow-hidden">
                      <s.icon size={15} className="mb-4 text-primary-hover group-hover:scale-110 transition-transform duration-300" />

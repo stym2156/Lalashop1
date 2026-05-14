@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
   Heart,
-  Send,
+  MessageSquare,
   Search,
   PlusSquare,
   Image as ImageIcon,
@@ -144,94 +144,104 @@ export default function SocialPage() {
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] pb-24 md:pb-8 font-sans">
-      <nav className="sticky top-0 z-[60] bg-white/90 backdrop-blur-lg border-b border-slate-100 px-4 py-3 flex items-center justify-between max-w-5xl mx-auto w-full md:px-8 shadow-sm">
-        <div className="flex-1 max-w-[240px] md:max-w-[320px] relative">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-            <input
-              type="text"
-              placeholder={t("pages.social.exploreUsers")}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() => searchQuery.length > 0 && setShowResults(true)}
-              className="w-full bg-slate-50 border border-slate-100 rounded-xl py-2 pl-10 pr-4 text-sm outline-none text-dark focus:bg-white focus:ring-2 focus:ring-primary/10 focus:border-primary/30 transition-all"
-            />
-            {searching && (
-              <Loader2
-                size={14}
-                className="absolute right-3 top-1/2 -translate-y-1/2 animate-spin text-gray-400"
+      <nav className="sticky top-0 z-[60] bg-white/90 backdrop-blur-lg border-b border-slate-100 px-4 py-3  w-full md:px-8 shadow-sm">
+        <div className="relative flex items-center w-full">
+
+          {/* Search Center */}
+          <div className="absolute left-1/2 -translate-x-1/2 w-full max-w-[240px] md:max-w-[320px]">
+            <div className="relative">
+              <Search
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                size={16}
               />
+
+              <input
+                type="text"
+                placeholder={t("pages.social.exploreUsers")}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => searchQuery.length > 0 && setShowResults(true)}
+                className="w-full bg-slate-50 border border-slate-100 rounded-xl py-2 pl-10 pr-4 text-sm outline-none text-dark focus:bg-white focus:ring-2 focus:ring-primary/10 focus:border-primary/30 transition-all"
+              />
+
+              {searching && (
+                <Loader2
+                  size={14}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 animate-spin text-gray-400"
+                />
+              )}
+            </div>
+
+            {showResults && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-border rounded-xl shadow-xl max-h-[400px] overflow-y-auto z-[70] animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="p-2 border-b border-gray-border flex justify-between items-center bg-gray-light/50">
+                  <span className="text-[10px] font-bold text-gray-400 tracking-widest pl-2">
+                    {t("actions.search")}
+                  </span>
+
+                  <button
+                    onClick={() => setShowResults(false)}
+                    className="text-[10px] text-primary font-bold pr-2 hover:underline"
+                  >
+                    {t("actions.close")}
+                  </button>
+                </div>
+
+                {searchResults.length === 0 ? (
+                  <div className="px-4 py-8 text-center text-[12px] text-gray-400">
+                    {searching
+                      ? t("pages.search.searching")
+                      : t("components.userList.noUsers")}
+                  </div>
+                ) : (
+                  searchResults.map((u) => (
+                    <Link
+                      key={u._id}
+                      href={profileHref(u._id)}
+                      onClick={() => setShowResults(false)}
+                      className="flex items-center gap-3 p-3 hover:bg-gray-light transition-colors group"
+                    >
+                      <Avatar
+                        src={u.profileImage}
+                        name={u.name}
+                        username={u.username}
+                        userId={u._id}
+                        size={40}
+                        className="rounded-full border border-gray-border flex-shrink-0"
+                      />
+
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-sm font-bold text-dark truncate group-hover:text-primary transition-colors">
+                          {u.username || u.name || "user"}
+                        </span>
+
+                        <span className="text-xs text-gray-500 truncate">
+                          {u.name || ""}
+                        </span>
+                      </div>
+                    </Link>
+                  ))
+                )}
+              </div>
             )}
           </div>
 
-          {showResults && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-border rounded-xl shadow-xl max-h-[400px] overflow-y-auto z-[70] animate-in fade-in slide-in-from-top-2 duration-200">
-              <div className="p-2 border-b border-gray-border flex justify-between items-center bg-gray-light/50">
-                <span className="text-[10px] font-bold text-gray-400 tracking-widest pl-2">
-                  {t("actions.search")}
-                </span>
-                <button
-                  onClick={() => setShowResults(false)}
-                  className="text-[10px] text-primary font-bold pr-2 hover:underline"
-                >
-                  {t("actions.close")}
-                </button>
-              </div>
-              {searchResults.length === 0 ? (
-                <div className="px-4 py-8 text-center text-[12px] text-gray-400">
-                  {searching ? t("pages.search.searching") : t("components.userList.noUsers")}
-                </div>
-              ) : (
-                searchResults.map((u) => (
-                  <Link
-                    key={u._id}
-                    href={profileHref(u._id)}
-                    onClick={() => setShowResults(false)}
-                    className="flex items-center gap-3 p-3 hover:bg-gray-light transition-colors group"
-                  >
-                    <Avatar
-                      src={u.profileImage}
-                      name={u.name}
-                      username={u.username}
-                      userId={u._id}
-                      size={40}
-                      className="rounded-full border border-gray-border flex-shrink-0"
-                    />
-                    <div className="flex flex-col min-w-0">
-                      <span className="text-sm font-bold text-dark truncate group-hover:text-primary transition-colors">
-                        {u.username || u.name || "user"}
-                      </span>
-                      <span className="text-xs text-gray-500 truncate">{u.name || ""}</span>
-                    </div>
-                  </Link>
-                ))
-              )}
-            </div>
-          )}
-        </div>
+          {/* Right Icons */}
+          <div className="ml-auto flex items-center gap-4 md:gap-6">
+            <button
+              onClick={openChat}
+              className="relative cursor-pointer text-dark hover:text-primary transition-colors"
+              aria-label={t("nav.messages")}
+            >
+              <MessageSquare size={24} className="-rotate-12" />
 
-        <div className="flex items-center gap-4 md:gap-6 ml-4">
-          <PlusSquare
-            size={24}
-            className="cursor-pointer hover:text-primary transition-colors text-dark"
-            onClick={() => setShowUpload(true)}
-          />
-          <Heart
-            size={24}
-            className="cursor-pointer hover:text-red-500 transition-colors text-dark hidden sm:block"
-          />
-          <button
-            onClick={openChat}
-            className="relative cursor-pointer text-dark hover:text-primary transition-colors"
-            aria-label={t("nav.messages")}
-          >
-            <Send size={24} className="-rotate-12" />
-            {unreadMessages > 0 && (
-              <span className="absolute -top-1.5 -right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold inline-flex items-center justify-center ring-2 ring-white">
-                {unreadMessages > 99 ? "99+" : unreadMessages}
-              </span>
-            )}
-          </button>
+              {unreadMessages > 0 && (
+                <span className="absolute -top-1.5 -right-2 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold inline-flex items-center justify-center ring-2 ring-white">
+                  {unreadMessages > 99 ? "99+" : unreadMessages}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
       </nav>
 

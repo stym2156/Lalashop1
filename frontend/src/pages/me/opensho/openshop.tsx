@@ -9,6 +9,7 @@ import Step2ShopInfo from "./Step2ShopInfo";
 import Step3Identity from "./Step3Identity";
 import Step4Warehouse from "./Step4Warehouse";
 import { apiClient } from "@/services/apiClient";
+import { uploadImage } from "@/services/uploadImage";
 
 interface OnboardingProps {
   onBack?: () => void;
@@ -123,6 +124,18 @@ export default function ShopOnboarding({ onBack, onComplete }: OnboardingProps) 
         .filter(Boolean)
         .join("-");
 
+      // Upload KYC documents to R2 first, then submit JSON with URLs only.
+      // Falls back to any pre-existing URL on the identity record so a re-submit
+      // after a partial failure doesn't force the user to re-pick their files.
+      const [businessLicenseUrl, idDocumentUrl] = await Promise.all([
+        identityData.licenseFile instanceof File
+          ? uploadImage(identityData.licenseFile, "kyc")
+          : Promise.resolve(identityData.businessLicenseUrl || ""),
+        identityData.idFile instanceof File
+          ? uploadImage(identityData.idFile, "kyc")
+          : Promise.resolve(identityData.idDocumentUrl || ""),
+      ]);
+
       const payload = {
         businessType,
         shopInfo: {
@@ -144,6 +157,8 @@ export default function ShopOnboarding({ onBack, onComplete }: OnboardingProps) 
           birthDate,
           expiryDate,
           tinNumber: identityData.tinNumber || "",
+          businessLicenseUrl,
+          idDocumentUrl,
           address: {
             street: identityData.resAddress,
             apartment: identityData.apartment || "",
@@ -156,31 +171,12 @@ export default function ShopOnboarding({ onBack, onComplete }: OnboardingProps) 
         warehouse: { fullAddress },
       };
 
-      const formData = new FormData();
-      formData.append("businessType", String(businessType || ""));
-      formData.append("shopInfo", JSON.stringify(payload.shopInfo));
-      formData.append("identity", JSON.stringify(payload.identity));
-      formData.append("warehouse", JSON.stringify(payload.warehouse));
-      if (identityData.licenseFile instanceof File) {
-        formData.append("licenseFile", identityData.licenseFile);
-      }
-      if (identityData.idFile instanceof File) {
-        formData.append("idFile", identityData.idFile);
-      }
-
-      const token =
-        typeof window !== "undefined" ? localStorage.getItem("token") : null;
-      const response = await fetch("/api/kyc/submit", {
+      const data = await apiClient("/kyc/submit", {
         method: "POST",
-        body: formData,
-        headers: token && token !== "null" && token !== "undefined"
-          ? { Authorization: `Bearer ${token}` }
-          : undefined,
+        body: JSON.stringify(payload),
       });
-
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data?.message || t("pages.openshopPanel.failedSubmit"));
+      if (data && data.success === false) {
+        throw new Error(data.message || t("pages.openshopPanel.failedSubmit"));
       }
 
       setIsSubmitted(true);
@@ -322,8 +318,9 @@ export default function ShopOnboarding({ onBack, onComplete }: OnboardingProps) 
             shopName={shopName}
             shopAccount={shopAccount}
             shopCategory={shopCategory}
+            bankName={bankName}
             email={shopEmail}
-            phone={phoneNumber}
+            country={selectedCountry?.name || ""}
             identityData={identityData}
             error={errors.agreed}
           />

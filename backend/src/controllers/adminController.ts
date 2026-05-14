@@ -886,3 +886,113 @@ export const issueSellerCredentials = async (req: IAuthRequest, res: Response) =
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+const ALLOWED_ADMIN_ROLES = ["super", "finance", "support", "content"] as const;
+type AdminRole = (typeof ALLOWED_ADMIN_ROLES)[number];
+
+// Direct-create an admin user from the management console. Replaces the old
+// invite-by-email flow — the creating admin sets the new admin's email +
+// password right here and shares the credentials out-of-band. No tokens,
+// no expiry, no email is sent.
+export const createAdminAccount = async (req: IAuthRequest, res: Response) => {
+  try {
+    const { email, password, name, adminRole } = req.body as {
+      email?: string;
+      password?: string;
+      name?: string;
+      adminRole?: AdminRole;
+    };
+
+    const cleanEmail = (email || "").trim().toLowerCase();
+    if (!cleanEmail) {
+      return res.status(400).json({ success: false, message: "email is required" });
+    }
+    if (!password || password.length < 6) {
+      return res
+        .status(400)
+        .json({ success: false, message: "password is required (min 6 characters)" });
+    }
+    if (!adminRole || !ALLOWED_ADMIN_ROLES.includes(adminRole)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "adminRole must be super/finance/support/content" });
+    }
+
+    const existing = await User.findOne({ email: cleanEmail });
+    if (existing) {
+      // Promote existing user to admin (same behaviour as the old
+      // acceptInvite path — easier than asking admins to delete-then-create).
+      existing.isAdmin = true;
+      existing.adminRole = adminRole;
+      if (name) existing.name = name.trim();
+      existing.password = password; // hashed by pre-save
+      await existing.save();
+      return res.status(200).json({
+        success: true,
+        data: {
+          _id: existing._id,
+          email: existing.email,
+          name: existing.name,
+          adminRole: existing.adminRole,
+          promoted: true,
+        },
+      });
+    }
+
+    const created = await User.create({
+      email: cleanEmail,
+      name: (name || cleanEmail.split("@")[0]).trim(),
+      password, // hashed by pre-save
+      isAdmin: true,
+      adminRole,
+      isVerified: true,
+    });
+
+    res.status(201).json({
+      success: true,
+      data: {
+        _id: created._id,
+        email: created.email,
+        name: created.name,
+        adminRole: created.adminRole,
+        promoted: false,
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// List every admin user (anyone with isAdmin=true). Used by the management
+// page in place of the old "list invitations" table.
+export const listAdminAccounts = async (_req: Request, res: Response) => {
+  try {
+    const admins = await User.find({ isAdmin: true })
+      .select("name email customId adminRole isSuspended suspendedAt suspendedReason createdAt updatedAt profileImage")
+      .sort({ createdAt: -1 })
+      .lean();
+    res.status(200).json({ success: true, data: admins });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Demote — strip admin privileges. Account itself stays so the user can still
+// shop as a customer if they ever want to.
+export const revokeAdminAccount = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ success: false, message: "User not found" });
+    if (!user.isAdmin) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User is not an admin" });
+    }
+    user.isAdmin = false;
+    user.adminRole = undefined;
+    await user.save();
+    res.status(200).json({ success: true, data: { _id: user._id, isAdmin: false } });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
