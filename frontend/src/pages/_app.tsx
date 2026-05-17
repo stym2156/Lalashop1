@@ -7,8 +7,23 @@ import BottomNav from "@/components/layout/BottomNav";
 import { LoadingProvider } from "../../LoadingContext";
 import { ChatProvider } from "@/components/chat/ChatContext";
 import ChatPanel from "@/components/chat/ChatPanel";
+import CustomerAuthGuard from "@/components/CustomerAuthGuard";
 import { useRouter } from "next/router";
 import { trackPageView } from "@/services/pageViewTracker";
+
+// Routes that require a logged-in customer. Match is prefix-based so all
+// /me/*, /orders/*, /creator/*, /buyproduct/* sub-routes are covered. Public
+// flows (home, product detail, category, search, login/signup, social feed,
+// posts viewing, shop profile pages) are NOT in this list — they render
+// without a token and the apiClient sends requests as anonymous.
+const PROTECTED_PREFIXES = [
+  "/cart",
+  "/buyproduct/",
+  "/me",
+  "/orders",
+  "/creator",
+  "/posts/create-post",
+];
 
 // Classify the current route into a page-type bucket so analytics can roll up
 // by category. We extract product/shop IDs from the dynamic segments so the
@@ -81,6 +96,13 @@ export default function App({ Component, pageProps }: AppProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.pathname]);
 
+  const requiresAuth = PROTECTED_PREFIXES.some(
+    (p) => router.pathname === p || router.pathname.startsWith(p),
+  );
+
+  const inner = <Component {...pageProps} />;
+  const maybeGuarded = requiresAuth ? <CustomerAuthGuard>{inner}</CustomerAuthGuard> : inner;
+
   return (
     <LoadingProvider>
       <ChatProvider>
@@ -89,7 +111,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <main
             className={`flex-1 ${!hideSidebar ? "md:pl-[64px]" : ""} min-h-screen flex flex-col`}
           >
-            <Component {...pageProps} />
+            {maybeGuarded}
           </main>
           {!hideBottomNav && <BottomNav />}
           <ChatPanel />

@@ -3,10 +3,10 @@
 ผลการ audit แบบขนาน 3 มิติ (security/authz, money flows, frontend/contract)
 แก้ทีไหร่ → เปลี่ยน `[ ]` เป็น `[x]` แล้วเติม `**FIX DONE** YYYY-MM-DD` ที่ท้ายบรรทัด
 
-**สถานะรวม:** 24 / 29 closed (21 fixed + 3 N/A/deferred · 5 pending)
+**สถานะรวม:** 25 / 29 closed (22 fixed + 3 N/A/deferred · 4 pending)
 
 - Critical: 9 fixed + 1 N/A (#9 false positive)
-- High: 7 fixed + 1 N/A (#14 no apply flow yet) · 4 pending design (#18, #19, #21, #22)
+- High: 8 fixed + 1 N/A (#14 no apply flow yet) · 3 pending design (#18, #19, #21)
 - Medium: 5 fixed (2 incidental + 3 frontend small) · 1 deferred (#28 refactor) · 1 pending (#25 design)
 
 ---
@@ -159,10 +159,12 @@
   📁 [frontend/login/index.tsx:28,63](frontend/src/pages/login/index.tsx), [Admin/login.tsx:33](Admin/src/pages/login.tsx), [seller/login.tsx:32](seller/src/pages/login.tsx)
   🔧 Fix: ย้ายไป httpOnly cookie (server-set)
 
-- [ ] **#22 Admin/seller pages ไม่มี auth guard ก่อน fetch**
-  component render + fetch ก่อนตรวจ token
-  📁 [Admin/withdrawpage/[id].tsx](Admin/src/pages/withdrawpage/[id].tsx), [Admin/index.tsx](Admin/src/pages/index.tsx), [seller/orders/index.tsx](seller/src/pages/orders/index.tsx)
-  💥 network request leak, 401 หลัง render
+- [x] **#22 Auth guard ก่อน fetch** **FIX DONE** 2026-05-17 (partial false positive)
+  📁 [frontend/components/CustomerAuthGuard.tsx](frontend/src/components/CustomerAuthGuard.tsx), [frontend/pages/_app.tsx](frontend/src/pages/_app.tsx)
+  ✅ ตรวจแล้ว: **Admin + seller ปลอดภัยอยู่แล้ว** — _app.tsx wrap ทุก non-auth route ด้วย `AdminAuthGuard` / `AuthGuard` ที่ render Loader ระหว่าง check และ render Component เฉพาะ state === "ok" → Component's useEffect ไม่ fire จนกว่า auth confirmed (audit เรื่อง 3 page นั้น = false positive)
+  ✅ **Customer frontend** เป็นเรื่องจริง: ไม่มี global guard เลย → protected pages พึ่ง backend 401 อย่างเดียว
+  ✅ Applied: สร้าง `CustomerAuthGuard.tsx` (light-weight token-presence check, redirect to /login?next=...) + _app.tsx เพิ่ม `PROTECTED_PREFIXES = ["/cart", "/buyproduct/", "/me", "/orders", "/creator", "/posts/create-post"]` → wrap component ตาม prefix match
+  📝 Note: lightweight check (token present) ไม่ round-trip `/auth/me` → expired token ยังเข้าหน้าได้ แต่ API call จะ 401 ตามปกติ — trade-off เพื่อ snappier nav
 
 ---
 
@@ -239,5 +241,6 @@
 2026-05-17 · #20 · (uncommitted) · authRateLimiter applied to /withdraw-pin/set, /2fa/email/send, /2fa/email/verify, /2fa/verify
 2026-05-17 · #13, #17, #23, #24 · (closed by previous commits) · incidentally fixed by #4, #1, #5
 2026-05-17 · #6-#12, #15-#16, #20 · da96364 · "fix(backend): close 5 high-severity bugs"
-2026-05-17 · #26, #27, #29 · (uncommitted) · payment.tsx + transfer.tsx + i18n keys (30 strings × 5 langs)
+2026-05-17 · #26, #27, #29 · f828705 · payment.tsx + transfer.tsx + i18n keys (30 strings × 5 langs)
+2026-05-17 · #22 · (uncommitted) · CustomerAuthGuard + _app.tsx PROTECTED_PREFIXES (Admin + seller already covered)
 ```
