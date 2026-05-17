@@ -3,11 +3,11 @@
 ผลการ audit แบบขนาน 3 มิติ (security/authz, money flows, frontend/contract)
 แก้ทีไหร่ → เปลี่ยน `[ ]` เป็น `[x]` แล้วเติม `**FIX DONE** YYYY-MM-DD` ที่ท้ายบรรทัด
 
-**สถานะรวม:** 20 / 29 closed (18 fixed + 2 N/A · 9 pending)
+**สถานะรวม:** 24 / 29 closed (21 fixed + 3 N/A/deferred · 5 pending)
 
 - Critical: 9 fixed + 1 N/A (#9 false positive)
 - High: 7 fixed + 1 N/A (#14 no apply flow yet) · 4 pending design (#18, #19, #21, #22)
-- Medium: 2 fixed (incidental จาก Critical) · 5 pending frontend/design (#25, #26, #27, #28, #29)
+- Medium: 5 fixed (2 incidental + 3 frontend small) · 1 deferred (#28 refactor) · 1 pending (#25 design)
 
 ---
 
@@ -178,26 +178,30 @@
   ถ้า seller เปลี่ยน commission rule ระหว่าง buyer จ่าย → rate เก่าค้าง
   📁 [orderController.ts:113-126](backend/src/controllers/orderController.ts)
 
-- [ ] **#26 Floating-point price arithmetic**
+- [x] **#26 Floating-point price arithmetic** **FIX DONE** 2026-05-17
   `parseFloat × parseInt` → 0.1 × 3 = 0.30000…4
-  📁 [buyproduct/payment.tsx:60](frontend/src/pages/buyproduct/payment.tsx)
-  🔧 Fix: ใช้ integer cents หรือ Decimal library
+  📁 [buyproduct/payment.tsx:60-69](frontend/src/pages/buyproduct/payment.tsx)
+  ✅ Applied: `Math.round(price * qty * 100) / 100` + clamp price to non-negative + qty to positive integer; ปลอดภัยจาก NaN/Infinity ด้วย `Number.isFinite()`
+  📝 Note: ไม่ได้ refactor ไปใช้ integer cents เต็มระบบ (จะกระทบ backend + DB schema) — เป็นแค่ display-rounding
 
-- [ ] **#27 Frontend ไม่ validate price/qty จาก URL**
+- [x] **#27 Frontend ไม่ validate price/qty จาก URL** **FIX DONE** 2026-05-17
   รับ negative / NaN ได้
-  📁 [buyproduct/transfer.tsx:103-106](frontend/src/pages/buyproduct/transfer.tsx)
+  📁 [buyproduct/transfer.tsx:101-114](frontend/src/pages/buyproduct/transfer.tsx)
+  ✅ Applied: helper `safeNum(v, fallback)` ตรวจ `Number.isFinite()` + `>= 0`; qty floor + min 1; round 2 decimals
+  📝 Note: backend #4 ก็ recompute totalPrice ฝั่ง server อยู่แล้ว — เรื่องนี้แค่ display correctness
 
-- [ ] **#28 apiClient 3 ตัวคืน shape ต่างกัน**
+- [~] **#28 apiClient 3 ตัวคืน shape ต่างกัน** **DEFERRED**
   - frontend: raw payload
   - Admin: `ApiResponse<T>` wrapper
   - seller: raw payload
   📁 services/apiClient.ts ทั้ง 3
-  💥 dev สับสน, bug subtle เวลา copy code ข้าม service
+  📝 ตรวจแล้ว: ไม่ใช่ bug จริง แต่เป็น style inconsistency; refactor ให้เหมือนกัน = ต้องแก้ทุก call site ใน 3 apps → ไม่เร็ว, แยกเป็น cleanup task
 
-- [ ] **#29 i18n hardcoded ภาษา**
-  ภาษาลาว/ไทย ฝังตรงๆ ใน JSX แทน `t()`
-  📁 [buyproduct/payment.tsx:70-82](frontend/src/pages/buyproduct/payment.tsx)
+- [x] **#29 i18n hardcoded ภาษา (BCEL/LDB/JDB)** **FIX DONE** 2026-05-17
+  ภาษาลาว ฝังตรงๆ ใน JSX แทน `t()`
+  📁 [buyproduct/payment.tsx:75-92](frontend/src/pages/buyproduct/payment.tsx) + locales × 5
   💥 ภาษาอื่นไม่แสดง / 5-language coverage หลุด
+  ✅ Applied: payment.tsx ใช้ `t("pages.payment.method.{bcelOne,ldbTrust,jdbYes}{Title,Desc}")`; เพิ่ม 6 keys ใหม่ใน en/lo/th/vi/zh common.json (รวม 30 strings)
 
 ---
 
@@ -234,4 +238,6 @@
 2026-05-17 · #16 · (uncommitted) · updateAddress whitelist 7 fields (kill mass-assignment)
 2026-05-17 · #20 · (uncommitted) · authRateLimiter applied to /withdraw-pin/set, /2fa/email/send, /2fa/email/verify, /2fa/verify
 2026-05-17 · #13, #17, #23, #24 · (closed by previous commits) · incidentally fixed by #4, #1, #5
+2026-05-17 · #6-#12, #15-#16, #20 · da96364 · "fix(backend): close 5 high-severity bugs"
+2026-05-17 · #26, #27, #29 · (uncommitted) · payment.tsx + transfer.tsx + i18n keys (30 strings × 5 langs)
 ```

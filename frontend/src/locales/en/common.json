@@ -1211,6 +1211,12 @@
       "option": "Option: {{color}} · Size: {{size}}",
       "premiumProduct": "Premium Product",
       "method": {
+        "bcelOneTitle": "BCEL One",
+        "bcelOneDesc": "Pay via the BCEL One app with OnePay QR",
+        "ldbTrustTitle": "LDB Trust",
+        "ldbTrustDesc": "Pay via the LDB Trust app",
+        "jdbYesTitle": "JDB Yes",
+        "jdbYesDesc": "Pay via the JDB Yes app",
         "visaMasterTitle": "Credit / Debit Card",
         "visaMasterDesc": "Pay with Visa, Mastercard or UnionPay",
         "codTitle": "Cash on Delivery",

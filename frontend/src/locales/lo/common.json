@@ -1211,6 +1211,12 @@
       "option": "ຕົວເລືອກ: {{color}} • ຂະໜາດ: {{size}}",
       "premiumProduct": "ສິນຄ້າພຣີມຽມ",
       "method": {
+        "bcelOneTitle": "BCEL One",
+        "bcelOneDesc": "ຊຳລະຜ່ານແອັບ BCEL One ດ້ວຍ OnePay QR",
+        "ldbTrustTitle": "LDB Trust",
+        "ldbTrustDesc": "ຊຳລະຜ່ານແອັບ LDB Trust",
+        "jdbYesTitle": "JDB Yes",
+        "jdbYesDesc": "ຊຳລະຜ່ານແອັບ JDB Yes",
         "visaMasterTitle": "ບັດເຄຣດິດ / ເດບິດ",
         "visaMasterDesc": "ຊຳລະຜ່ານບັດ Visa, Mastercard ຫຼື UnionPay",
         "codTitle": "ຊຳລະປາຍທາງ",

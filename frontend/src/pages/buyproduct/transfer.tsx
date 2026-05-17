@@ -98,13 +98,19 @@ export default function TransferPage() {
     };
   }, []);
 
-  // Compute total from query (single product flow) or fetch cart (cart flow)
+  // Compute total from query (single product flow) or fetch cart (cart flow).
+  // Sanitize URL params — a tampered URL with negative price, NaN, or "Infinity"
+  // would otherwise render "$NaN" or a bogus total in the UI.
   const expectedTotal = useMemo(() => {
-    if (query.total) return parseFloat(query.total as string);
-    const price = parseFloat((query.price as string) || "0");
-    const qty = parseInt((query.qty as string) || "1");
-    return price * qty;
-  }, [query]);
+    const safeNum = (v: unknown, fallback = 0): number => {
+      const n = Number(v);
+      return Number.isFinite(n) && n >= 0 ? n : fallback;
+    };
+    if (query.total) return Math.round(safeNum(query.total) * 100) / 100;
+    const price = safeNum(query.price);
+    const qty = Math.max(1, Math.floor(safeNum(query.qty, 1)));
+    return Math.round(price * qty * 100) / 100;
+  }, [query.total, query.price, query.qty]);
 
   // Create the pending order if we don't have one yet
   useEffect(() => {

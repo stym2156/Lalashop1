@@ -1211,6 +1211,12 @@
       "option": "ตัวเลือก: {{color}} · ขนาด: {{size}}",
       "premiumProduct": "สินค้าพรีเมียม",
       "method": {
+        "bcelOneTitle": "BCEL One",
+        "bcelOneDesc": "ชำระผ่านแอป BCEL One ด้วย OnePay QR",
+        "ldbTrustTitle": "LDB Trust",
+        "ldbTrustDesc": "ชำระผ่านแอป LDB Trust",
+        "jdbYesTitle": "JDB Yes",
+        "jdbYesDesc": "ชำระผ่านแอป JDB Yes",
         "visaMasterTitle": "บัตรเครดิต / เดบิต",
         "visaMasterDesc": "ชำระด้วยบัตร Visa, Mastercard หรือ UnionPay",
         "codTitle": "เก็บเงินปลายทาง",

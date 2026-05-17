@@ -54,10 +54,14 @@ export default function PaymentPage() {
     if (mounted) fetchData();
   }, [mounted, query.name]);
 
-  // คำนวณราคารวม
+  // คำนวณราคารวม — รอบเป็น 2 ตำแหน่งทศนิยมเพื่อไม่ให้เกิดเศษ floating-point
+  // (0.1 * 3 = 0.30000000000000004) บนหน้าจอ
   const finalSubtotal = useMemo(() => {
     if (query.name) {
-      return parseFloat(query.price as string || "0") * parseInt(query.qty as string || "1");
+      const price = Number(query.price);
+      const qty = Math.max(1, Math.floor(Number(query.qty) || 1));
+      const safePrice = Number.isFinite(price) && price >= 0 ? price : 0;
+      return Math.round(safePrice * qty * 100) / 100;
     }
     return cartSubtotal;
   }, [query.name, query.price, query.qty, cartSubtotal]);
@@ -65,21 +69,21 @@ export default function PaymentPage() {
   const paymentMethods = [
     {
       id: "bcel_one",
-      title: "BCEL One",
+      title: t("pages.payment.method.bcelOneTitle"),
       image: "/assets/BCELone.png",
-      desc: "ຊຳລະຜ່ານແອັບ BCEL One ດ້ວຍ OnePay QR"
+      desc: t("pages.payment.method.bcelOneDesc"),
     },
     {
       id: "ldb_trust",
-      title: "LDB Trust",
+      title: t("pages.payment.method.ldbTrustTitle"),
       image: "/assets/LDB.png",
-      desc: "ຊຳລະຜ່ານແອັບ LDB Trust"
+      desc: t("pages.payment.method.ldbTrustDesc"),
     },
     {
       id: "jdb_yes",
-      title: "JDB Yes",
+      title: t("pages.payment.method.jdbYesTitle"),
       image: "/assets/JDB.png",
-      desc: "ຊຳລະຜ່ານແອັບ JDB Yes"
+      desc: t("pages.payment.method.jdbYesDesc"),
     },
     {
       id: "visa_master",

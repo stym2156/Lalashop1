@@ -1211,6 +1211,12 @@
       "option": "选项：{{color}} · 尺码：{{size}}",
       "premiumProduct": "优质产品",
       "method": {
+        "bcelOneTitle": "BCEL One",
+        "bcelOneDesc": "通过 BCEL One 应用使用 OnePay QR 付款",
+        "ldbTrustTitle": "LDB Trust",
+        "ldbTrustDesc": "通过 LDB Trust 应用付款",
+        "jdbYesTitle": "JDB Yes",
+        "jdbYesDesc": "通过 JDB Yes 应用付款",
         "visaMasterTitle": "信用卡 / 借记卡",
         "visaMasterDesc": "使用 Visa、Mastercard 或 UnionPay 付款",
         "codTitle": "货到付款",

@@ -1211,6 +1211,12 @@
       "option": "Tùy chọn: {{color}} · Kích cỡ: {{size}}",
       "premiumProduct": "Sản phẩm cao cấp",
       "method": {
+        "bcelOneTitle": "BCEL One",
+        "bcelOneDesc": "Thanh toán qua ứng dụng BCEL One bằng OnePay QR",
+        "ldbTrustTitle": "LDB Trust",
+        "ldbTrustDesc": "Thanh toán qua ứng dụng LDB Trust",
+        "jdbYesTitle": "JDB Yes",
+        "jdbYesDesc": "Thanh toán qua ứng dụng JDB Yes",
         "visaMasterTitle": "Thẻ tín dụng / Ghi nợ",
         "visaMasterDesc": "Thanh toán bằng thẻ Visa, Mastercard hoặc UnionPay",
         "codTitle": "Thanh toán khi nhận",
